@@ -1,0 +1,238 @@
+﻿
+@{
+    ViewBag.Title = "ROUTE";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+
+    @*<link href="~/css/jquery-ui.min.css" rel="stylesheet" />*@
+    <style>
+        .form-control:disabled {
+            text-decoration: none;
+        }
+    </style>
+
+
+<div class="row">
+    <div class="col-lg-12 mt-2 mb-2">
+        <h2>
+            ROUTE
+            <button type="button" class="btn btn-primary waves-effect pull-right waves-light btn-new-Route">Add</button>
+        </h2>
+        <div class="modal fade" id="modal-Route" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #54cd88;">
+                        <h5 class="modal-title" id="modal-Route-Label" style="color: white; font-weight: bold !important; "></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="pgformholder">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txt-RouteCode">Route Code <i class="text-danger">*</i></label>
+                                            <input type="text" placeholder="" value="" id="txt-RouteCode" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txt-RouteName">Route Name</label>
+                                            <input type="text" placeholder="" value="" id="txt-RouteName" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txt-DepotID">Depot</label>
+                                            <select class="form-control" id="txt-DepotID" multiple>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 pb-5">
+                                        <div class="table-responsive" id="dataholder2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-save-Route">Save</button>
+                        <button type="button" id="btn-cancel" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-12 pb-5">
+                <div class="table-responsive" id="dataholder">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/pgmain.js?@DateTime.Now.ToString("hhmmss")"></script>
+    <script>
+        $(document).ready(function () {
+            var l_who = 'Admin';
+            var l_sync = !0;
+            g_js_GetRoutes('#dataholder', !0, { Mode: 'AdminAll' }, l_who, 'tb', !0, '');
+            g_js_bindDepot('#txt-DepotID', l_sync);
+
+
+
+            var inss = [];
+            function bshipment(AWB) {
+                //$('#dataholder').empty().html('Getting...');
+                g_js_ManageLabelPrinting(null, !0, { AWBNo: AWB, Mode: "CheckDRS" }, l_who, '', '', '', function (id) {
+                    if ($.inArray(id, inss) != -1) {
+                        $('#txt-AWBNo').after('<small style="color:red" class="pgerror">Consignment already in List.</small>');
+                        return;
+                    }
+                    //if (id.indexOf('~') != -1) {
+                    //    inss.push(id);
+                    //}
+                    inss.push(id);
+                    g_js_GetRoutes('#dataholder2', !0, { Mode: 'RouteOrderSelectByRouteID', RouteID: inss.join() }, l_who, 'tb2', !0);
+                });
+            }
+            var myVar;
+            $(document).on('change', '#txt-DepotID', function () {
+                $('#txt-DepotID option').each(function (ind, ele) {
+                    if ($(ele).is(':selected')) {
+                        var id = $(ele).val();
+                        $('.pgerror').remove();
+                        if ($.inArray(id, inss) != -1) {
+                            $('#txt-DepotID').after('<small style="color:red" class="pgerror">Already in List.</small>');
+                            return;
+                        }
+                        else {
+                            inss.push(id);
+                        }
+                    }
+                });
+                g_js_GetRoutes('#dataholder2', !0, { Mode: 'RouteOrderSelectByDepotID', RouteID: inss.join() }, l_who, 'tb2', !0);
+            });
+
+            $(document).on('click', '.btn-new-Route', function () {
+                $('#modal-Route-Label').html('ROUTE : NEW ROUTE');
+                $('.btn-save-Route').text('Save').attr({ 'data-id': '', 'data-mode': 'AddNew' });
+                $('.pgformholder input[type=text]').val('');
+                $('#dataholder2').empty();
+                $('#txt-RouteCode').val('');
+                $('#txt-RouteName').val('');
+                inss = [];
+                $('.pgerror').remove();
+                $("#txt-DepotID option").removeAttr('selected');
+                $('#modal-Route').modal('show');
+            });
+
+            $(document).on('click', '.pgedit-Route', function () {
+                $('#modal-Route-Label').html('ROUTE : UPDATE ROUTE');
+                var lo = JSON.parse($(this).find('textarea').val());
+                $('.btn-save-Route').text('Update').attr({ 'data-id': lo.RouteID, 'data-mode': 'UpdateByID' });
+                $('#txt-RouteCode').val(lo.RouteCode);
+                $('#txt-RouteName').val(lo.RouteName);
+                $('#dataholder2').empty();
+                inss = [];
+                g_js_GetRoutes('#dataholder2', !0, { Mode: 'RouteOrderSelectByRouteID', RouteID: lo.RouteID }, l_who, 'tb2', !0, function () {
+                    var r1 = $('.pgrec');
+                    $("#txt-DepotID option").removeAttr('selected');
+                    $.each(r1, function (i, obj) {
+                        inss.push($(this).attr('data-id2'));
+                        $("#txt-DepotID option:contains(" + $(this).attr('data-id2') + ")").attr('selected', 'selected');
+
+                    });
+                });
+                $('#modal-Route').modal('show');
+            });
+            $(document).on('click', '.pgdelete-Route2', function () {
+                $(this).closest('tr').remove();
+            });
+
+
+            $(document).on('click', '.btn-save-Route', function () {
+                var btn = $(this);
+                var htm = $(this).html();
+                var Mode = $(this).attr('data-mode');
+                var sid = $(this).attr('data-id');
+                var isvalid = true;
+                var fctrl = null;
+
+                var l_Route = {
+                    RouteID:sid,
+                    RouteCode: $('#txt-RouteCode').val(),
+                    RouteName: $('#txt-RouteName').val(),
+                    Mode: Mode,
+                }
+
+                $('.pgerror').remove();
+
+                if ($.trim(l_Route.RouteCode) == '') {
+                    $('#txt-RouteCode').after('<small style="color:red" class="pgerror">Route Code is required !</small>');
+                    if (isvalid) { fctrl = '#txt-RouteCode'; }
+                    isvalid = false;
+                }
+                if ($.trim(l_Route.RouteName) == '') {
+                    $('#txt-RouteName').after('<small style="color:red" class="pgerror">Route Name is required !</small>');
+                    if (isvalid) { fctrl = '#txt-RouteName'; }
+                    isvalid = false;
+                }
+
+                var inss2 = [];
+                var r1 = $('.pgrec');
+                $.each(r1, function (i, obj) {
+                    inss2.push($(this).attr('data-id2')+'~'+$(this).find('input').val());
+                });
+                l_Route.DepotIDs = inss2.join('^');
+
+                if (inss2.length == 0) {
+                    $('#txt-DepotID').after('<small style="color:red" class="pgerror">Select Atleast One depot</small>');
+                    if (isvalid) { fctrl = '#txt-DepotID'; }
+                    isvalid = false;
+                }
+                if (!isvalid) {
+                    g_js_pgfocus(fctrl);
+                    return;
+                }
+                // alert(JSON.stringify(Project) +' Mode : '+Mode);
+                //  return;
+                g_js_ManageRoutes(btn, true, l_Route, l_who, '', '');
+            });
+
+
+            $(document).on('click', '.pgdelete-Route', function () {
+                swal({
+                    title: "Are you sure want to Delete?",
+                    text: "Click OK to confirm.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((yes) => {
+                    if (yes) {
+                        g_js_ManageRoutes($(this), true, { RouteID: $(this).attr('data-id'), Mode: "DeleteByID" }, l_who, $(this), '', '');
+                    }
+                });
+            });
+
+
+        });
+    </script>
+
+
