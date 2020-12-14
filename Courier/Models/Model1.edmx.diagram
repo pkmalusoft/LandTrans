@@ -405,7 +405,14 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TransportMode" Width="1.5" PointX="0.75" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ImpExpDocumentMaster" Width="1.5" PointX="17.375" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" Width="1.5" PointX="38.375" PointY="41.75" />
-      </Diagram>
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TruckDetail" Width="1.5" PointX="44.625" PointY="53.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.VehicleType" Width="1.5" PointX="23.125" PointY="45.625" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_VehicleMaster_VehicleType" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

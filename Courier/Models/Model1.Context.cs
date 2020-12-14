@@ -263,6 +263,8 @@ namespace LTMSV2.Models
         public virtual DbSet<TransportMode> TransportModes { get; set; }
         public virtual DbSet<ImpExpDocumentMaster> ImpExpDocumentMasters { get; set; }
         public virtual DbSet<InScanMaster> InScanMasters { get; set; }
+        public virtual DbSet<TruckDetail> TruckDetails { get; set; }
+        public virtual DbSet<VehicleType> VehicleTypes { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

@@ -26,6 +26,8 @@ namespace LTMSV2.Models
             this.SalesInvoices = new HashSet<SalesInvoice>();
             this.SupplierMasters = new HashSet<SupplierMaster>();
             this.BranchMasters = new HashSet<BranchMaster>();
+            this.TruckDetails = new HashSet<TruckDetail>();
+            this.TruckDetails1 = new HashSet<TruckDetail>();
         }
     
         public int CurrencyID { get; set; }
@@ -56,5 +58,9 @@ namespace LTMSV2.Models
         public virtual ICollection<SupplierMaster> SupplierMasters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BranchMaster> BranchMasters { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TruckDetail> TruckDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TruckDetail> TruckDetails1 { get; set; }
     }
 }

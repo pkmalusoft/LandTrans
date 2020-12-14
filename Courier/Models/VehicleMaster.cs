@@ -35,5 +35,7 @@ namespace LTMSV2.Models
         public Nullable<int> BranchID { get; set; }
         public string MakeYear { get; set; }
         public string RegisteredUnder { get; set; }
+    
+        public virtual VehicleType VehicleType { get; set; }
     }
 }

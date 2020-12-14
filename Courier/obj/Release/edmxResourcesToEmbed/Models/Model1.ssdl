@@ -1706,6 +1706,18 @@
     <Property Name="ActionType" Type="varchar" MaxLength="10" Nullable="false" />
     <Property Name="BranchId" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="ImpExpDocumentMaster">
+    <Key>
+      <PropertyRef Name="DocumentID" />
+    </Key>
+    <Property Name="DocumentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DocumentName" Type="varchar" MaxLength="256" />
+    <Property Name="IMPEXPCode" Type="varchar" MaxLength="50" />
+    <Property Name="PortID" Type="int" />
+    <Property Name="CustomerID" Type="int" />
+    <Property Name="IssueDate" Type="datetime" />
+    <Property Name="ExpiryDate" Type="datetime" />
+  </EntityType>
   <EntityType Name="Import">
     <Key>
       <PropertyRef Name="ImportID" />
@@ -2142,6 +2154,8 @@
     <Property Name="SeparateDoc" Type="bit" />
     <Property Name="DocumentSetupID" Type="int" />
     <Property Name="CustomsInvoiceValue" Type="money" />
+    <Property Name="LabelPrinting" Type="bit" />
+    <Property Name="TruckDetailId" Type="int" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
@@ -3423,6 +3437,54 @@
     <Property Name="TransportModeID" Type="int" Nullable="false" />
     <Property Name="Mode" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <EntityType Name="TruckDetail">
+    <Key>
+      <PropertyRef Name="TruckDetailID" />
+    </Key>
+    <Property Name="TruckDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ReceiptNo" Type="varchar" MaxLength="20" />
+    <Property Name="VehicleID" Type="int" Nullable="false" />
+    <Property Name="RegNo" Type="varchar" MaxLength="20" />
+    <Property Name="VehicleType" Type="varchar" MaxLength="1" Nullable="false" />
+    <Property Name="TDDate" Type="datetime" Nullable="false" />
+    <Property Name="OriginName" Type="int" />
+    <Property Name="DestinationName" Type="int" />
+    <Property Name="DriverName" Type="varchar" MaxLength="256" />
+    <Property Name="VehicleTypeID" Type="int" Nullable="false" />
+    <Property Name="Rent" Type="money" />
+    <Property Name="OtherCharges" Type="money" />
+    <Property Name="RefTDID" Type="int" />
+    <Property Name="AcJournalID" Type="int" />
+    <Property Name="CurrencyIDRent" Type="int" />
+    <Property Name="CurrencyIDOC" Type="int" />
+    <Property Name="StatusPaymentMode" Type="char" MaxLength="2" />
+    <Property Name="PaymentHeadID" Type="int" />
+    <Property Name="Amount" Type="money" />
+    <Property Name="PaymentCurrencyID" Type="int" />
+    <Property Name="Remarks" Type="char" MaxLength="50" />
+    <Property Name="AcCompanyID" Type="int" />
+    <Property Name="TDcontrolAcHeadID" Type="int" />
+    <Property Name="OtherChargesAcHeadID" Type="int" />
+    <Property Name="FYearID" Type="int" />
+    <Property Name="CurrencyRent" Type="money" />
+    <Property Name="CurrencyOtherCharges" Type="money" />
+    <Property Name="CurrencyAmount" Type="money" />
+    <Property Name="Code" Type="char" MaxLength="50" />
+    <Property Name="PayeeName" Type="char" MaxLength="50" />
+    <Property Name="DriverID" Type="int" />
+    <Property Name="CancelDate" Type="datetime" />
+    <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
+    <Property Name="DocumentID" Type="int" />
+    <Property Name="RentAcHeadID" Type="int" />
+    <Property Name="RouteID" Type="int" />
+    <Property Name="TDRemarks" Type="varchar" MaxLength="512" />
+    <Property Name="InscanID" Type="int" />
+    <Property Name="BankName" Type="varchar" MaxLength="100" />
+    <Property Name="ChequeNo" Type="varchar" MaxLength="50" />
+    <Property Name="ChequeDate" Type="datetime" />
+    <Property Name="BranchID" Type="int" />
+    <Property Name="TypeOfLoad" Type="varchar" MaxLength="100" />
+  </EntityType>
   <EntityType Name="TypeOfGoods">
     <Key>
       <PropertyRef Name="TypeOfGoodID" />
@@ -3584,6 +3646,13 @@
     <Property Name="BranchID" Type="int" />
     <Property Name="MakeYear" Type="varchar" MaxLength="10" />
     <Property Name="RegisteredUnder" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="VehicleType">
+    <Key>
+      <PropertyRef Name="VehicleTypeID" />
+    </Key>
+    <Property Name="VehicleTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VehicleType" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="WorkCategory">
     <Key>
@@ -5556,6 +5625,66 @@
       </Principal>
       <Dependent Role="tblSupplierAdjustmentDetail">
         <PropertyRef Name="SupplierAdjustmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TruckDetails_BranchMaster">
+    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="0..1" />
+    <End Role="TruckDetail" Type="Self.TruckDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BranchMaster">
+        <PropertyRef Name="BranchID" />
+      </Principal>
+      <Dependent Role="TruckDetail">
+        <PropertyRef Name="BranchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TruckDetails_CurrencyMaster">
+    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
+    <End Role="TruckDetail" Type="Self.TruckDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CurrencyMaster">
+        <PropertyRef Name="CurrencyID" />
+      </Principal>
+      <Dependent Role="TruckDetail">
+        <PropertyRef Name="PaymentCurrencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TruckDetails_CurrencyMaster2">
+    <End Role="CurrencyMaster" Type="Self.CurrencyMaster" Multiplicity="0..1" />
+    <End Role="TruckDetail" Type="Self.TruckDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CurrencyMaster">
+        <PropertyRef Name="CurrencyID" />
+      </Principal>
+      <Dependent Role="TruckDetail">
+        <PropertyRef Name="CurrencyIDRent" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TruckDetails_RouteMaster">
+    <End Role="RouteMaster" Type="Self.RouteMaster" Multiplicity="0..1" />
+    <End Role="TruckDetail" Type="Self.TruckDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RouteMaster">
+        <PropertyRef Name="RouteID" />
+      </Principal>
+      <Dependent Role="TruckDetail">
+        <PropertyRef Name="RouteID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VehicleMaster_VehicleType">
+    <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="0..1" />
+    <End Role="VehicleMaster" Type="Self.VehicleMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VehicleType">
+        <PropertyRef Name="VehicleTypeID" />
+      </Principal>
+      <Dependent Role="VehicleMaster">
+        <PropertyRef Name="VehicleTypeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -8230,6 +8359,7 @@
     <EntitySet Name="GeneralSetup" EntityType="Self.GeneralSetup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="GeneralSetupType" EntityType="Self.GeneralSetupType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HoldRelease" EntityType="Self.HoldRelease" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ImpExpDocumentMaster" EntityType="Self.ImpExpDocumentMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Import" EntityType="Self.Import" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportAgentMaster" EntityType="Self.ImportAgentMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ImportShipment" EntityType="Self.ImportShipment" Schema="dbo" store:Type="Tables" />
@@ -8338,6 +8468,7 @@
     <EntitySet Name="tblVehicleRequiredType" EntityType="Self.tblVehicleRequiredType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Transit" EntityType="Self.Transit" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TransportMode" EntityType="Self.TransportMode" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TruckDetail" EntityType="Self.TruckDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TypeOfGoods" EntityType="Self.TypeOfGoods" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UMDesignation" EntityType="Self.UMDesignation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UMForms" EntityType="Self.UMForms" Schema="dbo" store:Type="Tables" />
@@ -8352,6 +8483,7 @@
     <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VehicleMaintenance" EntityType="Self.VehicleMaintenance" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VehicleMaster" EntityType="Self.VehicleMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VehicleType" EntityType="Self.VehicleType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="WorkCategory" EntityType="Self.WorkCategory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="WorkOrderMaster" EntityType="Self.WorkOrderMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ZoneCategory" EntityType="Self.ZoneCategory" Schema="dbo" store:Type="Tables" />
@@ -8985,6 +9117,26 @@
     <AssociationSet Name="FK_tblSupplierAdjustmentDetail_tblSupplierAdjustment" Association="Self.FK_tblSupplierAdjustmentDetail_tblSupplierAdjustment">
       <End Role="tblSupplierAdjustment" EntitySet="tblSupplierAdjustment" />
       <End Role="tblSupplierAdjustmentDetail" EntitySet="tblSupplierAdjustmentDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TruckDetails_BranchMaster" Association="Self.FK_TruckDetails_BranchMaster">
+      <End Role="BranchMaster" EntitySet="BranchMaster" />
+      <End Role="TruckDetail" EntitySet="TruckDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TruckDetails_CurrencyMaster" Association="Self.FK_TruckDetails_CurrencyMaster">
+      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
+      <End Role="TruckDetail" EntitySet="TruckDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TruckDetails_CurrencyMaster2" Association="Self.FK_TruckDetails_CurrencyMaster2">
+      <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />
+      <End Role="TruckDetail" EntitySet="TruckDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TruckDetails_RouteMaster" Association="Self.FK_TruckDetails_RouteMaster">
+      <End Role="RouteMaster" EntitySet="RouteMaster" />
+      <End Role="TruckDetail" EntitySet="TruckDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VehicleMaster_VehicleType" Association="Self.FK_VehicleMaster_VehicleType">
+      <End Role="VehicleType" EntitySet="VehicleType" />
+      <End Role="VehicleMaster" EntitySet="VehicleMaster" />
     </AssociationSet>
     <AssociationSet Name="FK_ZoneChart_ZoneCategory" Association="Self.FK_ZoneChart_ZoneCategory">
       <End Role="ZoneCategory" EntitySet="ZoneCategory" />

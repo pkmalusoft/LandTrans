@@ -111,3 +111,4 @@ F:\MalusoftIndia\CourierSystem\LandTrans\Courier\bin\Newtonsoft.Json.xml
 F:\MalusoftIndia\CourierSystem\LandTrans\Courier\bin\WebActivator.pdb
 F:\MalusoftIndia\CourierSystem\LandTrans\Courier\bin\Antlr3.Runtime.pdb
 F:\MalusoftIndia\CourierSystem\LandTrans\Courier\obj\Debug\LTMSV2.csproj.CopyComplete
+F:\MalusoftIndia\CourierSystem\LandTrans\Courier\obj\Debug\LTMSV2.csprojAssemblyReference.cache

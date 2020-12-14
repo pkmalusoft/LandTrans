@@ -4,6 +4,10 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 }
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -11,78 +15,118 @@
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
 
-   
+        $('#Category').change(function () {
+            if ($('#Category').val() == 'Own Vehicle') {
+
+                $('#divinsuranceedetail').removeClass('hide');
+                $('#divpurchasedetail').removeClass('hide');
+                $('#divInsuranceExpDate1').addClass('hide');
+                $('#divDepreciation').removeClass('hide');
+            }
+            else if ($('#Category').val() == 'Hired Vehicle')
+            {
+                $('#divInsuranceExpDate1').removeClass('hide');
+                $('#divDepreciation').addClass('hide');
+            }
+            else
+            {
+             $('#divInsuranceExpDate1').addClass('hide');
+                $('#divinsuranceedetail').addClass('hide');
+                $('#divpurchasedetail').addClass('hide');
+                $('#divDepreciation').addClass('hide');
+            }
+
+        });
+        
         $("#VehicleValue").blur(function () {
             var x = parseFloat($(this).val()).toFixed(2);
             $(this).val(x);
         });
-     
-
-        $("#VehicleNO").focus();
+        $('#RegExpirydate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#DepreciationDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#PurchaseDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#InsuranceExpDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#InsuranceExpDate1').datetimepicker({ format: 'DD-MM-YYYY' });
+        
+        $("#Category").focus();
 
         $("#btnsave").click(function () {
-            var no = $("#VehicleNO").val();
+            var cat = $('#Category').val();
             var reg = $("#RegistrationNo").val();
+            var regunder = $("#RegisteredUnder").val();
             var mod = $("#Model").val();
-            var type = $("#Type").val();
+            var type = $("#VehicleTypeID").val();
             var pur = $("#PurchaseDate").val();
             var value = $("#VehicleValue").val();
             var vdate = $("#ValueDate").val();
             var pdate = $("#PurchaseDate").val();
             var exp = $("#RegExpirydate").val();
             var des = $("#VehicleDescription").val();
-        
-         
-            if (no == "") {
+
+            if ($('#Category').val() == 'Hired Vehicle') {
+                $('#InsuranceExpDate').val($('#InsuranceExpDate1').val());
+            }
+            if (cat == "") {
                 $("#validations").show();
+                $('#Category').focus();
                 return false;
             }
             else if (reg == "") {
                 $("#validations").show();
+                $("#RegistrationNo").focus();
                 return false;
             }
-            else if (mod == "") {
+            else if (regunder == "")
+            {
                 $("#validations").show();
+                $("#RegisteredUnder").focus();
                 return false;
-            }
-            else if (type == "") {
+            }         
+            else if (type == "" || type == 0 || type==undefined) {
                 $("#validations").show();
-                return false;
-            }
-            else if (pur == "") {
-                $("#validations").show();
-                return false;
-            }
-            else if (value == "") {
-                $("#validations").show();
-                return false;
-            }
-            else if (vdate == "") {
-                $("#validations").show();
-                return false;
-            }
-            else if (pdate == "") {
-                $("#validations").show();
+                $("#VehicleTypeID").focus();
                 return false;
             }
             else if (exp == "") {
                 $("#validations").show();
+                $("#RegExpirydate").focus();
                 return false;
             }
-            else if (des  == "") {
-                $("#validations").show();
-                return false;
-            }
+            //else if (mod == "") {
+            //    $("#validations").show();
+            //    return false;
+            //}
+            //else if (pur == "") {
+            //    $("#validations").show();
+            //    return false;
+            //}
+            //else if (value == "") {
+            //    $("#validations").show();
+            //    return false;
+            //}
+            //else if (vdate == "") {
+            //    $("#validations").show();
+            //    return false;
+            //}
+            //else if (pdate == "") {
+            //    $("#validations").show();
+            //    return false;
+            //}
+           
+            //else if (des == "") {
+            //    $("#validations").show();
+            //    return false;
+            //}
 
-            else {
-                $("#validations").hide();
-                return true;
-            }
+            //else {
+            //    $("#validations").hide();
+            //    return true;
+            //}
         });
 
     });
 
- </script>
+</script>
 
 
 
@@ -93,100 +137,158 @@
 
 
 <section class="content">
-@using (Html.BeginForm()) {
-    @Html.ValidationSummary(true)
-      <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
-    <fieldset>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <fieldset>
 
-        <div class="row no-margin"> 
-  
-         <div class="col-md-3">
-                          <label class="headinglabel required">Vehicle No</label>
-                 @Html.TextBoxFor(model => model.VehicleNO, new {@class="form-control" })
-            @Html.ValidationMessageFor(model => model.VehicleNO)
-                 </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-3">
+                    <label class="headinglabel required">Category</label>
+                    @Html.DropDownList("Category", new List<SelectListItem>
+                {
+                    new SelectListItem{ Text="Contract Vehicle", Value = "Contract Vehicle" },
+                    new SelectListItem{ Text="Hired Vehicle", Value = "Hired Vehicle" },
+                    new SelectListItem{ Text="Own Vehicle", Value = "Own Vehicle" },
 
-         
+                    }, "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Registration No.</label>
+                    @Html.TextBoxFor(model => model.RegistrationNo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.RegistrationNo)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Manufacture Name</label>
+                    @Html.TextBoxFor(model => model.VehicleDescription, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.VehicleDescription)
 
-            <div class="col-md-3">
-                          <label class="headinglabel required">Registration No</label>
-         @Html.TextBoxFor(model => model.RegistrationNo, new {@class="form-control " })
-            @Html.ValidationMessageFor(model => model.RegistrationNo)
-                 </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Registered Under</label>
+                    @Html.TextBoxFor(model => model.RegisteredUnder, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.RegisteredUnder)
 
-            
-            <div class="col-md-3">
-                          <label class="headinglabel required">Model</label>
-       @Html.TextBoxFor(model => model.Model, new {@class="form-control txttarget text-right" })
-            @Html.ValidationMessageFor(model => model.Model)
-                 </div>
-            <div class="col-md-3">
-                          <label class="headinglabel required">Type</label>
-       @Html.TextBoxFor(model => model.Type, new {@class="form-control txttarget" })
-            @Html.ValidationMessageFor(model => model.Type)
-                 </div>
-           
-         </div>
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-3">
+                    <label class="headinglabel required">Model</label>
+                    @Html.TextBoxFor(model => model.Model, new { @class = "form-control txttarget text-right" })
+                    @Html.ValidationMessageFor(model => model.Model)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Year</label>
+                    @Html.TextBoxFor(model => model.MakeYear, new { @class = "form-control txttarget text-right" })
+                    @Html.ValidationMessageFor(model => model.MakeYear)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Vehicle Type</label>
+                    @Html.DropDownListFor(model => model.VehicleTypeID, new SelectList(@ViewBag.VehicleType, "VehicleTypeID", "VehicleType1"), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.VehicleTypeID)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Reg Expiry date</label>
+                    @Html.TextBoxFor(model => model.RegExpirydate, new { @class = "form-control text-right" })
+                </div>
+                <div class="col-md-3" id="divInsuranceExpDate1">
+                    <label class="headinglabel required">Insurance Exp. Date</label>
+                    @Html.TextBoxFor(model => model.InsuranceExpDate, new { @class = "form-control text-right" ,@id="InsuranceExpDate1" })
+
+                </div>
+
+            </div>
+            <div class="row no-margin" style="padding-top:10px" id="divDepreciation" >
+                <div class="col-md-3">
+                    <label class="headinglabel required">DepreciationDate</label>
+                    @Html.TextBoxFor(model => model.DepreciationDate, new { @class = "form-control text-right" })
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Scrap Value</label>
+                    @Html.TextBoxFor(model => model.ScrapValue, new { @class = "form-control text-right" })
+                </div>
+                @*<div class="col-md-3">
+                    <label class="headinglabel required">Branch</label>
+                    @Html.DropDownListFor(model => model.BranchID, new SelectList(@ViewBag.Branch, "BranchID", "BranchName"), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.BranchID)
+                </div>*@
+            </div>
+            <div class="row no-margin hide" style="padding-top:10px" id="divpurchasedetail">
+                <div class="col-md-12">
+                    <h3 style="color:white">PURCHSAE DETAILS</h3><hr />
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Mode of Purchase</label>
+                    @Html.DropDownList("Mode", new List<SelectListItem>
+                 {
+                     new SelectListItem{ Text="Leasing/Finance", Value = "Leasing/Finance" },
+                     new SelectListItem{ Text="Cash", Value = "Cash" },
+
+                     }, "Select", new { @class = "form-control" })
+
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel">Finance Company</label>
+                    @Html.TextBoxFor(model => model.FinanceCompany, new { @class = "form-control text-right" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Purchase Date</label>
+                    @Html.TextBoxFor(model => model.PurchaseDate, new { @class = "form-control text-right" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Purchase Value</label>
+                    @Html.TextBoxFor(model => model.PurchaseValue, new { @class = "form-control text-right" })
+                </div>
 
 
-        <div class="row no-margin" style="padding-top:10px">
-                
-             <div class="col-md-3">
-                          <label class="headinglabel required">Value</label>
-       @Html.TextBoxFor(model => model.VehicleValue, new {@class="form-control text-right" })
-       
-                 </div>
-        <div class="col-md-3">
-                          <label class="headinglabel">Value Date</label>  
-                       @Html.TextBoxFor(model => model.ValueDate,new { @class = "form-control text-right" })
-                  
-                           
-             </div>
-             <div class="col-md-3">
-                          <label class="headinglabel required">Purchase Date</label>
-        @Html.TextBoxFor(model => model.PurchaseDate, new {@class="form-control text-right" })
-          
-                 </div>
-            <div class="col-md-3">
-                          <label class="headinglabel required">Reg Expiry date</label>
-        @Html.TextBoxFor(model => model.RegExpirydate, new {@class="form-control text-right" })
-          
-                 </div>
-        </div>
+
+            </div>
+            <div class="row no-margin hide" style="padding-top:10px" id="divinsuranceedetail">
+                <div class="col-md-12">
+                    <h3 style="color:white">INSURANCE DETAILS</h3><hr />
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Insurance Company</label>
+                    @Html.TextBoxFor(model => model.InsuranceCompName, new { @class = "form-control text-right" })
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Policy No.</label>
+                    @Html.TextBoxFor(model => model.PolicyNo, new { @class = "form-control text-right" })
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Insurance Value</label>
+                    @Html.TextBoxFor(model => model.InsuredValue, new { @class = "form-control text-right" })
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Insurance Exp. Date</label>
+                    @Html.TextBoxFor(model => model.InsuranceExpDate, new { @class = "form-control text-right" })
+
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
 
 
 
-              <div class="row no-margin" style="padding-top:10px">
-                
 
-                   <div class="col-md-3">
-                          <label class="headinglabel required">Description</label>
-               @Html.TextBoxFor(model => model.VehicleDescription, new {@class="form-control txttarget" })
-            @Html.ValidationMessageFor(model => model.VehicleDescription)
-                     
-                 </div>
-          
-          
-            
-        </div>
 
-         <div class="row no-margin" style="padding-top:10px">
-                        <div class="col-md-12 btn-right">
-                            
-                                <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />/&nbsp;&nbsp;<a href='@Url.Action("Index", "VehicleMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
-                          
-                        </div>
-                    </div>
 
-    </fieldset>
-}
-    </section>
+            </div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-12 btn-right">
 
-        $("#ValueDate").datepicker({ dateFormat: 'dd-M-yy', changeYear: true, changeMonth: true });
-        $("#PurchaseDate").datepicker({ dateFormat: 'dd-M-yy', changeYear: true, changeMonth: true });
-        $("#RegExpirydate").datepicker({ dateFormat: 'dd-M-yy', changeYear: true, changeMonth: true });
-    });
-</script>
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />/&nbsp;&nbsp;<a href='@Url.Action("Index", "VehicleMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+                </div>
+            </div>
+
+        </fieldset>
+    }
+</section>
+
