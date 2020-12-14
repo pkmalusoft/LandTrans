@@ -312,10 +312,11 @@ namespace LTMSV2.Controllers
                     inscan.MovementID = v.MovementTypeID;
                     
                     inscan.Remarks = v.remarks;
-                    inscan.VolumnWeight = v.Volume;
+                    inscan.Volume= v.Volume;
                     inscan.VolumnWeight = v.VolumeWeight;
                     inscan.Freight = v.Freight;
                     inscan.DocumentSetupID = v.DocumentSetupId;
+                    inscan.ExportImportCode = v.ExportImportCode;
                     inscan.ItemID = v.ItemId;
                     inscan.PackageID = v.PackageId;
                     inscan.CustomsInvoiceValue = v.CustomsInvoiceValue;
@@ -646,6 +647,29 @@ namespace LTMSV2.Controllers
 
         }
 
+        [HttpGet]
+        public JsonResult GetImpExpCode(string term)
+        {
+            string status = "ok";
+            try
+            {
+                var list = (from c1 in db.ImpExpDocumentMasters
+                                   where c1.DocumentName.ToLower().StartsWith(term.ToLower())
+                                   orderby c1.DocumentName ascending
+                                   select new { DocumentId = c1.DocumentID, DocumentName = c1.DocumentName, ImpExpCode = c1.IMPEXPCode }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);                
+                
+            }
+
+            catch (Exception ex)
+            {
+                status = ex.Message;
+            }
+
+            return Json(new { data = "undefined", result = "failed" }, JsonRequestBehavior.AllowGet);
+
+        }
+
         public QuickAWBVM GetAWBDetail(int id)
         {
             QuickAWBVM inscan = new QuickAWBVM();
@@ -667,6 +691,8 @@ namespace LTMSV2.Controllers
                 inscan.StatusTypeId = data.StatusTypeId;
                 inscan.CourierStatusId = data.CourierStatusID;
                 inscan.remarks = data.Remarks;
+                
+
                 int statustypeid = 0;
                  
             if (data.StatusTypeId != null && data.StatusTypeId!=0)
@@ -800,6 +826,8 @@ namespace LTMSV2.Controllers
             if (data.DocumentSetupID!= null)
             {
                 inscan.DocumentSetupId = data.DocumentSetupID.Value;
+                inscan.DocumentSetupName = db.ImpExpDocumentMasters.Find(data.DocumentSetupID).DocumentName;
+                inscan.ExportImportCode = data.ExportImportCode;
             }
             else
             {
@@ -817,6 +845,21 @@ namespace LTMSV2.Controllers
             {
                 inscan.ItemId = 0;
             }
+
+            if (data.PackageID != null)
+            {
+                inscan.PackageId = data.PackageID.Value;
+                if (inscan.PackageId > 0)
+                    inscan.PackageName = db.Packages.Find(inscan.PackageId).PackageName;
+                else
+                    inscan.PackageName = "";
+            }
+            else
+            {
+                inscan.PackageId = 0;
+            }
+
+
             if (data.RouteID != null)
             {
                 inscan.RouteID = data.RouteID.Value;
@@ -1394,11 +1437,11 @@ namespace LTMSV2.Controllers
         public ActionResult GetOtherChargeAll(string term)
         {
             //MastersModel MM = new MastersModel();
-            int CompanyId= CommanFunctions.ParseInt(Session["CurrentCompanyID"].ToString());
+            int CompanyId = CommanFunctions.ParseInt(Session["CurrentCompanyID"].ToString());
 
             if (!String.IsNullOrEmpty(term))
             {
-                var othercharges = db.OtherCharges.Where(cc => cc.AcCompanyID== CompanyId && cc.OtherCharge1.ToLower().StartsWith(term.ToLower())).OrderBy(cc => cc.OtherCharge1).ToList();                               
+                var othercharges = db.OtherCharges.Where(cc => cc.AcCompanyID == CompanyId && cc.OtherCharge1.ToLower().StartsWith(term.ToLower())).OrderBy(cc => cc.OtherCharge1).ToList();
 
                 //MM.GetAnalysisHeadSelectList(Common.ParseInt(Session["AcCompanyID"].ToString()), term);
                 return Json(othercharges, JsonRequestBehavior.AllowGet);
@@ -1407,8 +1450,27 @@ namespace LTMSV2.Controllers
             {
                 var othercharges = db.OtherCharges.Where(cc => cc.AcCompanyID == CompanyId).OrderBy(cc => cc.OtherCharge1).ToList();
                 term = "";
-                return Json(othercharges, JsonRequestBehavior.AllowGet);                
+                return Json(othercharges, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [HttpPost]
+        public string GenLabelPrinting(LabelPrintingParam picker)
+        {
+            if (picker.ConsignmentNo == "" ||picker.ConsignmentNo ==null )
+                picker.ConsignmentNo = db.InScanMasters.Find(picker.InScanId).ConsignmentNo;
+
+            ViewBag.ReportName = "Label Printing - " + picker.ConsignmentNo;
+            AccountsReportsDAO.GenerateLabelPrinting(picker);
+            return picker.ConsignmentNo;
+
+        }
+        public ActionResult LabelPrinting(string consignmentno)
+        {
+            ViewBag.ReportName = "Label Printing - " + consignmentno;
+            
+            return View();
+
         }
 
         public class selectdata

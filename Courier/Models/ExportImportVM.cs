@@ -174,4 +174,19 @@ namespace LTMSV2.Models
         public string Filters { get; set; }
         public string SortBy { get; set; }
     }
-}
+
+
+    public class LabelPrintingParam
+    {
+        public int LabelStartNo { get; set; }
+        public int LabelQty { get; set; }
+        public int Increment { get; set; }
+        public int InScanId{ get; set; }
+
+        public string ConsignmentNo { get; set; }
+        public string Output { get; set; }
+
+        public string ReportFileName { get; set; }
+    }
+
+    }

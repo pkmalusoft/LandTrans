@@ -62,6 +62,7 @@ namespace LTMSV2.Models
         public decimal VolumeWeight { get; set; }
         public decimal CustomsInvoiceValue { get; set; }
         public int DocumentSetupId { get; set; }
+        public string DocumentSetupName { get; set; }
         public int DocumentTypeId { get; set; }
         public decimal Freight { get; set; }
         public string ExportImportCode { get; set; }

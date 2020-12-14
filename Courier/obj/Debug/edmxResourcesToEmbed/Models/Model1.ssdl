@@ -2154,6 +2154,7 @@
     <Property Name="SeparateDoc" Type="bit" />
     <Property Name="DocumentSetupID" Type="int" />
     <Property Name="CustomsInvoiceValue" Type="money" />
+    <Property Name="LabelPrinting" Type="bit" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>

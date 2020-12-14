@@ -99,5 +99,6 @@ namespace LTMSV2.Models
         public Nullable<bool> SeparateDoc { get; set; }
         public Nullable<int> DocumentSetupID { get; set; }
         public Nullable<decimal> CustomsInvoiceValue { get; set; }
+        public Nullable<bool> LabelPrinting { get; set; }
     }
 }
