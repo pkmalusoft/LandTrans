@@ -8864,5 +8864,65 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="DriverMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DriverMaster">
+        <MappingFragment StoreEntitySet="DriverMaster">
+          <ScalarProperty Name="CountryName3" ColumnName="CountryName3" />
+          <ScalarProperty Name="CountryName2" ColumnName="CountryName2" />
+          <ScalarProperty Name="CountryName1" ColumnName="CountryName1" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+          <ScalarProperty Name="PhoneNo4" ColumnName="PhoneNo4" />
+          <ScalarProperty Name="CountryID4" ColumnName="CountryID4" />
+          <ScalarProperty Name="PhoneNo3" ColumnName="PhoneNo3" />
+          <ScalarProperty Name="PhoneNo2" ColumnName="PhoneNo2" />
+          <ScalarProperty Name="PhoneNo1" ColumnName="PhoneNo1" />
+          <ScalarProperty Name="SponsorName" ColumnName="SponsorName" />
+          <ScalarProperty Name="Address3" ColumnName="Address3" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="VehicleNo" ColumnName="VehicleNo" />
+          <ScalarProperty Name="VehicleTypeID" ColumnName="VehicleTypeID" />
+          <ScalarProperty Name="VisaExpDate" ColumnName="VisaExpDate" />
+          <ScalarProperty Name="VisaNo" ColumnName="VisaNo" />
+          <ScalarProperty Name="PassportExpDate" ColumnName="PassportExpDate" />
+          <ScalarProperty Name="PassportNo" ColumnName="PassportNo" />
+          <ScalarProperty Name="Nationality" ColumnName="Nationality" />
+          <ScalarProperty Name="LicenseExpDate" ColumnName="LicenseExpDate" />
+          <ScalarProperty Name="LicenseNo" ColumnName="LicenseNo" />
+          <ScalarProperty Name="NickName" ColumnName="NickName" />
+          <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+          <ScalarProperty Name="DriverType" ColumnName="DriverType" />
+          <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RevenueCostMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueCostMaster">
+        <MappingFragment StoreEntitySet="RevenueCostMaster">
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="AcCompanyId" ColumnName="AcCompanyId" />
+          <ScalarProperty Name="CostAcHeadID" ColumnName="CostAcHeadID" />
+          <ScalarProperty Name="CostMandatory" ColumnName="CostMandatory" />
+          <ScalarProperty Name="CostRate" ColumnName="CostRate" />
+          <ScalarProperty Name="CostComponent" ColumnName="CostComponent" />
+          <ScalarProperty Name="RevenueAcHeadID" ColumnName="RevenueAcHeadID" />
+          <ScalarProperty Name="RevenueMandatory" ColumnName="RevenueMandatory" />
+          <ScalarProperty Name="RevenueRate" ColumnName="RevenueRate" />
+          <ScalarProperty Name="RevenueComponent" ColumnName="RevenueComponent" />
+          <ScalarProperty Name="RCCode" ColumnName="RCCode" />
+          <ScalarProperty Name="RCID" ColumnName="RCID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PortMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.PortMaster">
+        <MappingFragment StoreEntitySet="PortMaster">
+          <ScalarProperty Name="PortCode" ColumnName="PortCode" />
+          <ScalarProperty Name="PortName" ColumnName="PortName" />
+          <ScalarProperty Name="PortID" ColumnName="PortID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

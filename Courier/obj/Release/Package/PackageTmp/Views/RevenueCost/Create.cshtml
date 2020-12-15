@@ -1,0 +1,238 @@
+﻿@model LTMSV2.Models.RevenueCostMasterVM
+@{
+    ViewBag.Title = "Revenue Cost";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+<style>
+    textarea {
+        width: 100%;
+        resize: vertical;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .searchdiv {
+        background-color: #fff;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 500px;
+        padding: 20px;
+        margin-top: 50px;
+        border-radius: 10px;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .headinglabel {
+        font-family: Calibri;
+        font-size: 16px;
+        color: #2b2929 !important;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+       
+       
+        $("#RevenueHeadName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/AccountHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                AcHeadID: val.AcHeadID
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#RevenueHeadName").val(i.item.label);
+                $('#RevenueAcHeadID').val(i.item.AcHeadID);
+
+
+            },
+
+        });
+
+        $("#CostHeadName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/AccountHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                AcHeadID: val.AcHeadID
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#CostHeadName").val(i.item.label);
+                $('#CostAcHeadID').val(i.item.AcHeadID);
+
+
+            },
+
+        });
+
+        $("#btnsave").click(function () {
+            var acgroup = $("#AcGroupID option:selected").val();
+            var head = $("#AcHead1").val();
+            var code = $("#AcHeadKey").val();
+            var prefix = $("#Prefix").val();
+
+
+
+
+            if (acgroup == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if (head == "") {
+                $("#alert").show();
+                return false;
+            }
+
+            else {
+                $("#alert").hide();
+                return true;
+            }
+        });
+
+
+    });
+</script>
+<section class="content-header">
+    <h1 class="headingfont">Revenue Cost Components</h1>
+
+</section>
+
+
+<section class="content">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div class="searchdiv sm-width">
+            <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
+            <fieldset>
+
+                <div class="row no-margin">
+                    @Html.HiddenFor(model => model.RCID)
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="required headinglabel">Revenue Component</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.RevenueComponent, new { @class = "form-control txttarget" })
+                            @Html.ValidationMessageFor(model => model.RevenueComponent)
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class=" headinglabel">Revenue Rate</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.RevenueRate, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.RevenueRate)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-9 checkboxdesign" style="padding-top: 10px">
+                            @Html.CheckBox("RevenueMandatory", new { @name = "RevenueMandatory" }) &nbsp
+                            <label class="headinglabel">Revenue Mandatory</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class=" headinglabel">Revenue AcHead</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.RevenueHeadName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.RevenueHeadName)
+                            @Html.HiddenFor(model => model.RevenueAcHeadID)
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="required headinglabel">Cost Component</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.CostComponent, new { @class = "form-control txttarget" })
+                            @Html.ValidationMessageFor(model => model.CostComponent)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class=" headinglabel">Cost Rate</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.CostRate, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CostRate)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-9 checkboxdesign" style="padding-top: 10px">
+                            @Html.CheckBox("CostMandatory", new { @name = "CostMandatory" }) &nbsp
+                            <label class="headinglabel">Cost Mandatory</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="required headinglabel">Cost AcHead</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.CostHeadName, new { @class = "form-control txttarget" })
+                            @Html.ValidationMessageFor(model => model.CostHeadName)
+                            @Html.HiddenFor(model => model.CostAcHeadID)
+                        </div>
+                    </div>
+
+                    <div class="row no-margin" style="padding-top:10px">
+                        <div class="" style="text-align:right;padding:10px">
+
+                            <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" />
+
+                            <a href='@Url.Action("Index", "RevenueCost", new { id = 0 })' class="btn btn-danger btnwid" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
+        </div>
+    }
+</section>

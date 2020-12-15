@@ -183,6 +183,7 @@ namespace LTMSV2.Controllers
             v.Model = data.Model;
             //v.Type = data.Type;
             v.RegistrationNo = data.RegistrationNo;
+            if (data.PurchaseDate!=null)
             v.PurchaseDate = data.PurchaseDate.Value;
             if (data.RegExpirydate!=null)
             v.RegExpirydate = data.RegExpirydate.Value;

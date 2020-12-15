@@ -37,7 +37,7 @@
             }
 
         });
-        
+        $('#Category').trigger('change');
         $("#VehicleValue").blur(function () {
             var x = parseFloat($(this).val()).toFixed(2);
             $(this).val(x);
@@ -145,6 +145,7 @@
 
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-3">
+                    @Html.HiddenFor(mode=>mode.VehicleID)
                     <label class="headinglabel required">Category</label>
                     @Html.DropDownList("Category", new List<SelectListItem>
                 {
@@ -283,7 +284,7 @@
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-12 btn-right">
 
-                    <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />/&nbsp;&nbsp;<a href='@Url.Action("Index", "VehicleMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "VehicleMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
 
                 </div>
             </div>
