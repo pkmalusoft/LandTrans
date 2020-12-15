@@ -255,7 +255,6 @@ namespace LTMSV2.Models
         public virtual DbSet<Package> Packages { get; set; }
         public virtual DbSet<RouteMaster> RouteMasters { get; set; }
         public virtual DbSet<RouteOrder> RouteOrders { get; set; }
-        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
         public virtual DbSet<BranchMaster> BranchMasters { get; set; }
         public virtual DbSet<CityMaster> CityMasters { get; set; }
         public virtual DbSet<VehicleMaster> VehicleMasters { get; set; }
@@ -263,6 +262,9 @@ namespace LTMSV2.Models
         public virtual DbSet<Transit> Transits { get; set; }
         public virtual DbSet<TransportMode> TransportModes { get; set; }
         public virtual DbSet<ImpExpDocumentMaster> ImpExpDocumentMasters { get; set; }
+        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
+        public virtual DbSet<TruckDetail> TruckDetails { get; set; }
+        public virtual DbSet<VehicleType> VehicleTypes { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

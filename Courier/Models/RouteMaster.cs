@@ -14,8 +14,17 @@ namespace LTMSV2.Models
     
     public partial class RouteMaster
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public RouteMaster()
+        {
+            this.TruckDetails = new HashSet<TruckDetail>();
+        }
+    
         public int RouteID { get; set; }
         public string RouteCode { get; set; }
         public string RouteName { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TruckDetail> TruckDetails { get; set; }
     }
 }

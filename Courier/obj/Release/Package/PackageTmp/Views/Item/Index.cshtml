@@ -4,30 +4,35 @@
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 }
 
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2 class="mb-0">Item</h2>
-            </div>
-        </div>
+<style>
+    .ngedit {
+        color: #35b8eb !important;
+    }
+</style>
+
+<section class="content-header">
+    <h1 class="headingfont">ITEM</h1>
+
+</section>
+
+<div class="row no-margin">
+    <div class="col-lg-12 mt-2 mb-2 text-right">
+        <button id="btnAddNewItem" type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#modelItemMaster">Add</button>
     </div>
 </div>
 
 
-<div class="row">
-    <div class="col-lg-12 mt-2 mb-2 text-right">
-        <button id="btnAddNewItem" type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#modelItemMaster">Add</button>
+   
         <!-- Modal -->
         <div class="modal fade" id="modelItemMaster" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header" style="background-color: #54cd88;">
-                        <h5 class="modal-title" id="exampleModalLongTitle" style="color: white;font-weight: bold !important;">Item</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                    <div class="modal-header" style="background-color: #f5f5f5;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">
+                            ITEM
+                        </h4>
+                    </div>                    
                     <div class="modal-body">
                         <div class="form-group text-left">
                             <label for="exampleFormControlInput1">Item Name</label>
@@ -47,13 +52,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="add-Item btn btn-primary ngadd">Save</button>
-                        <button type="button" id="btn-cancel" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="btn-cancel" class="btn btn-danger"data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 <div class="card">
     <div class="card-body">
@@ -83,7 +86,7 @@
 
     var g_ManageItemMaster = {
 
-        ItemID: '', ItemName: '', Description: '', HsCode:''
+        ItemID: '', ItemName: '', Description: '', HsCode: ''
 
     }
 

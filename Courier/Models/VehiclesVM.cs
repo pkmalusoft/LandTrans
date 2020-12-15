@@ -18,18 +18,31 @@ namespace LTMSV2.Models
 
     public string Model { get; set; }
 
-    public string Type { get; set; }
+    public string Category { get; set; }
+        public string VehicleTypeName { get; set; }
+        public int VehicleTypeID { get; set; }
+        public string RegisteredUnder { get; set; }
+        public string MakeYear{ get; set; }
+        public Decimal PurchaseValue { get; set; }
 
-    public Decimal VehicleValue { get; set; }
-
-    public DateTime ValueDate { get; set; }
-
-    public DateTime PurchaseDate { get; set; }
+    
+    public DateTime? PurchaseDate { get; set; }
 
     public DateTime RegExpirydate { get; set; }
+        public string InsuranceCompName { get; set; }
+        public string PolicyNo { get; set; }
+        public Decimal InsuredValue { get; set; }
+        public DateTime? InsuranceExpDate { get; set; }
 
-    public int AcCompanyID { get; set; }
+        public DateTime? DepreciationDate { get; set; }
 
-    public string VehicleNO { get; set; }
-  }
+        public Decimal  ScrapValue { get; set; }
+        public int AcCompanyID { get; set; }
+        public string Mode { get; set; }
+
+        public int BranchID { get; set; }
+
+        public string FinanceCompany { get; set; }
+
+    }
 }

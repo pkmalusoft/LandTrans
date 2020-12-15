@@ -26,6 +26,7 @@ namespace LTMSV2.Models
             this.Quotations = new HashSet<Quotation>();
             this.SalesInvoices = new HashSet<SalesInvoice>();
             this.SupplierMasters = new HashSet<SupplierMaster>();
+            this.TruckDetails = new HashSet<TruckDetail>();
         }
     
         public int BranchID { get; set; }
@@ -86,5 +87,7 @@ namespace LTMSV2.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SupplierMaster> SupplierMasters { get; set; }
         public virtual CityMaster CityMaster { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TruckDetail> TruckDetails { get; set; }
     }
 }

@@ -67,13 +67,12 @@
     <thead>
     <tr>
         <th>
-           @Html.Label("Vehicle No")
+           @Html.Label("Category")
         </th>
         <th>
           @Html.Label("Registration No")
         </th>
-       
-        <th>
+         <th>
           @Html.Label("Model")
         </th>
         <th>
@@ -87,7 +86,7 @@
     <tfoot>
     <tr>
         <th>
-           @Html.Label("Vehicle No.")
+           @Html.Label("Vehicle Type")
         </th>
         <th>
           @Html.Label("Registration No.")
@@ -107,7 +106,7 @@
 @foreach (var item in Model) {
     <tr>
          <td>
-            @Html.DisplayFor(modelItem => item.VehicleNO)
+            @Html.DisplayFor(modelItem => item.Category)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.RegistrationNo)
@@ -123,7 +122,7 @@
        
         <td>
          @*   @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) *@
-              <a href="@Url.Action("Edit", new { id = item.VehicleID })"><i class="fa fa-pencil"></i></a>|
+              <a href="@Url.Action("Create", new { id = item.VehicleID })"><i class="fa fa-pencil"></i></a>|
         
              <a href="#" onclick="Delete(ID=@item.VehicleID)"><i class="fa fa-times"></i></a>
         </td>
