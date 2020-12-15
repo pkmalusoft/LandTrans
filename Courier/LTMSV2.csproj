@@ -228,6 +228,7 @@
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DepotController.cs" />
     <Compile Include="Controllers\DesignationController.cs" />
+    <Compile Include="Controllers\DriverController.cs" />
     <Compile Include="Controllers\EmployeeMasterController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Controllers\ForwardingAgentRatesController.cs" />
     <Compile Include="Controllers\HoldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImpExpDocumentController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\ImportShipmentController.cs" />
     <Compile Include="Controllers\InBoundController.cs" />
@@ -269,6 +271,7 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ReturnShipmentController.cs" />
     <Compile Include="Controllers\ReturnShippmentController.cs" />
+    <Compile Include="Controllers\RevenueCostController.cs" />
     <Compile Include="Controllers\RevenueTypeController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\TruckAssignController.cs" />
@@ -834,6 +837,10 @@
     <Compile Include="Models\DR.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DriverMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DriverVM.cs" />
     <Compile Include="Models\DRR.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1211,6 +1218,7 @@
     <Compile Include="Models\ImpExpDocumentMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ImpExpDocumentVM.cs" />
     <Compile Include="Models\ImpExpVM.cs" />
     <Compile Include="Models\Import.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -1419,6 +1427,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PODStatusVM.cs" />
+    <Compile Include="Models\PortMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PrepaidAWB.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1664,6 +1675,10 @@
     </Compile>
     <Compile Include="Models\ReturnShippmentVM.cs" />
     <Compile Include="Models\RevenueAcHeadVM.cs" />
+    <Compile Include="Models\RevenueCostMaster.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RevenueCostMasterVM.cs" />
     <Compile Include="Models\RevenueType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3487,6 +3502,11 @@
     <Content Include="Views\DailyTrips\Index.cshtml" />
     <Content Include="Views\TruckAssign\Index.cshtml" />
     <Content Include="Views\TruckAssign\Create.cshtml" />
+    <Content Include="Views\RevenueCost\Index.cshtml" />
+    <Content Include="Views\ImpExpDocument\Index.cshtml" />
+    <Content Include="Views\Driver\Index.cshtml" />
+    <Content Include="Views\RevenueCost\Create.cshtml" />
+    <Content Include="Views\ImpExpDocument\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

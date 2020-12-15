@@ -8757,6 +8757,9 @@
       <End Role="VehicleType" EntitySet="VehicleTypes" />
       <End Role="VehicleMaster" EntitySet="VehicleMasters" />
     </AssociationSet>
+    <EntitySet Name="DriverMasters" EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" />
+    <EntitySet Name="RevenueCostMasters" EntityType="DB_9F57C4_couriertest_newModel.RevenueCostMaster" />
+    <EntitySet Name="PortMasters" EntityType="DB_9F57C4_couriertest_newModel.PortMaster" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -13039,4 +13042,61 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="DriverMaster">
+    <Key>
+      <PropertyRef Name="DriverID" />
+    </Key>
+    <Property Name="DriverID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DriverType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DriverName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="NickName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LicenseNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LicenseExpDate" Type="DateTime" Precision="3" />
+    <Property Name="Nationality" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PassportNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PassportExpDate" Type="DateTime" Precision="3" />
+    <Property Name="VisaNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VisaExpDate" Type="DateTime" Precision="3" />
+    <Property Name="VehicleTypeID" Type="Int32" />
+    <Property Name="VehicleNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SponsorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNo1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNo2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNo3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CountryID4" Type="Int32" />
+    <Property Name="PhoneNo4" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CountryName1" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CountryName2" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CountryName3" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="RevenueCostMaster">
+    <Key>
+      <PropertyRef Name="RCID" />
+    </Key>
+    <Property Name="RCID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RCCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RevenueComponent" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="RevenueRate" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RevenueMandatory" Type="Boolean" />
+    <Property Name="RevenueAcHeadID" Type="Int32" />
+    <Property Name="CostComponent" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CostRate" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CostMandatory" Type="Boolean" />
+    <Property Name="CostAcHeadID" Type="Int32" />
+    <Property Name="AcCompanyId" Type="Int32" />
+    <Property Name="BranchID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="PortMaster">
+    <Key>
+      <PropertyRef Name="PortID" />
+    </Key>
+    <Property Name="PortID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PortName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="PortCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

@@ -1267,6 +1267,38 @@
     <Property Name="Value" Type="varchar" MaxLength="100" />
     <Property Name="Remarks" Type="varchar(max)" />
   </EntityType>
+  <EntityType Name="DriverMaster">
+    <Key>
+      <PropertyRef Name="DriverID" />
+    </Key>
+    <Property Name="DriverID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DriverType" Type="varchar" MaxLength="50" />
+    <Property Name="DriverName" Type="varchar" MaxLength="100" />
+    <Property Name="NickName" Type="varchar" MaxLength="50" />
+    <Property Name="LicenseNo" Type="varchar" MaxLength="50" />
+    <Property Name="LicenseExpDate" Type="datetime" />
+    <Property Name="Nationality" Type="varchar" MaxLength="50" />
+    <Property Name="PassportNo" Type="varchar" MaxLength="50" />
+    <Property Name="PassportExpDate" Type="datetime" />
+    <Property Name="VisaNo" Type="varchar" MaxLength="50" />
+    <Property Name="VisaExpDate" Type="datetime" />
+    <Property Name="VehicleTypeID" Type="int" />
+    <Property Name="VehicleNo" Type="varchar(max)" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Address3" Type="varchar" MaxLength="50" />
+    <Property Name="SponsorName" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNo1" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNo2" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNo3" Type="varchar" MaxLength="50" />
+    <Property Name="CountryID4" Type="int" />
+    <Property Name="PhoneNo4" Type="varchar" MaxLength="50" />
+    <Property Name="LocationName" Type="varchar" MaxLength="200" />
+    <Property Name="CityName" Type="varchar" MaxLength="200" />
+    <Property Name="CountryName1" Type="varchar" MaxLength="200" />
+    <Property Name="CountryName2" Type="varchar" MaxLength="200" />
+    <Property Name="CountryName3" Type="varchar" MaxLength="200" />
+  </EntityType>
   <EntityType Name="DRR">
     <Key>
       <PropertyRef Name="DRRID" />
@@ -2586,6 +2618,14 @@
     <Property Name="InscanID" Type="int" />
     <Property Name="statusUpdate" Type="bit" />
   </EntityType>
+  <EntityType Name="PortMaster">
+    <Key>
+      <PropertyRef Name="PortID" />
+    </Key>
+    <Property Name="PortID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PortName" Type="varchar" MaxLength="100" />
+    <Property Name="PortCode" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="PrepaidAWB">
     <Key>
       <PropertyRef Name="PrepaidAWBID" />
@@ -2875,6 +2915,23 @@
     <Property Name="EmployeeID" Type="int" Nullable="false" />
     <Property Name="ReturnTime" Type="datetime" Nullable="false" />
     <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="RevenueCostMaster">
+    <Key>
+      <PropertyRef Name="RCID" />
+    </Key>
+    <Property Name="RCID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RCCode" Type="varchar" MaxLength="50" />
+    <Property Name="RevenueComponent" Type="varchar" MaxLength="100" />
+    <Property Name="RevenueRate" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="RevenueMandatory" Type="bit" />
+    <Property Name="RevenueAcHeadID" Type="int" />
+    <Property Name="CostComponent" Type="varchar" MaxLength="100" />
+    <Property Name="CostRate" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="CostMandatory" Type="bit" />
+    <Property Name="CostAcHeadID" Type="int" />
+    <Property Name="AcCompanyId" Type="int" />
+    <Property Name="BranchID" Type="int" />
   </EntityType>
   <EntityType Name="RevenueType">
     <Key>
@@ -8335,6 +8392,7 @@
     <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Designation" EntityType="Self.Designation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DocumentSetup" EntityType="Self.DocumentSetup" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DriverMaster" EntityType="Self.DriverMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRR" EntityType="Self.DRR" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRConsignment" EntityType="Self.DRRConsignment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DRRInvoice" EntityType="Self.DRRInvoice" Schema="dbo" store:Type="Tables" />
@@ -8404,6 +8462,7 @@
     <EntitySet Name="PickUpRequestStatus" EntityType="Self.PickUpRequestStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="POD" EntityType="Self.POD" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PODSignature" EntityType="Self.PODSignature" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PortMaster" EntityType="Self.PortMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PrepaidAWB" EntityType="Self.PrepaidAWB" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PrepaidAwbDetails" EntityType="Self.PrepaidAwbDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PrepaidAWBInvoice" EntityType="Self.PrepaidAWBInvoice" Schema="dbo" store:Type="Tables" />
@@ -8424,6 +8483,7 @@
     <EntitySet Name="RecPayDetails" EntityType="Self.RecPayDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequestType" EntityType="Self.RequestType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ReturnDetails" EntityType="Self.ReturnDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RevenueCostMaster" EntityType="Self.RevenueCostMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RevenueType" EntityType="Self.RevenueType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RoleMaster" EntityType="Self.RoleMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RouteMaster" EntityType="Self.RouteMaster" Schema="dbo" store:Type="Tables" />

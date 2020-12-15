@@ -8,6 +8,7 @@ using LTMSV2.Models;
 using Newtonsoft.Json;
 namespace LTMSV2.Controllers
 {
+    [SessionExpire]
     public class PackageController : Controller
     {
         Entities1 db = new Entities1();
