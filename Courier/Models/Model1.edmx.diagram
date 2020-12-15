@@ -405,6 +405,8 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Transit" Width="1.5" PointX="40.375" PointY="37.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TransportMode" Width="1.5" PointX="0.75" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ImpExpDocumentMaster" Width="1.5" PointX="17.375" PointY="41.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TruckDetail" Width="1.5" PointX="27.375" PointY="41.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" Width="1.5" PointX="40.375" PointY="41.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

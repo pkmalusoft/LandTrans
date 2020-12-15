@@ -1272,6 +1272,38 @@
           <Property Name="Value" Type="varchar" MaxLength="100" />
           <Property Name="Remarks" Type="varchar(max)" />
         </EntityType>
+        <EntityType Name="DriverMaster">
+          <Key>
+            <PropertyRef Name="DriverID" />
+          </Key>
+          <Property Name="DriverID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DriverType" Type="varchar" MaxLength="50" />
+          <Property Name="DriverName" Type="varchar" MaxLength="100" />
+          <Property Name="NickName" Type="varchar" MaxLength="50" />
+          <Property Name="LicenseNo" Type="varchar" MaxLength="50" />
+          <Property Name="LicenseExpDate" Type="datetime" />
+          <Property Name="Nationality" Type="varchar" MaxLength="50" />
+          <Property Name="PassportNo" Type="varchar" MaxLength="50" />
+          <Property Name="PassportExpDate" Type="datetime" />
+          <Property Name="VisaNo" Type="varchar" MaxLength="50" />
+          <Property Name="VisaExpDate" Type="datetime" />
+          <Property Name="VehicleTypeID" Type="int" />
+          <Property Name="VehicleNo" Type="varchar(max)" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="Address3" Type="varchar" MaxLength="50" />
+          <Property Name="SponsorName" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneNo1" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneNo2" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneNo3" Type="varchar" MaxLength="50" />
+          <Property Name="CountryID4" Type="int" />
+          <Property Name="PhoneNo4" Type="varchar" MaxLength="50" />
+          <Property Name="LocationName" Type="varchar" MaxLength="200" />
+          <Property Name="CityName" Type="varchar" MaxLength="200" />
+          <Property Name="CountryName1" Type="varchar" MaxLength="200" />
+          <Property Name="CountryName2" Type="varchar" MaxLength="200" />
+          <Property Name="CountryName3" Type="varchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="DRR">
           <Key>
             <PropertyRef Name="DRRID" />
@@ -3440,6 +3472,54 @@
           <Property Name="TransportModeID" Type="int" Nullable="false" />
           <Property Name="Mode" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="TruckDetail">
+          <Key>
+            <PropertyRef Name="TruckDetailID" />
+          </Key>
+          <Property Name="TruckDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReceiptNo" Type="varchar" MaxLength="20" />
+          <Property Name="VehicleID" Type="int" Nullable="false" />
+          <Property Name="RegNo" Type="varchar" MaxLength="20" />
+          <Property Name="VehicleType" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="TDDate" Type="datetime" Nullable="false" />
+          <Property Name="OriginName" Type="int" />
+          <Property Name="DestinationName" Type="int" />
+          <Property Name="DriverName" Type="varchar" MaxLength="256" />
+          <Property Name="VehicleTypeID" Type="int" Nullable="false" />
+          <Property Name="Rent" Type="money" />
+          <Property Name="OtherCharges" Type="money" />
+          <Property Name="RefTDID" Type="int" />
+          <Property Name="AcJournalID" Type="int" />
+          <Property Name="CurrencyIDRent" Type="int" />
+          <Property Name="CurrencyIDOC" Type="int" />
+          <Property Name="StatusPaymentMode" Type="char" MaxLength="2" />
+          <Property Name="PaymentHeadID" Type="int" />
+          <Property Name="Amount" Type="money" />
+          <Property Name="PaymentCurrencyID" Type="int" />
+          <Property Name="Remarks" Type="char" MaxLength="50" />
+          <Property Name="AcCompanyID" Type="int" />
+          <Property Name="TDcontrolAcHeadID" Type="int" />
+          <Property Name="OtherChargesAcHeadID" Type="int" />
+          <Property Name="FYearID" Type="int" />
+          <Property Name="CurrencyRent" Type="money" />
+          <Property Name="CurrencyOtherCharges" Type="money" />
+          <Property Name="CurrencyAmount" Type="money" />
+          <Property Name="Code" Type="char" MaxLength="50" />
+          <Property Name="PayeeName" Type="char" MaxLength="50" />
+          <Property Name="DriverID" Type="int" />
+          <Property Name="CancelDate" Type="datetime" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
+          <Property Name="DocumentID" Type="int" />
+          <Property Name="RentAcHeadID" Type="int" />
+          <Property Name="RouteID" Type="int" />
+          <Property Name="TDRemarks" Type="varchar" MaxLength="512" />
+          <Property Name="InscanID" Type="int" />
+          <Property Name="BankName" Type="varchar" MaxLength="100" />
+          <Property Name="ChequeNo" Type="varchar" MaxLength="50" />
+          <Property Name="ChequeDate" Type="datetime" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="TypeOfLoad" Type="varchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="TypeOfGoods">
           <Key>
             <PropertyRef Name="TypeOfGoodID" />
@@ -3658,7 +3738,7 @@
           <Property Name="StatusZone" Type="char" MaxLength="1" />
           <Property Name="ZoneType" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <Association Name="FK__aspnet_Me__Appli__24D2692A">
+        <Association Name="FK__aspnet_Me__Appli__2A563856">
           <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
           <End Role="aspnet_Membership" Type="Self.aspnet_Membership" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3670,7 +3750,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__aspnet_Me__UserI__25C68D63">
+        <Association Name="FK__aspnet_Me__UserI__2B4A5C8F">
           <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
           <End Role="aspnet_Membership" Type="Self.aspnet_Membership" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -3682,7 +3762,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__aspnet_Pa__Appli__26BAB19C">
+        <Association Name="FK__aspnet_Pa__Appli__2C3E80C8">
           <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
           <End Role="aspnet_Paths" Type="Self.aspnet_Paths" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3694,7 +3774,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__aspnet_Pe__PathI__27AED5D5">
+        <Association Name="FK__aspnet_Pe__PathI__2D32A501">
           <End Role="aspnet_Paths" Type="Self.aspnet_Paths" Multiplicity="1" />
           <End Role="aspnet_PersonalizationAllUsers" Type="Self.aspnet_PersonalizationAllUsers" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -3706,7 +3786,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__aspnet_Pe__PathI__28A2FA0E">
+        <Association Name="FK__aspnet_Pe__PathI__2E26C93A">
           <End Role="aspnet_Paths" Type="Self.aspnet_Paths" Multiplicity="0..1" />
           <End Role="aspnet_PersonalizationPerUser" Type="Self.aspnet_PersonalizationPerUser" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3718,7 +3798,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__aspnet_Pe__UserI__29971E47">
+        <Association Name="FK__aspnet_Pe__UserI__2F1AED73">
           <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="0..1" />
           <End Role="aspnet_PersonalizationPerUser" Type="Self.aspnet_PersonalizationPerUser" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3730,7 +3810,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__aspnet_Pr__UserI__2A8B4280">
+        <Association Name="FK__aspnet_Pr__UserI__300F11AC">
           <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
           <End Role="aspnet_Profile" Type="Self.aspnet_Profile" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -3742,7 +3822,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__aspnet_Ro__Appli__2B7F66B9">
+        <Association Name="FK__aspnet_Ro__Appli__310335E5">
           <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
           <End Role="aspnet_Roles" Type="Self.aspnet_Roles" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3754,7 +3834,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__aspnet_Us__Appli__2C738AF2">
+        <Association Name="FK__aspnet_Us__Appli__31F75A1E">
           <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
           <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3766,7 +3846,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__aspnet_Us__RoleI__2D67AF2B">
+        <Association Name="FK__aspnet_Us__RoleI__32EB7E57">
           <End Role="aspnet_Roles" Type="Self.aspnet_Roles" Multiplicity="1" />
           <End Role="aspnet_UsersInRoles" Type="Self.aspnet_UsersInRoles" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3778,7 +3858,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__aspnet_Us__UserI__2E5BD364">
+        <Association Name="FK__aspnet_Us__UserI__33DFA290">
           <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
           <End Role="aspnet_UsersInRoles" Type="Self.aspnet_UsersInRoles" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3790,7 +3870,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CODReceip__Recei__5D8BC399">
+        <Association Name="FK__CODReceip__Recei__39987BE6">
           <End Role="CODReceipt" Type="Self.CODReceipt" Multiplicity="1" />
           <End Role="CODReceiptDetail" Type="Self.CODReceiptDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3802,7 +3882,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExportShi__Emplo__2E46C4CB">
+        <Association Name="FK__ExportShi__Emplo__5DD5DC5C">
           <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
           <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3814,7 +3894,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExportShi__Emplo__2F3AE904">
+        <Association Name="FK__ExportShi__Emplo__5ECA0095">
           <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
           <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3826,7 +3906,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExportShi__Emplo__302F0D3D">
+        <Association Name="FK__ExportShi__Emplo__5FBE24CE">
           <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
           <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3838,7 +3918,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExportShi__Emplo__31233176">
+        <Association Name="FK__ExportShi__Emplo__60B24907">
           <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
           <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3850,19 +3930,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExportShi__LastE__321755AF">
-          <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-          <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EmployeeMaster">
-              <PropertyRef Name="EmployeeID" />
-            </Principal>
-            <Dependent Role="ExportShipment">
-              <PropertyRef Name="LastEditedByLoginID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__ExportShi__LastE__330B79E8">
+        <Association Name="FK__ExportShi__LastE__61A66D40">
           <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
           <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3874,7 +3942,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExportShi__LastE__33FF9E21">
+        <Association Name="FK__ExportShi__LastE__629A9179">
           <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
           <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3886,7 +3954,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ExportShi__LastE__34F3C25A">
+        <Association Name="FK__ExportShi__LastE__638EB5B2">
           <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
           <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3898,7 +3966,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ImportShi__Expor__38C4533E">
+        <Association Name="FK__ExportShi__LastE__6482D9EB">
+          <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
+          <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeMaster">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="ExportShipment">
+              <PropertyRef Name="LastEditedByLoginID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ImportShi__Expor__6F00685E">
           <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
           <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3910,7 +3990,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ImportShi__Expor__39B87777">
+        <Association Name="FK__ImportShi__Expor__6FF48C97">
           <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
           <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3922,7 +4002,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ImportShi__Expor__3AAC9BB0">
+        <Association Name="FK__ImportShi__Expor__70E8B0D0">
           <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
           <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -8223,6 +8303,7 @@
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Designation" EntityType="Self.Designation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentSetup" EntityType="Self.DocumentSetup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DriverMaster" EntityType="Self.DriverMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DRR" EntityType="Self.DRR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DRRConsignment" EntityType="Self.DRRConsignment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DRRInvoice" EntityType="Self.DRRInvoice" Schema="dbo" store:Type="Tables" />
@@ -8356,6 +8437,7 @@
           <EntitySet Name="tblVehicleRequiredType" EntityType="Self.tblVehicleRequiredType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transit" EntityType="Self.Transit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransportMode" EntityType="Self.TransportMode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TruckDetail" EntityType="Self.TruckDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TypeOfGoods" EntityType="Self.TypeOfGoods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UMDesignation" EntityType="Self.UMDesignation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UMForms" EntityType="Self.UMForms" Schema="dbo" store:Type="Tables" />
@@ -8376,95 +8458,95 @@
           <EntitySet Name="ZoneChart" EntityType="Self.ZoneChart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZoneChartDetails" EntityType="Self.ZoneChartDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZoneMaster" EntityType="Self.ZoneMaster" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__aspnet_Me__Appli__24D2692A" Association="Self.FK__aspnet_Me__Appli__24D2692A">
+          <AssociationSet Name="FK__aspnet_Me__Appli__2A563856" Association="Self.FK__aspnet_Me__Appli__2A563856">
             <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
             <End Role="aspnet_Membership" EntitySet="aspnet_Membership" />
           </AssociationSet>
-          <AssociationSet Name="FK__aspnet_Me__UserI__25C68D63" Association="Self.FK__aspnet_Me__UserI__25C68D63">
+          <AssociationSet Name="FK__aspnet_Me__UserI__2B4A5C8F" Association="Self.FK__aspnet_Me__UserI__2B4A5C8F">
             <End Role="aspnet_Users" EntitySet="aspnet_Users" />
             <End Role="aspnet_Membership" EntitySet="aspnet_Membership" />
           </AssociationSet>
-          <AssociationSet Name="FK__aspnet_Pa__Appli__26BAB19C" Association="Self.FK__aspnet_Pa__Appli__26BAB19C">
+          <AssociationSet Name="FK__aspnet_Pa__Appli__2C3E80C8" Association="Self.FK__aspnet_Pa__Appli__2C3E80C8">
             <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
             <End Role="aspnet_Paths" EntitySet="aspnet_Paths" />
           </AssociationSet>
-          <AssociationSet Name="FK__aspnet_Pe__PathI__27AED5D5" Association="Self.FK__aspnet_Pe__PathI__27AED5D5">
+          <AssociationSet Name="FK__aspnet_Pe__PathI__2D32A501" Association="Self.FK__aspnet_Pe__PathI__2D32A501">
             <End Role="aspnet_Paths" EntitySet="aspnet_Paths" />
             <End Role="aspnet_PersonalizationAllUsers" EntitySet="aspnet_PersonalizationAllUsers" />
           </AssociationSet>
-          <AssociationSet Name="FK__aspnet_Pe__PathI__28A2FA0E" Association="Self.FK__aspnet_Pe__PathI__28A2FA0E">
+          <AssociationSet Name="FK__aspnet_Pe__PathI__2E26C93A" Association="Self.FK__aspnet_Pe__PathI__2E26C93A">
             <End Role="aspnet_Paths" EntitySet="aspnet_Paths" />
             <End Role="aspnet_PersonalizationPerUser" EntitySet="aspnet_PersonalizationPerUser" />
           </AssociationSet>
-          <AssociationSet Name="FK__aspnet_Pe__UserI__29971E47" Association="Self.FK__aspnet_Pe__UserI__29971E47">
+          <AssociationSet Name="FK__aspnet_Pe__UserI__2F1AED73" Association="Self.FK__aspnet_Pe__UserI__2F1AED73">
             <End Role="aspnet_Users" EntitySet="aspnet_Users" />
             <End Role="aspnet_PersonalizationPerUser" EntitySet="aspnet_PersonalizationPerUser" />
           </AssociationSet>
-          <AssociationSet Name="FK__aspnet_Pr__UserI__2A8B4280" Association="Self.FK__aspnet_Pr__UserI__2A8B4280">
+          <AssociationSet Name="FK__aspnet_Pr__UserI__300F11AC" Association="Self.FK__aspnet_Pr__UserI__300F11AC">
             <End Role="aspnet_Users" EntitySet="aspnet_Users" />
             <End Role="aspnet_Profile" EntitySet="aspnet_Profile" />
           </AssociationSet>
-          <AssociationSet Name="FK__aspnet_Ro__Appli__2B7F66B9" Association="Self.FK__aspnet_Ro__Appli__2B7F66B9">
+          <AssociationSet Name="FK__aspnet_Ro__Appli__310335E5" Association="Self.FK__aspnet_Ro__Appli__310335E5">
             <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
             <End Role="aspnet_Roles" EntitySet="aspnet_Roles" />
           </AssociationSet>
-          <AssociationSet Name="FK__aspnet_Us__Appli__2C738AF2" Association="Self.FK__aspnet_Us__Appli__2C738AF2">
+          <AssociationSet Name="FK__aspnet_Us__Appli__31F75A1E" Association="Self.FK__aspnet_Us__Appli__31F75A1E">
             <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
             <End Role="aspnet_Users" EntitySet="aspnet_Users" />
           </AssociationSet>
-          <AssociationSet Name="FK__aspnet_Us__RoleI__2D67AF2B" Association="Self.FK__aspnet_Us__RoleI__2D67AF2B">
+          <AssociationSet Name="FK__aspnet_Us__RoleI__32EB7E57" Association="Self.FK__aspnet_Us__RoleI__32EB7E57">
             <End Role="aspnet_Roles" EntitySet="aspnet_Roles" />
             <End Role="aspnet_UsersInRoles" EntitySet="aspnet_UsersInRoles" />
           </AssociationSet>
-          <AssociationSet Name="FK__aspnet_Us__UserI__2E5BD364" Association="Self.FK__aspnet_Us__UserI__2E5BD364">
+          <AssociationSet Name="FK__aspnet_Us__UserI__33DFA290" Association="Self.FK__aspnet_Us__UserI__33DFA290">
             <End Role="aspnet_Users" EntitySet="aspnet_Users" />
             <End Role="aspnet_UsersInRoles" EntitySet="aspnet_UsersInRoles" />
           </AssociationSet>
-          <AssociationSet Name="FK__CODReceip__Recei__5D8BC399" Association="Self.FK__CODReceip__Recei__5D8BC399">
+          <AssociationSet Name="FK__CODReceip__Recei__39987BE6" Association="Self.FK__CODReceip__Recei__39987BE6">
             <End Role="CODReceipt" EntitySet="CODReceipt" />
             <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExportShi__Emplo__2E46C4CB" Association="Self.FK__ExportShi__Emplo__2E46C4CB">
+          <AssociationSet Name="FK__ExportShi__Emplo__5DD5DC5C" Association="Self.FK__ExportShi__Emplo__5DD5DC5C">
             <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
             <End Role="ExportShipment" EntitySet="ExportShipment" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExportShi__Emplo__2F3AE904" Association="Self.FK__ExportShi__Emplo__2F3AE904">
+          <AssociationSet Name="FK__ExportShi__Emplo__5ECA0095" Association="Self.FK__ExportShi__Emplo__5ECA0095">
             <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
             <End Role="ExportShipment" EntitySet="ExportShipment" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExportShi__Emplo__302F0D3D" Association="Self.FK__ExportShi__Emplo__302F0D3D">
+          <AssociationSet Name="FK__ExportShi__Emplo__5FBE24CE" Association="Self.FK__ExportShi__Emplo__5FBE24CE">
             <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
             <End Role="ExportShipment" EntitySet="ExportShipment" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExportShi__Emplo__31233176" Association="Self.FK__ExportShi__Emplo__31233176">
+          <AssociationSet Name="FK__ExportShi__Emplo__60B24907" Association="Self.FK__ExportShi__Emplo__60B24907">
             <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
             <End Role="ExportShipment" EntitySet="ExportShipment" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExportShi__LastE__321755AF" Association="Self.FK__ExportShi__LastE__321755AF">
+          <AssociationSet Name="FK__ExportShi__LastE__61A66D40" Association="Self.FK__ExportShi__LastE__61A66D40">
             <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
             <End Role="ExportShipment" EntitySet="ExportShipment" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExportShi__LastE__330B79E8" Association="Self.FK__ExportShi__LastE__330B79E8">
+          <AssociationSet Name="FK__ExportShi__LastE__629A9179" Association="Self.FK__ExportShi__LastE__629A9179">
             <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
             <End Role="ExportShipment" EntitySet="ExportShipment" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExportShi__LastE__33FF9E21" Association="Self.FK__ExportShi__LastE__33FF9E21">
+          <AssociationSet Name="FK__ExportShi__LastE__638EB5B2" Association="Self.FK__ExportShi__LastE__638EB5B2">
             <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
             <End Role="ExportShipment" EntitySet="ExportShipment" />
           </AssociationSet>
-          <AssociationSet Name="FK__ExportShi__LastE__34F3C25A" Association="Self.FK__ExportShi__LastE__34F3C25A">
+          <AssociationSet Name="FK__ExportShi__LastE__6482D9EB" Association="Self.FK__ExportShi__LastE__6482D9EB">
             <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
             <End Role="ExportShipment" EntitySet="ExportShipment" />
           </AssociationSet>
-          <AssociationSet Name="FK__ImportShi__Expor__38C4533E" Association="Self.FK__ImportShi__Expor__38C4533E">
+          <AssociationSet Name="FK__ImportShi__Expor__6F00685E" Association="Self.FK__ImportShi__Expor__6F00685E">
             <End Role="ExportShipment" EntitySet="ExportShipment" />
             <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__ImportShi__Expor__39B87777" Association="Self.FK__ImportShi__Expor__39B87777">
+          <AssociationSet Name="FK__ImportShi__Expor__6FF48C97" Association="Self.FK__ImportShi__Expor__6FF48C97">
             <End Role="ExportShipment" EntitySet="ExportShipment" />
             <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__ImportShi__Expor__3AAC9BB0" Association="Self.FK__ImportShi__Expor__3AAC9BB0">
+          <AssociationSet Name="FK__ImportShi__Expor__70E8B0D0" Association="Self.FK__ImportShi__Expor__70E8B0D0">
             <End Role="ExportShipment" EntitySet="ExportShipment" />
             <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
           </AssociationSet>
@@ -17766,6 +17848,8 @@
           <EntitySet Name="Transits" EntityType="DB_9F57C4_couriertest_newModel.Transit" />
           <EntitySet Name="TransportModes" EntityType="DB_9F57C4_couriertest_newModel.TransportMode" />
           <EntitySet Name="ImpExpDocumentMasters" EntityType="DB_9F57C4_couriertest_newModel.ImpExpDocumentMaster" />
+          <EntitySet Name="TruckDetails" EntityType="DB_9F57C4_couriertest_newModel.TruckDetail" />
+          <EntitySet Name="DriverMasters" EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" />
         </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -21922,6 +22006,86 @@
           <Property Name="CustomerID" Type="Int32" />
           <Property Name="IssueDate" Type="DateTime" Precision="3" />
           <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="TruckDetail">
+          <Key>
+            <PropertyRef Name="TruckDetailID" />
+          </Key>
+          <Property Name="TruckDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReceiptNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="VehicleID" Type="Int32" Nullable="false" />
+          <Property Name="RegNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="VehicleType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="TDDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OriginName" Type="Int32" />
+          <Property Name="DestinationName" Type="Int32" />
+          <Property Name="DriverName" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="VehicleTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Rent" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="OtherCharges" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="RefTDID" Type="Int32" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="CurrencyIDRent" Type="Int32" />
+          <Property Name="CurrencyIDOC" Type="Int32" />
+          <Property Name="StatusPaymentMode" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="PaymentHeadID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentCurrencyID" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="TDcontrolAcHeadID" Type="Int32" />
+          <Property Name="OtherChargesAcHeadID" Type="Int32" />
+          <Property Name="FYearID" Type="Int32" />
+          <Property Name="CurrencyRent" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CurrencyOtherCharges" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CurrencyAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="PayeeName" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="DriverID" Type="Int32" />
+          <Property Name="CancelDate" Type="DateTime" Precision="3" />
+          <Property Name="Reason" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentID" Type="Int32" />
+          <Property Name="RentAcHeadID" Type="Int32" />
+          <Property Name="RouteID" Type="Int32" />
+          <Property Name="TDRemarks" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="InscanID" Type="Int32" />
+          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChequeDate" Type="DateTime" Precision="3" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="TypeOfLoad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="DriverMaster">
+          <Key>
+            <PropertyRef Name="DriverID" />
+          </Key>
+          <Property Name="DriverID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DriverType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DriverName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NickName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LicenseNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LicenseExpDate" Type="DateTime" Precision="3" />
+          <Property Name="Nationality" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PassportNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PassportExpDate" Type="DateTime" Precision="3" />
+          <Property Name="VisaNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VisaExpDate" Type="DateTime" Precision="3" />
+          <Property Name="VehicleTypeID" Type="Int32" />
+          <Property Name="VehicleNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SponsorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNo1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNo2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNo3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CountryID4" Type="Int32" />
+          <Property Name="PhoneNo4" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CountryName1" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CountryName2" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CountryName3" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -30730,6 +30894,88 @@
                 <ScalarProperty Name="IMPEXPCode" ColumnName="IMPEXPCode" />
                 <ScalarProperty Name="DocumentName" ColumnName="DocumentName" />
                 <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TruckDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TruckDetail">
+              <MappingFragment StoreEntitySet="TruckDetail">
+                <ScalarProperty Name="TypeOfLoad" ColumnName="TypeOfLoad" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="InscanID" ColumnName="InscanID" />
+                <ScalarProperty Name="TDRemarks" ColumnName="TDRemarks" />
+                <ScalarProperty Name="RouteID" ColumnName="RouteID" />
+                <ScalarProperty Name="RentAcHeadID" ColumnName="RentAcHeadID" />
+                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="CancelDate" ColumnName="CancelDate" />
+                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+                <ScalarProperty Name="PayeeName" ColumnName="PayeeName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CurrencyAmount" ColumnName="CurrencyAmount" />
+                <ScalarProperty Name="CurrencyOtherCharges" ColumnName="CurrencyOtherCharges" />
+                <ScalarProperty Name="CurrencyRent" ColumnName="CurrencyRent" />
+                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+                <ScalarProperty Name="OtherChargesAcHeadID" ColumnName="OtherChargesAcHeadID" />
+                <ScalarProperty Name="TDcontrolAcHeadID" ColumnName="TDcontrolAcHeadID" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="PaymentCurrencyID" ColumnName="PaymentCurrencyID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PaymentHeadID" ColumnName="PaymentHeadID" />
+                <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
+                <ScalarProperty Name="CurrencyIDOC" ColumnName="CurrencyIDOC" />
+                <ScalarProperty Name="CurrencyIDRent" ColumnName="CurrencyIDRent" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="RefTDID" ColumnName="RefTDID" />
+                <ScalarProperty Name="OtherCharges" ColumnName="OtherCharges" />
+                <ScalarProperty Name="Rent" ColumnName="Rent" />
+                <ScalarProperty Name="VehicleTypeID" ColumnName="VehicleTypeID" />
+                <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+                <ScalarProperty Name="DestinationName" ColumnName="DestinationName" />
+                <ScalarProperty Name="OriginName" ColumnName="OriginName" />
+                <ScalarProperty Name="TDDate" ColumnName="TDDate" />
+                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+                <ScalarProperty Name="RegNo" ColumnName="RegNo" />
+                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+                <ScalarProperty Name="ReceiptNo" ColumnName="ReceiptNo" />
+                <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DriverMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DriverMaster">
+              <MappingFragment StoreEntitySet="DriverMaster">
+                <ScalarProperty Name="CountryName3" ColumnName="CountryName3" />
+                <ScalarProperty Name="CountryName2" ColumnName="CountryName2" />
+                <ScalarProperty Name="CountryName1" ColumnName="CountryName1" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="PhoneNo4" ColumnName="PhoneNo4" />
+                <ScalarProperty Name="CountryID4" ColumnName="CountryID4" />
+                <ScalarProperty Name="PhoneNo3" ColumnName="PhoneNo3" />
+                <ScalarProperty Name="PhoneNo2" ColumnName="PhoneNo2" />
+                <ScalarProperty Name="PhoneNo1" ColumnName="PhoneNo1" />
+                <ScalarProperty Name="SponsorName" ColumnName="SponsorName" />
+                <ScalarProperty Name="Address3" ColumnName="Address3" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="VehicleNo" ColumnName="VehicleNo" />
+                <ScalarProperty Name="VehicleTypeID" ColumnName="VehicleTypeID" />
+                <ScalarProperty Name="VisaExpDate" ColumnName="VisaExpDate" />
+                <ScalarProperty Name="VisaNo" ColumnName="VisaNo" />
+                <ScalarProperty Name="PassportExpDate" ColumnName="PassportExpDate" />
+                <ScalarProperty Name="PassportNo" ColumnName="PassportNo" />
+                <ScalarProperty Name="Nationality" ColumnName="Nationality" />
+                <ScalarProperty Name="LicenseExpDate" ColumnName="LicenseExpDate" />
+                <ScalarProperty Name="LicenseNo" ColumnName="LicenseNo" />
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
+                <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+                <ScalarProperty Name="DriverType" ColumnName="DriverType" />
+                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
