@@ -86,6 +86,12 @@
                     url: "/DailyTrips/SaveHiredVehicle",
                     data: data,
                     success: function (response) {
+                        if (response.success == true) {
+                            $.notify("Submitted Successfully!", "success");
+                            location.href = "/DailyTrips/Index";
+                        } else {
+                            $.notify(response.message, "error");
+                        }
                     }
                 });
 

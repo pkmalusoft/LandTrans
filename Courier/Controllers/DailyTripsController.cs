@@ -103,40 +103,48 @@ namespace LTMSV2.Controllers
 
         public JsonResult SaveHiredVehicle(FormCollection data)
         {
-            var TruckDetail = new TruckDetail();
-            var Truck=db.TruckDetails.ToList().LastOrDefault();
-            var MaxId = 1000;
-            if(Truck==null)
+            try
             {
-                MaxId= Truck.TruckDetailID + 1;
+                var TruckDetail = new TruckDetail();
+                var Truck = db.TruckDetails.ToList().LastOrDefault();
+                var MaxId = 1000;
+                if (Truck == null)
+                {
+                    MaxId = Truck.TruckDetailID + 1;
+                }
+                var ReceiptNo = "TDS-" + MaxId;
+                TruckDetail.ReceiptNo = ReceiptNo;
+                TruckDetail.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
+                TruckDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                TruckDetail.VehicleType = Convert.ToString(data["VehicleType"]);
+                TruckDetail.TDDate = Convert.ToDateTime(data["TDDate"]);
+                TruckDetail.DriverID = Convert.ToInt32(data["DriverID"]);
+                TruckDetail.RegNo = Convert.ToString(data["RegNo"]);
+                TruckDetail.RouteID = Convert.ToInt32(data["RouteID"]);
+                TruckDetail.OriginName = Convert.ToInt32(data["OriginName"]);
+                TruckDetail.DestinationName = Convert.ToInt32(data["DestinationName"]);
+                TruckDetail.TypeOfLoad = Convert.ToString(data["TypeOfLoad"]);
+                TruckDetail.Rent = Convert.ToDecimal(data["Rent"]);
+                TruckDetail.CurrencyIDRent = Convert.ToInt32(data["CurrencyIDRent"]);
+                TruckDetail.OtherCharges = Convert.ToDecimal(data["OtherCharges"]);
+                TruckDetail.CurrencyRent = Convert.ToDecimal(data["CurrencyRent"]);
+                TruckDetail.RentAcHeadID = Convert.ToInt32(data["RentAcHeadID"]);
+                TruckDetail.TDRemarks = Convert.ToString(data["TDRemarks"]);
+                TruckDetail.StatusPaymentMode = Convert.ToString(data["StatusPaymentMode"]);
+                TruckDetail.PaymentHeadID = Convert.ToInt32(data["PaymentHeadID"]);
+                TruckDetail.TDcontrolAcHeadID = Convert.ToInt32(data["TDcontrolAcHeadID"]);
+                TruckDetail.CurrencyAmount = Convert.ToDecimal(data["CurrencyAmount"]);
+                TruckDetail.PaymentCurrencyID = Convert.ToInt32(data["PaymentCurrencyID"]);
+                TruckDetail.Remarks = Convert.ToString(data["Remarks"]);
+                db.TruckDetails.Add(TruckDetail);
+                db.SaveChanges();
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }
-            var ReceiptNo = "TDS-" + MaxId;
-            TruckDetail.ReceiptNo = ReceiptNo;
-            TruckDetail.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
-            TruckDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            TruckDetail.VehicleType = Convert.ToString(data["VehicleType"]);
-            TruckDetail.TDDate = Convert.ToDateTime(data["TDDate"]);
-            TruckDetail.DriverID = Convert.ToInt32(data["DriverID"]);
-            TruckDetail.RegNo = Convert.ToString(data["RegNo"]);
-            TruckDetail.RouteID = Convert.ToInt32(data["RouteID"]);
-            TruckDetail.OriginName = Convert.ToInt32(data["OriginName"]);
-            TruckDetail.DestinationName = Convert.ToInt32(data["DestinationName"]);
-            TruckDetail.TypeOfLoad = Convert.ToString(data["TypeOfLoad"]);
-            TruckDetail.Rent = Convert.ToDecimal(data["Rent"]);
-            TruckDetail.CurrencyIDRent = Convert.ToInt32(data["CurrencyIDRent"]);
-            TruckDetail.OtherCharges = Convert.ToDecimal(data["OtherCharges"]);
-            TruckDetail.CurrencyRent = Convert.ToDecimal(data["CurrencyRent"]);
-            TruckDetail.RentAcHeadID = Convert.ToInt32(data["RentAcHeadID"]);
-            TruckDetail.TDRemarks = Convert.ToString(data["TDRemarks"]);
-            TruckDetail.StatusPaymentMode = Convert.ToString(data["StatusPaymentMode"]);
-            TruckDetail.PaymentHeadID = Convert.ToInt32(data["PaymentHeadID"]);
-            TruckDetail.TDcontrolAcHeadID = Convert.ToInt32(data["TDcontrolAcHeadID"]);
-            TruckDetail.CurrencyAmount = Convert.ToDecimal(data["CurrencyAmount"]);
-            TruckDetail.PaymentCurrencyID = Convert.ToInt32(data["PaymentCurrencyID"]);
-            TruckDetail.Remarks = Convert.ToString(data["Remarks"]);
-            db.TruckDetails.Add(TruckDetail);
-            db.SaveChanges();
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                return Json(new { success = false,message=e.Message.ToString() }, JsonRequestBehavior.AllowGet);
+
+            }
         }
     }
 }
