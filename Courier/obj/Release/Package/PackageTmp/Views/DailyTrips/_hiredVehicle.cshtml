@@ -1,0 +1,293 @@
+﻿@model LTMSV2.Models.TruckDetailVM
+
+@using LTMSV2.Models
+@using System.Linq
+@{
+    Layout = null;
+    var Branch = ViewBag.Branch as IEnumerable<LTMSV2.Models.BranchMaster>;
+
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        $('#FormHired').validate({ // initialize the plugin
+            rules: {
+                TDDate: {
+                    required: true,
+                  
+                },
+                BranchID: {
+                    required: true,
+
+                },
+                DriverID: {
+                    required: true,
+
+                },
+                //RegNo: {
+                //    required: true,
+
+                //},
+                OriginName: {
+                    required: true,
+
+                },
+                DestinationName: {
+                    required: true,
+
+                },
+                TypeOfLoad: {
+                    required: true,
+
+                },
+                Rent: {
+                    required: true,
+
+                },
+                CurrencyIDRent: {
+                    required: true,
+
+                },
+                CurrencyRent: {
+                    required: true,
+
+                },
+                RentAcHeadID: {
+                    required: true,
+
+                },
+                PaymentHeadID: {
+                    required: true,
+
+                },
+                TDcontrolAcHeadID: {
+                    required: true,
+
+                },
+                CurrencyAmount: {
+                    required: true,
+
+                },
+                PaymentCurrencyID: {
+                    required: true,
+
+                },
+            },
+        });
+        $("#btnsave").click(function () {
+            if ($('#FormHired').valid()) {
+                var data = $('#FormHired').serialize();
+                console.log(data);
+                $.ajax({
+                    type: 'POST',
+                    url: "/DailyTrips/SaveHiredVehicle",
+                    data: data,
+                    success: function (response) {
+                        if (response.success == true) {
+                            $.notify("Submitted Successfully!", "success");
+                            location.href = "/DailyTrips/Index";
+                        } else {
+                            $.notify(response.message, "error");
+                        }
+                    }
+                });
+
+            } 
+        });
+    });
+</script>
+
+
+
+<section class="content">
+
+    <form id="FormHired">
+        <div id="validations" style="color: red; margin-left: 7px; display: none">* Please fill mandatory fields</div>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+
+        <div class="row no-margin">
+            <div class="col-md-12">
+                <h3 style="color: white">Hired Vehicle</h3>
+                <hr />
+            </div>
+
+        </div>
+
+
+
+        <div class="row no-margin">
+            <div class="col-md-3 form-group">
+                @Html.HiddenFor(model => model.TruckDetailID)
+                <input type="hidden" id="VehicleType" name="VehicleType" value="H" />
+                <label class="headinglabel required">Date</label>
+                @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control datepicker", @required = "true" })
+
+
+            </div>
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Branch</label>
+                @Html.DropDownListFor(model => model.BranchID, new SelectList(@ViewBag.Branch, "BranchID", "BranchName"), "Select", new { @class = "form-control" })
+
+
+            </div>
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Driver</label>
+
+                @Html.DropDownListFor(model => model.DriverID, new SelectList(ViewBag.Drivers, "DriverID", "DriverName"), "Select", new { @class = "form-control", @required = "true" })
+
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Registration Number</label>
+                @Html.DropDownListFor(model => model.RegNo, new SelectList(ViewBag.Vehicles, "RegistrationNo", "RegistrationNo"), "Select", new { @class = "form-control" })
+
+                @*@Html.TextBoxFor(model => model.RegNo, new { @class = "form-control", @required = "true" })*@
+
+
+
+            </div>
+
+
+        </div>
+
+        <div class="row no-margin">
+            <div class="col-md-3 form-group">
+                <label class="headinglabel">Route</label>
+                @Html.DropDownListFor(model => model.RouteID, new SelectList(@ViewBag.Routes, "RouteID", "RouteName"), "Select", new { @class = "form-control" })
+
+            </div>
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Originating Location</label>
+                @Html.DropDownListFor(model => model.OriginName, new SelectList(@ViewBag.Locations, "LocationID", "Location"), "Select", new { @class = "form-control", @required = "true" })
+
+            </div>
+
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Destination Location</label>
+                @Html.DropDownListFor(model => model.DestinationName, new SelectList(@ViewBag.Locations, "LocationID", "Location"), "Select", new { @class = "form-control", @required = "true" })
+
+            </div>
+
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Type of Load</label>
+                <select class="form-control" id="TypeOfLoad" name="TypeOfLoad" required>
+                    <option value="Consolidated Truck">Consolidated Truck</option>
+                    <option value="Full Truck">Full Truck</option>
+                </select>
+                @*@Html.TextBoxFor(model => model.TypeOfLoad, new { @class = "form-control", @required = "true" })*@
+            </div>
+
+
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Rent </label>
+
+                @Html.TextBoxFor(model => model.Rent, new { @class = "form-control", @required = "true" })
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Currency</label>
+                @Html.DropDownListFor(model => model.CurrencyIDRent, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control", @required = "true" })
+
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel">Other Charges</label>
+
+                @Html.TextBoxFor(model => model.OtherCharges, new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Currency</label>
+
+                @Html.DropDownListFor(model => model.CurrencyRent, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Account Head</label>
+                @Html.DropDownListFor(model => model.RentAcHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+
+            </div>
+            <div class="col-md-3 form-group">
+                <label class="headinglabel">Remark</label>
+
+                @Html.TextAreaFor(model => model.TDRemarks, new { @class = "form-control" })
+            </div>
+
+        </div>
+        <div class="row no-margin">
+            <div class="col-md-12">
+                <h3 style="color: white">Payment Details</h3>
+                <hr />
+            </div>
+
+        </div>
+        <div class="row no-margin">
+
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel">Payment Type</label>
+
+                @Html.TextBoxFor(model => model.StatusPaymentMode, new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Account Head (Cr)</label>
+                @Html.DropDownListFor(model => model.PaymentHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Control A/c (Dr)</label>
+                @Html.DropDownListFor(model => model.TDcontrolAcHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Amount</label>
+
+                @Html.TextBoxFor(model => model.CurrencyAmount, new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Currency</label>
+                @Html.DropDownListFor(model => model.PaymentCurrencyID, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
+
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel">Payment Remark</label>
+
+                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control" })
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="row no-margin" style="padding-top: 10px">
+
+            <div class="col-md-12 btn-right">
+
+                <input type="button" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;
+                <a href='@Url.Action("Index", "DailyTrips")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+
+            </div>
+        </div>
+
+
+
+    </form>
+
+</section>

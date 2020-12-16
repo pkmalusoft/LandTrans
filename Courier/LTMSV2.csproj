@@ -1883,6 +1883,7 @@
     <Compile Include="Models\TruckDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TruckDetailVM.cs" />
     <Compile Include="Models\TypeOfGood.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3507,6 +3508,11 @@
     <Content Include="Views\Driver\Index.cshtml" />
     <Content Include="Views\RevenueCost\Create.cshtml" />
     <Content Include="Views\ImpExpDocument\Create.cshtml" />
+    <Content Include="Views\DailyTrips\Create.cshtml" />
+    <Content Include="Views\DailyTrips\_contractVehicle.cshtml" />
+    <Content Include="Views\DailyTrips\_forwardingAgent.cshtml" />
+    <Content Include="Views\DailyTrips\_hiredVehicle.cshtml" />
+    <Content Include="Views\DailyTrips\_ownVehicle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
