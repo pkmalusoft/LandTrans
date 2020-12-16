@@ -53,10 +53,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/14/2020 10:54:51</publishTime>
     </File>
     <File Include="bin/LTMSV2.dll">
-      <publishTime>12/15/2020 19:51:14</publishTime>
+      <publishTime>12/16/2020 11:01:08</publishTime>
     </File>
     <File Include="bin/LTMSV2.pdb">
-      <publishTime>12/15/2020 19:51:14</publishTime>
+      <publishTime>12/16/2020 11:01:08</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>09/05/2018 16:10:50</publishTime>
@@ -3317,7 +3317,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/14/2020 10:54:27</publishTime>
     </File>
     <File Include="Reports/AWBRegister_ParcelType.rpt">
-      <publishTime>03/12/2020 14:12:27</publishTime>
+      <publishTime>12/03/2020 14:12:27</publishTime>
     </File>
     <File Include="Reports/AWBRegister_Payment.rpt">
       <publishTime>12/14/2020 10:54:27</publishTime>
@@ -3931,8 +3931,23 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/CustomerReceipt/_Table.cshtml">
       <publishTime>12/14/2020 10:54:27</publishTime>
     </File>
+    <File Include="Views/DailyTrips/Create.cshtml">
+      <publishTime>12/16/2020 10:51:16</publishTime>
+    </File>
     <File Include="Views/DailyTrips/Index.cshtml">
-      <publishTime>12/14/2020 10:54:27</publishTime>
+      <publishTime>12/16/2020 10:51:17</publishTime>
+    </File>
+    <File Include="Views/DailyTrips/_contractVehicle.cshtml">
+      <publishTime>12/16/2020 10:51:17</publishTime>
+    </File>
+    <File Include="Views/DailyTrips/_forwardingAgent.cshtml">
+      <publishTime>12/16/2020 10:51:17</publishTime>
+    </File>
+    <File Include="Views/DailyTrips/_hiredVehicle.cshtml">
+      <publishTime>12/16/2020 10:51:17</publishTime>
+    </File>
+    <File Include="Views/DailyTrips/_ownVehicle.cshtml">
+      <publishTime>12/16/2020 10:51:17</publishTime>
     </File>
     <File Include="Views/DeliveryRunSheetReciept/Create.cshtml">
       <publishTime>12/14/2020 10:54:27</publishTime>
@@ -4058,67 +4073,67 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/14/2020 10:54:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/EditExport.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/EditImport.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/ExportShipmentList - Copy.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/ExportShipmentList.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/ExportShipmentReport - Copy.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/ExportShipmentReport.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/ImportTable.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/Index.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/ShipmentList.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/Table.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ExportShipment/ViewImport.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ForwardingAgentAssign/Create.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ForwardingAgentInvoice/Create.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ForwardingAgentRates/Create.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ForwardingAgentRates/Edit.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/ForwardingAgentRates/Index.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/Hold/Create.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/Hold/Edit.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/Hold/EditRealese.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/Hold/Index.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/Hold/IndexRelease.cshtml">
-      <publishTime>06/12/2020 19:52:27</publishTime>
+      <publishTime>12/06/2020 19:52:27</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
       <publishTime>12/14/2020 10:54:27</publishTime>
