@@ -20,8 +20,8 @@ namespace LTMSV2.Models
         public string RegNo { get; set; }
         public string VehicleType { get; set; }
         public System.DateTime TDDate { get; set; }
-        public Nullable<int> OriginName { get; set; }
-        public Nullable<int> DestinationName { get; set; }
+        public string OriginName { get; set; }
+        public string DestinationName { get; set; }
         public string DriverName { get; set; }
         public int VehicleTypeID { get; set; }
         public Nullable<decimal> Rent { get; set; }
@@ -57,6 +57,7 @@ namespace LTMSV2.Models
         public Nullable<System.DateTime> ChequeDate { get; set; }
         public Nullable<int> BranchID { get; set; }
         public string TypeOfLoad { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual CurrencyMaster CurrencyMaster { get; set; }

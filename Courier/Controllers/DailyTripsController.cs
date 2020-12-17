@@ -58,16 +58,18 @@ namespace LTMSV2.Controllers
             }
             List<TruckDetailVM> lst = (from c in db.TruckDetails   
                                        join d in db.DriverMasters on c.DriverID equals d.DriverID
-                                       join o in db.LocationMasters on c.OriginName equals o.LocationID
-                                       join de in db.LocationMasters on c.DestinationName equals de.LocationID
-                                         where c.BranchID == branchid && (c.TDDate >= pFromDate && c.TDDate < pToDate)                                         
+                                       //join o in db.LocationMasters on c.OriginName equals o.LocationID
+                                       //join de in db.LocationMasters on c.DestinationName equals de.LocationID
+                                         where c.BranchID == branchid && (c.TDDate >= pFromDate && c.TDDate < pToDate) && (c.IsDeleted==false || c.IsDeleted==null)                                      
                                          orderby c.TDDate descending
                                          select new TruckDetailVM{
                                              TruckDetailID=c.TruckDetailID,
                                              ReceiptNo=c.ReceiptNo,
                                              DriverName=d.DriverName,
-                                             Origin=o.Location,
-                                             Destination=de.Location
+                                             Origin=c.OriginName,
+                                             Destination=c.DestinationName,
+                                             VehicleType=c.VehicleType,
+                                             TDDate=c.TDDate
                                          }).ToList();
             if(!String.IsNullOrEmpty(VehicleType))
             {
@@ -81,7 +83,7 @@ namespace LTMSV2.Controllers
           
             return View(lst);
         }
-        public ActionResult Create()
+        public ActionResult Create(int Id)
         {
             ViewBag.Branch = db.BranchMasters.ToList();
             ViewBag.Routes = db.RouteMasters.ToList();
@@ -91,16 +93,27 @@ namespace LTMSV2.Controllers
             ViewBag.Achead = db.AcHeads.Where(d=>d.AcBranchID== branchid).ToList();
             ViewBag.Drivers = db.DriverMasters.ToList();
             ViewBag.Vehicles = db.VehicleMasters.ToList();
-            var TruckDetailVM = new TruckDetailVM();
-          
-            return View(TruckDetailVM);
-        }
-        [HttpPost]
-        public ActionResult Create(TruckDetailVM model)
-        {
-            return View();
-        }
 
+            var   truckDetail = (from d in db.TruckDetails where d.TruckDetailID == Id select d).FirstOrDefault();
+            if(truckDetail==null)
+            {
+                truckDetail = new TruckDetail();
+                ViewBag.VehicleType = "H";
+            }
+            else
+            {
+                if(truckDetail.VehicleType=="H")
+                {
+                    ViewBag.VehicleType = "H";
+                }
+                else if(truckDetail.VehicleType == "O")
+                {
+                    ViewBag.VehicleType = "O";
+                }
+            }
+            return View(truckDetail);
+        }
+       
         public JsonResult SaveHiredVehicle(FormCollection data)
         {
             try
@@ -124,14 +137,14 @@ namespace LTMSV2.Controllers
                 TruckDetail.TDDate = Convert.ToDateTime(data["TDDate"]);
                 TruckDetail.DriverID = Convert.ToInt32(data["DriverID"]);
                 TruckDetail.RegNo = Convert.ToString(data["RegNo"]);
-                TruckDetail.RouteID = Convert.ToInt32(data["RouteID"]);
-                TruckDetail.OriginName = Convert.ToInt32(data["OriginName"]);
-                TruckDetail.DestinationName = Convert.ToInt32(data["DestinationName"]);
+                TruckDetail.RouteID = Convert.ToInt32(data["RouteID"]);               
+                TruckDetail.OriginName = Convert.ToString(data["OriginName"]);
+                TruckDetail.DestinationName = Convert.ToString(data["DestinationName"]);
                 TruckDetail.TypeOfLoad = Convert.ToString(data["TypeOfLoad"]);
                 TruckDetail.Rent = Convert.ToDecimal(data["Rent"]);
                 TruckDetail.CurrencyIDRent = Convert.ToInt32(data["CurrencyIDRent"]);
                 TruckDetail.OtherCharges = Convert.ToDecimal(data["OtherCharges"]);
-                TruckDetail.CurrencyRent = Convert.ToDecimal(data["CurrencyRent"]);
+                //TruckDetail.CurrencyRent = Convert.ToDecimal(data["CurrencyRent"]);
                 TruckDetail.RentAcHeadID = Convert.ToInt32(data["RentAcHeadID"]);
                 TruckDetail.TDRemarks = Convert.ToString(data["TDRemarks"]);
                 TruckDetail.StatusPaymentMode = Convert.ToString(data["StatusPaymentMode"]);
@@ -140,6 +153,7 @@ namespace LTMSV2.Controllers
                 TruckDetail.CurrencyAmount = Convert.ToDecimal(data["CurrencyAmount"]);
                 TruckDetail.PaymentCurrencyID = Convert.ToInt32(data["PaymentCurrencyID"]);
                 TruckDetail.Remarks = Convert.ToString(data["Remarks"]);
+                TruckDetail.IsDeleted =false;
                 db.TruckDetails.Add(TruckDetail);
                 db.SaveChanges();
                 return Json(new { success = true }, JsonRequestBehavior.AllowGet);
@@ -149,6 +163,78 @@ namespace LTMSV2.Controllers
                 return Json(new { success = false,message=e.Message.ToString() }, JsonRequestBehavior.AllowGet);
 
             }
+        }
+        public ActionResult Drivers(string term)
+        {
+           
+            if (!String.IsNullOrEmpty(term))
+            {
+                var Driver = new List<DriverMaster>();
+                Driver = db.DriverMasters.Where(d => d.DriverName.ToLower().Contains(term.ToLower())).ToList();
+                return Json(Driver, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var Driver = new List<DriverMaster>();
+                Driver = db.DriverMasters.ToList();
+                return Json(Driver, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult AcHead(string term)
+        {
+
+            if (!String.IsNullOrEmpty(term))
+            {
+                var achead = new List<AcHeadSelectAllVM>();
+                achead = (from d in db.AcHeads where d.AcHead1.ToLower().Contains(term.ToLower()) select new AcHeadSelectAllVM {
+                    AcHead = d.AcHead1,
+                    AcHeadID=d.AcHeadID
+                }).ToList();
+                return Json(achead, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var achead = new List<AcHeadSelectAllVM>();
+                achead = (from d in db.AcHeads
+                         
+                          select new AcHeadSelectAllVM
+                          {
+                              AcHead = d.AcHead1,
+                              AcHeadID = d.AcHeadID
+                          }).ToList();
+                return Json(achead, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public JsonResult GetAcHeadsById(int acheadid, int paymentheadid, int ControlAc)
+        {
+            var Achead = (from d in db.AcHeads where d.AcHeadID == acheadid select d).FirstOrDefault().AcHead1;
+            var PaymentAc = (from d in db.AcHeads where d.AcHeadID == paymentheadid select d).FirstOrDefault().AcHead1;
+            var controlac = (from d in db.AcHeads where d.AcHeadID == ControlAc select d).FirstOrDefault().AcHead1;
+            return Json(new { Achead = Achead, PaymentAc = PaymentAc, controlac = controlac }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetDriverById(int DriverId)
+        {
+            var Driver = (from d in db.DriverMasters where d.DriverID == DriverId select d).FirstOrDefault().DriverName;
+            
+            return Json(new { Driver = Driver }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeleteConfirmed(int id)
+        {
+            TruckDetail a = db.TruckDetails.Find(id);
+            if (a == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                a.IsDeleted = true;
+                db.Entry(a).State = EntityState.Modified;
+                db.SaveChanges();
+
+            }
+           
+            return RedirectToAction("Index");
         }
     }
 }

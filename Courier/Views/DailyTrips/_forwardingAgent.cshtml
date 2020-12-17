@@ -1,20 +1,111 @@
-﻿
-@model LTMSV2.Models.TruckDetailVM
+﻿@model LTMSV2.Models.TruckDetail
 
 @using LTMSV2.Models
 @using System.Linq
 @{
     /**/
 
-    /**/
-
     Layout = null;
-
+    var _mindate = @LTMSV2.Models.CommanFunctions.GetMinFinancialDate(); //'2020/01/01',
+    var _maxdate = @LTMSV2.Models.CommanFunctions.GetMaxFinancialDate();
 }
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=OinitAutocomplete" async defer></script>
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
 <script type="text/javascript">
+    var  Oautocomplete, Oautocomplete1;
+
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
+
+    function OinitAutocomplete() {
+        // Create the autocomplete object, restricting the search predictions to
+        // geographical location types.
+        Oautocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('Oautocomplete'), { types: ['geocode'] });
+
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        Oautocomplete.setFields(['address_component']);
+
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        Oautocomplete.addListener('place_changed', OfillInAddress);
+
+        Oautocomplete1 = new google.maps.places.Autocomplete(
+            document.getElementById('Dautocomplete1'), { types: ['geocode'] });
+
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        Oautocomplete1.setFields(['address_component']);
+
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        Oautocomplete1.addListener('place_changed', OfillInAddress);
+
+
+    }
+
+    function OfillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = Oautocomplete.getPlace();
+        var place1 = Oautocomplete1.getPlace();
+
+
+
+
+    }
+
+    // Bias the autocomplete object to the user's geographical location,
+    // as supplied by the browser's 'navigator.geolocation' object.
+    function Ogeolocate(val) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                if (val == 1) {
+                    Oautocomplete.setBounds(circle.getBounds());
+                } else {
+                    Oautocomplete1.setBounds(circle.getBounds());
+                }
+            });
+        }
+    }
+
 
     $(document).ready(function () {
 
+       
+
+
+        $('#FTDDate').datetimepicker({
+            maxDate: '@_maxdate',
+            minDate: '@_mindate', format: 'DD-MM-YYYY HH:mm'
+        });
+        var d = new Date();
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth() + 1;
+        var curr_year = d.getFullYear();
+
+        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+        $('#FTDDate').val(reqdate);
+     
     });
 </script>
 
@@ -22,8 +113,7 @@
 
 <section class="content">
 
-    @using (Html.BeginForm())
-    {
+    <form id="FormOwn">
         <div id="validations" style="color: red; margin-left: 7px; display: none">* Please fill mandatory fields</div>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -42,92 +132,74 @@
 
 
         <div class="row no-margin">
-
-            @*       <div class="editor-label">
-                    @Html.LabelFor(model => model.CustomerID)
-                </div>*@
-            <div class="col-md-3">
+            <div class="col-md-3 form-group">
                 @Html.HiddenFor(model => model.TruckDetailID)
-                @Html.HiddenFor(model => model.BranchID)
+                <input type="hidden" id="VehicleType" name="VehicleType" value="F" />
                 <label class="headinglabel required">Date</label>
-                @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control text-right", @required = "true" })
+                @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control datepicker", id = "FTDDate", @required = "true" })
 
 
             </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Branch</label>
-                @*@Html.DropDownListFor(model => model.BranchID, new SelectList(@ViewBag.Branch, "BranchID", "BranchName"), "Select", new { @class = "form-control" })*@
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
 
+            <div class="col-md-3 form-group">
+                <label class="headinglabel ">Phone Number </label>
 
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Phone Number</label>
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
-
-                @*@Html.DropDownListFor(model => model.DriverID, new SelectList(@ViewBag.Branch, "BranchID", "BranchName"), "Select", new { @class = "form-control" })*@
-
+                @Html.TextBoxFor(model => model.Amount, new { @class = "form-control", @required = "true" })
             </div>
 
-            <div class="col-md-3">
+
+            <div class="col-md-3 form-group ">
                 <label class="headinglabel required">Forwarding Agent</label>
-
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
-
-
-
-                @*<input type="text" id="txtCustomerName" />*@
-                @*@Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })*@
-            </div>
-
-
-        </div>
-
-        <div class="row no-margin">
-            <div class="col-md-3">
-                <label class="headinglabel">Route</label>
-                @*<input type="text"  class="form-control" readonly />*@
-                @*@Html.DropDownListFor(model => model.RouteID, new SelectList(@ViewBag.Routes, "RouteID", "RouteName"), "Select", new { @class = "form-control" })*@
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.RouteID, new SelectList(@ViewBag.Routes, "RouteID", "RouteName"), "Select", new { @class = "form-control", @required = "true" })
 
             </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Originating Country</label>
-                @*@Html.DropDownListFor(model => model.OriginName, new SelectList(@ViewBag.Locations, "Location", "Location"), "Select", new { @class = "form-control" })*@
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
-
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Originating City</label>
-                @*@Html.DropDownListFor(model => model.OriginName, new SelectList(@ViewBag.Locations, "Location", "Location"), "Select", new { @class = "form-control" })*@
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
-
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Originating Location</label>
-                @*@Html.DropDownListFor(model => model.OriginName, new SelectList(@ViewBag.Locations, "Location", "Location"), "Select", new { @class = "form-control" })*@
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Route</label>
+                @Html.DropDownListFor(model => model.RouteID, new SelectList(@ViewBag.Routes, "RouteID", "RouteName"), "Select", new { @class = "form-control", @required = "true" })
 
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Origin Country</label>
+                @Html.TextBoxFor(model => model.BankName, new { @class = "form-control", @required = "true" })
+
+            </div>
+
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Origin City</label>
+                @Html.TextBoxFor(model => model.BankName, new { @class = "form-control", @required = "true" })
+
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Origin Location</label>
+                @Html.TextBoxFor(model => model.BankName, new { @class = "form-control", @required = "true" })
+
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label class="headinglabel required">Account Head</label>
+                <input type="text" id="ORentAcHead" name="ORentAcHead" class="form-control" />
+                @Html.HiddenFor(model => model.RentAcHeadID, new { id = "ORentAcHeadID" })
+
+            </div>
+            <div class="col-md-3 form-group">
                 <label class="headinglabel">Remark</label>
-                
-                @Html.TextAreaFor(model => model.RegNo, new { @class = "form-control" })
+
+                @Html.TextAreaFor(model => model.TDRemarks, new { @class = "form-control" })
             </div>
+
         </div>
-
-
-
-
-
+        
 
 
         <div class="row no-margin" style="padding-top: 10px">
 
             <div class="col-md-12 btn-right">
 
-                <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "PickUpRequest", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                @*<input type="button" value="Save" class="btn btn-primary btnwidth" id="btnsave1" />*@&nbsp;&nbsp;
+                <a href='@Url.Action("Index", "DailyTrips")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
 
 
             </div>
@@ -135,6 +207,6 @@
 
 
 
-    }
+    </form>
 
 </section>

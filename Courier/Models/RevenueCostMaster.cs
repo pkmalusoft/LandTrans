@@ -14,6 +14,12 @@ namespace LTMSV2.Models
     
     public partial class RevenueCostMaster
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public RevenueCostMaster()
+        {
+            this.RevenueUpdateDetails = new HashSet<RevenueUpdateDetail>();
+        }
+    
         public int RCID { get; set; }
         public string RCCode { get; set; }
         public string RevenueComponent { get; set; }
@@ -26,5 +32,8 @@ namespace LTMSV2.Models
         public Nullable<int> CostAcHeadID { get; set; }
         public Nullable<int> AcCompanyId { get; set; }
         public Nullable<int> BranchID { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
     }
 }
