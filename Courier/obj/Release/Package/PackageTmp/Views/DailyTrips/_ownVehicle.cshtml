@@ -1,30 +1,270 @@
-﻿@model LTMSV2.Models.TruckDetailVM
+﻿@model LTMSV2.Models.TruckDetail
 
 @using LTMSV2.Models
 @using System.Linq
 @{
-       
-                Layout = null;
-                var Branch = ViewBag.Branch as IEnumerable<LTMSV2.Models.BranchMaster>;
+    /**/
 
+    Layout = null;
+    var _mindate = @LTMSV2.Models.CommanFunctions.GetMinFinancialDate(); //'2020/01/01',
+    var _maxdate = @LTMSV2.Models.CommanFunctions.GetMaxFinancialDate();
 }
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=OinitAutocomplete" async defer></script>
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
 <script type="text/javascript">
+    var  Oautocomplete, Oautocomplete1;
+
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
+
+    function OinitAutocomplete() {
+        // Create the autocomplete object, restricting the search predictions to
+        // geographical location types.
+        Oautocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('Oautocomplete'), { types: ['geocode'] });
+
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        Oautocomplete.setFields(['address_component']);
+
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        Oautocomplete.addListener('place_changed', OfillInAddress);
+
+        Oautocomplete1 = new google.maps.places.Autocomplete(
+            document.getElementById('Dautocomplete1'), { types: ['geocode'] });
+
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        Oautocomplete1.setFields(['address_component']);
+
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        Oautocomplete1.addListener('place_changed', OfillInAddress);
+
+
+    }
+
+    function OfillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = Oautocomplete.getPlace();
+        var place1 = Oautocomplete1.getPlace();
+
+
+
+
+    }
+
+    // Bias the autocomplete object to the user's geographical location,
+    // as supplied by the browser's 'navigator.geolocation' object.
+    function Ogeolocate(val) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                if (val == 1) {
+                    Oautocomplete.setBounds(circle.getBounds());
+                } else {
+                    Oautocomplete1.setBounds(circle.getBounds());
+                }
+            });
+        }
+    }
+
 
     $(document).ready(function () {
 
+        if ('@Model.TruckDetailID' > 0) {
+            $("#RegNo").val('@Model.RegNo');
+            $("#RouteID").val('@Model.RouteID');
+            $("#TypeOfLoad").val('@Model.TypeOfLoad');
+            $("#CurrencyIDRent").val('@Model.CurrencyIDRent');
+            //$("#CurrencyRent").val('@Model.CurrencyRent');
+            $("#PaymentCurrencyID").val('@Model.PaymentCurrencyID');
+            $.ajax({
+                type: "POST",
+                url: "/DailyTrips/GetAcHeadsById",
+                datatype: "Json",
+                data: { acheadid: '@Model.RentAcHeadID', paymentheadid:'@Model.PaymentHeadID', ControlAc:'@Model.TDcontrolAcHeadID' },
+                success: function (data) {
+                    $("#ORentAcHead").val(data.Achead);
+                    $("#OPaymentHead").val(data.PaymentAc);
+                    $("#OTDcontrolAcHead").val(data.controlac);
+                }
+            });
+              $.ajax({
+                type: "POST",
+                  url: "/DailyTrips/GetDriverById",
+                datatype: "Json",
+                data: { DriverId:'@Model.DriverID' },
+                success: function (data) {
+                    $("#ODriverName").val(data.Driver);
+                    
+                }
+            });
+        }
 
-        $('#FormHired').validate({ // initialize the plugin
+
+        $('#OTDDate').datetimepicker({
+            maxDate: '@_maxdate',
+            minDate: '@_mindate', format: 'DD-MM-YYYY HH:mm'
+        });
+        var d = new Date();
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth() + 1;
+        var curr_year = d.getFullYear();
+
+        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+        $('#OTDDate').val(reqdate);
+        $("#ODriverName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DailyTrips/Drivers',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.DriverName,
+                                value: val.DriverName,
+                                Id: val.DriverID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#ODriverName').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#ODriverName").val(i.item.label);
+                $('#ODriverID').val(i.item.Id);
+            },
+
+        });
+        $("#ORentAcHead").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DailyTrips/AcHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                Id: val.AcHeadID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#ORentAcHead').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#ORentAcHead").val(i.item.label);
+                $('#ORentAcHeadID').val(i.item.Id);
+            },
+
+        });
+        $("#OPaymentHead").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DailyTrips/AcHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                Id: val.AcHeadID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#OPaymentHead').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#OPaymentHead").val(i.item.label);
+                $('#OPaymentHeadID').val(i.item.Id);
+            },
+
+        });
+        $("#OTDcontrolAcHead").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DailyTrips/AcHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                Id: val.AcHeadID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#OTDcontrolAcHead').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#OTDcontrolAcHead").val(i.item.label);
+                $('#OTDcontrolAcHeadID').val(i.item.Id);
+            },
+
+        });
+        $('#FormOwn').validate({ // initialize the plugin
             rules: {
-                TDDate: {
+                OTDDate: {
                     required: true,
 
                 },
-                BranchID: {
-                    required: true,
 
-                },
-                DriverID: {
+                ODriverID: {
                     required: true,
 
                 },
@@ -32,11 +272,11 @@
                 //    required: true,
 
                 //},
-                OriginName: {
+                OOriginName: {
                     required: true,
 
                 },
-                DestinationName: {
+                ODestinationName: {
                     required: true,
 
                 },
@@ -44,43 +284,39 @@
                     required: true,
 
                 },
-                Rent: {
+                ORent: {
                     required: true,
 
                 },
-                CurrencyIDRent: {
+                OCurrencyIDRent: {
                     required: true,
 
                 },
-                CurrencyRent: {
+                OCurrencyRent: {
                     required: true,
 
                 },
-                RentAcHeadID: {
+                OPaymentHeadID: {
                     required: true,
 
                 },
-                PaymentHeadID: {
+                OTDcontrolAcHeadID: {
                     required: true,
 
                 },
-                TDcontrolAcHeadID: {
+                OCurrencyAmount: {
                     required: true,
 
                 },
-                CurrencyAmount: {
-                    required: true,
-
-                },
-                PaymentCurrencyID: {
+                OPaymentCurrencyID: {
                     required: true,
 
                 },
             },
         });
-        $("#btnsave").click(function () {
-            if ($('#FormHired').valid()) {
-                var data = $('#FormHired').serialize();
+        $("#btnsave1").click(function () {
+            if ($('#FormOwn').valid()) {
+                var data = $('#FormOwn').serialize();
                 console.log(data);
                 $.ajax({
                     type: 'POST',
@@ -105,7 +341,7 @@
 
 <section class="content">
 
-    <form id="FormHired">
+    <form id="FormOwn">
         <div id="validations" style="color: red; margin-left: 7px; display: none">* Please fill mandatory fields</div>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -115,7 +351,7 @@
 
         <div class="row no-margin">
             <div class="col-md-12">
-                <h3 style="color: white">Owned Vehicle</h3>
+                <h3 style="color: white">Own Vehicle</h3>
                 <hr />
             </div>
 
@@ -128,20 +364,15 @@
                 @Html.HiddenFor(model => model.TruckDetailID)
                 <input type="hidden" id="VehicleType" name="VehicleType" value="O" />
                 <label class="headinglabel required">Date</label>
-                @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control datepicker", @required = "true" })
+                @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control datepicker",id="OTDDate", @required = "true" })
 
 
             </div>
-            <div class="col-md-3 form-group">
-                <label class="headinglabel required">Branch</label>
-                @Html.DropDownListFor(model => model.BranchID, new SelectList(@ViewBag.Branch, "BranchID", "BranchName"), "Select", new { @class = "form-control" })
 
-
-            </div>
             <div class="col-md-3 form-group">
                 <label class="headinglabel required">Driver</label>
-
-                @Html.DropDownListFor(model => model.DriverID, new SelectList(ViewBag.Drivers, "DriverID", "DriverName"), "Select", new { @class = "form-control", @required = "true" })
+                @Html.TextBoxFor(model => model.DriverName, new { @class = "form-control",id="ODriverName", @required = "true" })
+                @Html.HiddenFor(model => model.DriverID, new {  id = "ODriverID" })
 
             </div>
 
@@ -156,9 +387,7 @@
             </div>
 
 
-        </div>
 
-        <div class="row no-margin">
             <div class="col-md-3 form-group">
                 <label class="headinglabel">Route</label>
                 @Html.DropDownListFor(model => model.RouteID, new SelectList(@ViewBag.Routes, "RouteID", "RouteName"), "Select", new { @class = "form-control" })
@@ -166,14 +395,15 @@
             </div>
             <div class="col-md-3 form-group">
                 <label class="headinglabel required">Originating Location</label>
-                @Html.DropDownListFor(model => model.OriginName, new SelectList(@ViewBag.Locations, "LocationID", "Location"), "Select", new { @class = "form-control", @required = "true" })
+                @Html.TextBoxFor(model => model.OriginName, new { @class = "form-control", id = "Oautocomplete", @onFocus = "Ogeolocate(1)", @required = "true" })
 
             </div>
 
 
             <div class="col-md-3 form-group">
                 <label class="headinglabel required">Destination Location</label>
-                @Html.DropDownListFor(model => model.DestinationName, new SelectList(@ViewBag.Locations, "LocationID", "Location"), "Select", new { @class = "form-control", @required = "true" })
+                @Html.TextBoxFor(model => model.DestinationName, new { @class = "form-control", id = "Dautocomplete1", @onFocus = "Ogeolocate(2)", @required = "true" })
+
 
             </div>
 
@@ -207,15 +437,16 @@
                 @Html.TextBoxFor(model => model.OtherCharges, new { @class = "form-control" })
             </div>
 
-            <div class="col-md-3 form-group">
+            @*<div class="col-md-3 form-group">
                 <label class="headinglabel required">Currency</label>
 
                 @Html.DropDownListFor(model => model.CurrencyRent, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
-            </div>
+            </div>*@
 
             <div class="col-md-3 form-group">
                 <label class="headinglabel required">Account Head</label>
-                @Html.DropDownListFor(model => model.RentAcHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+                <input type="text" id="ORentAcHead" name="ORentAcHead" class="form-control" />
+                @Html.HiddenFor(model => model.RentAcHeadID, new { id = "ORentAcHeadID" })
 
             </div>
             <div class="col-md-3 form-group">
@@ -243,13 +474,17 @@
 
             <div class="col-md-3 form-group">
                 <label class="headinglabel required">Account Head (Cr)</label>
-                @Html.DropDownListFor(model => model.PaymentHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+                <input type="text" class="form-control" id="OPaymentHead" name="PaymentHead" />
+                @Html.HiddenFor(model => model.PaymentHeadID, new { id = "OPaymentHeadID" })
 
             </div>
 
             <div class="col-md-3 form-group">
                 <label class="headinglabel required">Control A/c (Dr)</label>
-                @Html.DropDownListFor(model => model.TDcontrolAcHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+                <input type="text" class="form-control" id="OTDcontrolAcHead" name="TDcontrolAcHead" />
+                @Html.HiddenFor(model => model.TDcontrolAcHeadID, new { id = "OTDcontrolAcHeadID" })
+
+                @*@Html.DropDownListFor(model => model.TDcontrolAcHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })*@
             </div>
 
             <div class="col-md-3 form-group">
@@ -280,7 +515,7 @@
 
             <div class="col-md-12 btn-right">
 
-                <input type="button" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;
+                <input type="button" value="Save" class="btn btn-primary btnwidth" id="btnsave1" />&nbsp;&nbsp;
                 <a href='@Url.Action("Index", "DailyTrips")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
 
 

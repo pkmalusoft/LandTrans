@@ -1,4 +1,4 @@
-﻿@model LTMSV2.Models.TruckDetailVM
+﻿@model LTMSV2.Models.TruckDetail
 
 @using LTMSV2.Models
 @using System.Linq
@@ -30,7 +30,7 @@
 
         <div class="row no-margin">
             <div class="col-md-12">
-                <h3 style="color: white">Hired Vehicle</h3>
+                <h3 style="color: white">Contract Vehicle</h3>
                 <hr />
             </div>
 
@@ -38,92 +38,11 @@
 
 
 
-        <div class="row no-margin">
-
-            @*       <div class="editor-label">
-                    @Html.LabelFor(model => model.CustomerID)
-                </div>*@
-            <div class="col-md-3">
-                @Html.HiddenFor(model => model.TruckDetailID)
-                @Html.HiddenFor(model => model.BranchID)
-                <label class="headinglabel">Date</label>
-                @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control text-right", @required = "true" })
-
-           
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Branch</label>
-                @*@Html.DropDownListFor(model => model.BranchID, new SelectList(@ViewBag.Branch, "BranchID", "BranchName"), "Select", new { @class = "form-control" })*@
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
-
-
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel">Driver</label>
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
-
-                @*@Html.DropDownListFor(model => model.DriverID, new SelectList(@ViewBag.Branch, "BranchID", "BranchName"), "Select", new { @class = "form-control" })*@
-
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel required">Registration Number</label>
-               
-               @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
               
 
-
-                @*<input type="text" id="txtCustomerName" />*@
-                @*@Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })*@
-            </div>
-
-
-        </div>
-
-        <div class="row no-margin" >
-            <div class="col-md-3">
-                <label class="headinglabel">Route</label>
-                @*<input type="text"  class="form-control" readonly />*@
-                @*@Html.DropDownListFor(model => model.RouteID, new SelectList(@ViewBag.Routes, "RouteID", "RouteName"), "Select", new { @class = "form-control" })*@
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
-
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel required">Originating Location</label>
-                @*@Html.DropDownListFor(model => model.OriginName, new SelectList(@ViewBag.Locations, "Location", "Location"), "Select", new { @class = "form-control" })*@
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
-
-            </div>
-
-
-            <div class="col-md-3">
-                <label class="headinglabel required">Destination Location</label>
-                @*@Html.DropDownListFor(model => model.DestinationName, new SelectList(@ViewBag.Locations, "Location", "Location"), "Select", new { @class = "form-control" })*@
-
-                @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control" })
-            </div>
-
-            @*<div class="col-md-3">
-                <label class="headinglabel">Office Close Time</label>
-                @Html.TextBoxFor(model => model.OfficeTimeTo, new { @class = "form-control", @readonly = "readonly" })
-            </div>*@
-        </div>
-
-       
-
-        
-
        
        
-        <div class="row no-margin" style="padding-top: 10px">
-
-            <div class="col-md-12 btn-right">
-
-                <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "PickUpRequest", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
-
-
-            </div>
-        </div>
+       
 
 
 

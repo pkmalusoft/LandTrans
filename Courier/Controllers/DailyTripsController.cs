@@ -69,7 +69,8 @@ namespace LTMSV2.Controllers
                                              Origin=c.OriginName,
                                              Destination=c.DestinationName,
                                              VehicleType=c.VehicleType,
-                                             TDDate=c.TDDate
+                                             TDDate=c.TDDate,
+                                             RegNo=c.RegNo
                                          }).ToList();
             if(!String.IsNullOrEmpty(VehicleType))
             {
@@ -131,12 +132,15 @@ namespace LTMSV2.Controllers
                 }
                 var ReceiptNo = "TDS-" + MaxId;
                 TruckDetail.ReceiptNo = ReceiptNo;
+                TruckDetail.VehicleID= Convert.ToInt32(data["VehicleID"]);
+                var vehicle = db.VehicleMasters.Find(TruckDetail.VehicleID);
+                
                 TruckDetail.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
                 TruckDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 TruckDetail.VehicleType = Convert.ToString(data["VehicleType"]);
                 TruckDetail.TDDate = Convert.ToDateTime(data["TDDate"]);
                 TruckDetail.DriverID = Convert.ToInt32(data["DriverID"]);
-                TruckDetail.RegNo = Convert.ToString(data["RegNo"]);
+                TruckDetail.RegNo = vehicle.RegistrationNo;
                 TruckDetail.RouteID = Convert.ToInt32(data["RouteID"]);               
                 TruckDetail.OriginName = Convert.ToString(data["OriginName"]);
                 TruckDetail.DestinationName = Convert.ToString(data["DestinationName"]);
