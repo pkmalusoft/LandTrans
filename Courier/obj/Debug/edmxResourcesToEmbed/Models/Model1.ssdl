@@ -2945,6 +2945,32 @@
     <Property Name="MinimumValue" Type="money" />
     <Property Name="TaxPercentage" Type="decimal" Precision="5" Scale="2" />
   </EntityType>
+  <EntityType Name="RevenueUpdateDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MasterID" Type="int" Nullable="false" />
+    <Property Name="RevenueCostMasterID" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="IsPerfomaInvoice" Type="bit" Nullable="false" />
+    <Property Name="ExpectedAmount" Type="money" />
+    <Property Name="InvoiceId" Type="int" />
+    <Property Name="IsPerfomaCod" Type="bit" />
+  </EntityType>
+  <EntityType Name="RevenueUpdateMaster">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EntryDate" Type="date" Nullable="false" />
+    <Property Name="CurrencyRate" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="BranchID" Type="int" Nullable="false" />
+    <Property Name="InScanID" Type="int" Nullable="false" />
+    <Property Name="EmployeeID" Type="int" />
+    <Property Name="InvoiceID" Type="int" />
+    <Property Name="InvoiceType" Type="int" />
+  </EntityType>
   <EntityType Name="RoleMaster">
     <Key>
       <PropertyRef Name="RoleID" />
@@ -3504,8 +3530,8 @@
     <Property Name="RegNo" Type="varchar" MaxLength="20" />
     <Property Name="VehicleType" Type="varchar" MaxLength="1" Nullable="false" />
     <Property Name="TDDate" Type="datetime" Nullable="false" />
-    <Property Name="OriginName" Type="int" />
-    <Property Name="DestinationName" Type="int" />
+    <Property Name="OriginName" Type="varchar(max)" />
+    <Property Name="DestinationName" Type="varchar(max)" />
     <Property Name="DriverName" Type="varchar" MaxLength="256" />
     <Property Name="VehicleTypeID" Type="int" Nullable="false" />
     <Property Name="Rent" Type="money" />
@@ -3541,6 +3567,7 @@
     <Property Name="ChequeDate" Type="datetime" />
     <Property Name="BranchID" Type="int" />
     <Property Name="TypeOfLoad" Type="varchar" MaxLength="100" />
+    <Property Name="IsDeleted" Type="bit" />
   </EntityType>
   <EntityType Name="TypeOfGoods">
     <Key>
@@ -5258,6 +5285,56 @@
       </Principal>
       <Dependent Role="QuotationDetails">
         <PropertyRef Name="QuotationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RevenueUpdateDetail_RevenueCostMaster">
+    <End Role="RevenueCostMaster" Type="Self.RevenueCostMaster" Multiplicity="1" />
+    <End Role="RevenueUpdateDetail" Type="Self.RevenueUpdateDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RevenueCostMaster">
+        <PropertyRef Name="RCID" />
+      </Principal>
+      <Dependent Role="RevenueUpdateDetail">
+        <PropertyRef Name="RevenueCostMasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RevenueUpdateDetail_RevenueUpdateMaster">
+    <End Role="RevenueUpdateMaster" Type="Self.RevenueUpdateMaster" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="RevenueUpdateDetail" Type="Self.RevenueUpdateDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RevenueUpdateMaster">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RevenueUpdateDetail">
+        <PropertyRef Name="MasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RevenueUpdateMaster_BranchMaster">
+    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="1" />
+    <End Role="RevenueUpdateMaster" Type="Self.RevenueUpdateMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BranchMaster">
+        <PropertyRef Name="BranchID" />
+      </Principal>
+      <Dependent Role="RevenueUpdateMaster">
+        <PropertyRef Name="BranchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RevenueUpdateMaster_InScan">
+    <End Role="InScan" Type="Self.InScan" Multiplicity="1" />
+    <End Role="RevenueUpdateMaster" Type="Self.RevenueUpdateMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InScan">
+        <PropertyRef Name="InScanID" />
+      </Principal>
+      <Dependent Role="RevenueUpdateMaster">
+        <PropertyRef Name="InScanID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -8485,6 +8562,8 @@
     <EntitySet Name="ReturnDetails" EntityType="Self.ReturnDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RevenueCostMaster" EntityType="Self.RevenueCostMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RevenueType" EntityType="Self.RevenueType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RevenueUpdateDetail" EntityType="Self.RevenueUpdateDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RevenueUpdateMaster" EntityType="Self.RevenueUpdateMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RoleMaster" EntityType="Self.RoleMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RouteMaster" EntityType="Self.RouteMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RouteOrder" EntityType="Self.RouteOrder" Schema="dbo" store:Type="Tables" />
@@ -9041,6 +9120,22 @@
     <AssociationSet Name="FK_QuotationDetails_Quotation" Association="Self.FK_QuotationDetails_Quotation">
       <End Role="Quotation" EntitySet="Quotation" />
       <End Role="QuotationDetails" EntitySet="QuotationDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RevenueUpdateDetail_RevenueCostMaster" Association="Self.FK_RevenueUpdateDetail_RevenueCostMaster">
+      <End Role="RevenueCostMaster" EntitySet="RevenueCostMaster" />
+      <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RevenueUpdateDetail_RevenueUpdateMaster" Association="Self.FK_RevenueUpdateDetail_RevenueUpdateMaster">
+      <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMaster" />
+      <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RevenueUpdateMaster_BranchMaster" Association="Self.FK_RevenueUpdateMaster_BranchMaster">
+      <End Role="BranchMaster" EntitySet="BranchMaster" />
+      <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RevenueUpdateMaster_InScan" Association="Self.FK_RevenueUpdateMaster_InScan">
+      <End Role="InScan" EntitySet="InScan" />
+      <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMaster" />
     </AssociationSet>
     <AssociationSet Name="FK_S_ExportShipmentDetails_S_CurrencyMaster" Association="Self.FK_S_ExportShipmentDetails_S_CurrencyMaster">
       <End Role="CurrencyMaster" EntitySet="CurrencyMaster" />

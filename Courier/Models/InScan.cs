@@ -19,6 +19,7 @@ namespace LTMSV2.Models
         {
             this.InScanDomestics = new HashSet<InScanDomestic>();
             this.InScanInternationalDeatils = new HashSet<InScanInternationalDeatil>();
+            this.RevenueUpdateMasters = new HashSet<RevenueUpdateMaster>();
         }
     
         public int InScanID { get; set; }
@@ -160,5 +161,7 @@ namespace LTMSV2.Models
         public virtual ICollection<InScanDomestic> InScanDomestics { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InScanInternationalDeatil> InScanInternationalDeatils { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RevenueUpdateMaster> RevenueUpdateMasters { get; set; }
     }
 }

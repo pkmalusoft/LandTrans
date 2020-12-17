@@ -1,8 +1,11 @@
-﻿@model LTMSV2.Models.TruckDetailVM
+﻿@model LTMSV2.Models.TruckDetail
 @{
+    /**/
+
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 }
+@*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>*@
 
 <!DOCTYPE html>
 
@@ -11,9 +14,10 @@
     <meta name="viewport" content="width=device-width" />
     <title></title>
     <style>
-        .error{
-            color:red;
+        .error {
+            color: red;
         }
+
         * {
             box-sizing: border-box
         }
@@ -52,35 +56,100 @@
 
 <body>
 
-    <button class="tablink" onclick="openPage('Home', this, '#07a7e3')" id="defaultOpen">Hired Vehicle</button>
-    <button class="tablink" onclick="openPage('News', this, '#07a7e3')">Own Vehicle</button>
-    <button class="tablink" onclick="openPage('Contact', this, '#07a7e3')">Contract Vehicle</button>
-    <button class="tablink" onclick="openPage('About', this, '#07a7e3')">Forwarding Agent</button>
+    <button class="tablink" onclick="openPage('Hire', this, '#07a7e3')" id="defaultOpen_H">Hired Vehicle</button>
+    <button class="tablink" onclick="openPage('Own', this, '#07a7e3')"id="defaultOpen_O">Own Vehicle</button>
+    <button class="tablink" onclick="openPage('Contract', this, '#07a7e3')"id="defaultOpen_C">Contract Vehicle</button>
+    <button class="tablink" onclick="openPage('Forwarding', this, '#07a7e3')"id="defaultOpen_F">Forwarding Agent</button>
 
-    <div id="Home" class="tabcontent">
+    <div id="Hire" class="tabcontent">
         @Html.Partial("_hiredVehicle");
     </div>
 
-    <div id="News" class="tabcontent">
+    <div id="Own" class="tabcontent">
         @Html.Partial("_ownVehicle");
     </div>
 
-    <div id="Contact" class="tabcontent">
+    <div id="Contract" class="tabcontent">
         @Html.Partial("_contractVehicle");
     </div>
 
-    <div id="About" class="tabcontent">
+    <div id="Forwarding" class="tabcontent">
         @Html.Partial("_forwardingAgent");
     </div>
-    
+
 </body>
 </html>
-<script type="text/javascript">
-    $(function () {
-        $('.datepicker').datetimepicker({ format: 'DD-MM-YYYY' });
-        $('.datepicker').datepicker('setDate', new Date());
 
-    });
+<script type="text/javascript">
+    var autocomplete, autocomplete1;
+
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
+
+    function initAutocomplete() {
+        // Create the autocomplete object, restricting the search predictions to
+        // geographical location types.
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete'), { types: ['geocode'] });
+
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        autocomplete.setFields(['address_component']);
+
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        autocomplete.addListener('place_changed', fillInAddress);
+
+        autocomplete1 = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete1'), { types: ['geocode'] });
+
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        autocomplete1.setFields(['address_component']);
+
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        autocomplete1.addListener('place_changed', fillInAddress);
+
+
+    }
+
+    function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        var place1 = autocomplete1.getPlace();
+
+
+
+
+    }
+
+    // Bias the autocomplete object to the user's geographical location,
+    // as supplied by the browser's 'navigator.geolocation' object.
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                if (val == 1) {
+                    autocomplete.setBounds(circle.getBounds());
+                } else {
+                    autocomplete1.setBounds(circle.getBounds());
+                }
+            });
+        }
+    }
+   
     function openPage(pageName, elmnt, color) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
@@ -96,5 +165,5 @@
     }
 
     // Get the element with id="defaultOpen" and click on it
-    document.getElementById("defaultOpen").click();
+    document.getElementById("defaultOpen_"+'@ViewBag.VehicleType').click();
 </script>
