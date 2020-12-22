@@ -108,7 +108,7 @@ body .headinglabel {
 	display:inline-block;
 }
 .content-wrapper {
-	padding:15px!important;
+	padding:30px!important;
 }
 .content-wrapper > h2{
 	margin-top:0!important;
@@ -379,7 +379,6 @@ a {
 
 .content-header {
     position: relative;
-    padding: 15px 15px 0 15px;
 }
 
     .content-header > h1 {
@@ -5679,6 +5678,7 @@ table.text-center, table.text-center td, table.text-center th {
 	height:40px!important;
 	border-radius:10px!important;
 	border:1px solid #ccc;
+    margin-bottom: 10px;
 }
 .btn,.paginate_button{
 	height:40px!important;
@@ -5774,11 +5774,35 @@ input:focus,select:focus,textarea:focus,.form-control:focus{
 	justify-content: flex-end;
 	flex-wrap:wrap;
 }
+.flex{
+    display: flex;
+}
+h3{
+    margin:10px 0;
+    font-size: 19px;
+}
+
+.sub_title_block{
+    margin-bottom: 10px;
+}
+hr{
+    margin:0!important;
+}
+.justify-between{
+    justify-content: space-between;
+}
 .m-top{
 	margin-top:25px;
 }
 .right_text input{
 	text-align:right;
+}
+.modal-header .close{
+    background: #fff;
+    opacity: 1;
+    border-radius: 50px;
+    width: 25px;
+    height: 25px;
 }
 input{
 	outline:0!Important;
@@ -5802,9 +5826,16 @@ p.indexbtnpadding{
 	padding-left:15px;
 	padding-right:15px;
 }
+.mainContent.filled{
+    background: #fff;
+    padding-top: 20px;
+}
 .row {
     margin-right: -5px;
     margin-left: -5px;
+}
+.mainContent{
+    margin-top:70px;
 }
 .small_btn{
 	min-width:50px!important;
@@ -5817,6 +5848,12 @@ p.indexbtnpadding{
 	margin-left:0;
 	margin-right:20px;
 }
+
+.modal-header{
+    background:#35b8eb;
+ }
+
+
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px){
 	.content-header + .row .d-flex .col-md-1{
 	width:23%;
@@ -5876,4 +5913,7 @@ header .navbar-nav>li {
     .content-header + .row .d-flex .col-md-1, .content-header + form .d-flex .col-md-1 {
         width: 95px;
     }
+}
+.pt-10{
+    padding-top: 10px;
 }

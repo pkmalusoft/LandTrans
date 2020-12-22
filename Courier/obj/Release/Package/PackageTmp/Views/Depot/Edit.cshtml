@@ -4,7 +4,18 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 }
-
+<style>
+    .searchdiv {
+        background-color: #fff;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 500px;
+        padding: 20px;
+        margin-top: 50px;
+        border-radius: 10px;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+    }
+</style>
     <script type="text/javascript">
         //    google.maps.event.addDomListener(window, 'load', function () {
         //        var places = new google.maps.places.Autocomplete(document.getElementById('txtPlaces'));
@@ -48,7 +59,7 @@
 
             autocompleteCity = new google.maps.places.Autocomplete(
                 document.getElementById('CityName'), { types: ['geocode'] });
-
+            autocompleteCity.addListener('place_changed', fillInAddress);
             autocompleteCountry = new google.maps.places.Autocomplete(
                 document.getElementById('CountryName'), { types: ['geocode'] });
 
@@ -57,36 +68,21 @@
         function fillInAddress() {
             debugger;
             // Get the place details from the autocomplete object.
-            var place = autocomplete.getPlace();
-            console.log(place.address_components);
-
-            //for (var component in componentForm) {
-            //  document.getElementById(component).value = '';
-            //  document.getElementById(component).disabled = false;
-            //}
-
-            // Get each component of the address from the place details,
-            // and then fill-in the corresponding field on the form.
-            //for (var i = 0; i < place.address_components.length; i++) {
-            //  var addressType = place.address_components[i].types[0];
-            //  if (componentForm[addressType]) {
-            //    var val = place.address_components[i][componentForm[addressType]];
-            //    document.getElementById(addressType).value = val;
-            //  }
-            //      }
+            var place = autocompleteCity.getPlace();
+           
 
             var postcode = '';
             $.each(place.address_components, function (index, component) {
                 var types = component.types;
                 $.each(types, function (index, type) {
-                    if (type == 'postal_code') {
-                        postcode = component.long_name;
-                    }
-                    else if (type == 'locality') {
-                        //$('#hdncity').val(component.long_name);
-                        $('#CityName').val(component.long_name);
-                    }
-                    else if (type == 'country') {
+                    //if (type == 'postal_code') {
+                    //    postcode = component.long_name;
+                    //}
+                    //else if (type == 'locality') {
+                    //    //$('#hdncity').val(component.long_name);
+                    //    $('#CityName').val(component.long_name);
+                    //}
+                    if (type == 'country') {
                         $('#CountryName').val(component.long_name);
                     }
 
@@ -209,83 +205,82 @@
 </section>
 
 <section class="content">
-@using (Html.BeginForm()) {
-    @Html.ValidationSummary(true)
-      <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
-    <fieldset>
-        <div class="row no-margin"> 
-   @*    @Html.HiddenFor(model=>model.Own)*@
-            <div class="col-md-3">
-                <label class="headinglabel required">Country</label>
-                @Html.HiddenFor(model => model.ID)
-                @Html.HiddenFor(model => model.CompanyID)
-                @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", id = "CountryName", @onFocus = "geoCountrylocate()" })
-                @Html.ValidationMessageFor(model => model.CountryName)
-
-            </div>
-
-            <div class="col-md-3">
-                <label class="headinglabel required">City</label>
-                @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", id = "CityName", @onFocus = "geoCitylocate()" })
-                @Html.ValidationMessageFor(model => model.CityName)
-
-            </div>
-            
-            <div class="col-md-3">
-                 <label class="headinglabel required">Depot</label>
-                @Html.TextBoxFor(model => model.Depot, new { @class = "form-control txttarget" })
-                @Html.ValidationMessageFor(model => model.Depot)                     
-           </div>
-
-
-        </div>
-
-           <div class="row no-margin" style="padding-top:25px"> 
-                   <div class="col-md-3" style="padding-top:15px">
-                    @Html.CheckBox("IsOwn", new { @name = "IsOwn" }) &nbsp;&nbsp;
-                    <label class="headinglabel">Is Own</label>
-                    @Html.ValidationMessageFor(model => model.IsOwn)
-               </div>
-
-                   <div class="col-md-3">
-                          <label class="headinglabel">Agent</label>
-        @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "AgentID", "Name"), "Select", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.CountryID)
-                     
-                     
-                 </div>
-
-           
-</div>
-    
-
- 
-             <div class="row no-margin" style="padding-top:10px">
-                        <div class="col-md-12 btn-right">
-                           
-                             <input type="submit" value="Update" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
-                               
-                          
-                        
-                          <a href='@Url.Action("Index", "Depot", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
-                               
-                          
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        <div class="searchdiv sm-width">
+            <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+            <fieldset>
+                <div class="row no-margin">
+                    <div class="col-md-12">
+                        @Html.HiddenFor(mode=>Model.ID)
+                        <label class="headinglabel required">City</label>
+                        @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", id = "CityName", @onFocus = "geoCitylocate()" })
+                        @Html.ValidationMessageFor(model => model.CityName)
+                    </div>
+                </div>
+                <div class="row no-margin">
+                    <div class="col-md-12">
+                        <label class="headinglabel required">Country</label>
+                        @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", id = "CountryName", @readonly = "readonly" })
+                        @*@Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
+                        @Html.ValidationMessageFor(model => model.CountryName)
+                    </div>
+                </div>
+                <div class="row no-margin">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <label class="headinglabel required">Depot</label>
+                        </div>
+                        <div class="col-md-6 checkboxdesign" style="padding-top:5px">
+                            @Html.CheckBox("IsOwn", new { @name = "IsOwn" }) &nbsp;&nbsp;
+                            <label class="headinglabel">Is Own</label>
+                            @Html.ValidationMessageFor(model => model.IsOwn)
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(model => model.Depot, new { @class = "form-control txttarget" })
+                        @Html.ValidationMessageFor(model => model.Depot)
 
-      
-       
+                    </div>
+                </div>
 
-    
+                <div class="row no-margin">
 
-        <p>
-          
-        </p>
-    </fieldset>
-}
+                    <div class="col-md-12">
+                        <label class="headinglabel">Agent</label>
+                        @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agent, "AgentID", "Name"), "Select", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CountryID)
 
 
-    </section>
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="row no-margin" style="padding-top:10px">
+                    <div class="col-md-12 btn-right">
+
+                        <input type="submit" value="Update" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+
+
+
+                        <a href='@Url.Action("Index", "Depot", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+
+                    </div>
+                </div>
+
+
+
+            </fieldset>
+        </div>
+    }
+
+
+</section>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>
 

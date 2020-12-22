@@ -8,7 +8,7 @@
         var isdelete = true;
         var isprint = true;
         var isview = true;
-        string path = "/QuickAWB/Index";
+        string path = "/Consignment/Index";
 
         if (Convert.ToInt32(Session["UserRoleID"]) > 1)
         {
@@ -73,14 +73,22 @@
         });
     </script>
     <script type="text/javascript">
-        
+        function ShowLabelPrinting(InScanId) {
+            $('#InScanID').val(InScanId);
+            $('#txtStartLabelNo').val('');
+            $('#txtLabelQty').val('');
+            $('#txtIncrement').val('');
+            $('#LabelPrintingModal').modal('show');
+            $('#txtStartLabel').focus();
+
+        }
         function ShowStatusModal(InScanId) {
             
             $('#InScanID').val(InScanId);
 
           $.ajax({
             type: "POST",
-            url: "/QuickAWB/GetActiveStatus",
+            url: "/Consignment/GetActiveStatus",
             datatype: "Json",
             data: { 'InScanID': InScanId },
             success: function (response) {
@@ -125,7 +133,52 @@
                 });
             });
 
-            //});
+            $('#btnprintLabel').click(function ()  {
+                debugger;
+                if ($('#txtStartLabelNo').val() == '') {
+                    $('#lblerr').html('Enter Start Label No.!');
+                    $('#txtStartLabelNo').focus();
+                    return;
+                }
+                else if ($('#txtLabelQty').val() == '') {
+                    $('#lblerr').html('Enter Start Label Qty.!');
+                    $('#txtLabelQty').focus();
+                    return;
+                }
+                else if ($('#txtIncrement').val() == '' || $('#txtIncrement').val() == '0') {
+                    $('#lblerr').html('Enter Start Label Increment!');
+                    $('#txtIncrement').focus();
+                    return;
+                }
+
+                var printobj = {
+                    LabelStartNo: $('#txtStartLabelNo').val(),
+                    LabelQty: $('#txtLabelQty').val(),
+                    Increment: $('#txtIncrement').val(),
+                    InScanId: $('#InScanID').val(),
+                    ConsignmentNo: '',
+                    Output: "PDF",
+                    ReportFileName :""
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Consignment/GenerateLabelPrinting",                    
+                    data: JSON.stringify(printobj),
+                    datatype: "Json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        console.log(response);
+                        $('#LabelPrintingModal').modal('hide');
+
+                     //   window.open("~/Consignment/LabelPrinting?consignmentno=" + response, "_blank");
+
+                    }
+                });
+
+            });
+
+
                $('#ChangeStatusTypeId').change(function () {
             debugger;
             var pcourierstatusid = $('#CourierStatusId').val();
@@ -134,7 +187,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/QuickAWB/GetStatus",
+                url: "/Consignment/GetStatus",
                 datatype: "Json",
                 data: { 'StatusTypeId' : $('#ChangeStatusTypeId').val() },
                 success: function (response) {
@@ -183,7 +236,7 @@
 
              $.ajax({
                 type: "POST",
-                url: "/QuickAWB/SaveStatus",
+                url: "/Consignment/SaveStatus",
                 datatype: "Json",
                 data: statusobj,
                 success: function (response) {
@@ -311,31 +364,31 @@
                 <tfoot>
                     <tr>
                         <th>
-                            
+
                         </th>
                         <th class="right_text">
-                            
+
                         </th>
                         <th>
-                            
-                        </th>
-                        <th >
-                            
+
                         </th>
                         <th>
-                        
+
                         </th>
                         <th>
-                        
+
                         </th>
                         <th>
-                        
+
                         </th>
                         <th>
-                        
+
                         </th>
                         <th>
-                        
+
+                        </th>
+                        <th>
+
                         </th>
 
                         <th style="display:none"></th>
@@ -386,7 +439,7 @@
                                 }
                                 @if (isview)
                                 {
-                                    <a href="Details?id=@item.InScanID"><i class="fa fa-eye"></i>|</a>                                
+                                    <a href="Details?id=@item.InScanID"><i class="fa fa-eye"></i>|</a>
                                 }
                                 @if (isdelete)
                                 {
@@ -394,7 +447,8 @@
                                 }
                                 @if (isprint)
                                 {
-                                    <a href="@Url.Action("AWBPrint", "Consignment", new { id = item.InScanID })"><i class="fa fa-print"></i></a>                                                                
+                                    @*<a href="@Url.Action("AWBPrint", "Consignment", new { id = item.InScanID })"><i class="fa fa-print"></i></a>*@
+                                    <a href="#" title="Label Printing" onclick="ShowLabelPrinting('@item.InScanID')"><i class="fa fa-print"></i></a>
                                 }
                             </td>
                         </tr>
@@ -403,7 +457,56 @@
 
             </table>
         </div>
+        <div class="modal fade" id="LabelPrintingModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #f5f5f5;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">
+                            Label Printing
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row" style="padding-top: 5px">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-xs-5 col-sm-3">
+                                            Starting No.
+                                        </div>
+                                        <div class="col-xs-7 col-sm-9">
+                                            <input type="text" id="txtStartLabelNo" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:10px">
+                                        <div class="col-xs-5 col-sm-3">
+                                            Label  Qty
+                                        </div>
+                                        <div class="col-xs-7 col-sm-9">
+                                            <input type="text" id="txtLabelQty" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:10px">
+                                        <div class="col-xs-5 col-sm-3">
+                                            Increment
+                                        </div>
+                                        <div class="col-xs-7 col-sm-9">
+                                            <input type="text" id="txtIncrement" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="padding-top: 5px">
+                        <label id="lblerr"></label>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" name="Command" value="Print" class="btn btn-primary" id="btnprintLabel">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="StatusModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -451,8 +554,8 @@
     </section>
     <script type="text/javascript">
         function Delete(ID) {
-            if (confirm("Are you sure, You want to Delete Quick AirWay Bill?")) {
-                window.location.href = "/QuickAWB/DeleteConfirmed/?id=" + ID;
+            if (confirm("Are you sure, You want to Delete Consignment Entry?")) {
+                window.location.href = "/Consignment/DeleteConfirmed/?id=" + ID;
             }
         }
     </script>

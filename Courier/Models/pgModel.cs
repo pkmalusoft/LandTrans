@@ -518,6 +518,8 @@ namespace LTMSV2.Models
         public string RouteID { get; set; }
         public string RouteCode { get; set; }
         public string RouteName { get; set; }
+        public string OriginName { get; set; }
+        public string DestinationName { get; set; }
         public string DepotIDs { get; set; }
         public string AutoID { get; set; }
         public string DepotID { get; set; }
@@ -548,6 +550,8 @@ namespace LTMSV2.Models
                  { "RouteCode",o.RouteCode??"" },
                  { "RouteName",o.RouteName??"" },
                  { "DepotIDs",o.DepotIDs??"" },
+                 { "OriginName",o.OriginName??"" },
+                 { "DestinationName",o.DestinationName??"" },
                  { "Mode", o.Mode??"" },
                  };
                 Dictionary<string, string> output = new Dictionary<string, string>() { { "Result", "" } };

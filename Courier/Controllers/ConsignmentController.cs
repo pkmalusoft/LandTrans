@@ -225,7 +225,8 @@ namespace LTMSV2.Controllers
                         inscan.CreatedDate = localDateTime;
                         inscan.LastModifiedBy = userid;
                         inscan.LastModifiedDate = localDateTime;
-
+                      
+                        
                         if (v.PaymentModeId != null)
                         {
                             if (v.PaymentModeId == 3)
@@ -271,27 +272,21 @@ namespace LTMSV2.Controllers
                         inscan.LastModifiedBy = userid;
                         inscan.LastModifiedDate = localDateTime1;
                     }
-                    inscan.Weight = v.Weight;            
-                    //inscan.AcJournalID = ajm.AcJournalID;
                     
-
                     if (v.Weight!=null)
                     {
                         inscan.Weight = Convert.ToDecimal(v.Weight);
                     }
-
-                    inscan.PaymentModeId = v.PaymentModeId;
                     
-                    //if (v.CourierType!=null)
-                    //{
-                    //    inscan.CourierDescriptionID = v.CourierType;
-                    //}
-                    //if (v.CourierMode!=null)
-                    //{
-                    //    inscan.TaxconfigurationID = v.CourierMode;
-                    //}
+                    inscan.CBM_Unit = v.CBM_Unit;
+                    inscan.CBM_length = v.Length;
+                    inscan.CBM_height = v.Height;
+                    inscan.CBM_width = v.Width;
+                    inscan.Volume = v.Volume;
+                    inscan.VolumeWeight = v.VolumeWeight;
 
-                  
+                    inscan.PaymentModeId = v.PaymentModeId;                    
+                                      
                     inscan.Consignee = v.Consignee;
                     inscan.ConsigneeCountryName = v.ConsigneeCountryName;
                     inscan.ConsigneeCityName = v.ConsigneeCityName;
@@ -312,8 +307,7 @@ namespace LTMSV2.Controllers
                     inscan.MovementID = v.MovementTypeID;
                     
                     inscan.Remarks = v.remarks;
-                    inscan.Volume= v.Volume;
-                    inscan.VolumnWeight = v.VolumeWeight;
+                   
                     inscan.Freight = v.Freight;
                     inscan.DocumentSetupID = v.DocumentSetupId;
                     inscan.ExportImportCode = v.ExportImportCode;
@@ -518,10 +512,13 @@ namespace LTMSV2.Controllers
                     }
                     //accounts posting  for payment mode pickupcash and cod and Account on 30/nov/2020
                     //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
-                        _dao.AWBAccountsPosting(inscan.InScanID);
+                      //  _dao.AWBAccountsPosting(inscan.InScanID);
 
+                    
+                        TempData["ShowLabelPrint"] = "true";
+                        return RedirectToAction("Create",new { id = inscan.InScanID });
 
-                    return RedirectToAction("Index");
+                    
 
 
                 }
@@ -647,6 +644,23 @@ namespace LTMSV2.Controllers
 
         }
 
+        [HttpPost]
+        public JsonResult GenerateLabelPrinting(LabelPrintingParam picker)
+        {
+            //LabelPrintingParam picker = new LabelPrintingParam();
+            //picker.LabelStartNo = LabelStart;
+            //picker.LabelQty = LabelQty;
+            //picker.Increment = LabelIncrement;
+            //picker.InScanId = InscanId;
+            
+            if (picker.ConsignmentNo == "" || picker.ConsignmentNo == null)
+                picker.ConsignmentNo = db.InScanMasters.Find(picker.InScanId).ConsignmentNo;
+
+            ViewBag.ReportName = "Label Printing - " + picker.ConsignmentNo;
+            SessionDataModel.SetLabelPrintParam(picker);
+             return Json(new { status = "ok", data = picker.ConsignmentNo }, JsonRequestBehavior.AllowGet);
+
+        }
         [HttpGet]
         public JsonResult GetImpExpCode(string term)
         {
@@ -771,7 +785,19 @@ namespace LTMSV2.Controllers
                 {
                     inscan.Weight = 0;
                 }
-
+            inscan.CBM_Unit = data.CBM_Unit;
+            if (data.CBM_width!=null)
+            {
+                inscan.Width = data.CBM_width.Value;
+            }
+            if (data.CBM_length!=null)
+            {
+                inscan.Length = data.CBM_length.Value;
+            }
+            if (data.CBM_height !=null)
+            {
+                inscan.Height = data.CBM_height.Value;
+            }
             if (data.Volume != null)
             {
                 inscan.Volume = data.Volume.Value;
@@ -780,9 +806,9 @@ namespace LTMSV2.Controllers
             {
                 inscan.Volume = 0;
             }
-            if (data.VolumnWeight != null)
+            if (data.VolumeWeight != null)
             {
-                inscan.VolumeWeight = data.VolumnWeight.Value;
+                inscan.VolumeWeight = data.VolumeWeight.Value;
             }
             else
             {
@@ -1038,7 +1064,58 @@ namespace LTMSV2.Controllers
             return "ok";
 
         }
+        public int SaveShipper(QuickAWBVM v)
+        {
+            CustM objCust = new CustM();
+            var cust = (from c in db.CustomerMasters where c.CustomerName == v.customer && c.CustomerType == "CR" select c).FirstOrDefault();
 
+            int accompanyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int depotid = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            if (cust == null)
+            {
+                CustomerMaster obj = new CustomerMaster();
+
+                int max = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerID).FirstOrDefault();
+
+                obj.CustomerID = max + 1;
+                obj.AcCompanyID = accompanyid;
+
+                obj.CustomerCode = ""; // _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
+                obj.CustomerName = v.customer;//  v.Consignor;
+                obj.CustomerType = "CR"; //Cash customer
+
+                //obj.ContactPerson = v.ConsignorContact;
+                //obj.Address1 = v.ConsignorAddress1_Building;
+                //obj.Address2 = v.ConsignorAddress2_Street;
+                //obj.Address3 = v.ConsignorAddress3_PinCode;
+                //obj.Phone = v.ConsignorPhone;
+                //obj.CountryName = v.ConsignorCountryName;
+                //obj.CityName = v.ConsignorCityName;
+                //obj.LocationName = v.ConsignorLocationName;
+                obj.UserID = null;
+                obj.statusCommission = false;
+                obj.Referal = "";
+                obj.StatusActive = true;
+                obj.StatusTaxable = false;
+                obj.CreditLimit = 0;
+                obj.Email = "";
+                obj.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                obj.CurrencyID = Convert.ToInt32(Session["CurrencyID"].ToString());
+                // Convert.ToInt32(Session["UserID"].ToString());
+                obj.DepotID = depotid;
+                db.CustomerMasters.Add(obj);
+                db.SaveChanges();
+                return obj.CustomerID;
+                //cust = (from c in db.CustomerMasters where c.CustomerName == v.customer && c.CustomerType == "CR" select c).FirstOrDefault();
+                //return cust.CustomerID;
+            }
+            else
+            {
+                return cust.CustomerID;
+            }
+
+        }
         public int SaveCustomer(QuickAWBVM v)
         {
             CustM objCust = new CustM();
@@ -1414,10 +1491,14 @@ namespace LTMSV2.Controllers
         [HttpGet]
         public JsonResult GetReceiverName(string term)
         {
-            var shipperlist = (from c1 in db.InScanMasters
-                               where c1.Consignee.ToLower().StartsWith(term.ToLower())
-                               orderby c1.Consignee ascending
-                               select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode }).Distinct();
+            //var shipperlist = (from c1 in db.InScanMasters
+            //                   where c1.Consignee.ToLower().StartsWith(term.ToLower())
+            //                   orderby c1.Consignee ascending
+            //                   select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode }).Distinct();
+            var shipperlist = (from c1 in db.CustomerMasters
+                               where c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                               orderby c1.CustomerName ascending
+                               select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
 
             return Json(shipperlist, JsonRequestBehavior.AllowGet);                       
 
@@ -1426,10 +1507,15 @@ namespace LTMSV2.Controllers
         [HttpGet]
         public JsonResult GetShipperName(string term)
         {
-            var shipperlist = (from c1 in db.InScanMasters
-                               where c1.Consignor.ToLower().StartsWith(term.ToLower())
-                               orderby c1.Consignor ascending
-                               select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode }).Distinct();
+            //var shipperlist = (from c1 in db.InScanMasters
+            //                   where c1.Consignor.ToLower().StartsWith(term.ToLower())
+            //                   orderby c1.Consignor ascending
+            //                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode }).Distinct();
+
+            var shipperlist = (from c1 in db.CustomerMasters
+                               where c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                               orderby c1.CustomerName ascending
+                               select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
             return Json(shipperlist, JsonRequestBehavior.AllowGet);
         }
 
@@ -1454,21 +1540,12 @@ namespace LTMSV2.Controllers
             }
         }
 
-        [HttpPost]
-        public string GenLabelPrinting(LabelPrintingParam picker)
-        {
-            if (picker.ConsignmentNo == "" ||picker.ConsignmentNo ==null )
-                picker.ConsignmentNo = db.InScanMasters.Find(picker.InScanId).ConsignmentNo;
 
-            ViewBag.ReportName = "Label Printing - " + picker.ConsignmentNo;
-            AccountsReportsDAO.GenerateLabelPrinting(picker);
-            return picker.ConsignmentNo;
-
-        }
         public ActionResult LabelPrinting(string consignmentno)
         {
             ViewBag.ReportName = "Label Printing - " + consignmentno;
-            
+            LabelPrintingParam picker = SessionDataModel.GetLabelPrintParam();
+            AccountsReportsDAO.GenerateLabelPrinting(picker);
             return View();
 
         }
@@ -1661,6 +1738,7 @@ namespace LTMSV2.Controllers
             return View(v);
 
         }
+
         public ActionResult Edit(int id)
         {
             QuickAWBVM inscan = new QuickAWBVM();

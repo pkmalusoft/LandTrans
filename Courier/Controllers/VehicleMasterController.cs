@@ -67,6 +67,7 @@ namespace LTMSV2.Controllers
         {
             ViewBag.Branch = db.BranchMasters.ToList();
             ViewBag.VehicleType = db.VehicleTypes.ToList();
+            ViewBag.Achead = db.AcHeads.ToList();
             VehiclesVM v = new VehiclesVM();
             if (id>0)
             {
@@ -146,6 +147,15 @@ namespace LTMSV2.Controllers
             v.VehicleTypeID = vm.VehicleTypeID;
             v.RegisteredUnder = vm.RegisteredUnder;
             v.MakeYear = vm.MakeYear;
+            v.AcheadId = vm.AcheadId;
+            v.ContractExpDate = vm.ContractExpDate;
+            v.ContractIssuedDate = vm.ContractIssuedDate;
+            v.ContractNo = vm.ContractNo;
+            v.ContractRate = vm.ContractRate;
+            v.FreeKM = vm.FreeKM;
+            v.RateExtraKM = vm.RateExtraKM;
+            v.VehicleMaintenance = vm.VehicleMaintenance;
+            v.VehicleOwner = vm.VehicleOwner;
 
             if (vm.VehicleID == 0)
             {
@@ -207,7 +217,17 @@ namespace LTMSV2.Controllers
             v.InsuredValue = data.InsuredValue.Value;
             v.ScrapValue = data.ScrapValue.Value;
             v.PolicyNo = data.PolicyNo;
-
+            v.ContractNo = data.ContractNo;
+            v.ContractRate = data.ContractRate;
+            v.FreeKM = data.FreeKM;
+            v.RateExtraKM = data.RateExtraKM;
+            v.VehicleOwner = data.VehicleOwner;
+            v.VehicleMaintenance = data.VehicleMaintenance;
+            v.AcheadId = data.AcheadId;
+            if (data.ContractIssuedDate != null)
+                v.ContractIssuedDate = Convert.ToDateTime(data.ContractExpDate);
+            if (data.ContractExpDate != null)
+                v.ContractExpDate = Convert.ToDateTime(data.ContractExpDate);
             return v;
         }
        

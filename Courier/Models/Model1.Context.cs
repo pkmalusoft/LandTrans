@@ -253,23 +253,23 @@ namespace LTMSV2.Models
         public virtual DbSet<DocumentSetup> DocumentSetups { get; set; }
         public virtual DbSet<ItemMaster> ItemMasters { get; set; }
         public virtual DbSet<Package> Packages { get; set; }
-        public virtual DbSet<RouteMaster> RouteMasters { get; set; }
         public virtual DbSet<RouteOrder> RouteOrders { get; set; }
         public virtual DbSet<BranchMaster> BranchMasters { get; set; }
         public virtual DbSet<CityMaster> CityMasters { get; set; }
-        public virtual DbSet<VehicleMaster> VehicleMasters { get; set; }
         public virtual DbSet<CreditNoteDetail> CreditNoteDetails { get; set; }
         public virtual DbSet<Transit> Transits { get; set; }
         public virtual DbSet<TransportMode> TransportModes { get; set; }
         public virtual DbSet<ImpExpDocumentMaster> ImpExpDocumentMasters { get; set; }
-        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
         public virtual DbSet<VehicleType> VehicleTypes { get; set; }
         public virtual DbSet<DriverMaster> DriverMasters { get; set; }
         public virtual DbSet<RevenueCostMaster> RevenueCostMasters { get; set; }
         public virtual DbSet<PortMaster> PortMasters { get; set; }
+        public virtual DbSet<TruckDetail> TruckDetails { get; set; }
+        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
         public virtual DbSet<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
         public virtual DbSet<RevenueUpdateMaster> RevenueUpdateMasters { get; set; }
-        public virtual DbSet<TruckDetail> TruckDetails { get; set; }
+        public virtual DbSet<VehicleMaster> VehicleMasters { get; set; }
+        public virtual DbSet<RouteMaster> RouteMasters { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

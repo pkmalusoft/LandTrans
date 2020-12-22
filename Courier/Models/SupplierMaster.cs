@@ -50,6 +50,9 @@ namespace LTMSV2.Models
         public Nullable<bool> StatusReserved { get; set; }
         public string POBoxNo { get; set; }
         public string Remarks { get; set; }
+        public Nullable<int> CountryID { get; set; }
+        public Nullable<int> CityID { get; set; }
+        public Nullable<int> LocationID { get; set; }
     
         public virtual CurrencyMaster CurrencyMaster { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

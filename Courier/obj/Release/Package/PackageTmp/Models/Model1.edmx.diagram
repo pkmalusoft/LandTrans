@@ -399,22 +399,28 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_EmployeeMaster_CityMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_LocationMaster_CityMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblDepot_CityMaster" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.VehicleMaster" Width="1.5" PointX="25.375" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNoteDetail" Width="1.5" PointX="38.375" PointY="26.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Transit" Width="1.5" PointX="40.375" PointY="37.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TransportMode" Width="1.5" PointX="0.75" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ImpExpDocumentMaster" Width="1.5" PointX="17.375" PointY="41.75" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" Width="1.5" PointX="38.375" PointY="41.75" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TruckDetail" Width="1.5" PointX="44.625" PointY="53.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.VehicleType" Width="1.5" PointX="23.125" PointY="45.625" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" Width="1.5" PointX="27.375" PointY="41.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RevenueCostMaster" Width="1.5" PointX="40.375" PointY="41.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PortMaster" Width="1.5" PointX="19.375" PointY="41.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TruckDetail" Width="1.5" PointX="44.625" PointY="53.75" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" Width="1.5" PointX="32.375" PointY="42.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" Width="1.5" PointX="42.625" PointY="46.25" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster" Width="1.5" PointX="17" PointY="52.375" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_BranchMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_InScan" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.VehicleMaster" Width="1.5" PointX="25.375" PointY="108.875" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_VehicleMaster_VehicleType" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" Width="1.5" PointX="27.375" PointY="41.75" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RevenueCostMaster" Width="1.5" PointX="40.375" PointY="41.75" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.PortMaster" Width="1.5" PointX="19.375" PointY="41.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

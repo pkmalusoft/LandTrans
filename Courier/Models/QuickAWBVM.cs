@@ -58,6 +58,10 @@ namespace LTMSV2.Models
         public string paymentmode { get; set; }
         public int? PaymentModeId { get; set; }
         public string code { get; set; }
+        public string CBM_Unit { get; set; }
+        public decimal Length { get; set; }
+        public decimal Width { get; set; }
+        public decimal Height { get; set; }
         public decimal Volume { get; set; }
         public decimal VolumeWeight { get; set; }
         public decimal CustomsInvoiceValue { get; set; }
@@ -154,8 +158,9 @@ namespace LTMSV2.Models
         public string LastModifiedByName { get; set; }
         public string CreatedByDate { get; set; }
         public string LastModifiedDate { get; set; }
+        public bool PrintLabel { get; set; }
         public List<OtherChargeDetailVM> otherchargesVM { get; set; }
-
+        
 
     }
 

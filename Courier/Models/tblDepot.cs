@@ -19,6 +19,7 @@ namespace LTMSV2.Models
         {
             this.tblStockIssues = new HashSet<tblStockIssue>();
             this.tblStockIssues1 = new HashSet<tblStockIssue>();
+            this.EmployeeMasters = new HashSet<EmployeeMaster>();
         }
     
         public int ID { get; set; }
@@ -37,5 +38,7 @@ namespace LTMSV2.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblStockIssue> tblStockIssues1 { get; set; }
         public virtual CityMaster CityMaster { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmployeeMaster> EmployeeMasters { get; set; }
     }
 }

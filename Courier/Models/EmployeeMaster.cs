@@ -115,5 +115,6 @@ namespace LTMSV2.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SalesInvoice> SalesInvoices1 { get; set; }
         public virtual CityMaster CityMaster { get; set; }
+        public virtual tblDepot tblDepot { get; set; }
     }
 }

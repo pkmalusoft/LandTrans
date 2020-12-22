@@ -22,15 +22,17 @@
 
 
 
-        $('#TDDate').datetimepicker({ format: 'DD-MM-YYYY'});
+        $('#TDDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#TDDate').focus();
+        GetConsignments();
 
         $("#RouteName").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/Route/GetRouteData',
+                    url: '/TruckAssign/GetTripRouteData',
                     datatype: "json",
                     data: {
-                        term: request.term
+                        term: request.term, TripDate: $("#TDDate").val()
                     },
                     success: function (data) {
                         response($.map(data, function (val, item) {
@@ -51,11 +53,45 @@
             select: function (e, i) {
                 e.preventDefault();
                 $("#RouteName").val(i.item.label);
-                $("#RouteID").val(i.item.RouteID);
+                $("#RouteID").val(i.item.ItemID);
+            },
+
+        });
+        $("#VechicleName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/TruckAssign/GetTripRouteVechileData',
+                    datatype: "json",
+                    data: {
+                        term: request.term, TripDate: $("#TDDate").val(), RouteId: $("#RouteID").val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.VehicleDescription,
+                                value: val.VehicleDescription,
+                                ItemID: val.VehicleID
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: -1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#VechicleName').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#VechicleName").val(i.item.label);
+                $("#VehicleID").val(i.item.ItemID);
             },
 
         });
 
+        $("#TDDate").change(function () {
+            GetConsignments();
+        });
         $("#txtawb").change(function () {
             $('#btnadd').trigger('click');
         });
@@ -191,7 +227,42 @@
             });
         }
         $('#btnsave').click(function () {
-            debugger;
+            var SelectedInScanId = '';
+            var RemovedAWB = '';
+            $.each(AWBItems, function (index, item) {
+
+                //var awbitem = { InscanID: item.InScanId, AWB: item.AWB };
+                if (SelectedInScanId != '')
+                    SelectedInScanId += ',';
+
+                SelectedInScanId = SelectedInScanId + item.InScanId;
+                //lst1.push(awbitem);
+            });
+            alert(SelectedInScanId);
+            if (SelectedInScanId == '') {
+                $.notify("Awb No. Not Found! ", "warning");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/TruckAssign/SubmitTruckAssign",
+                    datatype: "Json",
+                    data: { TripDate: $('#TDDate').val(), RouteId: $("#RouteID").val(), VehicleId: $("#VehicleID").val(), InscanId: SelectedInScanId },
+                    success: function (response) {
+                        if (response.status == "ok") {
+
+                            $.notify(response.message, "success");
+                            window.location = "/TruckAssign/index";
+                        }
+                        else {
+
+                            $.notify(response.message, "warning");
+
+                        }
+                    }
+                });
+            }
+        });
+        $('#btnsave1').click(function () {
             var lst1 = [];
             var SelectedInScanId = '';
             var RemovedAWB = '';
@@ -279,7 +350,27 @@
 
         $("#InScanSheetNo").focus();
     });
-  
+    function GetConsignments() {
+        $.ajax({
+            type: "POST",
+            url: "/TruckAssign/GetConsignmentsByDate",
+            datatype: "Json",
+            data: { TripDate: $("#TDDate").val() },
+            success: function (response) {
+                $('#txtawb').empty();
+                $('#txtawb')
+                    .append($("<option></option>")
+                        .attr("value", "")
+                        .text("Select")); 
+                for (var i = 0; i < response.length; i++) {
+                    $('#txtawb')
+                        .append($("<option></option>")
+                            .attr("value", response[i].InScanID)
+                            .text(response[i].AWBNo)); 
+                }
+            }
+        });
+    }
 </script>
 
 
@@ -327,7 +418,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Vechile</label>
-                    @Html.TextBoxFor(model => model.VechicleName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Vechile Name" })
+                    @Html.TextBoxFor(model => model.VechicleName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Vechile Name - Driver Name" })
                     @Html.HiddenFor(model => model.VehicleID)
                 </div>
 
@@ -336,7 +427,10 @@
                 <div class="row no-margin" style="padding-top:10px">
                     <div class="col-md-3">
                         <label class="headinglabel required">Consignment No.</label>
-                        <input type="text" id="txtawb" class="form-control" />
+                        <input type="text"id="txtawb" class="form-control" />
+                        @*<select  id="txtawb" class="form-control" >
+                            <option value="">Select</option>
+                        </select>*@
                     </div>
                     <div class="col-md-3" style="padding-top:10px">
                       <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
@@ -350,11 +444,13 @@
                     <div class="col-md-12">
                         <table id="details" class="table table-responsive table-bordered" style="background-color:white">
                             <thead>
-                            <th>S No.</th>
-                            <th>AWB No.</th>
-                            <th>Origin</th>
-                            <th>Destination</th>
-                            <th>Remove</th>
+                                <tr>
+                                    <th>S No.</th>
+                                    <th>AWB No.</th>
+                                    <th>Origin</th>
+                                    <th>Destination</th>
+                                    <th>Remove</th>
+                                </tr>
                             </thead>
                             <tbody id="detailsbody"></tbody>
                         </table>

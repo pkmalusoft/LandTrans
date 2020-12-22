@@ -775,14 +775,14 @@ namespace LTMSV2.DAL
             else if (param.Output == "EXCEL")
             {
 
-                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportname = "LabelPrinting_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
                 param.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
             }
             else if (param.Output == "WORD")
             {
-                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+                reportname = "LabelPrinting_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
                 param.ReportFileName = reportname;
                 reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
                 rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
