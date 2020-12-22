@@ -368,7 +368,9 @@ namespace LTMSV2.NAL
             List<CityList> list = new List<CityList>();
             try
             {
-                SqlCommand cmd = new SqlCommand("select CityID, City from CityMaster where DepotID IS NULL order by City", con);
+                //SqlCommand cmd = new SqlCommand("select CityID, City from CityMaster where DepotID IS NULL order by City", con);
+                SqlCommand cmd = new SqlCommand("Select ID, Depot From tbldepot", con);
+                
                 con.Open();
                 SqlDataReader sdr = cmd.ExecuteReader();
                 if (sdr.HasRows)
@@ -377,8 +379,8 @@ namespace LTMSV2.NAL
                     {
                         list.Add(new CityList
                         {
-                            Value = sdr["CityID"].ToString(),
-                            Text = sdr["City"].ToString()
+                            Value = sdr["ID"].ToString(),
+                            Text = sdr["Depot"].ToString()
                         });
                     }
                 }

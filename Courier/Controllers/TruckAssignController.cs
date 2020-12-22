@@ -71,7 +71,7 @@ namespace LTMSV2.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.Title = "Trick Assign - Create";
+            ViewBag.Title = "Truck Assign - Create";
             return View();
         }
 
@@ -86,7 +86,7 @@ namespace LTMSV2.Controllers
 
                 List<RouteMasterVM> itemlist = (from c in db.RouteMasters
                                                 join truck in db.TruckDetails on c.RouteID equals truck.RouteID
-                                                where c.RouteName.ToLower().StartsWith(term.ToLower()) && truck.TDDate >= pFromDate && truck.TDDate <= toDate
+                                                where c.RouteName.ToLower().StartsWith(term.ToLower()) && truck.TDDate >= pFromDate && truck.TDDate <= toDate && truck.VehicleType.Trim()!="F"
                                                 orderby c.RouteName
                                                 select new RouteMasterVM { RouteID = c.RouteID, RouteName = c.RouteName }).ToList();
                
@@ -99,9 +99,9 @@ namespace LTMSV2.Controllers
             }
             else
             {
-                List<RouteMasterVM> itemlist = (from c in db.RouteMasters select new RouteMasterVM { RouteID = c.RouteID, RouteName = c.RouteName }).ToList();
+                //List<RouteMasterVM> itemlist = (from c in db.RouteMasters select new RouteMasterVM { RouteID = c.RouteID, RouteName = c.RouteName }).ToList();
 
-                return Json(itemlist, JsonRequestBehavior.AllowGet);
+                return Json(null, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -114,11 +114,10 @@ namespace LTMSV2.Controllers
                 pFromDate = Convert.ToDateTime(TripDate);
                 var toDate = pFromDate.AddDays(1);
 
-                List<VehicleVM> itemlist = (from c in db.VehicleMasters
-                                            join truck in db.TruckDetails on c.VehicleID equals truck.VehicleID
-                                            where truck.TDDate >= pFromDate && truck.TDDate <= toDate && truck.RouteID == RouteId
-                                            orderby c.VehicleDescription
-                                            select new VehicleVM { VehicleID = c.VehicleID, VehicleDescription = c.VehicleDescription }).ToList();
+                List<VehicleVM> itemlist = (from c  in db.TruckDetails 
+                                            where c.TDDate >= pFromDate && c.TDDate <= toDate && c.RouteID == RouteId
+                                            orderby c.RegNo
+                                            select new VehicleVM { VehicleID = c.VehicleID, VehicleDescription = c.RegNo+" - "+c.DriverName }).ToList();
                 if (!String.IsNullOrEmpty(term))
                 {
                     itemlist = itemlist.Where(d => d.VehicleDescription.ToLower().Contains(term.ToLower())).ToList();

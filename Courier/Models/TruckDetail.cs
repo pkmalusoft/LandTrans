@@ -58,6 +58,10 @@ namespace LTMSV2.Models
         public Nullable<int> BranchID { get; set; }
         public string TypeOfLoad { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
+        public string OriginCountry { get; set; }
+        public string PhoneNumber { get; set; }
+        public Nullable<int> ForwardAgentID { get; set; }
+        public string OriginCity { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual CurrencyMaster CurrencyMaster { get; set; }

@@ -59,6 +59,16 @@ namespace LTMSV2.Models
         {
             System.Web.HttpContext.Current.Session["TaxReportParam"] = reportparam;
         }
+
+        public static void SetLabelPrintParam(LabelPrintingParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["LabelPrintingParam"] = reportparam;
+        }
+        public static LabelPrintingParam GetLabelPrintParam()
+        {
+            return (LabelPrintingParam)System.Web.HttpContext.Current.Session["LabelPrintingParam"];
+            
+        }
         public static void SetCookie(byte[] arr)
         {
             System.Web.HttpContext.Current.Session["sessionVariable"] = arr;

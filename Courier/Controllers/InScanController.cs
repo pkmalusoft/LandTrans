@@ -321,6 +321,33 @@ namespace LTMSV2.Controllers
             }            
             
         }
+        public JsonResult GetAWBDetailById(int id)
+        {
+            AWBList obj = new AWBList();
+            var lst = (from c in db.InScanMasters where c.InScanID == id select c).FirstOrDefault();
+            if (lst == null)
+            {
+                return Json(new { status = "failed", data = obj, message = "AWB No. Not found" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                if (lst.QuickInscanID == null)
+                {
+                    obj.Origin = lst.ConsignorCountryName;
+                    obj.Destination = lst.ConsigneeCountryName;
+                    obj.AWB = lst.ConsignmentNo;
+                    obj.InScanId = lst.InScanID;
+
+                    return Json(new { status = "ok", data = obj, message = "AWB NO.found" }, JsonRequestBehavior.AllowGet);
+
+                }
+                else
+                {
+                    return Json(new { status = "failed", data = obj, message = "InScan already Done!" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+        }
         public class AWBList
         {            
             public int InScanId { get; set; }

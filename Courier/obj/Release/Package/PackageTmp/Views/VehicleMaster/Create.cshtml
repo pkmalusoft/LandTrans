@@ -11,7 +11,50 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        if ('@Model.AcheadId' > 0) {
+            
+                  $.ajax({
+                type: "POST",
+                url: "/DailyTrips/GetFwdAcHeadsById",
+                datatype: "Json",
+                data: { Acheadid: '@Model.AcheadId' },
+                success: function (data) {
+                    $("#Achead").val(data.controlac);
+                }
+            });
+        }
 
+        $("#Achead").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DailyTrips/AcHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                Id: val.AcHeadID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#Achead').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#Achead").val(i.item.label);
+                $('#AcheadId').val(i.item.Id);
+            },
+
+        });
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
 
@@ -21,19 +64,32 @@
                 $('#divinsuranceedetail').removeClass('hide');
                 $('#divpurchasedetail').removeClass('hide');
                 $('#divInsuranceExpDate1').addClass('hide');
-                $('#divDepreciation').removeClass('hide');
+                $('.divDepreciation').removeClass('hide');
+                $('#divcontractdetail').addClass('hide');
+
             }
             else if ($('#Category').val() == 'Hired Vehicle')
             {
                 $('#divInsuranceExpDate1').removeClass('hide');
-                $('#divDepreciation').addClass('hide');
+                $('.divDepreciation').addClass('hide');
+                $('#divcontractdetail').addClass('hide');
+
+            }
+            else if ($('#Category').val() == 'Contract Vehicle')
+            {
+                $('#divInsuranceExpDate1').addClass('hide');
+                $('#divinsuranceedetail').addClass('hide');
+                $('#divpurchasedetail').addClass('hide');
+                $('.divDepreciation').addClass('hide');
+                $('#divcontractdetail').removeClass('hide');
             }
             else
             {
+                $('#divcontractdetail').addClass('hide');
              $('#divInsuranceExpDate1').addClass('hide');
                 $('#divinsuranceedetail').addClass('hide');
                 $('#divpurchasedetail').addClass('hide');
-                $('#divDepreciation').addClass('hide');
+                $('.divDepreciation').addClass('hide');
             }
 
         });
@@ -47,6 +103,8 @@
         $('#PurchaseDate').datetimepicker({ format: 'DD-MM-YYYY' });
         $('#InsuranceExpDate').datetimepicker({ format: 'DD-MM-YYYY' });
         $('#InsuranceExpDate1').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#ContractExpDate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#ContractIssuedDate').datetimepicker({ format: 'DD-MM-YYYY' });
         
         $("#Category").focus();
 
@@ -131,7 +189,7 @@
 
 
 <section class="content-header">
-    <h1 class="headingfont">Vehicle</h1>
+    <h1 class="headingfont">Vehicle Agreements</h1>
 
 </section>
 
@@ -145,7 +203,7 @@
 
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-3">
-                    @Html.HiddenFor(mode=>mode.VehicleID)
+                    @Html.HiddenFor(mode => mode.VehicleID)
                     <label class="headinglabel required">Category</label>
                     @Html.DropDownList("Category", new List<SelectListItem>
                 {
@@ -193,14 +251,30 @@
                     <label class="headinglabel required">Reg Expiry date</label>
                     @Html.TextBoxFor(model => model.RegExpirydate, new { @class = "form-control text-right" })
                 </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Chart Of Account</label>
+                    <input type="text" id="Achead" name="Achead" class="form-control" required />
+                    @Html.HiddenFor(model => model.AcheadId)
+
+                 
+                </div>
                 <div class="col-md-3" id="divInsuranceExpDate1">
                     <label class="headinglabel required">Insurance Exp. Date</label>
-                    @Html.TextBoxFor(model => model.InsuranceExpDate, new { @class = "form-control text-right" ,@id="InsuranceExpDate1" })
+                  
+                    @Html.TextBoxFor(model => model.InsuranceExpDate, new { @class = "form-control text-right", @id = "InsuranceExpDate1" })
 
                 </div>
+                <div class="col-md-3 divDepreciation"id="divDepreciation">
+                    <label class="headinglabel required">DepreciationDate</label>
+                    @Html.TextBoxFor(model => model.DepreciationDate, new { @class = "form-control text-right" })
 
+                </div>
+                <div class="col-md-3 divDepreciation"id="divDepreciation">
+                    <label class="headinglabel required">Scrap Value</label>
+                    @Html.TextBoxFor(model => model.ScrapValue, new { @class = "form-control text-right" })
+                </div>
             </div>
-            <div class="row no-margin" style="padding-top:10px" id="divDepreciation" >
+            @*<div class="row no-margin" style="padding-top:10px" id="divDepreciation">
                 <div class="col-md-3">
                     <label class="headinglabel required">DepreciationDate</label>
                     @Html.TextBoxFor(model => model.DepreciationDate, new { @class = "form-control text-right" })
@@ -211,10 +285,50 @@
                     @Html.TextBoxFor(model => model.ScrapValue, new { @class = "form-control text-right" })
                 </div>
                 @*<div class="col-md-3">
-                    <label class="headinglabel required">Branch</label>
-                    @Html.DropDownListFor(model => model.BranchID, new SelectList(@ViewBag.Branch, "BranchID", "BranchName"), "Select", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.BranchID)
-                </div>*@
+                <label class="headinglabel required">Branch</label>
+                @Html.DropDownListFor(model => model.BranchID, new SelectList(@ViewBag.Branch, "BranchID", "BranchName"), "Select", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BranchID)
+            </div>*@
+            @*</div>*@
+            <div class="row no-margin hide" style="padding-top:10px" id="divcontractdetail">
+                <div class="col-md-12">
+                    <h3 style="color:white">CONTRACT DETAILS</h3><hr />
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Contract No.</label>
+                    @Html.TextBoxFor(model => model.ContractNo, new { @class = "form-control text-right" })
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel">Contract Issue Date </label>
+                    @Html.TextBoxFor(model => model.ContractIssuedDate, new { @class = "form-control text-right" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Contract Expiry Date </label>
+                    @Html.TextBoxFor(model => model.ContractExpDate, new { @class = "form-control text-right" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Contract Rate</label>
+                    @Html.TextBoxFor(model => model.ContractRate, new { @class = "form-control text-right" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Free KM</label>
+                    @Html.TextBoxFor(model => model.FreeKM, new { @class = "form-control text-right" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Rate Extra KM</label>
+                    @Html.TextBoxFor(model => model.RateExtraKM, new { @class = "form-control text-right" })
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Vehicle Maintenance</label>
+                    @Html.TextBoxFor(model => model.VehicleMaintenance, new { @class = "form-control text-right" })
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Vehicle Owner</label>
+                    @Html.TextBoxFor(model => model.VehicleOwner, new { @class = "form-control text-right" })
+                </div>
             </div>
             <div class="row no-margin hide" style="padding-top:10px" id="divpurchasedetail">
                 <div class="col-md-12">

@@ -10,7 +10,7 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>
+@*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIFoseM09VMMtw9s6E_h7LmRrdsZ0jkPU&libraries=places&callback=initAutocomplete" async defer></script>*@
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
@@ -95,6 +95,7 @@
             $("#CurrencyIDRent").val('@Model.CurrencyIDRent');
             //$("#CurrencyRent").val('@Model.CurrencyRent');
             $("#PaymentCurrencyID").val('@Model.PaymentCurrencyID');
+            $("#StatusPaymentMode").val('@Model.StatusPaymentMode');
             $.ajax({
                 type: "POST",
                 url: "/DailyTrips/GetAcHeadsById",
@@ -291,15 +292,15 @@
                     required: true,
 
                 },
-                RentAcHeadID: {
+                RentAcHead: {
                     required: true,
 
                 },
-                PaymentHeadID: {
+                PaymentHead: {
                     required: true,
 
                 },
-                TDcontrolAcHeadID: {
+                TDcontrolAcHead: {
                     required: true,
 
                 },
@@ -377,7 +378,7 @@
 
             <div class="col-md-3 form-group">
                 <label class="headinglabel required">Registration Number</label>
-                @Html.DropDownListFor(model => model.RegNo, new SelectList(ViewBag.Vehicles, "RegistrationNo", "RegistrationNo"), "Select", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.VehicleID, new SelectList(ViewBag.Vehicles, "VehicleId", "RegistrationNo"), "Select", new { @class = "form-control" })
 
                 @*@Html.TextBoxFor(model => model.RegNo, new { @class = "form-control", @required = "true" })*@
 
@@ -444,7 +445,7 @@
 
             <div class="col-md-3 form-group">
                 <label class="headinglabel required">Account Head</label>
-                <input type="text" id="RentAcHead" name="RentAcHead" class="form-control" />
+                <input type="text" id="RentAcHead" name="RentAcHead" class="form-control" required/>
                 @Html.HiddenFor(model => model.RentAcHeadID)
 
             </div>
@@ -467,20 +468,24 @@
 
             <div class="col-md-3 form-group">
                 <label class="headinglabel">Payment Type</label>
-
-                @Html.TextBoxFor(model => model.StatusPaymentMode, new { @class = "form-control" })
+                <select class="form-control" id="StatusPaymentMode" name="StatusPaymentMode">
+                    <option value="C">Cash</option>
+                    <option value="B">Bank</option>
+                    <option></option>
+                </select>
+                @*@Html.TextBoxFor(model => model.StatusPaymentMode, new { @class = "form-control", @maxlength = "2" })*@
             </div>
 
             <div class="col-md-3 form-group">
                 <label class="headinglabel required">Account Head (Cr)</label>
-                <input type="text" class="form-control" id="PaymentHead" name="PaymentHead" />
+                <input type="text" class="form-control" id="PaymentHead" name="PaymentHead" required />
                 @Html.HiddenFor(model => model.PaymentHeadID)
 
             </div>
 
             <div class="col-md-3 form-group">
                 <label class="headinglabel required">Control A/c (Dr)</label>
-                <input type="text" class="form-control" id="TDcontrolAcHead" name="TDcontrolAcHead" />
+                <input type="text" class="form-control" id="TDcontrolAcHead" name="TDcontrolAcHead" required/>
                 @Html.HiddenFor(model => model.TDcontrolAcHeadID)
 
                 @*@Html.DropDownListFor(model => model.TDcontrolAcHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })*@

@@ -106,7 +106,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/InScan/GetAWBDetailById",
+                url: "/InScan/GetAWBDetail",
                 datatype: "Json",
                 data: { id: $("#txtawb").val() },
                 success: function (response) {
@@ -418,7 +418,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Vechile</label>
-                    @Html.TextBoxFor(model => model.VechicleName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Vechile Name" })
+                    @Html.TextBoxFor(model => model.VechicleName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Vechile Name - Driver Name" })
                     @Html.HiddenFor(model => model.VehicleID)
                 </div>
 
@@ -427,9 +427,10 @@
                 <div class="row no-margin" style="padding-top:10px">
                     <div class="col-md-3">
                         <label class="headinglabel required">Consignment No.</label>
-                        <select  id="txtawb" class="form-control" >
+                        <input type="text"id="txtawb" class="form-control" />
+                        @*<select  id="txtawb" class="form-control" >
                             <option value="">Select</option>
-                        </select>
+                        </select>*@
                     </div>
                     <div class="col-md-3" style="padding-top:10px">
                       <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>

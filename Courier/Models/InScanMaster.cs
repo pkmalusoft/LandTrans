@@ -59,7 +59,6 @@ namespace LTMSV2.Models
         public string Pieces { get; set; }
         public Nullable<decimal> Weight { get; set; }
         public Nullable<decimal> Volume { get; set; }
-        public Nullable<decimal> VolumnWeight { get; set; }
         public string Remarks { get; set; }
         public Nullable<int> MovementID { get; set; }
         public Nullable<bool> StatusCustomsDocument { get; set; }
@@ -101,5 +100,13 @@ namespace LTMSV2.Models
         public Nullable<decimal> CustomsInvoiceValue { get; set; }
         public Nullable<bool> LabelPrinting { get; set; }
         public Nullable<int> TruckDetailId { get; set; }
+        public string CBM_Unit { get; set; }
+        public Nullable<decimal> VolumeWeight { get; set; }
+        public Nullable<decimal> CBM_length { get; set; }
+        public Nullable<decimal> CBM_width { get; set; }
+        public Nullable<decimal> CBM_height { get; set; }
+        public Nullable<int> CountryID { get; set; }
+        public Nullable<int> CityID { get; set; }
+        public Nullable<int> LocationID { get; set; }
     }
 }

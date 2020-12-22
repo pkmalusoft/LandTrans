@@ -22,12 +22,9 @@ namespace LTMSV2.Models
     
         public int ID { get; set; }
         public System.DateTime EntryDate { get; set; }
-        public decimal CurrencyRate { get; set; }
         public int BranchID { get; set; }
         public int InScanID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
-        public Nullable<int> InvoiceID { get; set; }
-        public Nullable<int> InvoiceType { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual InScan InScan { get; set; }

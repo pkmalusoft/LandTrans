@@ -44,5 +44,15 @@ namespace LTMSV2.Models
 
         public string FinanceCompany { get; set; }
 
+        public Nullable<int> AcheadId { get; set; }
+        public string ContractNo { get; set; }
+        public Nullable<System.DateTime> ContractIssuedDate { get; set; }
+        public Nullable<System.DateTime> ContractExpDate { get; set; }
+        public Nullable<decimal> ContractRate { get; set; }
+        public Nullable<int> FreeKM { get; set; }
+        public Nullable<decimal> RateExtraKM { get; set; }
+        public string VehicleMaintenance { get; set; }
+        public string VehicleOwner { get; set; }
+
     }
 }

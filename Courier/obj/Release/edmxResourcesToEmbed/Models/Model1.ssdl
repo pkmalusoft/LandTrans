@@ -2145,8 +2145,7 @@
     <Property Name="PackageID" Type="int" />
     <Property Name="Pieces" Type="nvarchar" MaxLength="50" />
     <Property Name="Weight" Type="decimal" Precision="18" Scale="3" />
-    <Property Name="Volume" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="VolumnWeight" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Volume" Type="decimal" Precision="18" Scale="3" />
     <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
     <Property Name="MovementID" Type="int" />
     <Property Name="StatusCustomsDocument" Type="bit" />
@@ -2188,6 +2187,11 @@
     <Property Name="CustomsInvoiceValue" Type="money" />
     <Property Name="LabelPrinting" Type="bit" />
     <Property Name="TruckDetailId" Type="int" />
+    <Property Name="CBM_Unit" Type="varchar" MaxLength="10" />
+    <Property Name="VolumeWeight" Type="decimal" Precision="18" Scale="3" />
+    <Property Name="CBM_length" Type="decimal" Precision="18" Scale="3" />
+    <Property Name="CBM_width" Type="decimal" Precision="18" Scale="3" />
+    <Property Name="CBM_height" Type="decimal" Precision="18" Scale="3" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
@@ -2957,6 +2961,12 @@
     <Property Name="ExpectedAmount" Type="money" />
     <Property Name="InvoiceId" Type="int" />
     <Property Name="IsPerfomaCod" Type="bit" />
+    <Property Name="PaymentType" Type="varchar" MaxLength="50" />
+    <Property Name="AcHeadDebitId" Type="int" />
+    <Property Name="AcHeadCreditId" Type="int" />
+    <Property Name="CustomerId" Type="int" />
+    <Property Name="CurrencyId" Type="int" />
+    <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="3" />
   </EntityType>
   <EntityType Name="RevenueUpdateMaster">
     <Key>
@@ -2964,12 +2974,9 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="EntryDate" Type="date" Nullable="false" />
-    <Property Name="CurrencyRate" Type="decimal" Precision="18" Scale="2" Nullable="false" />
     <Property Name="BranchID" Type="int" Nullable="false" />
     <Property Name="InScanID" Type="int" Nullable="false" />
     <Property Name="EmployeeID" Type="int" />
-    <Property Name="InvoiceID" Type="int" />
-    <Property Name="InvoiceType" Type="int" />
   </EntityType>
   <EntityType Name="RoleMaster">
     <Key>
@@ -2986,6 +2993,8 @@
     <Property Name="RouteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RouteCode" Type="varchar" MaxLength="50" />
     <Property Name="RouteName" Type="varchar" MaxLength="100" />
+    <Property Name="Origin" Type="varchar" MaxLength="200" />
+    <Property Name="Destination" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="RouteOrder">
     <Key>
@@ -3568,6 +3577,10 @@
     <Property Name="BranchID" Type="int" />
     <Property Name="TypeOfLoad" Type="varchar" MaxLength="100" />
     <Property Name="IsDeleted" Type="bit" />
+    <Property Name="OriginCountry" Type="nvarchar" MaxLength="100" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="ForwardAgentID" Type="int" />
+    <Property Name="OriginCity" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="TypeOfGoods">
     <Key>
@@ -3730,6 +3743,15 @@
     <Property Name="BranchID" Type="int" />
     <Property Name="MakeYear" Type="varchar" MaxLength="10" />
     <Property Name="RegisteredUnder" Type="varchar" MaxLength="100" />
+    <Property Name="AcheadId" Type="int" />
+    <Property Name="ContractNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="ContractIssuedDate" Type="datetime" />
+    <Property Name="ContractExpDate" Type="datetime" />
+    <Property Name="ContractRate" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="FreeKM" Type="int" />
+    <Property Name="RateExtraKM" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="VehicleOwner" Type="nvarchar" MaxLength="250" />
+    <Property Name="VehicleMaintenance" Type="nvarchar" MaxLength="250" />
   </EntityType>
   <EntityType Name="VehicleType">
     <Key>

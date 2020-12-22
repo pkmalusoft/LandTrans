@@ -67,6 +67,8 @@ namespace LTMSV2.Models
         public string CityName { get; set; }
         public Nullable<int> UserID { get; set; }
         public Nullable<int> DepotID { get; set; }
+        public Nullable<int> ApprovedBy { get; set; }
+        public Nullable<System.DateTime> ApprovedOn { get; set; }
     
         public virtual CurrencyMaster CurrencyMaster { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
