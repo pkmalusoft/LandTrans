@@ -1,0 +1,51 @@
+﻿@model LTMSV2.Models.TruckDetail
+
+@using LTMSV2.Models
+@using System.Linq
+@{
+                /**/
+
+                Layout = null;
+              
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    });
+</script>
+
+
+
+<section class="content">
+
+    @using (Html.BeginForm())
+    {
+        <div id="validations" style="color: red; margin-left: 7px; display: none">* Please fill mandatory fields</div>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+
+        <div class="row no-margin">
+            <div class="col-md-12">
+                <h3 style="color: white">Contract Vehicle</h3>
+                <hr />
+            </div>
+
+        </div>
+
+
+
+              
+
+       
+       
+       
+
+
+
+    }
+
+</section>

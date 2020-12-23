@@ -3525,6 +3525,8 @@
     <Content Include="Views\RevenueUpdate\Index.cshtml" />
     <Content Include="Views\RevenueUpdate\Create.cshtml" />
     <Content Include="Views\Consignment\LabelPrinting.cshtml" />
+    <Content Include="Views\CustomerMaster\ApproveCustomer.cshtml" />
+    <Content Include="Views\CustomerMaster\CustomerList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

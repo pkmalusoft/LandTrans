@@ -91,5 +91,9 @@ namespace LTMSV2.Models
         public string LocationName { get; set; }
         public int? UserID { get; set; }
         public int? DepotID { get; set; }
+
+        public int? ApprovedBy { get; set; }
+        public string ApprovedUserName { get; set; }
+        public DateTime ApprovedOn { get; set; }
     }
 }

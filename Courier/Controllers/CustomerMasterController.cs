@@ -587,7 +587,149 @@ namespace LTMSV2.Controllers
             }
             return Json(objLoc, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult CustomerList()
+        {
+            List<CustmorVM> lst = new List<CustmorVM>();
+            var data = db.CustomerMasters.Where(ite => (ite.StatusActive.HasValue ? ite.StatusActive == true : false) && ite.CustomerType != "CR").ToList();
 
+            foreach (var item in data)
+            {
+                CustmorVM c = new CustmorVM();
+
+                c.CustomerID = item.CustomerID;
+                c.CustomerType = item.CustomerType;
+                c.CustomerCode = item.CustomerCode;
+                c.CustomerName = item.CustomerName;
+                c.ContactPerson = item.ContactPerson;
+                c.Mobile = item.Mobile;
+                c.Phone = item.Phone;
+                lst.Add(c);
+            }
+
+            return View(lst);
+        }
+        public ActionResult ApproveCustomer(int id)
+        {
+            var c = (from d in db.CustomerMasters where d.CustomerID == id select d).FirstOrDefault();
+              CustmorVM obj = new CustmorVM();
+           
+
+            if (c == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+
+                UserRegistration u = new UserRegistration();
+                if (c.UserID != null)
+                {
+                    //UserRegistration x = (from a in db.UserRegistrations where a.UserName == c.Email select a).FirstOrDefault();
+                    UserRegistration x = (from a in db.UserRegistrations where a.UserID == c.UserID select a).FirstOrDefault();
+
+                    if (x != null)
+                    {
+                        if (x.RoleID != null)
+                            if (obj.RoleID == 0)
+                                obj.RoleID = 13;
+                            else
+                                obj.RoleID = Convert.ToInt32(x.RoleID);
+                    }
+                }
+                obj.RoleID = 13;
+                obj.CustomerID = c.CustomerID;
+
+                if (c.AcCompanyID != null)
+                    obj.AcCompanyID = c.AcCompanyID.Value;
+                else
+                    obj.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+
+                obj.CustomerCode = c.CustomerCode;
+                obj.CustomerName = c.CustomerName;
+                obj.CustomerType = c.CustomerType;
+
+                obj.ReferenceCode = c.ReferenceCode;
+                obj.ContactPerson = c.ContactPerson;
+                obj.Address1 = c.Address1;
+                obj.Address2 = c.Address2;
+                obj.Address3 = c.Address3;
+                obj.Phone = c.Phone;
+                obj.Mobile = c.Mobile;
+                obj.Fax = c.Fax;
+                obj.Email = c.Email;
+                obj.Website = c.WebSite;
+                //obj.CountryID = c.CountryID; //.Value;
+                //obj.CityID = c.CityID; //.Value;
+                //obj.LocationID = c.LocationID; //.Value;
+                obj.CountryName = c.CountryName;
+                obj.LocationName = c.LocationName;
+                obj.CityName = c.CityName;
+
+                if (c.CurrencyID != null)
+                    obj.CurrenceyID = c.CurrencyID.Value;
+                else
+                    obj.CurrenceyID = Convert.ToInt32(Session["CurrencyId"].ToString());
+
+                obj.StatusActive = c.StatusActive.Value;
+                if (c.CreditLimit != null)
+                { obj.CreditLimit = c.CreditLimit.Value; }
+                else
+                { obj.CreditLimit = 0; }
+
+                obj.StatusTaxable = c.StatusTaxable.Value;
+
+                if (c.EmployeeID != null)
+                    obj.EmployeeID = c.EmployeeID.Value;
+                if (c.statusCommission != null)
+                { obj.StatusCommission = c.statusCommission.Value; }
+                if (c.BusinessTypeId != null)
+                {
+                    obj.BusinessTypeId = Convert.ToInt32(c.BusinessTypeId);
+                }
+                if (c.Referal != null)
+                { obj.Referal = c.Referal; }
+
+                obj.OfficeTimeFrom = c.OfficeOpenTime;
+                obj.OfficeTimeTo = c.OfficeCloseTime;
+
+                if (c.CourierServiceID != null)
+                    obj.CourierServiceID = c.CourierServiceID.Value;
+
+                if (c.BranchID != null)
+                {
+                    obj.BranchID = c.BranchID.Value;
+                }
+
+                int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+                obj.DepotID = DepotID;
+                obj.CustomerUsername = c.CustomerUsername;
+                if (c.UserID != null)
+                {
+                    obj.UserID = c.UserID;
+                }
+                obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
+                obj.ApprovedOn = DateTime.Now;
+            }
+
+            return View(obj);
+        }
+        [HttpPost]
+        public ActionResult ApproveCustomer(CustmorVM c)
+        {
+            CustomerMaster obj = db.CustomerMasters.Find(c.CustomerID);
+            obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+            obj.ApprovedOn = DateTime.Now;
+            obj.CustomerType = c.CustomerType;
+
+            db.Entry(obj).State = EntityState.Modified;
+            db.SaveChanges();
+            TempData["SuccessMsg"] = "You have successfully Approved Customer.";
+            return RedirectToAction("CustomerList");
+
+
+
+        }
         public class CityM
         {
             public int CityID { get; set; }

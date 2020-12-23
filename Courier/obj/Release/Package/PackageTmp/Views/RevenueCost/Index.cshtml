@@ -1,0 +1,175 @@
+﻿@model IEnumerable<LTMSV2.Models.RevenueCostMasterVM>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dataTables-example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" />');
+        });
+
+
+        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+    });
+
+
+</script>
+<section class="content-header">
+    <h1 class="headingfont">Revenue Cost</h1>
+
+</section>
+<div class="col-md-12">
+    <p class="indexbtnpadding pull-right">
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+    </p>
+</div>
+<div class="clearfix"></div>
+
+
+<section class="content">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        @* <div class="alert alert-success alert-dismissable" role="alert" id="divMsgHeader" ng-show="SuccessAlert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                <div id="divFinalMsg">@TempData["SuccessMsg"]</div>
+            </div>*@
+        <script type="text/javascript">
+                      $(document).ready(function () {
+                          $.notify("@TempData["SuccessMsg"]", "success");
+                });
+        </script>
+    }
+    <div class="table-responsive tblbackground" style="padding:15px">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+            <thead>
+                <tr>
+                    @*<th>
+                        @Html.Label("RCCode")
+                    </th>*@
+                    <th>
+                        @Html.Label("Revenue Component") 
+                    </th>
+                    <th class="right_text">
+                        @Html.Label("Revenue Rate")  
+                    </th>
+                    <th>
+                        @Html.Label("Revenue Head") 
+                    </th>
+                    <th >
+                        @Html.Label("Cost Component")                        
+                    </th>
+                    <th class="right_text">
+                        @Html.Label("Cost Rate")
+                    </th>
+                    <th class="right_text">
+                        @Html.Label("Cost Head Name")
+                    </th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+            <tfoot>
+                <tr>
+            <tfoot>
+                <tr>
+
+                    @*<th>
+                        @Html.Label("RCCode")
+                    </th>*@
+                    <th>
+                        @Html.DisplayNameFor(model => model.RevenueComponent)
+                    </th>
+                    <th class="right_text">
+                        @Html.DisplayNameFor(model => model.RevenueRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RevenueHeadName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CostComponent)
+                    </th>
+                    <th class="right_text">
+                        @Html.DisplayNameFor(model => model.CostRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CostHeadName)
+                    </th>
+                    <th>
+                      
+                    </th>
+                </tr>
+            </tfoot>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.RCCode)
+
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RevenueComponent)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.RevenueRate)
+                    </td>
+                    <td >
+                        @Html.DisplayFor(modelItem => item.RevenueHeadName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CostComponent)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.CostRate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CostHeadName)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Create", new { id = item.RCID })"><i class="fa fa-pencil"></i></a>|
+                        <a href="#" onclick="Delete(ID=@item.RCID)"><i class="fa fa-times"></i></a>
+                    </td>
+                </tr>
+
+                }
+            </tbody>
+
+        </table>
+    </div>
+</section>
+
+
+
+<script type="text/javascript">
+    function Delete(ID) {
+        if (confirm("Are you sure, You want to Delete Country?")) {
+            window.location.href = "/RevenueCost/DeleteConfirmed/?id=" + ID;
+        }
+    }
+</script>

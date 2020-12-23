@@ -1,0 +1,385 @@
+﻿
+
+@{
+    ViewBag.Title = "Vehicle Registration Request";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-lg-12 mt-2 mb-2">
+        <h2>
+            Vehicle Registration Request
+            <button type="button" class="btn btn-primary waves-effect pull-right waves-light btn-new-VehicleMaster">Add</button>
+        </h2>
+        <div class="modal fade" id="modal-VehicleMaster" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #54cd88;">
+                        <h5 class="modal-title" id="modal-VehicleMaster-Label" style="color: white;font-weight: bold !important;"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="pgformholder">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-Category">Category<i class="text-danger"> *</i></label>
+                                            <select id="txt-Category" class="form-control">
+                                                <option value="">Select Category</option>
+                                                <option value="Contract Vehicle">Contract Vehicle</option>
+                                                <option value="Hired Vehicle">Hired Vehicle</option>
+                                                <option value="Own Vehicle">Own Vehicle</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-RegistrationNo">Registration No<i class="text-danger"> *</i></label>
+                                            <input type="text" placeholder="Registration No" value="" id="txt-RegistrationNo" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-VehicleDescription">Manufacturer Name<i class="text-danger"> *</i></label>
+                                            <select id="txt-VehicleDescription" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-RegisteredUnder">Registered Under<i class="text-danger"> *</i></label>
+                                            <select id="txt-RegisteredUnder" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-Model">Model</label>
+                                            <select id="txt-Model" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-MakeYear">Make Year</label>
+                                            <input type="text" placeholder="Make Year" value="" id="txt-MakeYear" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-VehicleTypeID">Vehicle Type<i class="text-danger"> *</i></label>
+                                            <select id="txt-VehicleTypeID" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-RegExpirydate">Reg Expiry date<i class="text-danger"> *</i></label>
+                                            <input type="date" placeholder="Reg Expiry date" value="" id="txt-RegExpirydate" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-DepreciationDate">Depreciation Date</label>
+                                            <input type="date" placeholder="Depreciation Date" value="" id="txt-DepreciationDate" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-ScrapValue">Scrap Value</label>
+                                            <input type="number" placeholder="Scrap Value" value="" id="txt-ScrapValue" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-BranchID">Branch<i class="text-danger"> *</i></label>
+                                            <select id="txt-BranchID" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <strong>Purchase Details</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-Mode">Mode</label>
+                                            <select id="txt-Mode" class="form-control">
+                                                <option value="">Select</option>
+                                                <option value="Leasing/Finance">Leasing/Finance</option>
+                                                <option value="Cash">Cash</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-FinanceCompany">Leasing/Finance Company</label>
+                                            <input type="text" placeholder="Leasing/Finance Company" value="" id="txt-FinanceCompany" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-PurchaseDate">Purchase Date</label>
+                                            <input type="date" placeholder="Purchase Date" value="" id="txt-PurchaseDate" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-PurchaseValue">Purchase Value</label>
+                                            <input type="number" placeholder="Purchase Value" value="" id="txt-PurchaseValue" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <strong>Insurance Details</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-InsuranceCompName">Insurance Comp Name</label>
+                                            <select id="txt-InsuranceCompName" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-PolicyNo">Policy No</label>
+                                            <input type="text" placeholder="Policy No" value="" id="txt-PolicyNo" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-InsuredValue">Insured Value</label>
+                                            <input type="number" placeholder="Insured Value" value="" id="txt-InsuredValue" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="txt-InsuranceExpDate">Insurance Exp Date</label>
+                                            <input type="date" placeholder="Insurance Exp Date" value="" id="txt-InsuranceExpDate" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-save-VehicleMaster">Save</button>
+                        <button type="button" id="btn-cancel" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-12 pb-5">
+                <div class="table-responsive" id="dataholder">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/pgmain.js?@DateTime.Now.ToString("hhmmss")"></script>
+    <script>
+        $(document).ready(function () {
+            var l_who = 'Admin';
+            var l_sync = !0;
+            g_js_GetVehicleMaster('#dataholder', !0, { eMode: 'AdminAll' }, l_who, 'tb', !0, '');
+
+            g_js_bindBranch('#txt-BranchID', l_sync);
+            g_js_GetManufacturerForVehicle('#txt-VehicleDescription', !0, {}, l_who, 'ddld', !0, { Text: 'Select' });
+            g_js_GetRegisteredUnderForVehicle('#txt-RegisteredUnder', !0, {}, l_who, 'ddld', !0, { Text: 'Select' });
+            g_js_GetVehicleTypes('#txt-VehicleTypeID', !0, {}, l_who, 'ddld', !0, { Text: 'Select' });
+            g_js_GetModelForVehicle('#txt-Model', !0, {}, l_who, 'ddld', !0, { Text: 'Select' });
+            g_js_GetInsCompanyForVehicle('#txt-InsuranceCompName', !0, {}, l_who, 'ddld', !0, { Text: 'Select' });
+            g_js_inputfilter('#txt-MakeYear');
+
+            $(document).on('click', '.btn-new-VehicleMaster', function () {
+                $('#modal-VehicleMaster-Label').html('New Vehicle');
+                $('.btn-save-VehicleMaster').text('Save').attr({ 'data-id': '', 'data-mode': 'AddNew' });
+               // $('.pgformholder input[type=text]').val('');
+                $('#txt-Category').val('');
+                $('#txt-RegistrationNo').val('');
+                $('#txt-VehicleDescription').val('');
+                $('#txt-RegisteredUnder').val('');
+                $('#txt-Model').val('');
+                $('#txt-MakeYear').val('');
+                $('#txt-VehicleTypeID').val('');
+                $('#txt-RegExpirydate').val('');
+                $('#txt-DepreciationDate').val('');
+                $('#txt-ScrapValue').val('');
+                $('#txt-BranchID').val('');
+                $('#txt-Mode').val('');
+                $('#txt-FinanceCompany').val('');
+                $('#txt-PurchaseDate').val('');
+                $('#txt-PurchaseValue').val('');
+                $('#txt-InsuranceCompName').val('');
+                $('#txt-PolicyNo').val('');
+                $('#txt-InsuredValue').val('');
+                $('#txt-InsuranceExpDate').val('');
+                $('#modal-VehicleMaster').modal('show');
+            });
+
+            $(document).on('click', '.pgedit-VehicleMaster', function () {
+                $('#modal-VehicleMaster-Label').html('Update Vehicle');
+                var lo = JSON.parse($(this).find('textarea').val());
+                $('.btn-save-VehicleMaster').text('Update').attr({ 'data-id': lo.VehicleID, 'data-mode': 'UpdateByID' });
+
+                $('#txt-Category').val(lo.Category);
+                $('#txt-RegistrationNo').val(lo.RegistrationNo);
+                $('#txt-VehicleDescription').val(lo.VehicleDescription);
+                $('#txt-RegisteredUnder').val(lo.RegisteredUnder);
+                $('#txt-Model').val(lo.Model);
+                $('#txt-MakeYear').val(lo.MakeYear);
+                $('#txt-VehicleTypeID').val(lo.VehicleTypeID);
+                $('#txt-RegExpirydate').val(lo.RegExpirydate);
+                $('#txt-DepreciationDate').val(lo.DepreciationDate);
+                $('#txt-ScrapValue').val(lo.ScrapValue);
+                $('#txt-BranchID').val(lo.BranchID);
+                $('#txt-Mode').val(lo.Mode);
+                $('#txt-FinanceCompany').val(lo.FinanceCompany);
+                $('#txt-PurchaseDate').val(lo.PurchaseDate);
+                $('#txt-PurchaseValue').val(lo.PurchaseValue);
+                $('#txt-InsuranceCompName').val(lo.InsuranceCompName);
+                $('#txt-PolicyNo').val(lo.PolicyNo);
+                $('#txt-InsuredValue').val(lo.InsuredValue);
+                $('#txt-InsuranceExpDate').val(lo.InsuranceExpDate);
+
+                $('#modal-VehicleMaster').modal('show');
+            });
+
+            $(document).on('click', '.btn-save-VehicleMaster', function () {
+                var btn = $(this);
+                var htm = $(this).html();
+                var Mode = $(this).attr('data-mode');
+                var sid = $(this).attr('data-id');
+                var isvalid = true;
+                var fctrl = null;
+
+                var l_VehicleMaster = {
+                    VehicleID: sid,
+                    Category: $('#txt-Category').val(),
+                    RegistrationNo: $('#txt-RegistrationNo').val(),
+                    VehicleDescription: $('#txt-VehicleDescription').val(),
+                    RegisteredUnder: $('#txt-RegisteredUnder').val(),
+                    Model: $('#txt-Model').val(),
+                    MakeYear: $('#txt-MakeYear').val(),
+                    VehicleTypeID: $('#txt-VehicleTypeID').val(),
+                    RegExpirydate: $('#txt-RegExpirydate').val(),
+                    DepreciationDate: $('#txt-DepreciationDate').val(),
+                    ScrapValue: $('#txt-ScrapValue').val(),
+                    BranchID: $('#txt-BranchID').val(),
+                    Mode: $('#txt-Mode').val(),
+                    FinanceCompany: $('#txt-FinanceCompany').val(),
+                    PurchaseDate: $('#txt-PurchaseDate').val(),
+                    PurchaseValue: $('#txt-PurchaseValue').val(),
+                    InsuranceCompName: $('#txt-InsuranceCompName').val(),
+                    PolicyNo: $('#txt-PolicyNo').val(),
+                    InsuredValue: $('#txt-InsuredValue').val(),
+                    InsuranceExpDate: $('#txt-InsuranceExpDate').val(),
+                    eMode: Mode,
+                }
+
+                $('.pgerror').remove();
+                if ($.trim(l_VehicleMaster.Category) == '') {
+                    $('#txt-Category').after('<small style="color:red" class="pgerror">Category is required !</small>');
+                    if (isvalid) { fctrl = '#txt-Category'; }
+                    isvalid = false;
+                }
+                if ($.trim(l_VehicleMaster.RegistrationNo) == '') {
+                    $('#txt-RegistrationNo').after('<small style="color:red" class="pgerror">Registration No is required !</small>');
+                    if (isvalid) { fctrl = '#txt-RegistrationNo'; }
+                    isvalid = false;
+                }
+                if ($.trim(l_VehicleMaster.VehicleDescription) == '') {
+                    $('#txt-VehicleDescription').after('<small style="color:red" class="pgerror">Manufacturer is required !</small>');
+                    if (isvalid) { fctrl = '#txt-VehicleDescription'; }
+                    isvalid = false;
+                }
+
+                if ($.trim(l_VehicleMaster.RegisteredUnder) == '') {
+                    $('#txt-RegisteredUnder').after('<small style="color:red" class="pgerror">Registered Under is required !</small>');
+                    if (isvalid) { fctrl = '#txt-RegisteredUnder'; }
+                    isvalid = false;
+                }
+
+                if ($.trim(l_VehicleMaster.VehicleTypeID) == '') {
+                    $('#txt-VehicleTypeID').after('<small style="color:red" class="pgerror">Vehicle Type is required !</small>');
+                    if (isvalid) { fctrl = '#txt-VehicleTypeID'; }
+                    isvalid = false;
+                }
+
+                if ($.trim(l_VehicleMaster.RegExpirydate) == '') {
+                    $('#txt-RegExpirydate').after('<small style="color:red" class="pgerror">Reg Expiry date is required !</small>');
+                    if (isvalid) { fctrl = '#txt-RegExpirydate'; }
+                    isvalid = false;
+                }
+                else if (new Date(l_VehicleMaster.RegExpirydate) <= new Date()) {
+                    $('#txt-RegExpirydate').after('<small style="color:red" class="pgerror">Reg Expiry date must be greater then today !</small>');
+                    if (isvalid) { fctrl = '#txt-RegExpirydate'; }
+                    isvalid = false;
+                }
+
+                if ($.trim(l_VehicleMaster.BranchID) == '') {
+                    $('#txt-BranchID').after('<small style="color:red" class="pgerror">Branch is required !</small>');
+                    if (isvalid) { fctrl = '#txt-BranchID'; }
+                    isvalid = false;
+                }
+
+                if (!isvalid) {
+                    g_js_pgfocus(fctrl);
+                    return;
+                }
+                // alert(JSON.stringify(Project) +' Mode : '+Mode);
+                //  return;
+                g_js_ManageVehicleMaster(btn, true, l_VehicleMaster, l_who, '', '');
+            });
+
+
+            $(document).on('click', '.pgdelete-VehicleMaster', function () {
+                swal({
+                    title: "Are you sure want to Delete?",
+                    text: "Click OK to confirm.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((yes) => {
+                    if (yes) {
+                        g_js_ManageVehicleMaster($(this), true, { VehicleID: $(this).attr('data-id'), eMode: "DeleteByID" }, l_who, $(this), '', '');
+                    }
+                });
+            });
+
+
+        });
+    </script>
+
+
+
