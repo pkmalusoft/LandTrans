@@ -32,11 +32,11 @@
     .fa fa-times {
     }
 
-    .ui-autocomplete {
+   /* .ui-autocomplete {
         position: absolute;
         cursor: default;
         z-index: 1001 !important
-    }
+    }*/
 
     .autocomplete:focus {
         background-color: #dbffcf;
@@ -311,10 +311,7 @@
 <script type="text/javascript">
     //customer and shipper autocomplete
     $(document).ready(function () {
-        $('.selectpicker').selectpicker({
-            liveSearch: true,
-            showSubtext: true
-        });
+        
         function LoadCustomerDetail() {
             if ($('#CustomerID').val() > 0) {
                 $.ajax({
@@ -616,7 +613,7 @@
                     }
                 })
             },
-            minLength: 1,
+            minLength: 0,
             autoFocus: false,
             focus: function (event, ui) {
                 $('#shippername').val(ui.item.value);
@@ -638,7 +635,54 @@
             },
 
         });
+        $("#Consignee").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Consignment/GetReceiverName',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Name,
+                                value: val.Name,
+                                ContactPerson: val.ContactPerson,
+                                Address1: val.Address1,
+                                Address2: val.Address2,
+                                Pincode: val.PinCode,
+                                Phone: val.Phone,
+                                CountryName: val.CountryName,
+                                CityName: val.CityName,
+                                LocationName: val.LocationName,
 
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#Consignee').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#Consignee").val(i.item.label);
+                $("#ConsigneeContact").val(i.item.ContactPerson);
+                $("#ConsigneeAddress1_Building").val(i.item.Address1);
+                $("#ConsigneeAddress2_Street").val(i.item.Address2);
+                $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);
+
+                $("#ConsigneePhone").val(i.item.Phone);
+                $("#ConsigneeCountryName").val(i.item.CountryName);
+                $("#ConsigneeCityName").val(i.item.CityName);
+                $("#ConsigneeLocationName").val(i.item.LocationName);
+
+            },
+
+        });
 
         //Item master autocomplete
         $("#ItemName").autocomplete({
@@ -1625,9 +1669,9 @@
             </div>
             <div class="col-md-2">
                 <label class="headinglabel required">Payment Mode</label>
-                @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control selectpicker ", @required = "true" })
+                @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 hide">
                 <div class="flexTitle">
                     <label class="headinglabel required">Customer</label>
                     <div class="checkboxdesign text-right" style="float:right">
@@ -1665,7 +1709,7 @@
                     <div class="row no-margin">
                         <div class="col-md-6">
                             <label class="headinglabel required">Name</label>
-                            @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Shipper Name" })
+                            @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Shipper Name",@autocomplete="off" })
                         </div>
 
                         <div class="col-md-6">
@@ -1728,11 +1772,11 @@
                     <div class="col-md-12 sub_title_block">
                         <h3>RECEIVER/CONSIGNEE DETAILLS</h3><hr />
                     </div>
-                    <div class="clearfix"></div>
+                    @*<div class="clearfix"></div>*@
                     <div class="row no-margin">
                         <div class="col-md-6">
                             <label class="headinglabel required">Name</label>
-                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @required = "true" })
+                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @required = "true" ,@autocomplete="false"})
                         </div>
                         <div class="col-md-6">
                             <label class="headinglabel required">Contact Person</label>

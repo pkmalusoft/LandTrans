@@ -13116,6 +13116,7 @@
     <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_BranchMaster" FromRole="RevenueUpdateMaster" ToRole="BranchMaster" />
     <NavigationProperty Name="InScan" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_InScan" FromRole="RevenueUpdateMaster" ToRole="InScan" />
     <NavigationProperty Name="RevenueUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" FromRole="RevenueUpdateMaster" ToRole="RevenueUpdateDetail" />
+    <Property Name="AcFinancialYearID" Type="Int32" />
   </EntityType>
   <Association Name="FK_RevenueUpdateMaster_BranchMaster">
     <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="1" />

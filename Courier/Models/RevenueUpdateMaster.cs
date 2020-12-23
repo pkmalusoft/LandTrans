@@ -25,6 +25,7 @@ namespace LTMSV2.Models
         public int BranchID { get; set; }
         public int InScanID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
+        public Nullable<int> AcFinancialYearID { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual InScan InScan { get; set; }

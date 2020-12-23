@@ -496,11 +496,9 @@
                     @Html.DropDownList("CustomerType", new List<SelectListItem>
                 {
                     new SelectListItem{ Text="Credit", Value = "CR" },
-                    new SelectListItem{ Text="Cash", Value = "CS" },
-                    new SelectListItem{ Text="CoLoader", Value = "CL" },
-                    new SelectListItem{ Text="COD", Value = "CD" },
+                    new SelectListItem{ Text="Cash", Value = "CS",Selected=true },
 
-                 }, "Select", new { @class = "form-control" })
+                 },  new { @class = "form-control",@disabled= "@disabled" })
 
 
                     @*@Html.DropDownListFor(model => model.CustomerTypeId, new SelectList(@ViewBag.country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@

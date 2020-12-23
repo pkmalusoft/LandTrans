@@ -1116,6 +1116,8 @@
     <Property Name="CityName" Type="varchar" MaxLength="100" />
     <Property Name="UserID" Type="int" />
     <Property Name="DepotID" Type="int" />
+    <Property Name="ApprovedBy" Type="int" />
+    <Property Name="ApprovedOn" Type="datetime" />
   </EntityType>
   <EntityType Name="CustomerMultiContract">
     <Key>
@@ -2192,6 +2194,9 @@
     <Property Name="CBM_length" Type="decimal" Precision="18" Scale="3" />
     <Property Name="CBM_width" Type="decimal" Precision="18" Scale="3" />
     <Property Name="CBM_height" Type="decimal" Precision="18" Scale="3" />
+    <Property Name="CountryID" Type="int" />
+    <Property Name="CityID" Type="int" />
+    <Property Name="LocationID" Type="int" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
@@ -2977,6 +2982,7 @@
     <Property Name="BranchID" Type="int" Nullable="false" />
     <Property Name="InScanID" Type="int" Nullable="false" />
     <Property Name="EmployeeID" Type="int" />
+    <Property Name="AcFinancialYearID" Type="int" />
   </EntityType>
   <EntityType Name="RoleMaster">
     <Key>
@@ -2993,8 +2999,8 @@
     <Property Name="RouteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RouteCode" Type="varchar" MaxLength="50" />
     <Property Name="RouteName" Type="varchar" MaxLength="100" />
-    <Property Name="Origin" Type="varchar" MaxLength="200" />
-    <Property Name="Destination" Type="varchar" MaxLength="200" />
+    <Property Name="OrginLocationID" Type="int" />
+    <Property Name="DestinationLocationID" Type="int" />
   </EntityType>
   <EntityType Name="RouteOrder">
     <Key>
@@ -3134,6 +3140,9 @@
     <Property Name="StatusReserved" Type="bit" />
     <Property Name="POBoxNo" Type="varchar" MaxLength="50" />
     <Property Name="Remarks" Type="varchar" MaxLength="400" />
+    <Property Name="CountryID" Type="int" />
+    <Property Name="CityID" Type="int" />
+    <Property Name="LocationID" Type="int" />
   </EntityType>
   <EntityType Name="SupplierType">
     <Key>
@@ -3960,6 +3969,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK__EmployeeM__Depot__5A45429A">
+    <End Role="tblDepot" Type="Self.tblDepot" Multiplicity="0..1" />
+    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblDepot">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="EmployeeMaster">
+        <PropertyRef Name="DepotID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK__ExportShi__Emplo__2E46C4CB">
     <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
@@ -4089,6 +4110,18 @@
       </Principal>
       <Dependent Role="ImportShipmentDetails">
         <PropertyRef Name="ExportShipmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__RevenueUp__Maste__5B3966D3">
+    <End Role="RevenueUpdateMaster" Type="Self.RevenueUpdateMaster" Multiplicity="1" />
+    <End Role="RevenueUpdateDetail" Type="Self.RevenueUpdateDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RevenueUpdateMaster">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RevenueUpdateDetail">
+        <PropertyRef Name="MasterID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -8699,6 +8732,10 @@
       <End Role="CODReceipt" EntitySet="CODReceipt" />
       <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
     </AssociationSet>
+    <AssociationSet Name="FK__EmployeeM__Depot__5A45429A" Association="Self.FK__EmployeeM__Depot__5A45429A">
+      <End Role="tblDepot" EntitySet="tblDepot" />
+      <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
+    </AssociationSet>
     <AssociationSet Name="FK__ExportShi__Emplo__2E46C4CB" Association="Self.FK__ExportShi__Emplo__2E46C4CB">
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
       <End Role="ExportShipment" EntitySet="ExportShipment" />
@@ -8742,6 +8779,10 @@
     <AssociationSet Name="FK__ImportShi__Expor__3AAC9BB0" Association="Self.FK__ImportShi__Expor__3AAC9BB0">
       <End Role="ExportShipment" EntitySet="ExportShipment" />
       <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__RevenueUp__Maste__5B3966D3" Association="Self.FK__RevenueUp__Maste__5B3966D3">
+      <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMaster" />
+      <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetail" />
     </AssociationSet>
     <AssociationSet Name="FK_AcBankDetails_AcJournalMaster" Association="Self.FK_AcBankDetails_AcJournalMaster">
       <End Role="AcJournalMaster" EntitySet="AcJournalMaster" />

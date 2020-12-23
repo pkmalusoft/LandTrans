@@ -51,8 +51,8 @@ namespace LTMSV2.Controllers
                 Customerid = Convert.ToInt32(Session["CustomerId"].ToString());
 
             }
-            List<RevenueUpdateMasterVM> lst = new List<RevenueUpdateMasterVM>();
-            //List<RevenueUpdateMasterVM> lst = RevenueDAO.GetRevenueUpdateList(ConsignmentNo, pFromDate, pToDate);
+            //List<RevenueUpdateMasterVM> lst = new List<RevenueUpdateMasterVM>();
+            List<RevenueUpdateMasterVM> lst = RevenueDAO.GetRevenueUpdateList(ConsignmentNo, pFromDate, pToDate);
                         
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");            
@@ -60,38 +60,124 @@ namespace LTMSV2.Controllers
             return View(lst);
         }
 
-        public ActionResult Create()
+        public ActionResult Create(int id=0)
         {
             ViewBag.Title = "Revenue Update - Create";
             ViewBag.employee = db.EmployeeMasters.ToList();
             List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
             lsttype.Add(new VoucherTypeVM { TypeName = "Pickup Cash" });
-            lsttype.Add(new VoucherTypeVM { TypeName = "Customer" });
-            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });            
+            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });            
 
             ViewBag.PaymentType = lsttype;
             ViewBag.Currency = db.CurrencyMasters.ToList();
-            return View();
+            ViewBag.Consignment = db.InScanMasters.ToList();
+            RevenueUpdateMasterVM vm = new RevenueUpdateMasterVM();
+            if (id==0)
+            {
+                vm.ID = 0;
+                vm.DetailVM = new List<RevenueUpdateDetailVM>();
+                vm.EntryDate = DateTime.Now;
+                ViewBag.EditMode = "false";
+            }
+            else
+            {
+                RevenueUpdateMaster v = db.RevenueUpdateMasters.Find(id);
+                vm.ID = v.ID;
+                vm.EntryDate = v.EntryDate;
+                vm.EmployeeID = v.EmployeeID;
+                vm.InScan = v.InScan;
+                vm.BranchID = v.BranchID;
+                vm.AcFinancialYearID = v.AcFinancialYearID;
+                ViewBag.EditMode = "true";
+            }
+            //vm.PickupCashHeadId = db.AcHeads.Where(cc => cc.AcHead1 == "Main Cash Account").FirstOrDefault().AcHead1;
+            
+            return View(vm);
         }
 
         [HttpPost]
         public ActionResult Create(RevenueUpdateMasterVM vm)
         {
-            RevenueUpdateMaster v = new RevenueUpdateMaster();
-            v.EntryDate = vm.EntryDate;
-            v.EmployeeID = vm.EmployeeID;
-            v.InScanID = vm.InScanID;
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
+            if (vm.ID==0)
+            {
+                RevenueUpdateMaster v = new RevenueUpdateMaster();
+                v.EntryDate = vm.EntryDate;
+                v.EmployeeID = vm.EmployeeID;
+                v.InScanID = vm.InScanID;
+                v.BranchID = branchid;
+                v.AcFinancialYearID = fyearid;
+                db.RevenueUpdateMasters.Add(v);
+                db.SaveChanges();
+            
+                for (int i = 0; i < vm.DetailVM.Count; i++)
+                {
+                    if (vm.DetailVM[i].IsDeleted != true)
+                    {
+                        if (vm.DetailVM[i].ID==0)
+                        {
+                            RevenueUpdateDetail detail = new RevenueUpdateDetail();
+                            detail.MasterID = v.ID;
+                            detail.RevenueCostMasterID = vm.DetailVM[i].RevenueCostMasterID;
+                            detail.AcHeadCreditId = vm.DetailVM[i].AcHeadCreditId;
+                            detail.AcHeadDebitId = vm.DetailVM[i].AcHeadDebitId;
+                            detail.Amount = vm.DetailVM[i].Amount;
+                            detail.CurrencyId = vm.DetailVM[i].CurrencyId;
+                            detail.CustomerId = vm.DetailVM[i].CustomerId;
+                            detail.ExchangeRate = vm.DetailVM[i].ExchangeRate;
+                            detail.PaymentType = vm.DetailVM[i].PaymentType;
 
-            ViewBag.Title = "Revenue Update - Create";
-            ViewBag.employee = db.EmployeeMasters.ToList();
-            List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
-            lsttype.Add(new VoucherTypeVM { TypeName = "Pickup Cash" });
-            lsttype.Add(new VoucherTypeVM { TypeName = "Customer" });
-            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
+                            db.RevenueUpdateDetails.Add(detail);
+                            db.SaveChanges();
 
-            ViewBag.PaymentType = lsttype;
-            ViewBag.Currency = db.CurrencyMasters.ToList();
-            return View();
+                        }
+                        else
+                        {
+                            RevenueUpdateDetail detail = db.RevenueUpdateDetails.Find(vm.DetailVM[i].ID);
+                            if (detail != null)
+                            {
+                                detail.MasterID = v.ID;
+                                detail.RevenueCostMasterID = vm.DetailVM[i].RevenueCostMasterID;
+                                detail.AcHeadCreditId = vm.DetailVM[i].AcHeadCreditId;
+                                detail.AcHeadDebitId = vm.DetailVM[i].AcHeadDebitId;
+                                detail.Amount = vm.DetailVM[i].Amount;
+                                detail.CurrencyId = vm.DetailVM[i].CurrencyId;
+                                detail.CustomerId = vm.DetailVM[i].CustomerId;
+                                detail.ExchangeRate = vm.DetailVM[i].ExchangeRate;
+                                detail.PaymentType = vm.DetailVM[i].PaymentType;
+
+                                db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+                                db.SaveChanges();
+                            }
+
+                            
+                        }
+                      
+                    }
+                    else
+                    {
+                        if (vm.DetailVM[i].ID > 0)
+                        {
+                            RevenueUpdateDetail detail = db.RevenueUpdateDetails.Find(vm.DetailVM[i].ID);
+                            db.RevenueUpdateDetails.Remove(detail);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("Index");
+            //ViewBag.Title = "Revenue Update - Create";
+            //ViewBag.employee = db.EmployeeMasters.ToList();
+            //List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Pickup Cash" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Customer" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
+
+            //ViewBag.PaymentType = lsttype;
+            //ViewBag.Currency = db.CurrencyMasters.ToList();
+            //return View();
         }
 
         public ActionResult Customer(string term)
@@ -114,14 +200,47 @@ namespace LTMSV2.Controllers
             }
         }
 
+        public JsonResult GetConsignmentDetail(int id)
+        {
+            var inscan = db.InScanMasters.Find(id);
 
+            var cust = (from c in db.CustomerMasters where c.CustomerName == inscan.Consignor select c).FirstOrDefault();
+            var receiver = (from c in db.CustomerMasters where c.CustomerName == inscan.Consignee select c).FirstOrDefault();
+            int consignorid = 0;
+            string consignorname = "";
+            int consigneeid = 0;
+            string consigneename = "";
+            if (cust != null)
+            {
+                consignorid = cust.CustomerID;
+                consignorname = cust.CustomerName;
+            }
+            if (receiver != null)
+            {
+                consigneeid = receiver.CustomerID;
+                consigneename = receiver.CustomerName;
+            }
+
+            return Json(new { ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename }, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+        [HttpPost]
+        public JsonResult GetRevenueUpdateDetail(int id)
+        {
+            List<RevenueUpdateDetailVM> list = RevenueDAO.GetRevenueUpdateDetail(id);
+
+            return Json(new { data=list }, JsonRequestBehavior.AllowGet);
+
+        }
         public ActionResult RevenueCost(string term)
         {
             int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             if (!String.IsNullOrEmpty(term))
             {
                 List<RevenueCostMasterVM> list = new List<RevenueCostMasterVM>();
-                list = (from c in db.RevenueCostMasters where c.RevenueComponent.ToLower().StartsWith(term.ToLower()) orderby c.RevenueComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.RevenueComponent }).ToList();
+                list = (from c in db.RevenueCostMasters join a in db.AcHeads on c.RevenueAcHeadID equals a.AcHeadID  where c.RevenueComponent.ToLower().StartsWith(term.ToLower()) orderby c.RevenueComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.RevenueComponent ,RevenueAcHeadID=c.RevenueAcHeadID , RevenueHeadName =a.AcHead1}).ToList();
 
                 return Json(list, JsonRequestBehavior.AllowGet);
 

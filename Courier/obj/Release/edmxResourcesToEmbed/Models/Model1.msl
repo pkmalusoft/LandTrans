@@ -1016,6 +1016,8 @@
     <EntitySetMapping Name="CustomerMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerMaster">
         <MappingFragment StoreEntitySet="CustomerMaster">
+          <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+          <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
           <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
           <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
           <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
@@ -8502,6 +8504,9 @@
     <EntitySetMapping Name="SupplierMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierMaster">
         <MappingFragment StoreEntitySet="SupplierMaster">
+          <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
           <ScalarProperty Name="Remarks" ColumnName="Remarks" />
           <ScalarProperty Name="POBoxNo" ColumnName="POBoxNo" />
           <ScalarProperty Name="StatusReserved" ColumnName="StatusReserved" />
@@ -8566,17 +8571,6 @@
           <ScalarProperty Name="PackageType" ColumnName="PackageType" />
           <ScalarProperty Name="PackageName" ColumnName="PackageName" />
           <ScalarProperty Name="PackageID" ColumnName="PackageID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="RouteMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RouteMaster">
-        <MappingFragment StoreEntitySet="RouteMaster">
-          <ScalarProperty Name="Destination" ColumnName="Destination" />
-          <ScalarProperty Name="Origin" ColumnName="Origin" />
-          <ScalarProperty Name="RouteName" ColumnName="RouteName" />
-          <ScalarProperty Name="RouteCode" ColumnName="RouteCode" />
-          <ScalarProperty Name="RouteID" ColumnName="RouteID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -8814,6 +8808,9 @@
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
+          <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
           <ScalarProperty Name="CBM_height" ColumnName="CBM_height" />
           <ScalarProperty Name="CBM_width" ColumnName="CBM_width" />
           <ScalarProperty Name="CBM_length" ColumnName="CBM_length" />
@@ -8931,6 +8928,7 @@
     <EntitySetMapping Name="RevenueUpdateMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster">
         <MappingFragment StoreEntitySet="RevenueUpdateMaster">
+          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
           <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
           <ScalarProperty Name="InScanID" ColumnName="InScanID" />
           <ScalarProperty Name="BranchID" ColumnName="BranchID" />
@@ -8972,6 +8970,17 @@
           <ScalarProperty Name="RegistrationNo" ColumnName="RegistrationNo" />
           <ScalarProperty Name="VehicleDescription" ColumnName="VehicleDescription" />
           <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RouteMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RouteMaster">
+        <MappingFragment StoreEntitySet="RouteMaster">
+          <ScalarProperty Name="DestinationLocationID" ColumnName="DestinationLocationID" />
+          <ScalarProperty Name="OrginLocationID" ColumnName="OrginLocationID" />
+          <ScalarProperty Name="RouteName" ColumnName="RouteName" />
+          <ScalarProperty Name="RouteCode" ColumnName="RouteCode" />
+          <ScalarProperty Name="RouteID" ColumnName="RouteID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

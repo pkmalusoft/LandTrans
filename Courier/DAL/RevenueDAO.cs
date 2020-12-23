@@ -17,8 +17,10 @@ namespace LTMSV2.DAL
             cmd.Parameters.Add("@FromDate", SqlDbType.VarChar);
             cmd.Parameters["@FromDate"].Value = FromDate.ToString("MM/dd/yyyy");
             cmd.Parameters.Add("@ToDate", SqlDbType.VarChar);
-            cmd.Parameters["@ToDate"].Value = FromDate.ToString("MM/dd/yyyy");
+            cmd.Parameters["@ToDate"].Value = ToDate.ToString("MM/dd/yyyy");
             cmd.Parameters.Add("@ConsignmentNo", SqlDbType.VarChar);
+            if (ConsignmentNote == null)
+                ConsignmentNote = "";
             cmd.Parameters["@ConsignmentNo"].Value = ConsignmentNote;
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -37,7 +39,7 @@ namespace LTMSV2.DAL
                     obj.Currency = ds.Tables[0].Rows[i]["CurrencyName"].ToString();
                     obj.PaymentType = ds.Tables[0].Rows[i]["PaymentType"].ToString();
                     obj.DebitAccountName = ds.Tables[0].Rows[i]["DebitAccountHead"].ToString();
-                    obj.CreditAccountName = ds.Tables[0].Rows[i]["PartyName"].ToString();
+                    obj.CreditAccountName = ds.Tables[0].Rows[i]["CreditAccountHead"].ToString();
                     obj.InvoicedTo = ds.Tables[0].Rows[i]["CustomerName"].ToString();
                     if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
                     {
@@ -47,6 +49,46 @@ namespace LTMSV2.DAL
                     {
                         obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
                     }                    
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
+        public static List<RevenueUpdateDetailVM> GetRevenueUpdateDetail(int ID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetRevenueUpdateList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add("@ID", SqlDbType.Int);
+            cmd.Parameters["@ID"].Value = ID;                        
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<RevenueUpdateDetailVM> objList = new List<RevenueUpdateDetailVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    RevenueUpdateDetailVM obj = new RevenueUpdateDetailVM();
+                    obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
+                    obj.MasterID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["MasterID"].ToString());
+                    obj.CurrencyId= CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CurrencyId"].ToString());
+                    obj.ExchangeRate = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["ExchangeRate"].ToString());
+                    obj.RevenueCostMasterID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["RevenueCostMasterID"].ToString());
+                    obj.RevenueCost = ds.Tables[0].Rows[i]["RevenueComponent"].ToString();
+                    obj.CustomerId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerId"].ToString());
+                    obj.Amount = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["Amount"].ToString());
+                    obj.AcHeadDebitId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadDebitId"].ToString());
+                    obj.AcHeadCreditId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadCreditId"].ToString());
+                    obj.PaymentType = ds.Tables[0].Rows[i]["PaymentType"].ToString();
+                    obj.DebitAccountName = ds.Tables[0].Rows[i]["DebitAccountHead"].ToString();
+                    obj.CreditAccountName = ds.Tables[0].Rows[i]["CreditAccountHead"].ToString();                    
+                    obj.Currency = ds.Tables[0].Rows[i]["CurrencyName"].ToString();                    
+                    obj.InvoicedTo = ds.Tables[0].Rows[i]["CustomerName"].ToString();                    
                     objList.Add(obj);
                 }
             }

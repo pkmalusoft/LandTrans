@@ -225,30 +225,26 @@ namespace LTMSV2.Controllers
                         inscan.CreatedDate = localDateTime;
                         inscan.LastModifiedBy = userid;
                         inscan.LastModifiedDate = localDateTime;
-                      
-                        
-                        if (v.PaymentModeId != null)
-                        {
-                            if (v.PaymentModeId == 3)
-                            {
-                                int _customerid = SaveCustomer(v);
-                                customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
-                                inscan.CustomerID = _customerid;
-                            }
-                            else
-                            {
-                                inscan.CustomerID = v.CustomerID;
-                            }
 
-                            //if (v.CustomerID == 0)
-                            //{
-                                
-                            //}
-                            //else
-                            //{
-                            //    inscan.CustomerID = v.CustomerID;
-                            //}
-                        }
+
+                        //if (v.PaymentModeId != null)
+                        //{
+                        //    if (v.PaymentModeId == 3)
+                        //    {
+                        //        int _customerid = SaveCustomer(v);
+                        //        customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
+                        //        inscan.CustomerID = _customerid;
+                        //    }
+                        //    else
+                        //    {
+                        //        inscan.CustomerID = v.CustomerID;
+                        //    }
+
+                        //}
+                        int _customerid = SaveShipper(v);
+                        SaveReceiver(v);
+                        customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
+                        inscan.CustomerID = _customerid;
                         inscan.TransactionDate = v.TransactionDate;
                     }
                     else
@@ -1067,7 +1063,7 @@ namespace LTMSV2.Controllers
         public int SaveShipper(QuickAWBVM v)
         {
             CustM objCust = new CustM();
-            var cust = (from c in db.CustomerMasters where c.CustomerName == v.customer && c.CustomerType == "CR" select c).FirstOrDefault();
+            var cust = (from c in db.CustomerMasters where c.CustomerName == v.shippername select c).FirstOrDefault();
 
             int accompanyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -1082,8 +1078,61 @@ namespace LTMSV2.Controllers
                 obj.AcCompanyID = accompanyid;
 
                 obj.CustomerCode = ""; // _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
-                obj.CustomerName = v.customer;//  v.Consignor;
-                obj.CustomerType = "CR"; //Cash customer
+                obj.CustomerName = v.shippername;//  v.Consignor;
+                obj.CustomerType = "SH"; //Cash customer
+
+                //obj.ContactPerson = v.ConsignorContact;
+                //obj.Address1 = v.ConsignorAddress1_Building;
+                //obj.Address2 = v.ConsignorAddress2_Street;
+                //obj.Address3 = v.ConsignorAddress3_PinCode;
+                //obj.Phone = v.ConsignorPhone;
+                //obj.CountryName = v.ConsignorCountryName;
+                //obj.CityName = v.ConsignorCityName;
+                //obj.LocationName = v.ConsignorLocationName;
+                obj.UserID = null;
+                obj.statusCommission = false;
+                obj.Referal = "";
+                obj.StatusActive = true;
+                obj.StatusTaxable = false;
+                obj.CreditLimit = 0;
+                obj.Email = "";
+                obj.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                obj.CurrencyID = Convert.ToInt32(Session["CurrencyID"].ToString());
+                // Convert.ToInt32(Session["UserID"].ToString());
+                obj.DepotID = depotid;
+                db.CustomerMasters.Add(obj);
+                db.SaveChanges();
+                return obj.CustomerID;
+                //cust = (from c in db.CustomerMasters where c.CustomerName == v.customer && c.CustomerType == "CR" select c).FirstOrDefault();
+                //return cust.CustomerID;
+            }
+            else
+            {
+                return cust.CustomerID;
+            }
+
+        }
+
+        public int SaveReceiver(QuickAWBVM v)
+        {
+            CustM objCust = new CustM();
+            var cust = (from c in db.CustomerMasters where c.CustomerName == v.Consignee select c).FirstOrDefault();
+
+            int accompanyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int depotid = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            if (cust == null)
+            {
+                CustomerMaster obj = new CustomerMaster();
+
+                int max = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerID).FirstOrDefault();
+
+                obj.CustomerID = max + 1;
+                obj.AcCompanyID = accompanyid;
+
+                obj.CustomerCode = ""; // _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
+                obj.CustomerName = v.Consignee;//  v.Consignor;
+                obj.CustomerType = "RE"; //Cash customer
 
                 //obj.ContactPerson = v.ConsignorContact;
                 //obj.Address1 = v.ConsignorAddress1_Building;
@@ -1495,12 +1544,23 @@ namespace LTMSV2.Controllers
             //                   where c1.Consignee.ToLower().StartsWith(term.ToLower())
             //                   orderby c1.Consignee ascending
             //                   select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode }).Distinct();
-            var shipperlist = (from c1 in db.CustomerMasters
-                               where c1.CustomerName.ToLower().StartsWith(term.ToLower())
-                               orderby c1.CustomerName ascending
-                               select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
+            if (term != "")
+            {
+                var shipperlist = (from c1 in db.CustomerMasters
+                                   where c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                                   orderby c1.CustomerName ascending
+                                   select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
 
-            return Json(shipperlist, JsonRequestBehavior.AllowGet);                       
+                return Json(shipperlist, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var shipperlist = (from c1 in db.CustomerMasters                                   
+                                   orderby c1.CustomerName ascending
+                                   select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
+
+                return Json(shipperlist, JsonRequestBehavior.AllowGet);
+            }
 
         }
 
@@ -1512,11 +1572,23 @@ namespace LTMSV2.Controllers
             //                   orderby c1.Consignor ascending
             //                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode }).Distinct();
 
-            var shipperlist = (from c1 in db.CustomerMasters
-                               where c1.CustomerName.ToLower().StartsWith(term.ToLower())
-                               orderby c1.CustomerName ascending
-                               select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
-            return Json(shipperlist, JsonRequestBehavior.AllowGet);
+            if (term != "")
+            {
+                var shipperlist = (from c1 in db.CustomerMasters
+                                   where c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                                   orderby c1.CustomerName ascending
+                                   select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
+
+                return Json(shipperlist, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var shipperlist = (from c1 in db.CustomerMasters
+                                   orderby c1.CustomerName ascending
+                                   select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
+
+                return Json(shipperlist, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpGet]

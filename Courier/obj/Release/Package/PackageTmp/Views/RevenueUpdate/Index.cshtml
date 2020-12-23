@@ -64,31 +64,31 @@
         </script>
     }
     <div class="table-responsive tblbackground" style="padding:15px">
-        <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example" style="width:100%">
             <thead>
                 <tr>      
-                    <th>
+                    <th width="5%">
                         @Html.Label("Consignment Note")
                     </th>
-                    <th>
+                    <th width="5%">
                         @Html.Label("Consignment Date")
                     </th>
-                    <th class="">
+                    <th width="10%">
                         @Html.Label("Invoice To")
                     </th>
-                    <th>
+                    <th width="5%">
                         @Html.Label("Amount")
                     </th>
-                    <th>
+                    <th width="5%">
                         @Html.Label("Currency")
                     </th>
-                    <th class="right_text">
-                        @Html.Label("Debit Account")
+                    <th width="15%" >
+                        @Html.Label("Debit Head")
                     </th>
-                    <th class="right_text">
-                        @Html.Label("Credit Account")
+                    <th width="15%">
+                        @Html.Label("Credit Head")
                     </th>
-                    <th>Action</th>
+                    <th width="5%">Action</th>
                 </tr>
 
             </thead>
@@ -111,10 +111,10 @@
                     <th>
                         @Html.Label("Currency")
                     </th>
-                    <th class="right_text">
+                    <th >
                         @Html.Label("Debit Account")
                     </th>
-                    <th class="right_text">
+                    <th>
                         @Html.Label("Credit Account")
                     </th>
                     <th>
@@ -126,35 +126,38 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
+                <tr>
 
-                        @*<td>
-                                @Html.DisplayFor(modelItem => item.RCCode)
+                    @*<td>
+            @Html.DisplayFor(modelItem => item.RCCode)
 
-                            </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ConsignmentNo)
-                        </td>
-                        <td class="text-right">
-                            @Html.DisplayFor(modelItem => item.ConsignmentDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.InvoicedTo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Amount)
-                        </td>
-                        <td class="text-right">
-                            @Html.DisplayFor(modelItem => item.DebitAccountName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreditAccountName)
-                        </td>
-                        <td>
-                            <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
-                            <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
-                        </td>
-                    </tr>
+        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConsignmentNo)
+                    </td>
+                    <td class="text-right">                        
+                        @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.ConsignmentDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InvoicedTo)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Currency)
+                    </td>
+                    <td >
+                        @Html.DisplayFor(modelItem => item.DebitAccountName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreditAccountName)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
+                        <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
+                    </td>
+                </tr>
 
                 }
             </tbody>

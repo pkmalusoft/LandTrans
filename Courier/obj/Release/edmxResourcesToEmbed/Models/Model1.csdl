@@ -1095,6 +1095,8 @@
     <NavigationProperty Name="tblCustomerAdjustments" Relationship="Self.FK_tblCustomerAdjustment_CustomerMaster" FromRole="CustomerMaster" ToRole="tblCustomerAdjustment" />
     <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerMaster_BranchMaster" FromRole="CustomerMaster" ToRole="BranchMaster" />
     <NavigationProperty Name="CityMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerMaster_CityMaster" FromRole="CustomerMaster" ToRole="CityMaster" />
+    <Property Name="ApprovedBy" Type="Int32" />
+    <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="CustomerMultiContract">
     <Key>
@@ -1505,6 +1507,7 @@
     <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_EmployeeMaster" FromRole="EmployeeMaster" ToRole="SalesInvoice" />
     <NavigationProperty Name="SalesInvoices1" Relationship="Self.FK_SalesInvoice_EmployeeMaster1" FromRole="EmployeeMaster" ToRole="SalesInvoice" />
     <NavigationProperty Name="CityMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_EmployeeMaster_CityMaster" FromRole="EmployeeMaster" ToRole="CityMaster" />
+    <NavigationProperty Name="tblDepot" Relationship="DB_9F57C4_couriertest_newModel.FK__EmployeeM__Depot__5A45429A" FromRole="EmployeeMaster" ToRole="tblDepot" />
   </EntityType>
   <EntityType Name="Expense">
     <Key>
@@ -3222,6 +3225,7 @@
     <NavigationProperty Name="tblStockIssues" Relationship="Self.FK_tblStockIssue_tblDepot" FromRole="tblDepot" ToRole="tblStockIssue" />
     <NavigationProperty Name="tblStockIssues1" Relationship="Self.FK_tblStockIssue_tblDepot1" FromRole="tblDepot" ToRole="tblStockIssue" />
     <NavigationProperty Name="CityMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_tblDepot_CityMaster" FromRole="tblDepot" ToRole="CityMaster" />
+    <NavigationProperty Name="EmployeeMasters" Relationship="DB_9F57C4_couriertest_newModel.FK__EmployeeM__Depot__5A45429A" FromRole="tblDepot" ToRole="EmployeeMaster" />
   </EntityType>
   <EntityType Name="tblDocumentType">
     <Key>
@@ -8658,7 +8662,6 @@
     <EntitySet Name="DocumentSetups" EntityType="DB_9F57C4_couriertest_newModel.DocumentSetup" />
     <EntitySet Name="ItemMasters" EntityType="DB_9F57C4_couriertest_newModel.ItemMaster" />
     <EntitySet Name="Packages" EntityType="DB_9F57C4_couriertest_newModel.Package" />
-    <EntitySet Name="RouteMasters" EntityType="DB_9F57C4_couriertest_newModel.RouteMaster" />
     <EntitySet Name="RouteOrders" EntityType="DB_9F57C4_couriertest_newModel.RouteOrder" />
     <EntitySet Name="BranchMasters" EntityType="DB_9F57C4_couriertest_newModel.BranchMaster" />
     <AssociationSet Name="FK_AcGroup_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_AcGroup_BranchMaster">
@@ -8751,10 +8754,6 @@
       <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
       <End Role="TruckDetail" EntitySet="TruckDetails" />
     </AssociationSet>
-    <AssociationSet Name="FK_TruckDetails_RouteMaster" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster">
-      <End Role="RouteMaster" EntitySet="RouteMasters" />
-      <End Role="TruckDetail" EntitySet="TruckDetails" />
-    </AssociationSet>
     <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
     <EntitySet Name="RevenueUpdateDetails" EntityType="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" />
     <EntitySet Name="RevenueUpdateMasters" EntityType="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster" />
@@ -8778,6 +8777,15 @@
     <AssociationSet Name="FK_VehicleMaster_VehicleType" Association="DB_9F57C4_couriertest_newModel.FK_VehicleMaster_VehicleType">
       <End Role="VehicleType" EntitySet="VehicleTypes" />
       <End Role="VehicleMaster" EntitySet="VehicleMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK__EmployeeM__Depot__5A45429A" Association="DB_9F57C4_couriertest_newModel.FK__EmployeeM__Depot__5A45429A">
+      <End Role="tblDepot" EntitySet="tblDepots" />
+      <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
+    </AssociationSet>
+    <EntitySet Name="RouteMasters" EntityType="DB_9F57C4_couriertest_newModel.RouteMaster" />
+    <AssociationSet Name="FK_TruckDetails_RouteMaster" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster">
+      <End Role="RouteMaster" EntitySet="RouteMasters" />
+      <End Role="TruckDetail" EntitySet="TruckDetails" />
     </AssociationSet>
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
@@ -12394,6 +12402,9 @@
     <NavigationProperty Name="SupplierType" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_SupplierType" FromRole="SupplierMaster" ToRole="SupplierType" />
     <NavigationProperty Name="tblSupplierAdjustments" Relationship="DB_9F57C4_couriertest_newModel.FK_tblSupplierAdjustment_SupplierMaster" FromRole="SupplierMaster" ToRole="tblSupplierAdjustment" />
     <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_BranchMaster" FromRole="SupplierMaster" ToRole="BranchMaster" />
+    <Property Name="CountryID" Type="Int32" />
+    <Property Name="CityID" Type="Int32" />
+    <Property Name="LocationID" Type="Int32" />
   </EntityType>
   <Association Name="FK_SupplierMaster_CurrencyMaster">
     <End Type="DB_9F57C4_couriertest_newModel.CurrencyMaster" Role="CurrencyMaster" Multiplicity="0..1" />
@@ -12487,17 +12498,6 @@
     <Property Name="PackageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="PackageName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="PackageType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="RouteMaster">
-    <Key>
-      <PropertyRef Name="RouteID" />
-    </Key>
-    <Property Name="RouteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="RouteCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="RouteName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="TruckDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="RouteMaster" ToRole="TruckDetail" />
-    <Property Name="Origin" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="Destination" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="RouteOrder">
     <Key>
@@ -12941,12 +12941,12 @@
     <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" FromRole="TruckDetail" ToRole="BranchMaster" />
     <NavigationProperty Name="CurrencyMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster" FromRole="TruckDetail" ToRole="CurrencyMaster" />
     <NavigationProperty Name="CurrencyMaster1" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2" FromRole="TruckDetail" ToRole="CurrencyMaster" />
-    <NavigationProperty Name="RouteMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="TruckDetail" ToRole="RouteMaster" />
     <Property Name="IsDeleted" Type="Boolean" />
     <Property Name="OriginCountry" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="PhoneNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="ForwardAgentID" Type="Int32" />
     <Property Name="OriginCity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="RouteMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="TruckDetail" ToRole="RouteMaster" />
   </EntityType>
   <Association Name="FK_TruckDetails_BranchMaster">
     <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
@@ -12981,18 +12981,6 @@
       </Principal>
       <Dependent Role="TruckDetail">
         <PropertyRef Name="CurrencyIDRent" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TruckDetails_RouteMaster">
-    <End Type="DB_9F57C4_couriertest_newModel.RouteMaster" Role="RouteMaster" Multiplicity="0..1" />
-    <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="RouteMaster">
-        <PropertyRef Name="RouteID" />
-      </Principal>
-      <Dependent Role="TruckDetail">
-        <PropertyRef Name="RouteID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -13091,6 +13079,9 @@
     <Property Name="CBM_length" Type="Decimal" Precision="18" Scale="3" />
     <Property Name="CBM_width" Type="Decimal" Precision="18" Scale="3" />
     <Property Name="CBM_height" Type="Decimal" Precision="18" Scale="3" />
+    <Property Name="CountryID" Type="Int32" />
+    <Property Name="CityID" Type="Int32" />
+    <Property Name="LocationID" Type="Int32" />
   </EntityType>
   <EntityType Name="RevenueUpdateDetail">
     <Key>
@@ -13125,6 +13116,7 @@
     <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_BranchMaster" FromRole="RevenueUpdateMaster" ToRole="BranchMaster" />
     <NavigationProperty Name="InScan" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_InScan" FromRole="RevenueUpdateMaster" ToRole="InScan" />
     <NavigationProperty Name="RevenueUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" FromRole="RevenueUpdateMaster" ToRole="RevenueUpdateDetail" />
+    <Property Name="AcFinancialYearID" Type="Int32" />
   </EntityType>
   <Association Name="FK_RevenueUpdateMaster_BranchMaster">
     <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="1" />
@@ -13221,6 +13213,41 @@
       </Principal>
       <Dependent Role="VehicleMaster">
         <PropertyRef Name="VehicleTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__EmployeeM__Depot__5A45429A">
+    <End Type="DB_9F57C4_couriertest_newModel.tblDepot" Role="tblDepot" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.EmployeeMaster" Role="EmployeeMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblDepot">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="EmployeeMaster">
+        <PropertyRef Name="DepotID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="RouteMaster">
+    <Key>
+      <PropertyRef Name="RouteID" />
+    </Key>
+    <Property Name="RouteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RouteCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RouteName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="OrginLocationID" Type="Int32" />
+    <Property Name="DestinationLocationID" Type="Int32" />
+    <NavigationProperty Name="TruckDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="RouteMaster" ToRole="TruckDetail" />
+  </EntityType>
+  <Association Name="FK_TruckDetails_RouteMaster">
+    <End Type="DB_9F57C4_couriertest_newModel.RouteMaster" Role="RouteMaster" Multiplicity="0..1" />
+    <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RouteMaster">
+        <PropertyRef Name="RouteID" />
+      </Principal>
+      <Dependent Role="TruckDetail">
+        <PropertyRef Name="RouteID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

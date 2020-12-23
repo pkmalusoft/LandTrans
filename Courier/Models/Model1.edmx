@@ -2987,6 +2987,7 @@
           <Property Name="BranchID" Type="int" Nullable="false" />
           <Property Name="InScanID" Type="int" Nullable="false" />
           <Property Name="EmployeeID" Type="int" />
+          <Property Name="AcFinancialYearID" Type="int" />
         </EntityType>
         <EntityType Name="RoleMaster">
           <Key>
@@ -22505,6 +22506,7 @@
           <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_BranchMaster" FromRole="RevenueUpdateMaster" ToRole="BranchMaster" />
           <NavigationProperty Name="InScan" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_InScan" FromRole="RevenueUpdateMaster" ToRole="InScan" />
           <NavigationProperty Name="RevenueUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" FromRole="RevenueUpdateMaster" ToRole="RevenueUpdateDetail" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
         </EntityType>
         <Association Name="FK_RevenueUpdateMaster_BranchMaster">
           <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="1" />
@@ -31572,6 +31574,7 @@
           <EntitySetMapping Name="RevenueUpdateMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster">
               <MappingFragment StoreEntitySet="RevenueUpdateMaster">
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="InScanID" ColumnName="InScanID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />

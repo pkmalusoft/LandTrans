@@ -8928,6 +8928,7 @@
     <EntitySetMapping Name="RevenueUpdateMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster">
         <MappingFragment StoreEntitySet="RevenueUpdateMaster">
+          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
           <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
           <ScalarProperty Name="InScanID" ColumnName="InScanID" />
           <ScalarProperty Name="BranchID" ColumnName="BranchID" />

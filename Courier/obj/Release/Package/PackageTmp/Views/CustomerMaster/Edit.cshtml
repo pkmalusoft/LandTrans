@@ -494,10 +494,10 @@ var componentForm = {
                 {
                     new SelectListItem{ Text="Credit", Value = "CR" },
                     new SelectListItem{ Text="Cash", Value = "CS" },
-                    new SelectListItem{ Text="CoLoader", Value = "CL" },
-                    new SelectListItem{ Text="COD", Value = "CD" },
+                    new SelectListItem{ Text="Shipper", Value = "SH" },
+                    new SelectListItem{ Text="Consignee", Value = "CO" },
 
-                 }, "Select", new { @class = "form-control" })
+                 }, "Select", new { @class = "form-control",@disabled = "@disabled" })
                     @Html.ValidationMessageFor(model => model.CustomerType)
 
                 </div>

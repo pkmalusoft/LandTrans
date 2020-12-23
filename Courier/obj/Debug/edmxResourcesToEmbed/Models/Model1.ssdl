@@ -2982,6 +2982,7 @@
     <Property Name="BranchID" Type="int" Nullable="false" />
     <Property Name="InScanID" Type="int" Nullable="false" />
     <Property Name="EmployeeID" Type="int" />
+    <Property Name="AcFinancialYearID" Type="int" />
   </EntityType>
   <EntityType Name="RoleMaster">
     <Key>

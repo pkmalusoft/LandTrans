@@ -202,16 +202,16 @@
 
 
 
-        $('#RevenueItems').multiselect({
-            includeSelectAllOption: true,
-            enableClickableOptGroups: true,
-            enableCollapsibleOptGroups: true,
-            enableFiltering: true,
-            dropRight: true,
+        //$('#RevenueItems').multiselect({
+        //    includeSelectAllOption: true,
+        //    enableClickableOptGroups: true,
+        //    enableCollapsibleOptGroups: true,
+        //    enableFiltering: true,
+        //    dropRight: true,
 
-        });
+        //});
 
-        $(".multiselect-container").css({ "height": "200px", "overflow-y": "scroll" });
+        //$(".multiselect-container").css({ "height": "200px", "overflow-y": "scroll" });
 
 
 
@@ -227,33 +227,21 @@
         //});
 
         $("#btnsave").click(function () {
+            debugger;
             var sup = $("#SupplierName").val();
             var ref = $("#ReferenceCode").val();
             var con = $("#ContactPerson").val();
             var add = $("#Address1").val();
             var phone = $("#Phone").val();
             var ExpCode = $("#ExportCode").val();
+            var maxcreditdays = $('#MaxCreditDays').val();
             var regex = /^[0-9 ]+$/
             var isValid = regex.test(ExpCode);
             
             var email = $("#Email").val();
-            var x = "";
-            {
-
-                x = $("#RevenueItems").val();
-
-                $("#RevenueTypeIds").val(x);
-
-            };
-
-
-
+           
 
             if (sup == "") {
-                $("#alert").show();
-                return false;
-            }
-            else if (ref == "") {
                 $("#alert").show();
                 return false;
             }
@@ -261,11 +249,19 @@
                 $("#alert").show();
                 return false;
             }
-            else if (add == "") {
-
+            else if ($('#LocationName').val() == "")
+            {
                 $("#alert").show();
                 return false;
             }
+            else if ($('#CityName').val() == "") {
+                $("#alert").show();
+                return false;
+            }
+            else if ($('#CountryName').val() == "") {
+                $("#alert").show();
+                return false;
+            } 
             else if (phone == "") {
 
                 $("#alert").show();
@@ -276,7 +272,18 @@
                 $("#alert").show();
                 return false;
             }
-            else if (!isValid) {
+            //else if (maxcreditdays == "" || maxcreditdays == "0")
+            //{
+            //    $("#alert").show();
+            //    return false;
+
+            //}
+            else if (ref == "") {
+                $("#alert").show();
+                return false;
+            }          
+                    
+            else if ($('#ExportCode').val()!="" && !isValid) {
                 alert("Exporter Code must be a Number.");
                 return false;
             } 
@@ -308,7 +315,7 @@
     });
 </script>
 <section class="content-header">
-    <h1 class="headingfont">Supplier</h1>
+    <h1 class="headingfont">Supplier - Create</h1>
 
 </section>
 
@@ -364,7 +371,7 @@
                     @Html.ValidationMessageFor(model => model.ContactPerson)
                 </div>
                 <div class="col-md-3">
-                    <label class="required headinglabel">Address 1 (Building)</label>
+                    <label class="headinglabel">Address 1 (Building)</label>
                     @Html.TextBoxFor(model => model.Address1, new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.Address1)
                 </div>
@@ -440,7 +447,7 @@
                 <div class="row no-margin" style="padding-top:10px">
 
                     <div class="col-md-3">
-                        <label class="required headinglabel">Exporter Code</label>
+                        <label class="headinglabel">Exporter Code</label>
                         @Html.TextBoxFor(model => model.ExportCode, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.ExportCode)
                     </div>
@@ -452,7 +459,7 @@
                     </div>
                     <div class="col-md-3">
 
-                        <label class="headinglabel">TRN No.</label>
+                        <label class="required headinglabel">TRN No.</label>
                         @Html.TextBoxFor(model => model.RegistrationNo, new { @class = "form-control txttarget" })
                         @Html.ValidationMessageFor(model => model.RegistrationNo)
 
@@ -464,7 +471,7 @@
                     </div>
 
                 </div>
-                <div class="row no-margin" style="padding-top:10px">
+                @*<div class="row no-margin" style="padding-top:10px">
 
                     <div class="col-md-4">
                         <label class="headinglabel">Remark</label>
@@ -478,10 +485,10 @@
                         @Html.DropDownList("RevenueItems", new SelectList(ViewBag.revenue, "RevenueTypeID", "RevenueType1"), new { @class = "multiselect form-control", multiple = "multiple", @style = "padding-top:10px" })
                         @Html.HiddenFor(model => model.RevenueTypeIds)
 
-                        @*@Html.ValidationMessageFor(model => model.RevenuTypeIds)*@
+                       
                     </div>
 
-                </div>
+                </div>*@
              
                 <div class="row no-margin" style="padding-top:10px">
                     <div class="col-md-12" style="text-align: right; margin-top: 20px;">
