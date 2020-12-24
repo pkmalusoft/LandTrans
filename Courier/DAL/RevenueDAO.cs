@@ -59,7 +59,7 @@ namespace LTMSV2.DAL
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "SP_GetRevenueUpdateList";
+            cmd.CommandText = "SP_GetRevenueUpdateDetail";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Add("@ID", SqlDbType.Int);
             cmd.Parameters["@ID"].Value = ID;                        
@@ -81,7 +81,7 @@ namespace LTMSV2.DAL
                     obj.RevenueCostMasterID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["RevenueCostMasterID"].ToString());
                     obj.RevenueCost = ds.Tables[0].Rows[i]["RevenueComponent"].ToString();
                     obj.CustomerId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerId"].ToString());
-                    obj.Amount = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["Amount"].ToString());
+                    obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
                     obj.AcHeadDebitId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadDebitId"].ToString());
                     obj.AcHeadCreditId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadCreditId"].ToString());
                     obj.PaymentType = ds.Tables[0].Rows[i]["PaymentType"].ToString();

@@ -38,6 +38,64 @@
 <script type="text/javascript">
     var AWBItems = [];
     var RemoveAWBItems = [];
+    function DisplayCostItems() {
+                        
+        $.ajax({
+            type: "POST",
+            url: "/RevenueUpdate/GetRevenueUpdateDetail",
+            datatype: "Json",
+            data: { "id": $("#ID").val() },  //$("#CollectedByID option:selected").val()
+            success: function (response) {
+
+                if (response.data != null) {
+                    AWBItems = [];
+                    AWBItems = response.data;
+                    //$('#details > tbody > tr').html('');
+                    $.each(AWBItems, function (index, item) {
+                        debugger;
+                        var i = $('#details > tbody > tr').length - 1;
+                        var paytype = item.PaymentType;
+                        var currencyid = item.CurrencyId;
+                        var currencyname = item.Currency;
+                        var exchangerate = item.ExchangeRate;
+                        var revenuecost = item.RevenueCost;
+                        var revenuecostid = item.RevenueCostMasterID;
+                        var amount = item.Amount;
+                        var famount = parseFloat(amount * exchangerate).toFixed(2);
+                        var invoicedto = item.InvoicedTo;
+                        var customerid = item.CustomerId;
+                        var DebitHead = item.DebitAccountName;
+                        var DebitHeadId = item.AcHeadDebitId;
+                        var CreditHead = item.CreditAccountName;
+                        var CreditHeadId = item.AcHeadCreditId;
+                        var DetailID = item.ID;
+
+                        var objHtml = '<tr>' + '<td style="padding-left:10px">' + paytype + '<input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input type="hidden" name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead value="' + paytype + '" name="DetailVM[' + i + '].Paymenttype"></td>';
+                        objHtml = objHtml + '<td style="padding-left:10px">' + currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
+                        objHtml = objHtml + '<td class="textright" style="padding-right:10px">' + exchangerate + '<input type="hidden" class="JAcAmt" value=' + exchangerate + ' name="DetailVM[' + i + '].ExchangeRate"></td>';
+                        objHtml = objHtml + '<td class=textright style="padding-right:10px">' + revenuecost + '<input type="hidden" class="JAcAmt" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
+                        objHtml = objHtml + '<td class style="padding-right:10px">' + amount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
+                        objHtml = objHtml + '<td class style="padding-right:10px">' + famount + '</td>';
+                        objHtml = objHtml + '<td style="padding-left:10px">' + invoicedto + '<input type="hidden" value=' + customerid + ' name="DetailVM[' + i + '].CustomerId"></td>'
+                        objHtml = objHtml + '<td style="padding-left:10px">' + DebitHead + '<input type="hidden" value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
+                        objHtml = objHtml + '<td style="padding-left:10px">' + CreditHead + '<input type="hidden" value="' + CreditHeadId + '" name="DetailVM[' + i + '].AcHeadCreditId"></td>';
+                        //  objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
+                        objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
+                        objHtml = objHtml + '</tr>';
+                        $("#details").append(objHtml);
+                    });
+
+                }
+                else {
+                    AWBItems = [];
+                    //$("#detailsbody").html('');
+                    $('#details > tbody').html('');
+
+                }
+
+            }
+        });
+    }
     $(document).ready(function () {
         AWBItems = [];
 
@@ -134,8 +192,8 @@
                 e.preventDefault();
                 $("#txtRevenueCost").val(i.item.label);
                 $("#txtRevenueCostId").val(i.item.ID);
-                $("#txtDebitHeadId").val(i.item.RevenueAcHeadID);
-                $("#txtDebitHead").val(i.item.RevenueAcHeadName);                
+                $("#txtCreditHeadId").val(i.item.RevenueAcHeadID);
+                $("#txtCreditHead").val(i.item.RevenueAcHeadName);                
             },
 
         });
@@ -201,47 +259,7 @@
         });
 
         //$("#InScanSheetNo").change(function () {
-        function DisplayCostItems() {
-            debugger;
-          //  $('#details tr').slice(1).remove();
-            $.ajax({
-                type: "POST",
-                url: "/RevenueUpdate/GetCostItem",
-                datatype: "Json",
-                data: { id: $("#InscanID").val() },  //$("#CollectedByID option:selected").val()
-                success: function (response) {
-                    debugger;
-                    console.log(response);
-                    if (response.status == "ok") {                       
-                        AWBItems = [];
-                        AWBItems = response.data;
-
-                        $.each(AWBItems, function (index, item) {
-                            $("#detailsbody").append('<tr awbno="' + item.AWB + '"><td>' + (parseInt(index) + 1) + '</td><td>' + item.AWB + '</td><td>' + item.Origin + '</td><td>' + item.Destination + '</td><td><a awbno="' + item.AWB + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
-                        });
-
-                    }
-                    else {
-                        AWBItems = [];
-                          $("#detailsbody").html('');
-                        $('#QuickInscanID').val('');
-                        $('#DepotID').val('').trigger('change');
-                        $('#VehicleId').val(0).trigger('change');
-                        $('#DriverName').val('');
-                        $('#CollectedByID').val(0).trigger('change');
-                        $('#ReceivedByID').val(0).trigger('change');
-                          var d = new Date();
-                        var curr_date = d.getDate();
-                        var curr_month = d.getMonth()+1;
-                        var curr_year = d.getFullYear();
-                        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
-                         $('#QuickInscanDateTime').val(reqdate);
-
-                    }
-
-                }
-            });
-        }
+        
 
         $('#PaymentType').change(function () {
             debugger;
@@ -302,24 +320,52 @@
             $(obj).val(true);
         });
         $("#btnAdd").click(function () {
-
-            if ($("#SelectedReceivedFrom").val() == "" || $("#SelectedReceivedFrom").val() == "0" || $("#ReceivedFrom").val() == "") {
-                alert('Please Select "Received From"');
-                $("#ReceivedFrom").focus();
+            var errormessage = "";
+            $('#spanerr').html();
+            if ($("#PaymentType").val() == "") {
+                $('#spanerr').html('Select Payment Type');
+               $("#PaymentType").focus();
                 return false;
             }
-            else if ($("#amount").val() == "") {
-                alert("Please Enter The Amount");
-                $("#amount").focus();
+            else if ($('#CurrencyId').val() == "" || $('#CurrencyId').val()=="0") {
+                $('#spanerr').html("Please Select Currency!");
+                $("#txtAmount").focus();
                 return false;
             }
-            else if (parseInt($("#amount").val()) == 0) {
-                alert("Please Enter The Amount");
-                $("#amount").focus();
+            else if ($("#PaymentType").val() != "Pickup Cash" && ($('#txtCustomer').val() == "" || $('#txtCustomerId').val() == "0" || $('#txtCustomerId').val() == ""))
+            {
+                $('#spanerr').html("Select Customer!");
+                $("#txtCustomer").focus();
+                return false;
+            }         
+            else if ($('#txtRevenueCost').val() == "" || $('#txtRevenueCostId').val() == "0") {
+                $('#spanerr').html("Select Revenue Cost!");
+                $("#txtRevenueCost").focus();
+                return false;
+            }     
+            else if ($("#txtAmount").val() == "") {
+                $('#spanerr').html("Please Enter The Amount");
+                $("#txtAmount").focus();
                 return false;
             }
+            else if (parseInt($("#txtAmount").val()) == 0) {
+                $('#spanerr').html("Please Enter The Amount");
+                $("#txtAmount").focus();
+                return false;
+            }
+            else if ($('#txtDebitHead').val() == "" || $('#txtDebitHeadId').val() == "0") {
+                $('#spanerr').html("Select Debit Head!");
+                $('#txtDebitHead').focus();
+                return false;
+            }     
+            else if ($('#txtCreditHead').val() == "" || $('#txtCreditHeadId').val() == "0") {
+                $('#spanerr').html("Select Credit Head!");
+                $('#txtCreditHead').focus();
+                return false;
+            }      
+            
             else {
-
+                $('#spanerr').html("");
                 var str = "";
                 var totalamt = 0;
                 var i = $('#details > tbody > tr').length - 1;
@@ -339,7 +385,7 @@
                 var CreditHeadId = $('#txtCreditHeadId').val();
                 var DetailID = 0;
 
-                var objHtml = '<tr>' + '<td style="padding-left:10px">' + paytype + '<input type="hidden" name ="DetailVM[' + i + '].ID" value=' + DetailID + '/><input type="hidden" name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead value=' + paytype + ' name="DetailVM[' + i + '].Paymenttype"></td>';
+                var objHtml = '<tr>' + '<td style="padding-left:10px">' + paytype + '<input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input type="hidden" name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead value="' + paytype + '" name="DetailVM[' + i + '].Paymenttype"></td>';
                 objHtml = objHtml + '<td style="padding-left:10px">' + currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
                 objHtml = objHtml + '<td class="textright" style="padding-right:10px">' + exchangerate + '<input type="hidden" class="JAcAmt" value=' + exchangerate + ' name="DetailVM[' + i + '].ExchangeRate"></td>';
                 objHtml = objHtml + '<td class=textright style="padding-right:10px">' + revenuecost + '<input type="hidden" class="JAcAmt" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
@@ -370,8 +416,11 @@
             }
             return false;
         });
+        //if ($('#ID').val() > 0) {
+        //    DisplayCostItems();
+        //}
         $('#btnsave').click(function () {
-            debugger;
+            
             var lst1 = [];
             var SelectedInScanId = '';
             var RemovedAWB = '';
@@ -381,14 +430,10 @@
 
         });
      if ('@ViewBag.EditMode' == "true") {
-            DisplayAWBItems();
-        }
-        else {
-            $('#DRSDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
-            $("#DRSDate").focus();
-        }
+         DisplayCostItems();
+        }        
 
-        $("#InScanSheetNo").focus();
+        $("#EntryDate").focus();
     });
 
 </script>
@@ -418,7 +463,7 @@
                 <div class="col-md-12 btn-right" style="padding-top:10px;padding-bottom: 25px;">
                     <div class="row no-margin btn-right" style="padding-top:10px">
                         <div class="col-md-12">
-                            <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />                                                       
+                            <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
 
                             <a href='@Url.Action("Index", "RevenueUpdate")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
 
@@ -445,7 +490,7 @@
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                 </div>
                 <div class="col-md-3">
-                    <label class="headinglabel required">Consignment No.</label>                    
+                    <label class="headinglabel required">Consignment No.</label>
                     @Html.DropDownListFor(model => model.InScanID, new SelectList(@ViewBag.Consignment, "InScanID", "ConsignmentNo"), "Select", new { @class = "form-control" })
                     @*@Html.TextBoxFor(model => model.ConsignmentNo, new { @class = "form-control" })*@
                 </div>
@@ -456,62 +501,67 @@
                 <hr style="margin-bottom:0px" />
             </div>
             <div class="row no-margin">
-                <div class="col-md-1">
-                    <label class="headinglabel required">Pay Type</label>
-                    @Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentType, "TypeName", "TypeName", 0), "Select", new { @class = "form-control", @id = "PaymentType" })
+                <div class="col-md-12">
+                    <span id="spanerr" style="color:red"></span>
+                    </div>
                 </div>
-                <div class="col-md-1">
-                    <label class="headinglabel required">Currency</label>
-                    @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyName", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
-                    @Html.HiddenFor(model => model.ExchangeRate)
+                <div class="row no-margin">
+                    <div class="col-md-1">
+                        <label class="headinglabel required">Pay Type</label>
+                        @Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentType, "TypeName", "TypeName", 0), "Select", new { @class = "form-control", @id = "PaymentType" })
+                    </div>
+                    <div class="col-md-1">
+                        <label class="headinglabel required">Currency</label>
+                        @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyName", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
+                        @Html.HiddenFor(model => model.ExchangeRate)
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="headinglabel label1">Revenue Cost</label>
+                        <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
+                        <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
+                    </div>
+                    <div class="col-md-1">
+                        <label class="headinglabel">Amount</label>
+                        <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="headinglabel">Invoiced To</label>
+                        <input type="text" id="txtCustomer" class="form-control" autocomplete="off" />
+                        <input type="hidden" id="txtCustomerId" class="form-control" autocomplete="off" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="headinglabel">Debit Ac</label>
+                        <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
+                        <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="headinglabel">Credit Ac</label>
+                        <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
+                        <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
+                    </div>
+                    <div class="col-md-1" style="padding-top:30px">
+                        <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data" onclick="ClearData()">-</button>&nbsp;&nbsp;
+                        <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
+                    </div>
+                </div>
+                <br />
+                <div class="row no-margin" style="padding-top:10px">
+                    <table class="table table-bordered table-responsive" id="details">
+                        <tr>
+                            <td style="width:5%">Payment Mode</td>
+                            <td style="width:5%">Currency</td>
+                            <td style="width:5%">Ex.Rate</td>
+                            <td style="width:15%">Revenue</td>
+                            <td style="width:5%">Amount</td>
+                            <td style="width:5%">Amount(F.C)</td>
+                            <td style="width:15%">Invoiced To</td>
+                            <td style="width:15%">Debit Account</td>
+                            <td style="width:15%">Credit Account</td>
+                        </tr>
+                    </table>
                 </div>
 
-                <div class="col-md-2">
-                    <label class="headinglabel label1">Revenue Cost</label>
-                    <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
-                    <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
-                </div>
-                <div class="col-md-1">
-                    <label class="headinglabel">Amount</label>
-                    <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" />
-                </div>
-                <div class="col-md-2">
-                    <label class="headinglabel">Invoiced To</label>
-                    <input type="text" id="txtCustomer" class="form-control" autocomplete="off" />
-                    <input type="hidden" id="txtCustomerId" class="form-control" autocomplete="off" />
-                </div>
-                <div class="col-md-2">
-                    <label class="headinglabel">Debit Ac</label>
-                    <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
-                    <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
-                </div>
-                <div class="col-md-2">
-                    <label class="headinglabel">Credit Ac</label>
-                    <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
-                    <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
-                </div>
-                <div class="col-md-1" style="padding-top:30px">
-                    <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data" onclick="ClearData()">-</button>&nbsp;&nbsp;
-                    <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
-                </div>
-            </div>
-            <br />
-            <div class="row no-margin" style="padding-top:10px">
-                <table class="table table-bordered table-responsive" id="details">
-                    <tr>
-                        <td style="width:5%">Payment Mode</td>
-                        <td style="width:5%">Currency</td>
-                        <td style="width:5%">Ex.Rate</td>
-                        <td style="width:15%">Revenue</td>
-                        <td style="width:5%">Amount</td>
-                        <td style="width:5%">Amount(F.C)</td>
-                        <td style="width:15%">Invoiced To</td>
-                        <td style="width:15%">Debit Account</td>
-                        <td style="width:15%">Credit Account</td>
-                    </tr>
-                </table>
-            </div>
-
-        </fieldset>
+</fieldset>
     }
 </section>

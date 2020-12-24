@@ -86,7 +86,7 @@ namespace LTMSV2.Controllers
                 vm.ID = v.ID;
                 vm.EntryDate = v.EntryDate;
                 vm.EmployeeID = v.EmployeeID;
-                vm.InScan = v.InScan;
+                vm.InScanID = v.InScanID;
                 vm.BranchID = v.BranchID;
                 vm.AcFinancialYearID = v.AcFinancialYearID;
                 ViewBag.EditMode = "true";
@@ -101,9 +101,10 @@ namespace LTMSV2.Controllers
         {
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
-            if (vm.ID==0)
+            RevenueUpdateMaster v = new RevenueUpdateMaster();
+            if (vm.ID == 0)
             {
-                RevenueUpdateMaster v = new RevenueUpdateMaster();
+                
                 v.EntryDate = vm.EntryDate;
                 v.EmployeeID = vm.EmployeeID;
                 v.InScanID = vm.InScanID;
@@ -111,6 +112,19 @@ namespace LTMSV2.Controllers
                 v.AcFinancialYearID = fyearid;
                 db.RevenueUpdateMasters.Add(v);
                 db.SaveChanges();
+            }
+            else
+            {
+                v = db.RevenueUpdateMasters.Find(vm.ID);
+                v.EntryDate = vm.EntryDate;
+                v.EmployeeID = vm.EmployeeID;
+                v.InScanID = vm.InScanID;
+                v.BranchID = branchid;
+                v.AcFinancialYearID = fyearid;
+                db.Entry(v).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+            }
             
                 for (int i = 0; i < vm.DetailVM.Count; i++)
                 {
@@ -164,9 +178,9 @@ namespace LTMSV2.Controllers
                             db.RevenueUpdateDetails.Remove(detail);
                             db.SaveChanges();
                         }
-                    }
-                }
-            }
+                    }                
+               }
+            TempData["SuccessMsg"] = "Consignment Revenue Updated Successfull!";
             return RedirectToAction("Index");
             //ViewBag.Title = "Revenue Update - Create";
             //ViewBag.employee = db.EmployeeMasters.ToList();
@@ -229,6 +243,7 @@ namespace LTMSV2.Controllers
         [HttpPost]
         public JsonResult GetRevenueUpdateDetail(int id)
         {
+            //List<RevenueUpdateDetailVM> list = new List<RevenueUpdateDetailVM>();
             List<RevenueUpdateDetailVM> list = RevenueDAO.GetRevenueUpdateDetail(id);
 
             return Json(new { data=list }, JsonRequestBehavior.AllowGet);

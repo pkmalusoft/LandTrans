@@ -14,7 +14,12 @@ namespace LTMSV2.Models
         public int  CrDr { get; set; }
         public decimal Amount { get; set; }
         public string AcHead { get; set; }
-      
+        public DateTime Opdate { get; set; }
+
+        public string Remarks { get; set; }
+        public int? PartyId { get; set; }
+        public string StatusSDSC { get; set; }
+        public string BranchId { get; set; }
 
     }
 }

@@ -12,7 +12,7 @@ using System.Data.Entity;
 using System.Configuration;
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
-
+using Newtonsoft.Json;
 namespace LTMSV2.Controllers
 {
     [SessionExpire]   
@@ -593,7 +593,28 @@ new AcGroupModel()
         }
 
 
+        public ActionResult DeleteAcBook(int id)
+        {
+            
+            AcJournalMaster a = (from c in db.AcJournalMasters where c.AcJournalID == id select c).FirstOrDefault();
+            a.StatusDelete = true;
+            db.Entry(a).State = EntityState.Modified;
+            db.SaveChanges();
+            ViewBag.SuccessMsg = "You have successfully deleted Cash Bank Book Voucher!";
+            return RedirectToAction("IndexAcBook");
+            //return View("IndexAcHead", db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentCompanyID"].ToString())));
+        }
+        public ActionResult DeleteJVBook(int id)
+        {
 
+            AcJournalMaster a = (from c in db.AcJournalMasters where c.AcJournalID == id select c).FirstOrDefault();
+            a.StatusDelete = true;
+            db.Entry(a).State = EntityState.Modified;
+            db.SaveChanges();
+            ViewBag.SuccessMsg = "You have successfully deleted Journal Voucher!";
+            return RedirectToAction("AcJournalVoucherIndex");
+            //return View("IndexAcHead", db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentCompanyID"].ToString())));
+        }
 
         //Methods for Expense Analysis Head
 
@@ -3178,7 +3199,7 @@ new AcGroupModel()
                 return Json(AnalysisHeadSelectList, JsonRequestBehavior.AllowGet);
             }
         }
-
+        #region
         public ActionResult Ledger(int id)
         {
             //ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
@@ -3273,7 +3294,7 @@ new AcGroupModel()
                 }
             else
             {
-                if (reportparam.FromDate.Date.ToString() =="01-01-0001 00:00:00")
+                if (reportparam.FromDate.Date.ToString() =="01-01-0001 00:00:00" || reportparam.FromDate.Date.ToString() == "01-01-0001")
                 {
                     pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
                     reportparam.FromDate = pFromDate;
@@ -3579,6 +3600,175 @@ new AcGroupModel()
             //return reportpath;
         }
 
+        public ActionResult ProfitLossReport()
+        {
+                ViewBag.ReportName = "Profit and Loss Report";
+               
+               
+                if (Session["ReportOutput"] != null)
+                {
+                    string currentreport = Session["ReportOutput"].ToString();
+                    if (!currentreport.Contains("ProfileLossReport"))
+                    {
+                        Session["ReportOutput"] = null;
+                    }
+                }
+            
+            return View();
+
+        }
+
+        public ActionResult DayBook()
+        {
+            ViewBag.ReportName = "Day Book Report";
+            //List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
+            //lsttype.Add(new VoucherTypeVM { TypeName = "All" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Cash Receipt & Payments" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Journal Vouchers" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "AWB Posting" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Invoice Posting" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "COD Posting" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "Customer Receipt Posting" });
+                        
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("ProfileLossReport"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+            AccountsReportParam model = SessionDataModel.GetAccountsParam();
+            if (model == null)
+            {
+                model = new AccountsReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    Output = "PDF"
+                };
+            }
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DayBook([Bind(Include = "FromDate,ToDate,Output,Filters,SelectedValues")] AccountsReportParam picker)
+        {
+            AccountsReportParam model = new AccountsReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                Output = picker.Output
+            };
+            model.VoucherTypeId = ""; 
+            if (picker.SelectedValues != null)
+            {
+                foreach (var item in picker.SelectedValues)
+                {
+                    if (model.VoucherTypeId == "")
+                    {
+                        model.VoucherTypeId= item.ToString();
+                    }
+                    else
+                    {
+                        model.VoucherTypeId = model.VoucherTypeId + "," + item.ToString();
+                    }
+
+                }
+            }
+            //model.Output = "EXCEL";
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+           
+
+            AccountsReportsDAO.GenerateDayBookReport();
+
+            if (model.Output != "PDF")
+                return RedirectToAction("Download", "Accounts", new { file = "a" });
+            else
+                return View();            
+
+        }
+
+        public ActionResult ReportParamDate()
+        {
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            //ViewBag.AccountType = (from d in db.AcTypes where d.BranchId == branchid select d).ToList();
+            //ViewBag.groups = GetAllAcGroupsByBranch(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
+
+            DateTime pFromDate;
+            DateTime pToDate;
+
+            if (reportparam == null)
+            {
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
+                reportparam = new AccountsReportParam();
+                reportparam.FromDate = pFromDate;
+                reportparam.ToDate = pToDate;
+                reportparam.AcHeadId = 0;
+                reportparam.AcHeadName = "";
+                reportparam.Output = "PDF";
+            }
+            else
+            {
+                if (reportparam.FromDate.Date.ToString() == "01-01-0001 00:00:00")
+                {
+                    pFromDate = CommanFunctions.GetFirstDayofMonth().Date; //.AddDays(-1);
+                    reportparam.FromDate = pFromDate;
+                    reportparam.Output = "PDF";
+                }
+
+            }
+
+            return View(reportparam);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReportParamDate([Bind(Include = "FromDate,ToDate,Output,Filters")] AccountsReportParam picker)
+        {
+            AccountsReportParam model = new AccountsReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),            
+                Output = picker.Output
+            };
+
+            //model.Output = "EXCEL";
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            //Stream stream= GenerateReport();
+            //GenerateDefaultReport();
+
+            //AccountsReportsDAO.GenerateProfitLostReport();
+
+            if (model.Output != "PDF")
+                return RedirectToAction("Download", "Accounts", new { file = "a" });
+            else
+                return RedirectToAction("ProfitLossReport", "Accounts", new { id = 1 });
+
+            //return File(stream, "application/pdf", "AccLedger.pdf");
+
+
+            //return PartialView(model);
+            //return View(model);
+
+            //return PartialView("InvoiceSearch",model);
+
+        }
+
+        #endregion
         public static void SaveStreamAsFile(string filePath, Stream inputStream, string fileName)
         {
             DirectoryInfo info = new DirectoryInfo(filePath);
@@ -3593,6 +3783,95 @@ new AcGroupModel()
                 inputStream.CopyTo(outputFileStream);
             }
         }
+        public ActionResult AcOpeningInvoice()
+        {
+            var Model = new OpennnigBalanceVM();
+            int year = DateTime.Now.Year;
+            DateTime firstDay = new DateTime(year, 1, 1);
+            ViewBag.Opdate = firstDay.ToString("dd-MM-yyyy");
+            ViewBag.Customers = db.CustomerMasters.ToList();
+            ViewBag.Suppliers = db.SupplierMasters.ToList();
+            ViewBag.Agents = db.ForwardingAgentMasters.ToList();                
+            return View(Model);
+        }
+
+        public JsonResult GetAcOpeningBalanceDetails(string Type,int PartyId)
+        {
+            var OpeningInvoice = db.AcOPInvoiceMasters.Where(d => d.StatusSDSC == Type && d.PartyID == PartyId).FirstOrDefault();
+            var InvoiceDetails = new List<AcOPInvoiceDetail>();
+
+            if (OpeningInvoice!=null)
+            {
+                InvoiceDetails = (from d in db.AcOPInvoiceDetails where d.AcOPInvoiceMasterID == OpeningInvoice.AcOPInvoiceMasterID select d).ToList();
+            }
+            else
+            {
+                OpeningInvoice = new AcOPInvoiceMaster();
+            }
+            InvoiceDetails.ForEach(d => d.AcOPInvoiceMaster = null);
+            return Json(new { Remarks = OpeningInvoice.Remarks, InvoiceDetails = InvoiceDetails }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SetInvoicesDetails(string InvoiceNo, string Invoicedate, string LastTransdate, decimal Amount, int Drcr )
+        {
+            var InvoiceDetails = new List<AcOPInvoiceDetail>();
+            var invoice= new AcOPInvoiceDetail();
+            invoice.InvoiceNo = InvoiceNo;
+            invoice.InvoiceDate = Convert.ToDateTime(Invoicedate);
+            invoice.LastTransDate = Convert.ToDateTime(LastTransdate);
+            invoice.Amount = Convert.ToDecimal(Amount);
+            invoice.StatusClose = Drcr==1?true:false;
+            InvoiceDetails.Add(invoice);
+            return Json(new {  InvoiceDetails = InvoiceDetails }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult SaveOpInvoice(string Type,int PartyId,string Remarks,string Details)
+        {
+            try
+            {
+                var acopeningmaster = (from d in db.AcOPInvoiceMasters where d.StatusSDSC==Type && d.PartyID==PartyId select d).FirstOrDefault();
+                if (acopeningmaster==null)
+                {
+                    acopeningmaster = new AcOPInvoiceMaster();
+                }
+                else
+                {
+                    var details = (from d in db.AcOPInvoiceDetails where d.AcOPInvoiceMasterID == acopeningmaster.AcOPInvoiceMasterID select d).ToList();
+                    db.AcOPInvoiceDetails.RemoveRange(details);
+                    db.SaveChanges();
+                }
+                acopeningmaster.AcFinancialYearID = Convert.ToInt32(Session["fyearid"]);
+                acopeningmaster.AcHeadID = db.AcHeads.FirstOrDefault().AcHeadID;
+                acopeningmaster.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+                acopeningmaster.StatusSDSC = Type;
+                acopeningmaster.PartyID = PartyId;
+                acopeningmaster.Remarks = Remarks;
+                if(acopeningmaster.AcOPInvoiceMasterID==0)
+                {
+                    db.AcOPInvoiceMasters.Add(acopeningmaster);
+                }
+                db.SaveChanges();
+                var IDetails =  JsonConvert.DeserializeObject<List<AcOPInvoiceDetail>>(Details);
+                foreach(var item in IDetails)
+                {
+                    var InvoiceDetail = new AcOPInvoiceDetail();
+                    InvoiceDetail.AcOPInvoiceMasterID = acopeningmaster.AcOPInvoiceMasterID;
+                    InvoiceDetail.InvoiceDate = item.InvoiceDate;
+                    InvoiceDetail.LastTransDate = item.LastTransDate;
+                    InvoiceDetail.Amount = item.Amount;
+                    InvoiceDetail.StatusClose = item.StatusClose;
+                    InvoiceDetail.InvoiceNo = item.InvoiceNo;
+                    db.AcOPInvoiceDetails.Add(InvoiceDetail);
+                    db.SaveChanges();
+
+                }
+                return Json(new { status = "ok", message = "Opening Invoice updated Successfully!" }, JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception e)
+            {
+                return Json(new { status = "failed", message = e.Message.ToString() }, JsonRequestBehavior.AllowGet);
+
+            }
+        }
+
     }
 
 

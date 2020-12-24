@@ -1,0 +1,499 @@
+﻿@model LTMSV2.Models.OpennnigBalanceVM
+
+@{
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var Customers = ViewBag.Customers as IEnumerable<LTMSV2.Models.CustomerMaster>;
+    var Suppliers = ViewBag.Suppliers as IEnumerable<LTMSV2.Models.SupplierMaster>;
+    var Agents = ViewBag.Agents as IEnumerable<LTMSV2.Models.ForwardingAgentMaster>;
+}
+
+
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+<script type="text/javascript">
+    var AWBItems = [];
+    var RemoveAWBItems = [];
+    $(document).ready(function () {
+        $('input[type=radio][name=Type]').change(function () {
+            if (this.value == 'C') {
+                $("#divCustomers").css("display", "block");
+                $("#divAgents").css("display", "none");
+                $("#divHVehicles").css("display", "none");
+                $("#divSuppliers").css("display", "none");
+            }
+            else if (this.value == 'F') {
+                $("#divCustomers").css("display", "none");
+                $("#divAgents").css("display", "block");
+                $("#divHVehicles").css("display", "none");
+                $("#divSuppliers").css("display", "none");
+            }
+            else if (this.value == 'H') {
+                $("#divCustomers").css("display", "none");
+                $("#divAgents").css("display", "none");
+                $("#divHVehicles").css("display", "block");
+                $("#divSuppliers").css("display", "none");
+            }
+            else if (this.value == 'S') {
+                $("#divCustomers").css("display", "none");
+                $("#divAgents").css("display", "none");
+                $("#divHVehicles").css("display", "none");
+                $("#divSuppliers").css("display", "block");
+            }
+        });
+
+
+        AWBItems = [];
+
+
+        $('#Invoicedate').datetimepicker({ format: 'DD-MM-YYYY' });
+        $('#LastTransdate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+        GetInvoices();
+
+
+        $("#CustomerId").change(function () {
+            GetInvoices();
+        });
+        $("#AgentId").change(function () {
+            GetInvoices();
+        });
+        $("#HiredVehicle").change(function () {
+            GetInvoices();
+        });
+        $("#SupplierId").change(function () {
+            GetInvoices();
+        });
+
+        $("#btnadd").click(function () {
+            var InvoiceNo = $("#InvoiceNo").val();
+            var Invoicedate = $("#Invoicedate").val();
+            var LastTransdate = $("#LastTransdate").val();
+            var Amount = $("#Amount").val();
+            var Drcr = $("#Drcr").val();
+            if (InvoiceNo == '') {
+                $("#validations").show();
+
+                return;
+            } else if (Invoicedate == '') {
+                $("#validations").show();
+                return;
+            }
+            else if (LastTransdate == '') {
+                $("#validations").show();
+                return;
+            }
+            else if (Amount == '') {
+                $("#validations").show();
+                return;
+            }
+            else if (Drcr == '') {
+                $("#validations").show();
+                return;
+            }
+            else {
+                $("#validations").hide();
+                $.ajax({
+                    type: "POST",
+                    url: "/Accounts/SetInvoicesDetails",
+                    datatype: "Json",
+                    data: { InvoiceNo: InvoiceNo, Invoicedate: Invoicedate, LastTransdate: LastTransdate, Amount: Amount, Drcr: Drcr },
+                    success: function (response) {
+                        AWBItems = response.InvoiceDetails;
+                        $.each(AWBItems, function (index, item) {
+                            debugger;
+                            var dr_Cr = item.StatusClose == 1 ? "Dr" : "Cr";
+                            $("#detailsbody").append('<tr awbno="' + item.InvoiceNo + '"><td>' + item.InvoiceNo + '</td><td>' + moment(item.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(item.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + item.Amount + '</td><td>' + dr_Cr + '</td><td><a awbno="' + item.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        });
+
+                    }
+                });
+                $("#InvoiceNo").val('');
+                $("#Invoicedate").val('');
+                $("#LastTransdate").val('');
+                $("#Amount").val('');
+                $("#Drcr").val('');
+            }
+
+
+
+
+
+        });
+
+
+        $("#details").on('click', '.rem', function () {
+            debugger;
+            var remove_awbono = $(this).attr('awbno');
+
+            var tempAWBItems = [];
+            $.each(AWBItems, function (index, value) {
+                debugger;
+                if (value.AWB == remove_awbono) {
+                    RemoveAWBItems.push(value);
+                    return;
+                }
+            });
+            $.each(AWBItems, function (index, value) {
+                debugger;
+                if (value.AWB != remove_awbono) {
+                    tempAWBItems.push(value);
+                }
+
+            });
+            AWBItems = [];
+            AWBItems = tempAWBItems;
+            //$(this).parent().parent().remove();
+            $("#detailsbody").html('');
+            $.each(AWBItems, function (index, item) {
+                var dr_Cr = item.StatusClose == 1 ? "Dr" : "Cr";
+                $("#detailsbody").append('<tr awbno="' + item.InvoiceNo + '"><td>' + item.InvoiceNo + '</td><td>' + moment(item.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(item.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + item.Amount + '</td><td>' + dr_Cr + '</td><td><a awbno="' + item.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+            });
+        });
+        var index = 0;
+        function DisplayAWBItems() {
+            var InvoiceNo = $("#InvoiceNo").val();
+            var Invoicedate = $("#Invoicedate").val();
+            var LastTransdate = $("#LastTransdate").val();
+            var Amount = $("#Amount").val();
+            var Drcr = $("#Drcr").val();
+            if (InvoiceNo == '') {
+                $("#validations").show();
+                return;
+            }
+            else if (Invoicedate == '') {
+                $("#validations").show();
+                return;
+            }
+            else if (LastTransdate == '') {
+                $("#validations").show();
+                return;
+            }
+            else if (Amount == '') {
+                $("#validations").show();
+                return;
+            }
+            else if (Drcr == '') {
+                $("#validations").show();
+                return;
+            }
+            else {
+                $("#validations").hide();
+                $.ajax({
+                    type: "POST",
+                    url: "/Accounts/SetInvoicesDetails",
+                    datatype: "Json",
+                    data: { InvoiceNo: InvoiceNo, Invoicedate: Invoicedate, LastTransdate: LastTransdate, Amount: Amount, Drcr: Drcr },
+                    success: function (response) {
+                        AWBItems = response.InvoiceDetails;
+                        $.each(AWBItems, function (index, item) {
+                            var dr_Cr = item.StatusClose == 1 ? "Dr" : "Cr";
+                            $("#detailsbody").append('<tr awbno="' + item.InvoiceNo + '"><td>' + item.InvoiceNo + '</td><td>' + moment(item.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(item.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + item.Amount + '</td><td>' + dr_Cr + '</td><td><a awbno="' + item.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        });
+
+                    }
+                });
+                $("#InvoiceNo").val('');
+                $("#Invoicedate").val('');
+                $("#LastTransdate").val('');
+                $("#Amount").val('');
+                $("#Drcr").val('');
+            }
+
+        }
+
+
+       
+        $('#btnsave').click(function () {
+            var Type = $('input[name="Type"]:checked').val();
+            var PartyId = 0;
+            if (Type == "C") {
+                PartyId = $("#CustomerId").val();
+            }
+            else if (Type == "F") {
+                PartyId = $("#divAgents").val();
+
+            }
+            else if (Type == "H") {
+                PartyId = $("#HiredVehicle").val();
+
+            }
+            else if (Type == "S") {
+                PartyId = $("#SupplierId").val();
+            }
+            if ((PartyId == "" || PartyId == null)) {
+                $("#validations").show();
+            }
+            else if (AWBItems.length == 0) {
+                $.notify("Invoices not Found! ", "warning");
+            }
+            
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "/Accounts/SaveOpInvoice",
+                    datatype: "Json",
+                    data: { Type: Type, PartyId: PartyId, Remarks: $("#Remarks").val(), Details: JSON.stringify(AWBItems) },
+                    success: function (response) {
+                        if (response.status == "ok") {
+                          
+                            $.notify(response.message, "success");
+                            location.reload();
+                        }
+                        else {
+
+                            $.notify(response.message, "warning");
+
+                        }
+                    }
+                });}
+        });
+    
+    });
+    function GetInvoices() {
+        debugger;
+       var Type= $('input[name="Type"]:checked').val();
+        var PartyId =0;       
+        if (Type == "C") {
+            PartyId = $("#CustomerId").val();
+        }
+        else if (Type == "F") {
+            PartyId = $("#AgentId").val();
+
+        }
+        else if (Type == "H") {
+            PartyId = $("#HiredVehicle").val();
+
+        }
+        else if (Type == "S") {
+            PartyId = $("#SupplierId").val();
+        }
+        if (PartyId == "" || PartyId == null) {
+           
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/Accounts/GetAcOpeningBalanceDetails",
+                datatype: "Json",
+                data: { Type: Type, PartyId: PartyId },
+                success: function (response) {
+                    $("#Remarks").val(response.Remarks);
+                    AWBItems = response.InvoiceDetails;
+                    $.each(AWBItems, function (index, item) {
+                        var dr_Cr = item.StatusClose == 1 ? "Dr" : "Cr";
+                        $("#detailsbody").append('<tr awbno="' + item.InvoiceNo + '"><td>' + item.InvoiceNo + '</td><td>' + moment(item.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(item.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + item.Amount + '</td><td>' + dr_Cr + '</td><td><a awbno="' + item.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                    });
+
+                }
+            });
+        }
+    }
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">Invoice Opening Balance</h1>
+
+</section>
+<div class="row">
+    <div class="col-md-12 btn-right" style="padding-top:10px;padding-bottom: 25px;">
+        <div class="row no-margin btn-right" style="padding-top:10px">
+            <div class="col-md-12">
+                <input type="button" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+
+            </div>
+        </div>
+    </div>
+</div>
+<section class="content">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+        </script>
+    }
+
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <fieldset>
+            <div class="row no-margin  form-group">
+                <div class="col-md-1">
+                    <label class="headinglabel">Type</label>
+
+                </div>
+                <div class="col-md-8">
+                    <input type="radio" id="Customer" name="Type" value="C" checked="checked">
+                    <label for="Customer">Customers  </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="FwdAgent" name="Type" value="F">
+                    <label for="FwdAgent">Forwarding Agents  </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="HireVehicle" name="Type" value="H">
+                    <label for="HireVehicle">Hired Vehicles  </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="Supplier" name="Type" value="S">
+                    <label for="Supplier">Supplier  </label>
+                </div>
+                <div class="col-md-1">
+                    <label>Op Date  </label>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="@ViewBag.Opdate">
+                </div>
+            </div>
+            <br />
+            <div class="row no-margin form-group" id="divCustomers">
+
+
+                <div class="col-md-2">
+                    <label class="headinglabel required">Customers</label>
+                </div>
+                <div class="col-md-9">
+                  <select name="CustomerId" id="CustomerId" class="form-control">
+                      <option value="">Select</option>
+                     @foreach(var item in Customers)
+                     {
+                         <option value="@item.CustomerID">@item.CustomerName</option>
+                     }
+                  </select>
+                </div>
+
+
+            </div>
+            <div class="row no-margin form-group" id="divAgents" style="display:none">
+
+
+                <div class="col-md-2">
+                    <label class="headinglabel required">Forwarding Agents</label>
+                </div>
+                <div class="col-md-9">
+                    <select name="AgentId" id="AgentId" class="form-control">
+                        <option value="">Select</option>
+                        @foreach (var item in Agents)
+                        {
+                            <option value="@item.FAgentID">@item.FAgentName</option>
+                        }
+                    </select>
+                </div>
+
+
+            </div>
+            <div class="row no-margin form-group" id="divHVehicles" style="display:none">
+
+
+                <div class="col-md-2">
+                    <label class="headinglabel required">Hired Vehicles</label>
+                </div>
+                <div class="col-md-9">
+                    <select name="HiredVehicle" id="HiredVehicle" class="form-control">
+                        <option value="">Select</option>
+                        @foreach (var item in Suppliers)
+                        {
+                            <option value="@item.SupplierID">@item.SupplierName</option>
+                        }
+                    </select>
+                </div>
+
+
+            </div>
+            <div class="row no-margin form-group" id="divSuppliers" style="display:none">
+
+
+                <div class="col-md-2">
+                    <label class="headinglabel required">Suppliers</label>
+                </div>
+                <div class="col-md-9">
+                    <select name="SupplierId" id="SupplierId" class="form-control">
+                        <option value="">Select</option>
+                        @foreach (var item in Suppliers)
+                        {
+                            <option value="@item.SupplierID">@item.SupplierName</option>
+                        }
+                    </select>
+                </div>
+
+
+            </div>
+            <div class="row no-margin form-group">
+                <div class="col-md-2">
+                    <label class="headinglabel">Remarks</label>
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control txttarget", })
+                    @Html.HiddenFor(model => model.Remarks)
+                </div>
+            </div>
+
+
+            <div class="row no-margin form-group">
+                <div class="col-md-12">
+                    <h3 style="color:white">Invoice Details</h3><hr />
+                </div>
+            </div><br />
+
+            <div class="row no-margin  form-group">
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Invoice No.</label>
+                    <input type="text" id="InvoiceNo" class="form-control" />
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Invoice Date</label>
+                    <input type="text" id="Invoicedate" class="form-control" />
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Last Trans. Date</label>
+                    <input type="text" id="LastTransdate" class="form-control" />
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Amount</label>
+                    <input type="text" id="Amount" class="form-control" />
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Dr/Cr</label>
+                    <select id="Drcr" class="form-control">
+                        <option value="1">Dr</option>
+                        <option value="0">Cr</option>
+                    </select>
+
+                </div>
+                <div class="col-md-3" style="padding-top:10px">
+                    <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+
+                </div>
+
+            </div>
+
+            <div class="row no-margin" style="padding-top:30px">
+
+                <div class="col-md-12">
+                    <table id="details" class="table table-responsive table-bordered" style="background-color:white">
+                        <thead>
+                            <tr>
+                                <th>Invoice No.</th>
+                                <th>Invoice Date</th>
+                                <th>Last Trans. Date</th>
+                                <th>Amount</th>
+                                <th>Dr/Cr</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detailsbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+
+        </fieldset>
+    }
+</section>

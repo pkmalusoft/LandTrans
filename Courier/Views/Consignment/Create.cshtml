@@ -375,7 +375,7 @@
                 $("#CustomerandShipperSame").removeAttr("disabled", "disabled");
             }
             if (modeid == 1 || modeid == 3) {
-                $("#Consignee").autocomplete({
+                $("#Consignee1").autocomplete({
                     source: function (request, response) {
                         $.ajax({
                             url: '/Consignment/GetReceiverName',
@@ -426,7 +426,7 @@
             }
             else { //code
 
-                $("#Consignee").autocomplete({
+                $("#Consignee1").autocomplete({
                     source: function (request, response) {
                         $.ajax({
                             url: '/Consignment/GetReceiverName', //'/Consignment/GetConsigneeName',
@@ -646,8 +646,9 @@
                     success: function (data) {
                         response($.map(data, function (val, item) {
                             return {
-                                label: val.Name,
-                                value: val.Name,
+                                label: val.ShipperName,
+                                value: val.ShipperName,
+                                AcHeadID: val.AcHeadID,
                                 ContactPerson: val.ContactPerson,
                                 Address1: val.Address1,
                                 Address2: val.Address2,
@@ -665,11 +666,11 @@
             minLength: 1,
             autoFocus: false,
             focus: function (event, ui) {
-                $('#Consignee').val(ui.item.value);
+                $('#Consignee1').val(ui.item.value);
             },
             select: function (e, i) {
                 e.preventDefault();
-                $("#Consignee").val(i.item.label);
+                $("#Consignee1").val(i.item.label);
                 $("#ConsigneeContact").val(i.item.ContactPerson);
                 $("#ConsigneeAddress1_Building").val(i.item.Address1);
                 $("#ConsigneeAddress2_Street").val(i.item.Address2);
@@ -1670,7 +1671,8 @@
             <div class="col-md-2">
                 <label class="headinglabel required">Payment Mode</label>
                 @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
-            </div>
+            </div>            
+
             <div class="col-md-4 hide">
                 <div class="flexTitle">
                     <label class="headinglabel required">Customer</label>
@@ -1772,11 +1774,11 @@
                     <div class="col-md-12 sub_title_block">
                         <h3>RECEIVER/CONSIGNEE DETAILLS</h3><hr />
                     </div>
-                    @*<div class="clearfix"></div>*@
+                    <div class="clearfix"></div>
                     <div class="row no-margin">
                         <div class="col-md-6">
                             <label class="headinglabel required">Name</label>
-                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control txttarget", @required = "true" ,@autocomplete="false"})
+                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control", @required = "true", @autocomplete = "false" })
                         </div>
                         <div class="col-md-6">
                             <label class="headinglabel required">Contact Person</label>
@@ -1784,7 +1786,7 @@
                         </div>
                     </div>
                     <div class="row no-margin">
-
+                       
 
 
                         <div class="col-md-3">
