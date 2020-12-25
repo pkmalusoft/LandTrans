@@ -93,7 +93,87 @@
     }
 </style>
 <script type="text/javascript">
+    $(document).ready(function () {
+        $("#ConsignorLocationName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/LocationMaster/GetLocation',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Location,
+                                value: val.Location,
+                                LocationID:val.LocationID,
+                                CityID: val.CityID,
+                                CountryID: val.CountryID,                                
+                                CountryName: val.CountryName,
+                                CityName: val.CityName
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#ConsignorLocationName').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#ConsignorLocationName").val(i.item.label);
+                $("#ConsignorLocationID").val(i.item.LocationID);
+                $("#ConsignorCountryName").val(i.item.CountryName);
+                $("#ConsignorCountryID").val(i.item.CountryID);               
+                $("#ConsignorCityName").val(i.item.CityName);
+                $("#ConsignorCityID").val(i.item.CityID);
+            },
 
+        });
+
+        $("#ConsigneeLocationName").autocomplete( {
+            source: function (request, response) {
+                $.ajax({
+                    url: '/LocationMaster/GetLocation',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Location,
+                                value: val.Location,
+                                LocationID: val.LocationID,
+                                CityID: val.CityID,
+                                CountryID: val.CountryID,
+                                CountryName: val.CountryName,
+                                CityName: val.CityName
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#ConsigneeLocationName').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#ConsigneeLocationName").val(i.item.label);
+                $("#ConsigneeLocationID").val(i.item.LocationID);
+                $("#ConsigneeCountryName").val(i.item.CountryName);
+                $("#ConsigneeCountryID").val(i.item.CountryID);
+                $("#ConsigneeCityName").val(i.item.CityName);
+                $("#ConsigneeCityID").val(i.item.CityID);
+            },
+
+        });
+    });
     var placeSearch, autocomplete, autocompleteCity, autocompleteCountry;
 
     var consignorlocation, consignorCity, consignorCountry;
@@ -922,7 +1002,7 @@
         swal({
             title: "Are you sure want to Print Label?",
             //text: "Click Yes to confirm.",
-            icon: "question",
+            icon: "warning",
             confirmButtonColor: 'blue',
             //buttons: true,
             //buttons: ["Cancel", "Yes"],
@@ -1647,6 +1727,13 @@
                 @Html.HiddenFor(model => model.CourierStatusId)
                 @Html.HiddenFor(model => model.StatusTypeId)
                 @Html.HiddenFor(model => model.PrintLabel)
+                @Html.HiddenFor(model => model.ConsignorCountryID);
+                @Html.HiddenFor(model => model.ConsignorCityID);
+                @Html.HiddenFor(model => model.ConsignorLocationID);
+                @Html.HiddenFor(model => model.ConsigneeCountryID);
+                @Html.HiddenFor(model => model.ConsigneeCityID);
+                @Html.HiddenFor(model => model.ConsigneeLocationID);
+
                 <label class="headinglabel required">Consignment No.</label>
                 @if (@Model.InScanID == 0)
                 {@Html.TextBoxFor(model => model.ConsignmentNo, new { @class = "form-control txttarget", @required = "true", @maxlength = 11 }) }
@@ -1711,7 +1798,7 @@
                     <div class="row no-margin">
                         <div class="col-md-6">
                             <label class="headinglabel required">Name</label>
-                            @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Shipper Name",@autocomplete="off" })
+                            @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Shipper Name",autocomplete="off" })
                         </div>
 
                         <div class="col-md-6">
@@ -1748,7 +1835,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel required">Location</label>
-                            @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget autocomplete", @required = "true", @onFocus = "geolocate1()", @placeholder = "Location" })
+                            @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget", @required = "true",  @placeholder = "Location" })
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel required">Origin City</label>
@@ -1814,7 +1901,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel required">Consignee Location</label>
-                            @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget", @onFocus = "geolocate()", @required = "true" })
+                            @Html.TextBoxFor(model => model.ConsigneeLocationName, new { @class = "form-control txttarget", @required = "true" })
                             @*<input class="form-control  " id="ConsigneeLocationName" name="ConsigneeLocationName" onFocus="geolocate()" type="text" />*@
                             @*@Html.TextBoxFor(model => model.destlocation, new { @class = "form-control txttarget" })*@
                         </div>
@@ -2459,4 +2546,4 @@
 
 </section>
 <script src="~/Scripts/sweetalert.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>
+@*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>*@

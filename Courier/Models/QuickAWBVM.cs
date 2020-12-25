@@ -38,11 +38,16 @@ namespace LTMSV2.Models
         public string ConsignorCountryName { get; set; }
 
         public string ConsignorLocationName { get; set; }
+        public int ConsignorLocationID { get; set; }
+        public int ConsignorCityID { get; set; }
+        public int ConsignorCountryID { get; set; }
         public string ConsignorFax { get; set; }
         public string Consignee { get; set; }
         public string ConsigneeCityName { get; set; }
-
         public string ConsigneeLocationName { get; set; }
+        public int ConsigneeLocationID { get; set; }
+        public int ConsigneeCityID { get; set; }
+        public int ConsigneeCountryID { get; set; }
         public string ConsigneeContact { get; set; }
         public string ConsigneePhone { get; set; }
         public string ConsigneeAddress1_Building { get; set; }

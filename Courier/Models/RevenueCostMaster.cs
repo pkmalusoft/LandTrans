@@ -18,6 +18,7 @@ namespace LTMSV2.Models
         public RevenueCostMaster()
         {
             this.RevenueUpdateDetails = new HashSet<RevenueUpdateDetail>();
+            this.CostUpdateDetails = new HashSet<CostUpdateDetail>();
         }
     
         public int RCID { get; set; }
@@ -35,5 +36,7 @@ namespace LTMSV2.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CostUpdateDetail> CostUpdateDetails { get; set; }
     }
 }

@@ -289,36 +289,39 @@
         });
 
         $(document).on('click', '.btn-new-Route', function () {
-            $('#modal-Route-Label').html('ROUTE : NEW ROUTE');
-            $('.btn-save-Route').text('Save').attr({ 'data-id': '', 'data-mode': 'AddNew' });
-            $('.pgformholder input[type=text]').val('');
-            $('#dataholder2').empty();
-            $('#txt-RouteCode').val('');
-            $('#txt-RouteName').val('');
-            inss = [];
-            $('.pgerror').remove();
-            $("#txt-DepotID option").removeAttr('selected');
-            $('#modal-Route').modal('show');
+            location.href = '@Url.Action("Create","Route")?Id=0';
+            //$('#modal-Route-Label').html('ROUTE : NEW ROUTE');
+            //$('.btn-save-Route').text('Save').attr({ 'data-id': '', 'data-mode': 'AddNew' });
+            //$('.pgformholder input[type=text]').val('');
+            //$('#dataholder2').empty();
+            //$('#txt-RouteCode').val('');
+            //$('#txt-RouteName').val('');
+            //inss = [];
+            //$('.pgerror').remove();
+            //$("#txt-DepotID option").removeAttr('selected');
+            //$('#modal-Route').modal('show');
         });
 
         $(document).on('click', '.pgedit-Route', function () {
-            $('#modal-Route-Label').html('ROUTE : UPDATE ROUTE');
             var lo = JSON.parse($(this).find('textarea').val());
-            $('.btn-save-Route').text('Update').attr({ 'data-id': lo.RouteID, 'data-mode': 'UpdateByID' });
-            $('#txt-RouteCode').val(lo.RouteCode);
-            $('#txt-RouteName').val(lo.RouteName);
-            $('#dataholder2').empty();
-            inss = [];
-            g_js_GetRoutes('#dataholder2', !0, { Mode: 'RouteOrderSelectByRouteID', RouteID: lo.RouteID }, l_who, 'tb2', !0, function () {
-                var r1 = $('.pgrec');
-                $("#txt-DepotID option").removeAttr('selected');
-                $.each(r1, function (i, obj) {
-                    inss.push($(this).attr('data-id2'));
-                    $("#txt-DepotID option:contains(" + $(this).attr('data-id2') + ")").attr('selected', 'selected');
+            location.href = '@Url.Action("Create","Route")?Id=' + lo.RouteID;
+            //$('#modal-Route-Label').html('ROUTE : UPDATE ROUTE');
+            //var lo = JSON.parse($(this).find('textarea').val());
+            //$('.btn-save-Route').text('Update').attr({ 'data-id': lo.RouteID, 'data-mode': 'UpdateByID' });
+            //$('#txt-RouteCode').val(lo.RouteCode);
+            //$('#txt-RouteName').val(lo.RouteName);
+            //$('#dataholder2').empty();
+            //inss = [];
+            //g_js_GetRoutes('#dataholder2', !0, { Mode: 'RouteOrderSelectByRouteID', RouteID: lo.RouteID }, l_who, 'tb2', !0, function () {
+            //    var r1 = $('.pgrec');
+            //    $("#txt-DepotID option").removeAttr('selected');
+            //    $.each(r1, function (i, obj) {
+            //        inss.push($(this).attr('data-id2'));
+            //        $("#txt-DepotID option:contains(" + $(this).attr('data-id2') + ")").attr('selected', 'selected');
 
-                });
-            });
-            $('#modal-Route').modal('show');
+            //    });
+            //});
+            //$('#modal-Route').modal('show');
         });
         $(document).on('click', '.pgdelete-Route2', function () {
             $(this).closest('tr').remove();

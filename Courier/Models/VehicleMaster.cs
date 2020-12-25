@@ -44,6 +44,7 @@ namespace LTMSV2.Models
         public Nullable<decimal> RateExtraKM { get; set; }
         public string VehicleOwner { get; set; }
         public string VehicleMaintenance { get; set; }
+        public Nullable<int> SupplierID { get; set; }
     
         public virtual VehicleType VehicleType { get; set; }
     }

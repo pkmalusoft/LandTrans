@@ -15,5 +15,8 @@ namespace LTMSV2.Models
     public int CityID { get; set; }
 
     public int CountryID { get; set; }
+    public string CityName { get; set; }
+
+    public string CountryName { get; set; }
   }
 }

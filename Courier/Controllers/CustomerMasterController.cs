@@ -162,9 +162,9 @@ namespace LTMSV2.Controllers
             obj.Fax = c.Fax;
             obj.Email = c.Email;
             obj.WebSite = c.Website;
-            //obj.CountryID = 1; ;// c.CountryID;
-            //obj.CityID = 19; // c.CityID;
-            //obj.LocationID = 7; // c.LocationID;
+            obj.CountryID = c.CountryID;
+            obj.CityID = c.CityID;
+            obj.LocationID = c.LocationID;
             obj.CountryName = c.CountryName;
             obj.CityName = c.CityName;
             obj.LocationName = c.LocationName;
@@ -401,9 +401,13 @@ namespace LTMSV2.Controllers
                 obj.Fax = c.Fax;
                 obj.Email = c.Email;
                 obj.Website = c.WebSite;
-                //obj.CountryID = c.CountryID; //.Value;
-                //obj.CityID = c.CityID; //.Value;
-                //obj.LocationID = c.LocationID; //.Value;
+
+                if (c.CountryID!=null)
+                obj.CountryID = c.CountryID.Value;
+                if (c.CityID!=null)
+                obj.CityID = c.CityID.Value;
+                if(c.LocationID!=null)
+                obj.LocationID = c.LocationID.Value; 
                 obj.CountryName = c.CountryName;
                 obj.LocationName = c.LocationName;
                 obj.CityName = c.CityName;
@@ -480,9 +484,9 @@ namespace LTMSV2.Controllers
             obj.Fax = c.Fax;
             obj.Email = c.Email;
             obj.WebSite = c.Website;
-            //obj.CountryID = 1;//  c.CountryID;
-            //obj.CityID = 19; // c.CityID;
-            //obj.LocationID = 7; // c.LocationID;
+            obj.CountryID =  c.CountryID;
+            obj.CityID = c.CityID;
+            obj.LocationID = c.LocationID;
             obj.CountryName = c.CountryName;
             obj.CityName = c.CityName;
             obj.LocationName = c.LocationName;

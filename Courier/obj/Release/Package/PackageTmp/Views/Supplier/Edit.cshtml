@@ -55,6 +55,45 @@
             $("#SupplierType").val('@Model.SupplierType');
         }
 
+        $("#LocationName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/LocationMaster/GetLocation',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Location,
+                                value: val.Location,
+                                LocationID: val.LocationID,
+                                CityID: val.CityID,
+                                CountryID: val.CountryID,
+                                CountryName: val.CountryName,
+                                CityName: val.CityName
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#LocationName').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#LocationName").val(i.item.label);
+                $("#LocationID").val(i.item.LocationID);
+                $("#CountryName").val(i.item.CountryName);
+                $("#CountryID").val(i.item.CountryID);
+                $("#CityName").val(i.item.CityName);
+                $("#CityID").val(i.item.CityID);
+            },
+
+        });
         $.ajax({
             type: "POST",
             url: "/Supplier/GetID",
@@ -220,6 +259,9 @@
         <input type="hidden" id="revids" />
         <fieldset>
             @Html.HiddenFor(model => model.SupplierID)
+            @Html.HiddenFor(mode => Model.LocationID)
+            @Html.HiddenFor(mode => Model.CityID)
+            @Html.HiddenFor(mode => Model.CountryID)
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-3">
                     <label class="required headinglabel">Supplier Code</label>
@@ -267,7 +309,7 @@
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Location</label>
-                    @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control", @onFocus = "geolocate()", @required = "true" })
+                    @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control",  @required = "true" })
                     @Html.ValidationMessageFor(model => model.LocationName)
 
                 </div>
@@ -275,13 +317,13 @@
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-3">
                     <label class="required headinglabel">City</label>
-                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", onFocus = "geoCitylocate()" })
+                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.CityName)
 
                 </div>
                 <div class="col-md-3">
                     <label class="required headinglabel">Country</label>
-                    @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", onFocus = "geoCountrylocate()" })
+                    @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", @readonly="readonly"})
                     @Html.ValidationMessageFor(model => model.CountryName)
 
 
@@ -337,8 +379,13 @@
                     <label class="required headinglabel">Supplier Type</label>
                     @Html.DropDownListFor(model => model.SupplierTypeID, new SelectList(ViewBag.SupplierType, "SupplierTypeID", "SupplierType1"), new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.SupplierTypeID)
-
                 </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Account Head</label>
+                    @Html.DropDownListFor(model => model.AcHeadID, new SelectList(ViewBag.AcHead, "AcHeadID", "AcHead1"), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.AcHeadID)
+                </div>
+
                 <div class="col-md-3">
                     <label class="required headinglabel">TRN No.</label>
                     @Html.TextBoxFor(model => model.RegistrationNo, new { @class = "form-control txttarget" })
@@ -353,23 +400,23 @@
 
             </div>
             @*<div class="row no-margin" style="padding-top:10px">
-                <div class="col-md-4">
-                    <label class="headinglabel">Remark</label>
-                    @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control txttarget" })
-                    @Html.ValidationMessageFor(model => model.Remarks)
+            <div class="col-md-4">
+                <label class="headinglabel">Remark</label>
+                @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control txttarget" })
+                @Html.ValidationMessageFor(model => model.Remarks)
 
-                </div>
+            </div>
 
-                <div class="col-md-4">
-                    <label class="headinglabel">Revenue Type Ids</label><h6></h6>
-                    
-                    @Html.DropDownList("RevenueItems", new SelectList(ViewBag.revenue, "RevenueTypeID", "RevenueType1"), new { @class = "multiselect form-control", multiple = "multiple" })
-                    @Html.HiddenFor(model => model.RevenueTypeIds)
+            <div class="col-md-4">
+                <label class="headinglabel">Revenue Type Ids</label><h6></h6>
 
-                    
-                </div>
+                @Html.DropDownList("RevenueItems", new SelectList(ViewBag.revenue, "RevenueTypeID", "RevenueType1"), new { @class = "multiselect form-control", multiple = "multiple" })
+                @Html.HiddenFor(model => model.RevenueTypeIds)
 
-            </div>*@
+
+            </div>
+
+        </div>*@
 
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-12" style="text-align: right;    margin-top: 20px;">

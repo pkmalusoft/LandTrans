@@ -219,6 +219,10 @@ namespace LTMSV2.Controllers
                         inscan.ConsignorAddress3_PinCode = v.ConsignorAddress3_PinCode;
                         inscan.ConsignorPhone = v.ConsignorPhone;
                         inscan.ConsignorContact = v.ConsignorContact;
+                        inscan.ConsignorCountryID = v.ConsignorCountryID;
+                        inscan.ConsignorCityID = v.ConsignorCityID;
+                        inscan.ConsignorLocationID = v.ConsignorLocationID;
+
                         inscan.CreatedBy = userid;
                         DateTime univDateTime = DateTime.Now;
                         DateTime localDateTime = DateTime.SpecifyKind(univDateTime, DateTimeKind.Local);
@@ -293,7 +297,10 @@ namespace LTMSV2.Controllers
                     inscan.ConsigneeFax = v.ConsigneeFax;
                     inscan.ConsigneePhone = v.ConsigneePhone;                    
                     inscan.ConsigneeContact = v.ConsigneeContact;
-                    
+                    inscan.ConsigneeCountryID = v.ConsigneeCountryID;
+                    inscan.ConsigneeCityID = v.ConsigneeCityID;
+                    inscan.ConsigneeLocationID = v.ConsigneeLocationID;
+
 
                     inscan.Pieces = v.Pieces.ToString();
 
@@ -914,7 +921,12 @@ namespace LTMSV2.Controllers
                 inscan.CustomerRateTypeID = Convert.ToInt32(data.CustomerRateID);
                 }
             inscan.PaymentModeId = data.PaymentModeId;
-            
+            inscan.ConsignorCountryID =Convert.ToInt32(data.ConsignorCountryID);
+            inscan.ConsignorCityID = Convert.ToInt32(data.ConsignorCityID);
+            inscan.ConsignorLocationID = Convert.ToInt32(data.ConsignorLocationID);
+            inscan.ConsigneeCountryID = Convert.ToInt32(data.ConsigneeCountryID);
+            inscan.ConsigneeCityID = Convert.ToInt32(data.ConsigneeCityID);
+            inscan.ConsigneeLocationID =Convert.ToInt32(data.ConsigneeLocationID);
                 inscan.ConsignorCountryName = data.ConsignorCountryName;
                 inscan.ConsignorCityName = data.ConsignorCityName;
                 inscan.ConsigneeCountryName = data.ConsigneeCountryName;
@@ -1572,20 +1584,20 @@ namespace LTMSV2.Controllers
             //                   orderby c1.Consignor ascending
             //                   select new { ShipperName = c1.Consignor, ContactPerson = c1.ConsignorContact, Phone = c1.ConsignorPhone, LocationName = c1.ConsignorLocationName, CityName = c1.ConsignorCityName, CountryName = c1.ConsignorCountryName, Address1 = c1.ConsignorAddress1_Building, Address2 = c1.ConsignorAddress2_Street, PinCode = c1.ConsignorAddress3_PinCode }).Distinct();
 
-            if (term != "")
+            if (term.Trim() != "")
             {
-                var shipperlist = (from c1 in db.CustomerMasters
+               List<ShipperVM> shipperlist = (from c1 in db.CustomerMasters
                                    where c1.CustomerName.ToLower().StartsWith(term.ToLower())
                                    orderby c1.CustomerName ascending
-                                   select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
+                                   select new ShipperVM() { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct().ToList();
 
                 return Json(shipperlist, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                var shipperlist = (from c1 in db.CustomerMasters
+                List<ShipperVM> shipperlist = (from c1 in db.CustomerMasters
                                    orderby c1.CustomerName ascending
-                                   select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
+                                   select new ShipperVM() { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct().ToList();
 
                 return Json(shipperlist, JsonRequestBehavior.AllowGet);
             }
@@ -2307,7 +2319,18 @@ namespace LTMSV2.Controllers
             public string CustCode { get; set; }
             public int CustID { get; set; }
         }
-     
+        public class ShipperVM
+        {
+            public string ShipperName { get; set; }
+            public string ContactPerson { get; set; }
+            public string Phone { get; set; }
+            public string LocationName { get; set; }
+            public string CityName { get; set; }
+            public string CountryName { get; set; }
+            public string Address1 { get; set; }
+            public string Address2 { get; set; }
+            public string PinCode { get; set; }
+        }
         public JsonResult GetAWB(string id)
         {
             AWB obj = new AWB();

@@ -26,20 +26,19 @@ namespace LTMSV2.Models
         public string VisaNo { get; set; }
         public Nullable<System.DateTime> VisaExpDate { get; set; }
         public Nullable<int> VehicleTypeID { get; set; }
-        public string VehicleNo { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string Address3 { get; set; }
         public string SponsorName { get; set; }
         public string PhoneNo1 { get; set; }
         public string PhoneNo2 { get; set; }
-        public string PhoneNo3 { get; set; }
-        public Nullable<int> CountryID4 { get; set; }
-        public string PhoneNo4 { get; set; }
         public string LocationName { get; set; }
         public string CityName { get; set; }
-        public string CountryName1 { get; set; }
-        public string CountryName2 { get; set; }
-        public string CountryName3 { get; set; }
+        public Nullable<int> LocationID { get; set; }
+        public Nullable<int> CountryID { get; set; }
+        public Nullable<int> CityID { get; set; }
+        public bool IsOwner { get; set; }
+        public string CountryName { get; set; }
+        public Nullable<int> SupplierID { get; set; }
     }
 }

@@ -8504,6 +8504,7 @@
     <EntitySetMapping Name="SupplierMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierMaster">
         <MappingFragment StoreEntitySet="SupplierMaster">
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
           <ScalarProperty Name="LocationID" ColumnName="LocationID" />
           <ScalarProperty Name="CityID" ColumnName="CityID" />
           <ScalarProperty Name="CountryID" ColumnName="CountryID" />
@@ -8691,39 +8692,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DriverMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DriverMaster">
-        <MappingFragment StoreEntitySet="DriverMaster">
-          <ScalarProperty Name="CountryName3" ColumnName="CountryName3" />
-          <ScalarProperty Name="CountryName2" ColumnName="CountryName2" />
-          <ScalarProperty Name="CountryName1" ColumnName="CountryName1" />
-          <ScalarProperty Name="CityName" ColumnName="CityName" />
-          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
-          <ScalarProperty Name="PhoneNo4" ColumnName="PhoneNo4" />
-          <ScalarProperty Name="CountryID4" ColumnName="CountryID4" />
-          <ScalarProperty Name="PhoneNo3" ColumnName="PhoneNo3" />
-          <ScalarProperty Name="PhoneNo2" ColumnName="PhoneNo2" />
-          <ScalarProperty Name="PhoneNo1" ColumnName="PhoneNo1" />
-          <ScalarProperty Name="SponsorName" ColumnName="SponsorName" />
-          <ScalarProperty Name="Address3" ColumnName="Address3" />
-          <ScalarProperty Name="Address2" ColumnName="Address2" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="VehicleNo" ColumnName="VehicleNo" />
-          <ScalarProperty Name="VehicleTypeID" ColumnName="VehicleTypeID" />
-          <ScalarProperty Name="VisaExpDate" ColumnName="VisaExpDate" />
-          <ScalarProperty Name="VisaNo" ColumnName="VisaNo" />
-          <ScalarProperty Name="PassportExpDate" ColumnName="PassportExpDate" />
-          <ScalarProperty Name="PassportNo" ColumnName="PassportNo" />
-          <ScalarProperty Name="Nationality" ColumnName="Nationality" />
-          <ScalarProperty Name="LicenseExpDate" ColumnName="LicenseExpDate" />
-          <ScalarProperty Name="LicenseNo" ColumnName="LicenseNo" />
-          <ScalarProperty Name="NickName" ColumnName="NickName" />
-          <ScalarProperty Name="DriverName" ColumnName="DriverName" />
-          <ScalarProperty Name="DriverType" ColumnName="DriverType" />
-          <ScalarProperty Name="DriverID" ColumnName="DriverID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="RevenueCostMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueCostMaster">
         <MappingFragment StoreEntitySet="RevenueCostMaster">
@@ -8805,12 +8773,97 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="RevenueUpdateDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail">
+        <MappingFragment StoreEntitySet="RevenueUpdateDetail">
+          <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+          <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="AcHeadCreditId" ColumnName="AcHeadCreditId" />
+          <ScalarProperty Name="AcHeadDebitId" ColumnName="AcHeadDebitId" />
+          <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+          <ScalarProperty Name="IsPerfomaCod" ColumnName="IsPerfomaCod" />
+          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+          <ScalarProperty Name="ExpectedAmount" ColumnName="ExpectedAmount" />
+          <ScalarProperty Name="IsPerfomaInvoice" ColumnName="IsPerfomaInvoice" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="RevenueCostMasterID" ColumnName="RevenueCostMasterID" />
+          <ScalarProperty Name="MasterID" ColumnName="MasterID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RevenueUpdateMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster">
+        <MappingFragment StoreEntitySet="RevenueUpdateMaster">
+          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VehicleMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.VehicleMaster">
+        <MappingFragment StoreEntitySet="VehicleMaster">
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="VehicleMaintenance" ColumnName="VehicleMaintenance" />
+          <ScalarProperty Name="VehicleOwner" ColumnName="VehicleOwner" />
+          <ScalarProperty Name="RateExtraKM" ColumnName="RateExtraKM" />
+          <ScalarProperty Name="FreeKM" ColumnName="FreeKM" />
+          <ScalarProperty Name="ContractRate" ColumnName="ContractRate" />
+          <ScalarProperty Name="ContractExpDate" ColumnName="ContractExpDate" />
+          <ScalarProperty Name="ContractIssuedDate" ColumnName="ContractIssuedDate" />
+          <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+          <ScalarProperty Name="AcheadId" ColumnName="AcheadId" />
+          <ScalarProperty Name="RegisteredUnder" ColumnName="RegisteredUnder" />
+          <ScalarProperty Name="MakeYear" ColumnName="MakeYear" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="ScrapValue" ColumnName="ScrapValue" />
+          <ScalarProperty Name="DepreciationDate" ColumnName="DepreciationDate" />
+          <ScalarProperty Name="Category" ColumnName="Category" />
+          <ScalarProperty Name="InsuredValue" ColumnName="InsuredValue" />
+          <ScalarProperty Name="PolicyNo" ColumnName="PolicyNo" />
+          <ScalarProperty Name="InsuranceCompName" ColumnName="InsuranceCompName" />
+          <ScalarProperty Name="FinanceCompany" ColumnName="FinanceCompany" />
+          <ScalarProperty Name="Mode" ColumnName="Mode" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="InsuranceExpDate" ColumnName="InsuranceExpDate" />
+          <ScalarProperty Name="VehicleTypeID" ColumnName="VehicleTypeID" />
+          <ScalarProperty Name="RegExpirydate" ColumnName="RegExpirydate" />
+          <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+          <ScalarProperty Name="PurchaseValue" ColumnName="PurchaseValue" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="RegistrationNo" ColumnName="RegistrationNo" />
+          <ScalarProperty Name="VehicleDescription" ColumnName="VehicleDescription" />
+          <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RouteMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RouteMaster">
+        <MappingFragment StoreEntitySet="RouteMaster">
+          <ScalarProperty Name="Destination" ColumnName="Destination" />
+          <ScalarProperty Name="Origin" ColumnName="Origin" />
+          <ScalarProperty Name="DestinationLocationID" ColumnName="DestinationLocationID" />
+          <ScalarProperty Name="OrginLocationID" ColumnName="OrginLocationID" />
+          <ScalarProperty Name="RouteName" ColumnName="RouteName" />
+          <ScalarProperty Name="RouteCode" ColumnName="RouteCode" />
+          <ScalarProperty Name="RouteID" ColumnName="RouteID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
-          <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-          <ScalarProperty Name="CityID" ColumnName="CityID" />
-          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="ConsigneeCityID" ColumnName="ConsigneeCityID" />
+          <ScalarProperty Name="ConsigneeCountryID" ColumnName="ConsigneeCountryID" />
+          <ScalarProperty Name="ConsigneeLocationID" ColumnName="ConsigneeLocationID" />
+          <ScalarProperty Name="ConsignorCityID" ColumnName="ConsignorCityID" />
+          <ScalarProperty Name="ConsignorLocationID" ColumnName="ConsignorLocationID" />
+          <ScalarProperty Name="ConsignorCountryID" ColumnName="ConsignorCountryID" />
           <ScalarProperty Name="CBM_height" ColumnName="CBM_height" />
           <ScalarProperty Name="CBM_width" ColumnName="CBM_width" />
           <ScalarProperty Name="CBM_length" ColumnName="CBM_length" />
@@ -8905,16 +8958,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="RevenueUpdateDetails">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail">
-        <MappingFragment StoreEntitySet="RevenueUpdateDetail">
+    <EntitySetMapping Name="CostUpdateDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CostUpdateDetail">
+        <MappingFragment StoreEntitySet="CostUpdateDetail">
           <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
           <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
-          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
           <ScalarProperty Name="AcHeadCreditId" ColumnName="AcHeadCreditId" />
           <ScalarProperty Name="AcHeadDebitId" ColumnName="AcHeadDebitId" />
           <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
-          <ScalarProperty Name="IsPerfomaCod" ColumnName="IsPerfomaCod" />
           <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
           <ScalarProperty Name="ExpectedAmount" ColumnName="ExpectedAmount" />
           <ScalarProperty Name="IsPerfomaInvoice" ColumnName="IsPerfomaInvoice" />
@@ -8925,62 +8977,47 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="RevenueUpdateMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster">
-        <MappingFragment StoreEntitySet="RevenueUpdateMaster">
+    <EntitySetMapping Name="CostUpdateMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CostUpdateMaster">
+        <MappingFragment StoreEntitySet="CostUpdateMaster">
           <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
           <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
           <ScalarProperty Name="BranchID" ColumnName="BranchID" />
           <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="VehicleMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.VehicleMaster">
-        <MappingFragment StoreEntitySet="VehicleMaster">
-          <ScalarProperty Name="VehicleMaintenance" ColumnName="VehicleMaintenance" />
-          <ScalarProperty Name="VehicleOwner" ColumnName="VehicleOwner" />
-          <ScalarProperty Name="RateExtraKM" ColumnName="RateExtraKM" />
-          <ScalarProperty Name="FreeKM" ColumnName="FreeKM" />
-          <ScalarProperty Name="ContractRate" ColumnName="ContractRate" />
-          <ScalarProperty Name="ContractExpDate" ColumnName="ContractExpDate" />
-          <ScalarProperty Name="ContractIssuedDate" ColumnName="ContractIssuedDate" />
-          <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
-          <ScalarProperty Name="AcheadId" ColumnName="AcheadId" />
-          <ScalarProperty Name="RegisteredUnder" ColumnName="RegisteredUnder" />
-          <ScalarProperty Name="MakeYear" ColumnName="MakeYear" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-          <ScalarProperty Name="ScrapValue" ColumnName="ScrapValue" />
-          <ScalarProperty Name="DepreciationDate" ColumnName="DepreciationDate" />
-          <ScalarProperty Name="Category" ColumnName="Category" />
-          <ScalarProperty Name="InsuredValue" ColumnName="InsuredValue" />
-          <ScalarProperty Name="PolicyNo" ColumnName="PolicyNo" />
-          <ScalarProperty Name="InsuranceCompName" ColumnName="InsuranceCompName" />
-          <ScalarProperty Name="FinanceCompany" ColumnName="FinanceCompany" />
-          <ScalarProperty Name="Mode" ColumnName="Mode" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="InsuranceExpDate" ColumnName="InsuranceExpDate" />
+    <EntitySetMapping Name="DriverMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DriverMaster">
+        <MappingFragment StoreEntitySet="DriverMaster">
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="IsOwner" ColumnName="IsOwner" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+          <ScalarProperty Name="PhoneNo2" ColumnName="PhoneNo2" />
+          <ScalarProperty Name="PhoneNo1" ColumnName="PhoneNo1" />
+          <ScalarProperty Name="SponsorName" ColumnName="SponsorName" />
+          <ScalarProperty Name="Address3" ColumnName="Address3" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
           <ScalarProperty Name="VehicleTypeID" ColumnName="VehicleTypeID" />
-          <ScalarProperty Name="RegExpirydate" ColumnName="RegExpirydate" />
-          <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
-          <ScalarProperty Name="PurchaseValue" ColumnName="PurchaseValue" />
-          <ScalarProperty Name="Model" ColumnName="Model" />
-          <ScalarProperty Name="RegistrationNo" ColumnName="RegistrationNo" />
-          <ScalarProperty Name="VehicleDescription" ColumnName="VehicleDescription" />
-          <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="RouteMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RouteMaster">
-        <MappingFragment StoreEntitySet="RouteMaster">
-          <ScalarProperty Name="DestinationLocationID" ColumnName="DestinationLocationID" />
-          <ScalarProperty Name="OrginLocationID" ColumnName="OrginLocationID" />
-          <ScalarProperty Name="RouteName" ColumnName="RouteName" />
-          <ScalarProperty Name="RouteCode" ColumnName="RouteCode" />
-          <ScalarProperty Name="RouteID" ColumnName="RouteID" />
+          <ScalarProperty Name="VisaExpDate" ColumnName="VisaExpDate" />
+          <ScalarProperty Name="VisaNo" ColumnName="VisaNo" />
+          <ScalarProperty Name="PassportExpDate" ColumnName="PassportExpDate" />
+          <ScalarProperty Name="PassportNo" ColumnName="PassportNo" />
+          <ScalarProperty Name="Nationality" ColumnName="Nationality" />
+          <ScalarProperty Name="LicenseExpDate" ColumnName="LicenseExpDate" />
+          <ScalarProperty Name="LicenseNo" ColumnName="LicenseNo" />
+          <ScalarProperty Name="NickName" ColumnName="NickName" />
+          <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+          <ScalarProperty Name="DriverType" ColumnName="DriverType" />
+          <ScalarProperty Name="DriverID" ColumnName="DriverID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

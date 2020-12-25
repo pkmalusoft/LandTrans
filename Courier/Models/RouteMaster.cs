@@ -25,6 +25,8 @@ namespace LTMSV2.Models
         public string RouteName { get; set; }
         public Nullable<int> OrginLocationID { get; set; }
         public Nullable<int> DestinationLocationID { get; set; }
+        public string Origin { get; set; }
+        public string Destination { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TruckDetail> TruckDetails { get; set; }

@@ -180,7 +180,7 @@ namespace LTMSV2.Controllers
                         }
                     }                
                }
-            TempData["SuccessMsg"] = "Consignment Revenue Updated Successfull!";
+            TempData["SuccessMsg"] = "Consignment Revenue Updated Successfully!";
             return RedirectToAction("Index");
             //ViewBag.Title = "Revenue Update - Create";
             //ViewBag.employee = db.EmployeeMasters.ToList();

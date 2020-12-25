@@ -1,0 +1,315 @@
+﻿@model LTMSV2.Models.DriverMaster
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+}
+
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+<script>
+    $(function () {
+        $('#LicenseExpDate').datetimepicker({ format: 'DD-MM-YYYY' });
+    });
+
+    $(function () {
+        $('#PassportExpDate').datetimepicker({ format: 'DD-MM-YYYY'});
+    });
+    $(function () {
+        $('#VisaExpDate').datetimepicker({ format: 'DD-MM-YYYY' });
+    });
+    
+</script>
+
+<script type="text/javascript">
+    function is_url(str) {
+        regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+        if (regexp.test(str)) {
+            $("#validations").html('* Please fill mandatory fields!');
+            return true;
+        }
+        else {
+            $("#validations").html('Invalid Website Link!');
+            return false;
+        }
+    }
+    function checkmobileno(inputtxt) {
+        debugger;
+        //var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+        var phoneno = /^[0-9]{10}$/;
+        if (inputtxt.match(phoneno)) {
+            $("#validations").html('* Please fill mandatory fields!');
+            return true;
+        }
+        else {
+            $("#validations").html('The Mobile Number entered is invalid!');
+            return false;
+        }
+    }
+    function checkPhoneNumber(phoneNo) {
+        var phoneRE = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/; ///^\(\d\d\d\) \d\d\d-\d\d\d\d$/;
+        if (phoneNo.match(phoneRE)) {
+            $("#validations").html('* Please fill mandatory fields!');
+            return true;
+        } else {
+            $("#validations").html('The phone number entered is invalid!');
+
+            return false;
+        }
+    }
+    function checkNumeric(numtext) {
+        //^[1-9]\d * (\.\d +)?$
+        var NumericRE = /^-?(0|[1-9]\d*)(\.\d+)?$/; ///^\^[1-9]\d * (\.\d +)?$/;
+        if (numtext.match(NumericRE)) {
+            $("#validations").html('* Please fill mandatory fields!');
+            return true;
+        } else {
+            $("#validations").html('Invalid Credit Limit!');
+            return false;
+        }
+    }
+    $(document).ready(function () {
+        $(":text").css({ "border-radius": "5px" });
+        $(":password").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+        $("#Email").val('');
+        $("#Password").val('');
+
+        $("#DriverType").focus();
+
+        $("#CityID").empty();
+        $("#LocationID").empty();
+
+                      
+      
+        $("#LocationName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/LocationMaster/GetLocation',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Location,
+                                value: val.Location,
+                                LocationID: val.LocationID,
+                                CityID: val.CityID,
+                                CountryID: val.CountryID,
+                                CountryName: val.CountryName,
+                                CityName: val.CityName
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#LocationName').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#LocationName").val(i.item.label);
+                $("#LocationID").val(i.item.LocationID);
+                $("#CountryName").val(i.item.CountryName);
+                $("#CountryID").val(i.item.CountryID);
+                $("#CityName").val(i.item.CityName);
+                $("#CityID").val(i.item.CityID);
+            },
+
+        });
+  
+
+        $("#btnsave").click(function () {
+            debugger;
+         
+        });
+    });
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">@ViewBag.Title</h1>
+
+</section>
+
+<section class="content">
+
+    @using (Html.BeginForm("Create", "Driver", new { @name = "Myform", @id = "Myform" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+
+        <div id="validations" style="color: red; margin-left: 7px; display: none">* Please fill mandatory fields</div>
+
+        <fieldset>
+
+
+            <div class="row no-margin">
+
+
+                <div class="col-md-3">
+                    @Html.HiddenFor(model => model.DriverID)
+                    @Html.HiddenFor(model => model.CityID)
+                    @Html.HiddenFor(model => model.CountryID)
+                    @Html.HiddenFor(model => model.LocationID)
+                    <label class="headinglabel required">Driver Type</label>
+                    @Html.DropDownList("DriverType", new List<SelectListItem>
+                {
+                    new SelectListItem{ Text="Hired Vehicle", Value = "Hired Vehicle",Selected=true },
+                    new SelectListItem{ Text="Own Vehicle", Value = "Own Vehicle" },
+                 }, new { @class = "form-control", })
+
+                    @Html.ValidationMessageFor(model => model.DriverType)
+
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Driver Name</label>
+                    @Html.TextBoxFor(model => model.DriverName, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.DriverName)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Nick Name</label>
+                    @Html.TextBoxFor(model => model.NickName, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.NickName)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Nationality</label>
+                    @Html.TextBoxFor(model => model.Nationality, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Nationality)
+                </div>
+
+              
+
+
+
+            </div>
+
+
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-3">
+                    <label class="headinglabel required">License No.</label>
+                    @Html.TextBoxFor(model => model.LicenseNo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LicenseNo)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">License Exp. Date.</label>
+                    @Html.TextBoxFor(model => model.LicenseExpDate, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LicenseExpDate)
+                </div>
+               
+                <div class="col-md-3">
+                    <label class="headinglabel required">PassportNo</label>
+                    @Html.TextBoxFor(model => model.PassportNo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PassportNo)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Passport Exp. Date</label>
+                    @Html.TextBoxFor(model => model.PassportExpDate, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PassportExpDate)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Visa No.</label>
+                    @Html.TextBoxFor(model => model.VisaNo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.VisaNo)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Visa Exp. Date</label>
+                    @Html.TextBoxFor(model => model.VisaExpDate, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.VisaExpDate)
+                </div>
+
+            </div>          
+
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-3">
+                    <label class="headinglabel">Address 1 (Building)</label>
+                    @Html.TextBoxFor(model => model.Address1, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.Address1)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Address 2 (Street)</label>
+
+                    @Html.TextBoxFor(model => model.Address2, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.Address2)
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Location</label>
+                    @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.LocationName)
+
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">City</label>
+                    <input class="form-control" id="CityName" name="CityName" type="text" readonly="readonly" />
+                    @Html.ValidationMessageFor(model => model.CityName)
+                </div>
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Country</label>
+                    <input class="form-control" id="CountryName" name="CountryName" type="text" readonly="readonly" />
+                    @Html.ValidationMessageFor(model => model.CountryName)
+                </div>
+
+
+                <div class="col-md-3">
+                    <label class="headinglabel required">Mobile</label>
+                    @Html.TextBoxFor(model => model.PhoneNo1, new { @class = "form-control textright", @placeholder = "XXXXXXXXXX", @maxlength = 25 })
+                    @Html.ValidationMessageFor(model => model.PhoneNo1)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Phone</label>
+                    @Html.TextBoxFor(model => model.PhoneNo2, new { @class = "form-control textright", @maxlength = 25, @placeholder = "XXX-XXX-XXXX" })
+                    @Html.ValidationMessageFor(model => model.PhoneNo2)
+                </div>
+
+            </div>
+
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-3 ">
+                    <label class="headinglabel required">Vehicle Type</label>
+                    @Html.DropDownListFor(model => model.VehicleTypeID, new SelectList(@ViewBag.Vehicletype, "VehicleTypeID", "VehicleType1"), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.VehicleTypeID)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required">Sponsor Name</label>
+                    @Html.TextBoxFor(model => model.SponsorName, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.SponsorName)
+                </div>
+
+                <div class="col-md-2 checkboxdesign" style="padding-top: 30px">
+                    @Html.CheckBox("IsOwner", new { @name = "IsOwner", @checked = "checked" }) &nbsp
+                    <label class="headinglabel">Is Owner</label>
+                    @Html.ValidationMessageFor(model => model.IsOwner)
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-3 ">
+                    <label class="headinglabel required">Supplier</label>
+                    @Html.DropDownListFor(model => model.SupplierID, new SelectList(@ViewBag.Supplier, "SupplierID", "SupplierName"), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SupplierID)
+                </div>
+
+            </div>
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-12 btn-right">
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "CustomerMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                </div>
+            </div>
+
+        </fieldset>
+    }
+
+</section>
+
+
+

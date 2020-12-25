@@ -273,6 +273,7 @@
     <Compile Include="Controllers\ReturnShippmentController.cs" />
     <Compile Include="Controllers\RevenueCostController.cs" />
     <Compile Include="Controllers\RevenueTypeController.cs" />
+    <Compile Include="Controllers\CostUpdateController.cs" />
     <Compile Include="Controllers\RevenueUpdateController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\TruckAssignController.cs" />
@@ -301,6 +302,7 @@
     <Compile Include="DAL\NumbertoWords.cs" />
     <Compile Include="DAL\PickupRequestDAO.cs" />
     <Compile Include="DAL\ReceiptDAO.cs" />
+    <Compile Include="DAL\MasterDAO.cs" />
     <Compile Include="DAL\RevenueDAO.cs" />
     <Compile Include="DAL\SessionExpireFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -681,6 +683,12 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CostType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CostUpdateDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CostUpdateMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CountryMaster.cs">
@@ -1690,6 +1698,7 @@
     <Compile Include="Models\RevenueUpdateMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CostUpdateMasterVM.cs" />
     <Compile Include="Models\RevenueUpdateMasterVM.cs" />
     <Compile Include="Models\RoleController.cs" />
     <Compile Include="Models\RoleMaster.cs">
@@ -3531,6 +3540,10 @@
     <Content Include="Views\CustomerMaster\CustomerList.cshtml" />
     <Content Include="Views\Accounts\AcOpeningInvoice.cshtml" />
     <Content Include="Views\Accounts\DayBook.cshtml" />
+    <Content Include="Views\Route\Create.cshtml" />
+    <Content Include="Views\CostUpdate\Create.cshtml" />
+    <Content Include="Views\CostUpdate\Index.cshtml" />
+    <Content Include="Views\Driver\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

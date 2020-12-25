@@ -12,6 +12,9 @@ namespace LTMSV2.Models
 
     public class RouteMasterVM : RouteMaster
     {
+        public string OriginName { get; set; }
+        public string DestinationName { get; set; }
+        public IEnumerable<RouteOrder> RouteOrders { get; set; }
 
     }
     public class PackageVM 

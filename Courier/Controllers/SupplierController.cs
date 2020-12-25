@@ -48,7 +48,7 @@ namespace LTMSV2.Controllers
             //    ObjectSourceModel.GetCountry(), "CountryID", "CountryName");
             var supplierMasterTypes = (from d in db.SupplierTypes select d).ToList();
             ViewBag.SupplierType = supplierMasterTypes;
-          
+            ViewBag.AcHead = db.AcHeads.OrderBy(c => c.AcHead1).ToList();
             var data = db.RevenueTypes.ToList();
             ViewBag.revenue = data;
             return View();
@@ -106,6 +106,7 @@ namespace LTMSV2.Controllers
 
             var data = db.RevenueTypes.ToList();
             ViewBag.revenue = data;
+            ViewBag.AcHead = db.AcHeads.OrderBy(c => c.AcHead1).ToList();
             SupplierMaster supplier = db.SupplierMasters.Find(id);
             
             var supplierMasterTypes = (from d in db.SupplierTypes  select d).ToList();

@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using LTMSV2.Models;
 using System.Data;
-
+using LTMSV2.DAL;
 namespace LTMSV2.Controllers
 {
     public class LocationMasterController : Controller
@@ -152,7 +152,14 @@ namespace LTMSV2.Controllers
             TempData["SuccessMsg"] = "You have successfully Deleted Location.";
             return RedirectToAction("Index");
         }
-
+        
+        public ActionResult GetLocation(string term)
+        {
+            List<LocationVM> locationlist = new List<LocationVM>();
+            locationlist = MasterDAO.GetLocation(term);
+            return Json(locationlist, JsonRequestBehavior.AllowGet);            
+            
+        }
         public JsonResult GetCity(int id)
         {
             List<CityM> objCity = new List<CityM>();

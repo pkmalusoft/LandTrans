@@ -832,6 +832,35 @@
     <Property Name="CostTypeID" Type="int" Nullable="false" />
     <Property Name="CostType" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="CostUpdateDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MasterID" Type="int" Nullable="false" />
+    <Property Name="RevenueCostMasterID" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="IsPerfomaInvoice" Type="bit" Nullable="false" />
+    <Property Name="ExpectedAmount" Type="money" />
+    <Property Name="InvoiceId" Type="int" />
+    <Property Name="PaymentType" Type="varchar" MaxLength="50" />
+    <Property Name="AcHeadDebitId" Type="int" />
+    <Property Name="AcHeadCreditId" Type="int" />
+    <Property Name="SupplierId" Type="int" />
+    <Property Name="CurrencyId" Type="int" />
+    <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="3" />
+  </EntityType>
+  <EntityType Name="CostUpdateMaster">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EntryDate" Type="date" Nullable="false" />
+    <Property Name="BranchID" Type="int" Nullable="false" />
+    <Property Name="TruckDetailID" Type="int" Nullable="false" />
+    <Property Name="EmployeeID" Type="int" />
+    <Property Name="AcFinancialYearID" Type="int" />
+  </EntityType>
   <EntityType Name="CountryMaster">
     <Key>
       <PropertyRef Name="CountryID" />
@@ -1285,21 +1314,20 @@
     <Property Name="VisaNo" Type="varchar" MaxLength="50" />
     <Property Name="VisaExpDate" Type="datetime" />
     <Property Name="VehicleTypeID" Type="int" />
-    <Property Name="VehicleNo" Type="varchar(max)" />
     <Property Name="Address1" Type="varchar" MaxLength="50" />
     <Property Name="Address2" Type="varchar" MaxLength="50" />
     <Property Name="Address3" Type="varchar" MaxLength="50" />
     <Property Name="SponsorName" Type="varchar" MaxLength="50" />
     <Property Name="PhoneNo1" Type="varchar" MaxLength="50" />
     <Property Name="PhoneNo2" Type="varchar" MaxLength="50" />
-    <Property Name="PhoneNo3" Type="varchar" MaxLength="50" />
-    <Property Name="CountryID4" Type="int" />
-    <Property Name="PhoneNo4" Type="varchar" MaxLength="50" />
     <Property Name="LocationName" Type="varchar" MaxLength="200" />
     <Property Name="CityName" Type="varchar" MaxLength="200" />
-    <Property Name="CountryName1" Type="varchar" MaxLength="200" />
-    <Property Name="CountryName2" Type="varchar" MaxLength="200" />
-    <Property Name="CountryName3" Type="varchar" MaxLength="200" />
+    <Property Name="LocationID" Type="int" />
+    <Property Name="CountryID" Type="int" />
+    <Property Name="CityID" Type="int" />
+    <Property Name="IsOwner" Type="bit" Nullable="false" />
+    <Property Name="CountryName" Type="varchar" MaxLength="200" />
+    <Property Name="SupplierID" Type="int" />
   </EntityType>
   <EntityType Name="DRR">
     <Key>
@@ -2194,9 +2222,12 @@
     <Property Name="CBM_length" Type="decimal" Precision="18" Scale="3" />
     <Property Name="CBM_width" Type="decimal" Precision="18" Scale="3" />
     <Property Name="CBM_height" Type="decimal" Precision="18" Scale="3" />
-    <Property Name="CountryID" Type="int" />
-    <Property Name="CityID" Type="int" />
-    <Property Name="LocationID" Type="int" />
+    <Property Name="ConsignorCountryID" Type="int" />
+    <Property Name="ConsignorLocationID" Type="int" />
+    <Property Name="ConsignorCityID" Type="int" />
+    <Property Name="ConsigneeLocationID" Type="int" />
+    <Property Name="ConsigneeCountryID" Type="int" />
+    <Property Name="ConsigneeCityID" Type="int" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
@@ -3001,6 +3032,8 @@
     <Property Name="RouteName" Type="varchar" MaxLength="100" />
     <Property Name="OrginLocationID" Type="int" />
     <Property Name="DestinationLocationID" Type="int" />
+    <Property Name="Origin" Type="nvarchar" MaxLength="200" />
+    <Property Name="Destination" Type="nvarchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="RouteOrder">
     <Key>
@@ -3143,6 +3176,7 @@
     <Property Name="CountryID" Type="int" />
     <Property Name="CityID" Type="int" />
     <Property Name="LocationID" Type="int" />
+    <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <EntityType Name="SupplierType">
     <Key>
@@ -3761,6 +3795,7 @@
     <Property Name="RateExtraKM" Type="decimal" Precision="18" Scale="2" />
     <Property Name="VehicleOwner" Type="nvarchar" MaxLength="250" />
     <Property Name="VehicleMaintenance" Type="nvarchar" MaxLength="250" />
+    <Property Name="SupplierID" Type="int" />
   </EntityType>
   <EntityType Name="VehicleType">
     <Key>
@@ -3966,6 +4001,18 @@
       </Principal>
       <Dependent Role="CODReceiptDetail">
         <PropertyRef Name="ReceiptID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CostUpdat__Maste__7310F064">
+    <End Role="CostUpdateMaster" Type="Self.CostUpdateMaster" Multiplicity="1" />
+    <End Role="CostUpdateDetail" Type="Self.CostUpdateDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CostUpdateMaster">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CostUpdateDetail">
+        <PropertyRef Name="MasterID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -4388,6 +4435,56 @@
       </Principal>
       <Dependent Role="Category">
         <PropertyRef Name="AcHeadID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CostUpdateDetail_CostUpdateMaster">
+    <End Role="CostUpdateMaster" Type="Self.CostUpdateMaster" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CostUpdateDetail" Type="Self.CostUpdateDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CostUpdateMaster">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CostUpdateDetail">
+        <PropertyRef Name="MasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CostUpdateDetail_RevenueCostMaster">
+    <End Role="RevenueCostMaster" Type="Self.RevenueCostMaster" Multiplicity="1" />
+    <End Role="CostUpdateDetail" Type="Self.CostUpdateDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RevenueCostMaster">
+        <PropertyRef Name="RCID" />
+      </Principal>
+      <Dependent Role="CostUpdateDetail">
+        <PropertyRef Name="RevenueCostMasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CostUpdateMaster_BranchMaster">
+    <End Role="BranchMaster" Type="Self.BranchMaster" Multiplicity="1" />
+    <End Role="CostUpdateMaster" Type="Self.CostUpdateMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BranchMaster">
+        <PropertyRef Name="BranchID" />
+      </Principal>
+      <Dependent Role="CostUpdateMaster">
+        <PropertyRef Name="BranchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CostUpdateMaster_TruckDetail">
+    <End Role="TruckDetail" Type="Self.TruckDetail" Multiplicity="1" />
+    <End Role="CostUpdateMaster" Type="Self.CostUpdateMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TruckDetail">
+        <PropertyRef Name="TruckDetailID" />
+      </Principal>
+      <Dependent Role="CostUpdateMaster">
+        <PropertyRef Name="TruckDetailID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -5378,18 +5475,6 @@
       </Principal>
       <Dependent Role="RevenueUpdateMaster">
         <PropertyRef Name="BranchID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_RevenueUpdateMaster_InScan">
-    <End Role="InScan" Type="Self.InScan" Multiplicity="1" />
-    <End Role="RevenueUpdateMaster" Type="Self.RevenueUpdateMaster" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InScan">
-        <PropertyRef Name="InScanID" />
-      </Principal>
-      <Dependent Role="RevenueUpdateMaster">
-        <PropertyRef Name="InScanID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -8497,6 +8582,8 @@
     <EntitySet Name="Commission" EntityType="Self.Commission" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Content" EntityType="Self.Content" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CostType" EntityType="Self.CostType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CostUpdateDetail" EntityType="Self.CostUpdateDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CostUpdateMaster" EntityType="Self.CostUpdateMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CountryMaster" EntityType="Self.CountryMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CourierDescription" EntityType="Self.CourierDescription" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CourierMovement" EntityType="Self.CourierMovement" Schema="dbo" store:Type="Tables" />
@@ -8732,6 +8819,10 @@
       <End Role="CODReceipt" EntitySet="CODReceipt" />
       <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
     </AssociationSet>
+    <AssociationSet Name="FK__CostUpdat__Maste__7310F064" Association="Self.FK__CostUpdat__Maste__7310F064">
+      <End Role="CostUpdateMaster" EntitySet="CostUpdateMaster" />
+      <End Role="CostUpdateDetail" EntitySet="CostUpdateDetail" />
+    </AssociationSet>
     <AssociationSet Name="FK__EmployeeM__Depot__5A45429A" Association="Self.FK__EmployeeM__Depot__5A45429A">
       <End Role="tblDepot" EntitySet="tblDepot" />
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
@@ -8871,6 +8962,22 @@
     <AssociationSet Name="FK_Category_AcHead" Association="Self.FK_Category_AcHead">
       <End Role="AcHead" EntitySet="AcHead" />
       <End Role="Category" EntitySet="Category" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CostUpdateDetail_CostUpdateMaster" Association="Self.FK_CostUpdateDetail_CostUpdateMaster">
+      <End Role="CostUpdateMaster" EntitySet="CostUpdateMaster" />
+      <End Role="CostUpdateDetail" EntitySet="CostUpdateDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CostUpdateDetail_RevenueCostMaster" Association="Self.FK_CostUpdateDetail_RevenueCostMaster">
+      <End Role="RevenueCostMaster" EntitySet="RevenueCostMaster" />
+      <End Role="CostUpdateDetail" EntitySet="CostUpdateDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CostUpdateMaster_BranchMaster" Association="Self.FK_CostUpdateMaster_BranchMaster">
+      <End Role="BranchMaster" EntitySet="BranchMaster" />
+      <End Role="CostUpdateMaster" EntitySet="CostUpdateMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CostUpdateMaster_TruckDetail" Association="Self.FK_CostUpdateMaster_TruckDetail">
+      <End Role="TruckDetail" EntitySet="TruckDetail" />
+      <End Role="CostUpdateMaster" EntitySet="CostUpdateMaster" />
     </AssociationSet>
     <AssociationSet Name="FK_CustomerEnquiry_CustomerMaster" Association="Self.FK_CustomerEnquiry_CustomerMaster">
       <End Role="CustomerMaster" EntitySet="CustomerMaster" />
@@ -9194,10 +9301,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_RevenueUpdateMaster_BranchMaster" Association="Self.FK_RevenueUpdateMaster_BranchMaster">
       <End Role="BranchMaster" EntitySet="BranchMaster" />
-      <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMaster" />
-    </AssociationSet>
-    <AssociationSet Name="FK_RevenueUpdateMaster_InScan" Association="Self.FK_RevenueUpdateMaster_InScan">
-      <End Role="InScan" EntitySet="InScan" />
       <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMaster" />
     </AssociationSet>
     <AssociationSet Name="FK_S_ExportShipmentDetails_S_CurrencyMaster" Association="Self.FK_S_ExportShipmentDetails_S_CurrencyMaster">

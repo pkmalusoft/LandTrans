@@ -14,6 +14,12 @@ namespace LTMSV2.Models
     
     public partial class TruckDetail
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TruckDetail()
+        {
+            this.CostUpdateMasters = new HashSet<CostUpdateMaster>();
+        }
+    
         public int TruckDetailID { get; set; }
         public string ReceiptNo { get; set; }
         public int VehicleID { get; set; }
@@ -67,5 +73,7 @@ namespace LTMSV2.Models
         public virtual CurrencyMaster CurrencyMaster { get; set; }
         public virtual CurrencyMaster CurrencyMaster1 { get; set; }
         public virtual RouteMaster RouteMaster { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CostUpdateMaster> CostUpdateMasters { get; set; }
     }
 }

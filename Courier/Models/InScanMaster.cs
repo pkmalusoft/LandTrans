@@ -105,8 +105,11 @@ namespace LTMSV2.Models
         public Nullable<decimal> CBM_length { get; set; }
         public Nullable<decimal> CBM_width { get; set; }
         public Nullable<decimal> CBM_height { get; set; }
-        public Nullable<int> CountryID { get; set; }
-        public Nullable<int> CityID { get; set; }
-        public Nullable<int> LocationID { get; set; }
+        public Nullable<int> ConsignorCountryID { get; set; }
+        public Nullable<int> ConsignorLocationID { get; set; }
+        public Nullable<int> ConsignorCityID { get; set; }
+        public Nullable<int> ConsigneeLocationID { get; set; }
+        public Nullable<int> ConsigneeCountryID { get; set; }
+        public Nullable<int> ConsigneeCityID { get; set; }
     }
 }
