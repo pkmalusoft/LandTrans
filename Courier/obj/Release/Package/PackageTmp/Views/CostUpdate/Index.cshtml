@@ -9,6 +9,9 @@
     tfoot {
         display: table-header-group;
     }
+    table input {
+        width: 100%;
+    }
 </style>
 
 <script type="text/javascript">
@@ -59,31 +62,31 @@
         </script>
     }
     <div class="table-responsive tblbackground" style="padding:15px">
-        <table class="table table-responsive table-bordered tblfont" id="dataTables-example" style="width:100%">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example" style="width:100%;table-layout:fixed">
             <thead>
-                <tr>      
-                    <th width="5%">
+                <tr>
+                    <th>
                         TD No.
                     </th>
-                    <th width="5%">
+                    <th>
                         @Html.Label("TD Date")
                     </th>
-                    <th width="10%">
+                    <th>
                         @Html.Label("Invoice To")
                     </th>
-                    <th width="5%">
+                    <th>
                         @Html.Label("Amount")
                     </th>
-                    <th width="5%">
+                    <th>
                         @Html.Label("Currency")
                     </th>
-                    <th width="15%" >
+                    <th>
                         @Html.Label("Debit Head")
                     </th>
-                    <th width="15%">
+                    <th>
                         @Html.Label("Credit Head")
                     </th>
-                    <th width="5%">Action</th>
+                    <th> Action</th>
                 </tr>
 
             </thead>
@@ -106,7 +109,7 @@
                     <th>
                         @Html.Label("Currency")
                     </th>
-                    <th >
+                    <th>
                         @Html.Label("Debit Account")
                     </th>
                     <th>
@@ -121,38 +124,38 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
+                    <tr>
 
-                    @*<td>
-            @Html.DisplayFor(modelItem => item.RCCode)
+                        @*<td>
+                        @Html.DisplayFor(modelItem => item.RCCode)
 
-        </td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TDNo)
-                    </td>
-                    <td class="text-right">                        
-                        @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.TDDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InvoicedTo)
-                    </td>
-                    <td class="text-right">
-                        @Html.DisplayFor(modelItem => item.Amount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Currency)
-                    </td>
-                    <td >
-                        @Html.DisplayFor(modelItem => item.DebitAccountName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreditAccountName)
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
-                        <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
-                    </td>
-                </tr>
+                    </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TDNo)
+                        </td>
+                        <td class="text-right">
+                            @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.TDDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InvoicedTo)
+                        </td>
+                        <td class="text-right">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Currency)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DebitAccountName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreditAccountName)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
+                            <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
+                        </td>
+                    </tr>
 
                 }
             </tbody>

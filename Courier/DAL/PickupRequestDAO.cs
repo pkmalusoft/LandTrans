@@ -474,6 +474,36 @@ namespace LTMSV2.DAL
             return "OK";
 
         }
+
+
+        //Generate COD Receipt posting
+        public string GenerateDailyTripsPosting(int Id)
+        {
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_GenerateDailyTripPosting " + Id.ToString();
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "OK";
+
+        }
     }
 
 }

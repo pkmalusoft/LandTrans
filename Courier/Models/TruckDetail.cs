@@ -68,6 +68,8 @@ namespace LTMSV2.Models
         public string PhoneNumber { get; set; }
         public Nullable<int> ForwardAgentID { get; set; }
         public string OriginCity { get; set; }
+        public Nullable<int> SupplierInvoiceId { get; set; }
+        public Nullable<int> RecPayId { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual CurrencyMaster CurrencyMaster { get; set; }

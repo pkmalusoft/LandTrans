@@ -54,5 +54,11 @@ namespace LTMSV2.Models
         public string VehicleMaintenance { get; set; }
         public string VehicleOwner { get; set; }
 
+        public int SupplierTypeId { get; set; }
+        public int SupplierID { get; set; }
+        public string SupplierName { get; set; }
+
+        public string DriverName { get; set; }
+        public int DriverID { get; set; }
     }
 }

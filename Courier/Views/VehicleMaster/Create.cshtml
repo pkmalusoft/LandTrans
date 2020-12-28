@@ -23,7 +23,67 @@
                 }
             });
         }
+        $("#SupplierName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/VehicleMaster/Supplier',
+                    datatype: "json",
+                    data: {
+                        term: request.term, suppliertypeid:$('#SupplierTypeId').val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.SupplierName,
+                                value: val.SupplierName,
+                                SupplierID: val.SupplierID
 
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#SupplierName").val(i.item.label);
+                $('#SupplierID').val(i.item.SupplierID);
+
+            },
+
+        });
+
+        $("#DriverName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/VehicleMaster/Driver',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.SupplierName,
+                                value: val.SupplierName,
+                                SupplierID: val.SupplierID
+
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#DriverName").val(i.item.label);
+                $('#DriverID').val(i.item.SupplierID);
+
+            },
+
+        });
         $("#Achead").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -189,7 +249,7 @@
 
 
 <section class="content-header">
-    <h1 class="headingfont">Vehicle Agreements</h1>
+    <h1 class="headingfont">Vehicle Master</h1>
 
 </section>
 
@@ -387,12 +447,23 @@
                 </div>
             </div>
             <div class="row no-margin" style="padding-top:10px">
-
-
-
-
-
-
+                @*<div class="col-md-3 ">
+                    <label class="headinglabel required">Supplier Type</label>
+                    @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(@ViewBag.SupplierType, "SupplierTypeID", "SupplierType1"), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SupplierTypeId)
+                </div>*@
+                <div class="col-md-3 ">
+                    <label class="headinglabel required">Supplier Name</label>
+                    @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.SupplierName)
+                    @Html.HiddenFor(model => model.SupplierID)
+                </div>
+                @*<div class="col-md-3 ">
+                    <label class="headinglabel required">Driver</label>
+                    @Html.TextBoxFor(model => model.DriverName, new { @class = "form-control txttarget" })
+                    @Html.ValidationMessageFor(model => model.DriverName)
+                    @Html.HiddenFor(model => model.DriverID)
+                </div>*@
             </div>
 
             <div class="row no-margin" style="padding-top:10px">

@@ -173,7 +173,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.StockDetail" Width="1.5" PointX="31.75" PointY="37.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SubStatu" Width="1.5" PointX="35.75" PointY="35.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Supplier" Width="1.5" PointX="8.75" PointY="38.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoice" Width="1.5" PointX="10.75" PointY="38.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierType" Width="1.5" PointX="11.25" PointY="91.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SystemControlSequence" Width="1.5" PointX="36.75" PointY="18.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TaxConfiguration" Width="1.5" PointX="33.75" PointY="38.125" IsExpanded="true" />
@@ -429,6 +428,10 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_RevenueCostMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" Width="1.5" PointX="25.375" PointY="41.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" Width="1.5" PointX="13" PointY="47.625" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoice" Width="1.5" PointX="15.75" PointY="104.625" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

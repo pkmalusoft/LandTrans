@@ -14,9 +14,15 @@ namespace LTMSV2.Models
     
     public partial class SupplierInvoice
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SupplierInvoice()
+        {
+            this.SupplierInvoiceDetails = new HashSet<SupplierInvoiceDetail>();
+        }
+    
         public int SupplierInvoiceID { get; set; }
-        public Nullable<int> SupplierID { get; set; }
-        public Nullable<System.DateTime> InvoiceDate { get; set; }
+        public int SupplierID { get; set; }
+        public System.DateTime InvoiceDate { get; set; }
         public string Remarks { get; set; }
         public Nullable<int> AccompanyID { get; set; }
         public string InvoiceNo { get; set; }
@@ -24,5 +30,10 @@ namespace LTMSV2.Models
         public Nullable<int> AcDiscJournalID { get; set; }
         public Nullable<int> AcHeadID { get; set; }
         public Nullable<int> FyearID { get; set; }
+        public Nullable<int> cid { get; set; }
+    
+        public virtual SupplierMaster SupplierMaster { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SupplierInvoiceDetail> SupplierInvoiceDetails { get; set; }
     }
 }

@@ -3871,7 +3871,88 @@ new AcGroupModel()
 
             }
         }
+        public ActionResult AcOpeningMaster()
+        {
+            var AcFinancialYearID = Convert.ToInt32(Session["fyearid"]);
 
+            var CurrentStartYear =Convert.ToDateTime(Session["FyearFrom"]);
+            var Year = CurrentStartYear.Year;
+            DateTime firstDay = new DateTime(Year, 1, 1);
+            ViewBag.Opdate = firstDay.ToString("dd-MM-yyyy");
+            var OpeningMaster = (from d in db.AcOpeningMasters where d.AcFinancialYearID== AcFinancialYearID select d).ToList();
+            return View(OpeningMaster);
+        }
+        public JsonResult SubmitAcOpeningMaster(int Id,int AcHeadId,decimal? Amount,string AccNature)
+        {
+            try
+            {
+                var AcFinancialYearID = Convert.ToInt32(Session["fyearid"]);
+                var isexist = (from d in db.AcOpeningMasters where d.AcOpeningID!=Id && d.AcFinancialYearID== AcFinancialYearID && d.AcHeadID == AcHeadId select d).FirstOrDefault();
+                if (isexist == null)
+                {
+                    var data = (from d in db.AcOpeningMasters where d.AcOpeningID == Id select d).FirstOrDefault();
+                    if (data == null)
+                    {
+                        data = new AcOpeningMaster();
+                    }
+                    data.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
+                    data.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+                    data.AcFinancialYearID = Convert.ToInt32(Session["fyearid"]);
+                    data.AcHeadID = AcHeadId;
+                    var CurrentStartYear = Convert.ToDateTime(Session["FyearFrom"]);
+                    var Year = CurrentStartYear.Year;
+                    DateTime firstDay = new DateTime(Year, 1, 1);
+                    data.OPDate = firstDay;
+                    if (AccNature == "Dr")
+                    {
+                        data.Amount = Amount ;
+                    }
+                    else
+                    {
+                        data.Amount = Amount * -1;
+                    }
+                    data.UserID = Convert.ToInt32(Session["UserID"]);
+                    if (Id == 0)
+                    {
+                        db.AcOpeningMasters.Add(data);
+                    }
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message ="Opening Amount already added to this Chart of Account!" }, JsonRequestBehavior.AllowGet);
+
+                }
+            }
+            catch (Exception e){
+                return Json(new { success = false, message = e.Message.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        public JsonResult GetOpeningMasterById(int Id)
+        {
+            var acopeingmastervm = new AcOpeningMasterVm();
+            var data = (from d in db.AcOpeningMasters where d.AcOpeningID == Id select d).FirstOrDefault();
+            var Achead = (from d in db.AcHeads where d.AcHeadID == data.AcHeadID select d).FirstOrDefault();
+
+            acopeingmastervm.AcHeadID = data.AcHeadID;
+            acopeingmastervm.AcHead = Achead.AcHead1;
+            acopeingmastervm.AcOpeningID = data.AcOpeningID;
+            acopeingmastervm.Amount = data.Amount;
+
+            return Json(new { data= acopeingmastervm }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeleteAcOpeningMaster(int Id)
+        {
+            var data = (from d in db.AcOpeningMasters where d.AcOpeningID == Id select d).FirstOrDefault();
+            db.AcOpeningMasters.Remove(data);
+            db.SaveChanges();
+            ViewBag.SuccessMsg = "You have successfully deleted Account Opening Master";
+            return RedirectToAction("AcOpeningMaster");
+
+        }
     }
 
 
@@ -3909,7 +3990,15 @@ public static class MvcHelpers
         }
     }
 
+    
+}
+public class AcOpeningMasterVm
+{
+    public int AcOpeningID { get; set; }
 
+    public Nullable<int> AcHeadID { get; set; }
+    public Nullable<decimal> Amount { get; set; }
+    public string AcHead { get; set; }
 }
 public class DeleteFileAttribute : ActionFilterAttribute
 {

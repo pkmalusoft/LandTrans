@@ -1,0 +1,251 @@
+﻿@model IEnumerable<LTMSV2.Models.AcOpeningMaster>
+
+@{
+    ViewBag.Title = "AcOpeningMaster";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+
+    string path = Request.Url.AbsolutePath.ToLower();
+
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        LTMSV2.Models.SourceMastersModel obj = new LTMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
+}
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+</style>
+<script type="text/javascript">
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31
+            && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    function setNumberDecimal(obj) {
+
+       $(obj).val(parseFloat($(obj).val()).toFixed(3));
+    }
+    $(document).ready(function () {
+
+        $("#btnsave").click(function () {
+            var Id = $("#Id").val();
+            var AcHeadId = $("#AcHeadId").val();
+            var Amount = $("#Amount").val();
+            var AccNature = $("#AccNature").val();
+            if (AcHeadId == null || AcHeadId == "") {
+                $.notify("Please Select Chart of Account!", "error");
+            }
+            else if (Amount == "" || Amount == null) {
+                $.notify("Enter Opening Amount", "error");
+
+            } else {
+                $.ajax({
+                type: "POST",
+                url: "/Accounts/SubmitAcOpeningMaster",
+                datatype: "Json",
+                    data: { Id: Id, AcHeadId: AcHeadId, Amount: Amount, AccNature: AccNature},
+                success: function (data) {
+                    if (data.success == true) {
+                        $.notify("Submitted Successfully!", "success");
+                        location.reload();
+                    } else {
+                        $.notify(data.message, "error");
+                    }
+                }
+            });
+            }
+        });
+        $("#AcHeadName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DailyTrips/AcHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                Id: val.AcHeadID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: -1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#AcHeadName').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#AcHeadName").val(i.item.label);
+                $("#AcHeadId").val(i.item.Id);
+            },
+
+        });
+    });
+    function EditOpeningMaster(Id) {
+        $.ajax({
+            type: "POST",
+            url: "/Accounts/GetOpeningMasterById",
+            datatype: "Json",
+            data: { Id: Id },
+            success: function (data) {
+                $("#Id").val(data.data.AcOpeningID);
+                $("#AcHeadId").val(data.data.AcHeadID);
+                if (data.data.Amount >0) {
+                    $("#Amount").val(data.data.Amount * -1);
+                    $("#AccNature").val("Dr");
+                } else {
+                    $("#Amount").val(data.data.Amount);
+                    $("#AccNature").val("Cr");
+                }
+
+                $("#AcHeadName").val(data.data.AcHead);
+                $("#btnsave").attr('value', 'Update');
+                $("#btncancel").removeClass('hidden');
+            }
+        });
+    }
+    function DeleteOpeningMaster(ID) {
+        if (confirm("Are you sure? You want to Delete?")) {
+            window.location.href = "/Accounts/DeleteAcOpeningMaster/?Id=" + ID;
+        }
+    }
+    function CancelEdit() {
+        location.reload();
+    }
+</script>
+<section class="content-header">
+    <h1 class="headingfont">Account Opening Master</h1>
+
+</section>
+<section class="content">
+    @if (ViewBag.SuccessMsg != null)
+    {
+        <script type="text/javascript">
+         $(document).ready(function () {
+             $.notify("@ViewBag.SuccessMsg ", "success");
+         });
+        </script>
+    }
+
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script type="text/javascript">
+         $(document).ready(function () {
+             $.notify("@ViewBag.ErrorMsg ", "danger");
+         });
+        </script>
+    }
+    <div class="row no-margin">
+        <div class="col-md-12">
+            <div class="row form-group">
+                <input type="hidden" id="Id" name="Id" value="0" />
+                <div class="col-md-2">
+                    <label>Opening Date</label>
+                    <input type="text" class="form-control" id="OpDate" name="OpDate" value="@ViewBag.Opdate" readonly />
+                </div>
+                <div class="col-md-3">
+                    <label class="required">Account Head</label>
+                    <input type="text" class="form-control" id="AcHeadName" name="AcHeadName" />
+                    <input type="hidden" id="AcHeadId" name="AcHeadId" />
+                </div>
+                <div class="col-md-2">
+                    <label class="required">Amount</label>
+                    <input type="text" class="form-control text-right" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" id="Amount" name="Amount" />
+                </div>
+                <div class="col-md-2">
+                    <label class="required">Account Nature</label>
+                    <select class="form-control" id="AccNature" name="AccNature">
+                        <option value="Dr">Debit</option>
+                        <option value="Cr">Credit</option>
+                    </select>
+                </div>
+                <div class="col-md-3 btn-right">
+                    <input type="submit" value="ADD" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+                    <input type="submit" onclick="CancelEdit()" value="Cancel" class="btn btn-danger btnwidth hidden" id="btncancel" />
+
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+    
+    <hr />
+    <div class="table-responsive tblbackground" style="padding:15px">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+            <thead>
+                <tr>                  
+                    <th>
+                        @Html.Label("Chart of Account")
+                    </th>
+                    <th>
+                        @Html.Label("Type")
+                    </th>
+                    <th>
+                        @Html.Label("Amount")
+                    </th>
+
+                    <th>Action</th>
+                </tr>
+            </thead>    
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AcHead.AcHead1)
+                    </td>
+
+                    @if (item.Amount > 0)
+                    {
+                        <td> Debit </td>
+
+                    }
+                    else
+                    {
+                        <td> Credit </td>
+
+                    }
+
+                <td style="text-align:right">                    
+                    @LTMSV2.Models.CommanFunctions.GetDecimalFormat(item.Amount,"3")
+                </td>
+
+                    <td>
+
+                        @if (ismodify)
+                        {
+                            <a style="cursor:pointer" onclick="EditOpeningMaster(@item.AcOpeningID)"><i class="fa fa-pencil"></i></a>
+                        }
+                        |
+                        @if (isdelete)
+                        {
+                            <a onclick="DeleteOpeningMaster(@item.AcOpeningID)"><i class="fa fa-times"></i></a>
+                        }
+
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

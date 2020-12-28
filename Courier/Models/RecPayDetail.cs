@@ -28,5 +28,6 @@ namespace LTMSV2.Models
         public Nullable<bool> Lock { get; set; }
         public Nullable<int> JobID { get; set; }
         public Nullable<decimal> AdjustmentAmount { get; set; }
+        public Nullable<int> TruckDetailID { get; set; }
     }
 }

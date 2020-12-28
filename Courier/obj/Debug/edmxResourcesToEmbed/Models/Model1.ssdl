@@ -2938,6 +2938,7 @@
     <Property Name="Lock" Type="bit" />
     <Property Name="JobID" Type="int" />
     <Property Name="AdjustmentAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="TruckDetailID" Type="int" />
   </EntityType>
   <EntityType Name="RequestType">
     <Key>
@@ -3131,15 +3132,28 @@
       <PropertyRef Name="SupplierInvoiceID" />
     </Key>
     <Property Name="SupplierInvoiceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="SupplierID" Type="int" />
-    <Property Name="InvoiceDate" Type="datetime" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="SupplierID" Type="int" Nullable="false" />
+    <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="AccompanyID" Type="int" />
-    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="20" />
+    <Property Name="InvoiceNo" Type="varchar" MaxLength="20" />
     <Property Name="AcJOurnalID" Type="int" />
     <Property Name="AcDiscJournalID" Type="int" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="FyearID" Type="int" />
+    <Property Name="cid" Type="int" />
+  </EntityType>
+  <EntityType Name="SupplierInvoiceDetails">
+    <Key>
+      <PropertyRef Name="SupplierInvoiceDetailID" />
+    </Key>
+    <Property Name="SupplierInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplierInvoiceID" Type="int" Nullable="false" />
+    <Property Name="Particulars" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Quantity" Type="money" Nullable="false" />
+    <Property Name="Rate" Type="money" Nullable="false" />
+    <Property Name="CurrencyID" Type="int" Nullable="false" />
+    <Property Name="CurrencyAmount" Type="money" Nullable="false" />
   </EntityType>
   <EntityType Name="SupplierMaster">
     <Key>
@@ -3624,6 +3638,8 @@
     <Property Name="PhoneNumber" Type="nvarchar" MaxLength="100" />
     <Property Name="ForwardAgentID" Type="int" />
     <Property Name="OriginCity" Type="nvarchar" MaxLength="100" />
+    <Property Name="SupplierInvoiceId" Type="int" />
+    <Property Name="RecPayId" Type="int" />
   </EntityType>
   <EntityType Name="TypeOfGoods">
     <Key>
@@ -3796,6 +3812,8 @@
     <Property Name="VehicleOwner" Type="nvarchar" MaxLength="250" />
     <Property Name="VehicleMaintenance" Type="nvarchar" MaxLength="250" />
     <Property Name="SupplierID" Type="int" />
+    <Property Name="SupplierTypeID" Type="int" />
+    <Property Name="DriverID" Type="int" />
   </EntityType>
   <EntityType Name="VehicleType">
     <Key>
@@ -5645,6 +5663,30 @@
       </Principal>
       <Dependent Role="SalesInvoiceDetails">
         <PropertyRef Name="SalesInvoiceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SupplierInvoice_SupplierMaster">
+    <End Role="SupplierMaster" Type="Self.SupplierMaster" Multiplicity="1" />
+    <End Role="SupplierInvoice" Type="Self.SupplierInvoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SupplierMaster">
+        <PropertyRef Name="SupplierID" />
+      </Principal>
+      <Dependent Role="SupplierInvoice">
+        <PropertyRef Name="SupplierID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SupplierInvoiceDetails_SupplierInvoice">
+    <End Role="SupplierInvoice" Type="Self.SupplierInvoice" Multiplicity="1" />
+    <End Role="SupplierInvoiceDetails" Type="Self.SupplierInvoiceDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SupplierInvoice">
+        <PropertyRef Name="SupplierInvoiceID" />
+      </Principal>
+      <Dependent Role="SupplierInvoiceDetails">
+        <PropertyRef Name="SupplierInvoiceID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -8716,6 +8758,7 @@
     <EntitySet Name="SubStatus" EntityType="Self.SubStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierInvoice" EntityType="Self.SupplierInvoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SupplierInvoiceDetails" EntityType="Self.SupplierInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierMaster" EntityType="Self.SupplierMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierType" EntityType="Self.SupplierType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SystemControlSequence" EntityType="Self.SystemControlSequence" Schema="dbo" store:Type="Tables" />
@@ -9358,6 +9401,14 @@
     <AssociationSet Name="FK_SalesInvoiceDetails_SalesInvoice" Association="Self.FK_SalesInvoiceDetails_SalesInvoice">
       <End Role="SalesInvoice" EntitySet="SalesInvoice" />
       <End Role="SalesInvoiceDetails" EntitySet="SalesInvoiceDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SupplierInvoice_SupplierMaster" Association="Self.FK_SupplierInvoice_SupplierMaster">
+      <End Role="SupplierMaster" EntitySet="SupplierMaster" />
+      <End Role="SupplierInvoice" EntitySet="SupplierInvoice" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SupplierInvoiceDetails_SupplierInvoice" Association="Self.FK_SupplierInvoiceDetails_SupplierInvoice">
+      <End Role="SupplierInvoice" EntitySet="SupplierInvoice" />
+      <End Role="SupplierInvoiceDetails" EntitySet="SupplierInvoiceDetails" />
     </AssociationSet>
     <AssociationSet Name="FK_SupplierMaster_BranchMaster" Association="Self.FK_SupplierMaster_BranchMaster">
       <End Role="BranchMaster" EntitySet="BranchMaster" />

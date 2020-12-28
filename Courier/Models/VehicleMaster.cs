@@ -45,6 +45,8 @@ namespace LTMSV2.Models
         public string VehicleOwner { get; set; }
         public string VehicleMaintenance { get; set; }
         public Nullable<int> SupplierID { get; set; }
+        public Nullable<int> SupplierTypeID { get; set; }
+        public Nullable<int> DriverID { get; set; }
     
         public virtual VehicleType VehicleType { get; set; }
     }

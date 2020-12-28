@@ -5,7 +5,7 @@ using System.Web;
 
 namespace LTMSV2.Models
 {
-    public class TruckDetailVM
+    public class TruckDetailVM:TruckDetail
     {
         public int TruckDetailID { get; set; }
         public string ReceiptNo { get; set; }

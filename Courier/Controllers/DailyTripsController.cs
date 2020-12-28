@@ -10,6 +10,7 @@ using System.Data.Entity;
 
 namespace LTMSV2.Controllers
 {
+    [SessionExpireFilter]
     public class DailyTripsController : Controller
     {
         Entities1 db = new Entities1();
@@ -95,16 +96,16 @@ namespace LTMSV2.Controllers
             ViewBag.Locations = db.LocationMasters.ToList();
             ViewBag.Currency = db.CurrencyMasters.ToList();
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            ViewBag.Achead = db.AcHeads.Where(d=>d.AcBranchID== branchid).ToList();
+            ViewBag.Achead = db.AcHeads.Where(d => d.AcBranchID == branchid).ToList();
             ViewBag.Drivers = db.DriverMasters.ToList();
             ViewBag.Vehicles = db.VehicleMasters.ToList();
             ViewBag.Countries = db.CountryMasters.ToList();
             ViewBag.Documents = db.DocumentSetups.ToList();
             ViewBag.VehicleTypes = db.VehicleTypes.ToList();
             ViewBag.FwdAgents = db.ForwardingAgentMasters.ToList();
-
-            var   truckDetail = (from d in db.TruckDetails where d.TruckDetailID == Id select d).FirstOrDefault();
-            if(truckDetail==null)
+            ViewBag.Title = "DAILY TRIPS - CREATE";
+            var truckDetail = (from d in db.TruckDetails where d.TruckDetailID == Id select d).FirstOrDefault();
+            if (truckDetail == null)
             {
                 truckDetail = new TruckDetail();
                 ViewBag.VehicleType = "H";
@@ -123,11 +124,12 @@ namespace LTMSV2.Controllers
             }
             else
             {
-                if(truckDetail.VehicleType=="H")
+                ViewBag.Title = "DAILY TRIPS - MODIFY";
+                if (truckDetail.VehicleType == "H")
                 {
                     ViewBag.VehicleType = "H";
                 }
-                else if(truckDetail.VehicleType == "O")
+                else if (truckDetail.VehicleType == "O")
                 {
                     ViewBag.VehicleType = "O";
                 }
@@ -144,14 +146,15 @@ namespace LTMSV2.Controllers
                     ViewBag.VehicleType = "H";
                 }
             }
-           
+
             return View(truckDetail);
         }
-       
+            
         public JsonResult SaveHiredVehicle(FormCollection data)
         {
             try
             {
+                int FYearId = Convert.ToInt32(Session["fyearid"].ToString());
                 var TruckDetail = new TruckDetail();
                 var TruckDetailID = Convert.ToInt32(data["TruckDetailID"]);
                 TruckDetail = (from d in db.TruckDetails where d.TruckDetailID == TruckDetailID select d).FirstOrDefault();
@@ -174,7 +177,7 @@ namespace LTMSV2.Controllers
                
                 TruckDetail.VehicleID= Convert.ToInt32(data["VehicleID"]);
                 var vehicle = db.VehicleMasters.Find(TruckDetail.VehicleID);
-                
+                TruckDetail.FYearID = FYearId;
                 TruckDetail.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
                 TruckDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 TruckDetail.VehicleType = Convert.ToString(data["VehicleType"]);
@@ -182,6 +185,8 @@ namespace LTMSV2.Controllers
                 TruckDetail.DriverID = Convert.ToInt32(data["DriverID"]);
                 TruckDetail.DriverName = Convert.ToString(data["DriverName"]);
                 TruckDetail.RegNo = vehicle.RegistrationNo;
+                TruckDetail.ChequeNo = Convert.ToString(data["ChequeNo"]);
+                TruckDetail.ChequeDate= Convert.ToDateTime(data["ChequeDate"]); 
                 TruckDetail.RouteID = Convert.ToInt32(data["RouteID"]);               
                 TruckDetail.OriginName = Convert.ToString(data["OriginName"]);
                 TruckDetail.DestinationName = Convert.ToString(data["DestinationName"]);
@@ -189,13 +194,15 @@ namespace LTMSV2.Controllers
                 TruckDetail.Rent = Convert.ToDecimal(data["Rent"]);
                 TruckDetail.CurrencyIDRent = Convert.ToInt32(data["CurrencyIDRent"]);
                 TruckDetail.OtherCharges = Convert.ToDecimal(data["OtherCharges"]);
+                TruckDetail.OtherChargesAcHeadID = Convert.ToInt32(data["OtherChargesAcHeadID"]);
                 //TruckDetail.CurrencyRent = Convert.ToDecimal(data["CurrencyRent"]);
                 TruckDetail.RentAcHeadID = Convert.ToInt32(data["RentAcHeadID"]);
                 TruckDetail.TDRemarks = Convert.ToString(data["TDRemarks"]);
                 TruckDetail.StatusPaymentMode = Convert.ToString(data["StatusPaymentMode"]);
                 TruckDetail.PaymentHeadID = Convert.ToInt32(data["PaymentHeadID"]);
                 TruckDetail.TDcontrolAcHeadID = Convert.ToInt32(data["TDcontrolAcHeadID"]);
-                TruckDetail.CurrencyAmount = Convert.ToDecimal(data["CurrencyAmount"]);
+                TruckDetail.CurrencyAmount = Convert.ToDecimal(data["Amount"]);
+                TruckDetail.Amount = Convert.ToDecimal(data["Amount"]);
                 TruckDetail.PaymentCurrencyID = Convert.ToInt32(data["PaymentCurrencyID"]);
                 TruckDetail.Remarks = Convert.ToString(data["Remarks"]);
                 TruckDetail.IsDeleted =false;
@@ -204,6 +211,8 @@ namespace LTMSV2.Controllers
                     db.TruckDetails.Add(TruckDetail);
                 }
                 db.SaveChanges();
+                PickupRequestDAO _dao = new PickupRequestDAO();
+                _dao.GenerateDailyTripsPosting(TruckDetail.TruckDetailID);
                 return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }
             catch(Exception e)
@@ -216,6 +225,7 @@ namespace LTMSV2.Controllers
         {
             try
             {
+                int FYearId=Convert.ToInt32(Session["fyearid"].ToString());
                 var TruckDetail = new TruckDetail();
                 var TruckDetailID= Convert.ToInt32(data["TruckDetailID"]);
                 TruckDetail = (from d in db.TruckDetails where d.TruckDetailID == TruckDetailID select d).FirstOrDefault();
@@ -241,7 +251,7 @@ namespace LTMSV2.Controllers
                 TruckDetail.VehicleID = Convert.ToInt32(data["VehicleID"]);
                 var vehicle = db.VehicleMasters.Find(TruckDetail.VehicleID);
                 TruckDetail.VehicleType = Convert.ToString(data["VehicleType"]);
-
+                TruckDetail.FYearID = FYearId;
                 TruckDetail.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
                 TruckDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 TruckDetail.TDDate = Convert.ToDateTime(data["TDDate"]);
@@ -278,6 +288,7 @@ namespace LTMSV2.Controllers
         {
             try
             {
+                int FYearId = Convert.ToInt32(Session["fyearid"].ToString());
                 var TruckDetail = new TruckDetail();
                 var TruckDetailID = Convert.ToInt32(data["TruckDetailID"]);
                 TruckDetail = (from d in db.TruckDetails where d.TruckDetailID == TruckDetailID select d).FirstOrDefault();
@@ -301,7 +312,7 @@ namespace LTMSV2.Controllers
 
 
                 TruckDetail.VehicleType = Convert.ToString(data["VehicleType"]);
-
+                TruckDetail.FYearID = FYearId;
                 TruckDetail.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
                 TruckDetail.PhoneNumber = Convert.ToString(data["PhoneNumber"]);
                 TruckDetail.ForwardAgentID = Convert.ToInt32(data["ForwardAgentID"]);
@@ -392,6 +403,21 @@ namespace LTMSV2.Controllers
             var Driver = (from d in db.DriverMasters where d.DriverID == DriverId select d).FirstOrDefault().DriverName;
             
             return Json(new { Driver = Driver }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetRouteDetail(int RouteId)
+        {
+            var route = (from d in db.RouteMasters where d.RouteID == RouteId select d).FirstOrDefault();
+            string Origin = "";
+            string Destination = "";
+
+            if (route!=null)
+            {
+                Origin = db.LocationMasters.Find(route.OrginLocationID).Location.ToString();
+                Destination= db.LocationMasters.Find(route.DestinationLocationID).Location.ToString();
+            }
+
+            return Json(new { Origin = Origin, Destination=Destination }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult DeleteConfirmed(int id)

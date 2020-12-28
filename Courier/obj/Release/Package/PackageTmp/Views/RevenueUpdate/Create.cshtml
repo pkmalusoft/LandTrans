@@ -38,6 +38,19 @@
 <script type="text/javascript">
     var AWBItems = [];
     var RemoveAWBItems = [];
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31
+            && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    function setNumberDecimal(obj) {
+
+        $(obj).val(parseFloat($(obj).val()).toFixed(3));
+    }
     function DisplayCostItems() {
                         
         $.ajax({
@@ -523,7 +536,7 @@
                     </div>
                     <div class="col-md-1">
                         <label class="headinglabel">Amount</label>
-                        <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" />
+                        <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
                     </div>
                     <div class="col-md-2">
                         <label class="headinglabel">Invoiced To</label>
@@ -531,12 +544,12 @@
                         <input type="hidden" id="txtCustomerId" class="form-control" autocomplete="off" />
                     </div>
                     <div class="col-md-2">
-                        <label class="headinglabel">Debit Ac</label>
+                        <label class="headinglabel">Debit Chart of Account</label>
                         <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
                         <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
                     </div>
                     <div class="col-md-2">
-                        <label class="headinglabel">Credit Ac</label>
+                        <label class="headinglabel">Credit Chat of Account</label>
                         <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
                         <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
                     </div>
@@ -556,8 +569,8 @@
                             <td style="width:5%">Amount</td>
                             <td style="width:5%">Amount(F.C)</td>
                             <td style="width:15%">Invoiced To</td>
-                            <td style="width:15%">Debit Account</td>
-                            <td style="width:15%">Credit Account</td>
+                            <td style="width:15%">Debit Chart of Account</td>
+                            <td style="width:15%">Credit Chat of Account</td>
                         </tr>
                     </table>
                 </div>

@@ -195,7 +195,6 @@ namespace LTMSV2.Models
         public virtual DbSet<StockDetail> StockDetails { get; set; }
         public virtual DbSet<SubStatu> SubStatus { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
-        public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
         public virtual DbSet<SupplierType> SupplierTypes { get; set; }
         public virtual DbSet<SystemControlSequence> SystemControlSequences { get; set; }
         public virtual DbSet<TaxConfiguration> TaxConfigurations { get; set; }
@@ -272,6 +271,8 @@ namespace LTMSV2.Models
         public virtual DbSet<CostUpdateDetail> CostUpdateDetails { get; set; }
         public virtual DbSet<CostUpdateMaster> CostUpdateMasters { get; set; }
         public virtual DbSet<DriverMaster> DriverMasters { get; set; }
+        public virtual DbSet<SupplierInvoiceDetail> SupplierInvoiceDetails { get; set; }
+        public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

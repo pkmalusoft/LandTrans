@@ -67,6 +67,7 @@ namespace LTMSV2.Controllers
         {
             ViewBag.Branch = db.BranchMasters.ToList();
             ViewBag.VehicleType = db.VehicleTypes.ToList();
+            ViewBag.SupplierType = db.SupplierTypes.ToList();
             ViewBag.Achead = db.AcHeads.ToList();
             VehiclesVM v = new VehiclesVM();
             if (id>0)
@@ -112,7 +113,9 @@ namespace LTMSV2.Controllers
                     v = db.VehicleMasters.Find(vm.VehicleID);
                 }
 
-
+                    //v.SupplierTypeID = vm.SupplierTypeId;
+                    v.SupplierID = vm.SupplierID;
+                    //v.DriverID = vm.DriverID;
                     v.VehicleDescription = vm.VehicleDescription;
                     v.RegistrationNo = vm.RegistrationNo;
                     v.Model = vm.Model;
@@ -200,7 +203,13 @@ namespace LTMSV2.Controllers
             v.AcCompanyID =Convert.ToInt32(data.AcCompanyID);
             v.RegistrationNo = data.RegistrationNo;
             v.RegisteredUnder = data.RegisteredUnder;
-            
+
+            if (data.SupplierID!=null)
+                v.SupplierID = data.SupplierID.Value;
+
+            //if (data.SupplierTypeID != null)
+            //    v.SupplierTypeId = data.SupplierTypeID.Value;
+
             if (data.RegExpirydate!=null)
               v.RegExpirydate = Convert.ToDateTime(data.RegExpirydate);
             
@@ -230,12 +239,49 @@ namespace LTMSV2.Controllers
                 v.ContractExpDate = Convert.ToDateTime(data.ContractExpDate);
             return v;
         }
-       
+
         //
         // POST: /VehicleMaster/Edit/5
 
-   
-      
+        public ActionResult Supplier(string term,int suppliertypeid)
+        {
+            int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            if (!String.IsNullOrEmpty(term.Trim()))
+            {
+                List<SupplierMasterVM> supplierlist = new List<SupplierMasterVM>();
+                supplierlist = (from c in db.SupplierMasters where c.SupplierTypeID==suppliertypeid && c.SupplierName.ToLower().StartsWith(term.ToLower()) orderby c.SupplierName select new SupplierMasterVM { SupplierID = c.SupplierID, SupplierName = c.SupplierName }).ToList();
+
+                return Json(supplierlist, JsonRequestBehavior.AllowGet);
+
+
+            }
+            else
+            {
+                List<SupplierMasterVM> supplierlist = new List<SupplierMasterVM>();
+                supplierlist = (from c in db.SupplierMasters where c.SupplierTypeID == suppliertypeid orderby c.SupplierName select new SupplierMasterVM { SupplierID = c.SupplierID, SupplierName = c.SupplierName }).ToList();
+                return Json(supplierlist, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult Driver(string term)
+        {
+            int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            if (!String.IsNullOrEmpty(term.Trim()))
+            {
+                List<SupplierMasterVM> supplierlist = new List<SupplierMasterVM>();
+                supplierlist = (from c in db.DriverMasters where c.DriverName.ToLower().StartsWith(term.ToLower()) orderby c.DriverName select new SupplierMasterVM { SupplierID = c.DriverID, SupplierName = c.DriverName }).ToList();
+
+                return Json(supplierlist, JsonRequestBehavior.AllowGet);
+
+
+            }
+            else
+            {
+                List<SupplierMasterVM> supplierlist = new List<SupplierMasterVM>();
+                supplierlist = (from c in db.DriverMasters orderby c.DriverName select new SupplierMasterVM { SupplierID = c.DriverID, SupplierName = c.DriverName }).ToList();
+                return Json(supplierlist, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult DeleteConfirmed(int id)
         {
             VehicleMaster vehiclemaster = db.VehicleMasters.Find(id);

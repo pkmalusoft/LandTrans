@@ -20,6 +20,7 @@ namespace LTMSV2.Models
             this.PurchaseInvoices = new HashSet<PurchaseInvoice>();
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
             this.tblSupplierAdjustments = new HashSet<tblSupplierAdjustment>();
+            this.SupplierInvoices = new HashSet<SupplierInvoice>();
         }
     
         public int SupplierID { get; set; }
@@ -64,5 +65,7 @@ namespace LTMSV2.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblSupplierAdjustment> tblSupplierAdjustments { get; set; }
         public virtual BranchMaster BranchMaster { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SupplierInvoice> SupplierInvoices { get; set; }
     }
 }

@@ -276,6 +276,8 @@
     <Compile Include="Controllers\CostUpdateController.cs" />
     <Compile Include="Controllers\RevenueUpdateController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\SupplierInvoiceController.cs" />
+    <Compile Include="Controllers\SupplierPaymentController.cs" />
     <Compile Include="Controllers\TruckAssignController.cs" />
     <Compile Include="Controllers\VehicleMasterController.cs" />
     <Compile Include="Controllers\VehicleTypeController.cs" />
@@ -1775,6 +1777,10 @@
     <Compile Include="Models\SupplierInvoice.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SupplierInvoiceDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SupplierInvoiceVM.cs" />
     <Compile Include="Models\SupplierMaster.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3544,6 +3550,16 @@
     <Content Include="Views\CostUpdate\Create.cshtml" />
     <Content Include="Views\CostUpdate\Index.cshtml" />
     <Content Include="Views\Driver\Create.cshtml" />
+    <Content Include="Views\DailyTrips\Create - Copy.cshtml" />
+    <Content Include="Views\Accounts\AcOpeningMaster.cshtml" />
+    <Content Include="Views\SupplierInvoice\Index.cshtml" />
+    <Content Include="Views\SupplierPayment\SupplierPayment.cshtml" />
+    <Content Include="Views\SupplierPayment\SupplierPaymentDetails.cshtml" />
+    <Content Include="Views\SupplierPayment\_GetAllSupplier.cshtml" />
+    <Content Include="Views\SupplierPayment\_GetAllSupplierByDate.cshtml" />
+    <Content Include="Views\SupplierPayment\_GetAllTradeSupplierByDate.cshtml" />
+    <Content Include="Views\SupplierPayment\_Table.cshtml" />
+    <Content Include="Views\SupplierInvoice\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
