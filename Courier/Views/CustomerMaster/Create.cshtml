@@ -79,8 +79,8 @@
         $("#Email").val('');
         $("#Password").val('');
 
-        $("#CustomerType").focus();
-
+        $("#CustomerName").focus();
+        $('#CustomerType1').val($('#CustomerType').val()).trigger('change');
         $("#CityID").empty();
         $("#LocationID").empty();
 
@@ -174,14 +174,14 @@
         $("#btnApprove").click(function () {
             debugger;
             $("#validations").html("Plesae Fill mandatory details to Approve Customer!")
-            var cust = $("#CustomerType option:selected").val();
+            var cust = $("#CustomerType1 option:selected").val();
             var name = $("#CustomerName").val();
             var code = $("#CustomerCode").val();
             var add1 = $("#Address1").val();
             var con = $("#ContactPerson").val();          
             var cou = $("#CountryName").val();
             var city = $("#CityName").val();
-            var loc = $("#autocomplete").val();
+            var loc = $("#LocationName").val();
             var curr = $("#CurrenceyID option:selected").val();
             var mobile = $("#Mobile").val();
             var trn = $("#VATTRN").val();
@@ -234,7 +234,7 @@
             }
             else if (loc == "") {
                 $("#validations").show();
-                $("#autocomplete").focus();
+                $("#LocationName").focus();
                 return false;
             }
             else if (curr == "") {
@@ -265,8 +265,10 @@
                     return false;
                 }
             }
-            if (cust == "CS" && $('#ChkApprovedBy').attr('checked')) {
-                $("#CustomerType").val("CR").trigger('change');
+            if (cust == "CS" && $('#btnApprove').is(':checked')) {
+                $("#validations").html('');
+                $("#CustomerType").val("CR");
+                $("#CustomerType1").val("CR").trigger('change');
                 var d = new Date();
                 var curr_date = d.getDate();
                 var curr_month = d.getMonth() + 1;
@@ -277,7 +279,9 @@
                 $('#ApprovedOn').val(newdate);
             }
             else {
-                $("#CustomerType").val("CS").trigger('change');
+                $("#CustomerType").val("CS");
+                $("#CustomerType1").val("CS").trigger('change');
+                $("#validations").html('')
                 $("#txtApprovedBy").val('');
                 $('#ApprovedOn').val('');
             }
@@ -286,7 +290,7 @@
 
         $("#btnsave").click(function () {
             debugger;
-            var cust = $("#CustomerType option:selected").val();
+            var cust = $("#CustomerType1 option:selected").val();
             var name = $("#CustomerName").val();
             var code = $("#CustomerCode").val();
             var add1 = $("#Address1").val();
@@ -297,7 +301,7 @@
             var trn = $("#VATTRN").val();
             var cou = $("#CountryName").val();
             var city = $("#CityName").val();
-            var loc = $("#autocomplete").val();
+            var loc = $("#LocationName").val();
             var curr = $("#CurrenceyID option:selected").val();
             var mobile = $("#Mobile").val();
             var phone = $("#Phone").val();
@@ -357,7 +361,7 @@
             }
             else if (loc == "") {
                 $("#validations").show();
-                $("#autocomplete").focus();
+                $("#LocationName").focus();
                 return false;
             }
             else if (curr == "") {
@@ -512,13 +516,15 @@
                     @Html.HiddenFor(model => model.CityID)
                     @Html.HiddenFor(model => model.CountryID)
                     @Html.HiddenFor(model => model.LocationID)
+                    @Html.HiddenFor(model => model.LocationID)
+                    @Html.HiddenFor(model => model.CustomerType)
                     <label class="headinglabel required">Customer Type</label>
-                    @Html.DropDownList("CustomerType", new List<SelectListItem>
+                    @Html.DropDownList("CustomerType1", new List<SelectListItem>
                 {
                     new SelectListItem{ Text="Credit", Value = "CR" },
                     new SelectListItem{ Text="Cash", Value = "CS",Selected=true },
 
-                 }, new { @class = "form-control", @disabled = "@disabled" })
+                 }, new { @class = "form-control", @readonly = "readonly" })
 
 
                     @*@Html.DropDownListFor(model => model.CustomerTypeId, new SelectList(@ViewBag.country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
@@ -541,7 +547,7 @@
 
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Flat/Building</label>
+                    <label class="headinglabel">Flat/Building</label>
                     @Html.TextBoxFor(model => model.Address1, new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.Address1)
                 </div>
@@ -565,12 +571,12 @@
 
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Contact Person</label>
+                    <label class="headinglabel">Contact Person</label>
                     @Html.TextBoxFor(model => model.ContactPerson, new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.ContactPerson)
                 </div>
                 <div class="col-md-3">
-                    <label class="headinglabel required">Location</label>
+                    <label class="headinglabel">Location</label>
                     @Html.TextBoxFor(mode=>Model.LocationName,new { @class="form-control txttarget"})
                     @Html.ValidationMessageFor(model => model.LocationName)
                 </div>
@@ -582,7 +588,7 @@
             <div class="row no-margin" style="padding-top: 10px">
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">City</label>
+                    <label class="headinglabel">City</label>
                     <input class="form-control" id="CityName" name="CityName" type="text" readonly="readonly"  />                    
                     @Html.ValidationMessageFor(model => model.CityName)
                 </div>
@@ -596,13 +602,13 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Currency</label>
+                    <label class="headinglabel" >Currency</label>
                     @Html.DropDownListFor(model => model.CurrenceyID, new SelectList(@ViewBag.currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.CurrenceyID)
                 </div>
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Mobile</label>
+                    <label class="headinglabel">Mobile</label>
                     @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control textright", @placeholder = "XXXXXXXXXX", @maxlength = 25 })
                     @Html.ValidationMessageFor(model => model.Mobile)
                 </div>
@@ -634,7 +640,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Sale Executive</label>
+                    <label class="headinglabel">Sale Executive</label>
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.EmployeeID)
                 </div>
@@ -647,7 +653,7 @@
             <div class="row no-margin" style="padding-top: 10px">
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">VAT TRN No.</label>
+                    <label class="headinglabel">VAT TRN No.</label>
                     @Html.TextBoxFor(model => model.VATTRN,  new { @class = "form-control"})
                     @Html.ValidationMessageFor(model => model.VATTRN)
                     
@@ -657,7 +663,7 @@
 
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Email</label>
+                    <label class="headinglabel">Email</label>
                     @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Email)
                 </div>
@@ -691,7 +697,7 @@
                     @Html.ValidationMessageFor(model => model.Referal)
                 </div>
                 <div class="col-md-3">
-                    <label class="headinglabel required">Business Type</label>
+                    <label class="headinglabel">Business Type</label>
                     @Html.DropDownListFor(model => model.BusinessTypeId, new SelectList(@ViewBag.businessType, "Id", "BusinessType1"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.BusinessTypeId)
                 </div>

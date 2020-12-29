@@ -9,8 +9,8 @@
     tfoot {
         display: table-header-group;
     }
-     table input{
-        width:100%;
+    .subtable>tbody>tr>td{
+        padding-left:30px;
     }
 </style>
 
@@ -20,10 +20,15 @@
             var title = $(this).text();
             $(this).html('<input type="text" />');
         });
-
-
-        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
-
+        //var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        var table = $('#dataTables-example').DataTable({
+            "aaSorting": [],
+            //"dom": '<"top"i>rt<"top"flp><"clear">',
+            //dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+            //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            //"pagingType": "simple"
+        });
+        table.draw();
         table.columns().every(function () {
             var that = this;
 
@@ -35,6 +40,46 @@
                 }
             });
         });
+        function format(d) {
+            // `d` is the original data object for the row
+            var RevenueId = d[4];
+            var DataHtml = '';
+            $.ajax({
+                type: "POST",
+                url: "/RevenueUpdate/GetRevenueUpdateDetails",
+                datatype: "Json",
+                data: { Id: RevenueId },
+                success: function (data) {
+                    DataHtml = '<table class="subtable">';
+                    $.each(data, function (index, value) {
+                        DataHtml = DataHtml + '<tr><td  class="textright">' + value.Amount + '</td><td>' + value.Currency + '</td><td>' + value.DebitAccountName + '</td><td>' + value.CreditAccountName + '</td></tr>';
+                    });
+                    DataHtml = DataHtml + '</table>';
+                    $('#pr_' + RevenueId).append(DataHtml);
+                }
+            });
+
+            return '<p id="pr_' + RevenueId + '"></p>';
+        }
+
+        $('#dataTables-example tbody').on('click', 'td.details-control', function () {
+            debugger;
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                $(this).find('img').attr('src', '/Content/img/details_open.png');
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+                $(this).find('img').attr('src', '/Content/img/details_close.png');
+            }
+        });
+       
 
     });
 
@@ -54,7 +99,7 @@
 
 <section class="content">
     @if (TempData["SuccessMsg"] != null)
-    {       
+    {
         <script type="text/javascript">
                       $(document).ready(function () {
                           $.notify("@TempData["SuccessMsg"]", "success");
@@ -62,31 +107,32 @@
         </script>
     }
     <div class="table-responsive tblbackground" style="padding:15px">
-        <table class="table table-responsive table-bordered tblfont" id="dataTables-example" style="width:100%;table-layout:fixed">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example" style="width:100%">
             <thead>
-                <tr>      
-                    <th>
+                <tr>
+                    <th width="5%">
                         @Html.Label("Consignment Note")
                     </th>
-                    <th>
-                        @Html.Label("Consignment Date")
-                    </th>
-                    <th >
-                        @Html.Label("Invoice To")
-                    </th>
-                    <th> 
+                    <th width="5%">
+                        @Html.Label("Consignment Date")</th>
+                        @*</th>
+                            <th width="10%">
+                                @Html.Label("Invoice To")
+                            </th>*@
+                    <th width="5%">
                         @Html.Label("Amount")
                     </th>
-                    <th>
-                        @Html.Label("Currency")
-                    </th>
-                    <th >
-                        @Html.Label("Debit Head")
-                    </th>
-                    <th>
-                        @Html.Label("Credit Head")
-                    </th>
-                    <th>Action</th>
+                    @*<th width="5%">
+                            @Html.Label("Currency")
+                        </th>
+                        <th width="15%" >
+                            @Html.Label("Debit Head")
+                        </th>
+                        <th width="15%">
+                            @Html.Label("Credit Head")
+                        </th>*@
+                    <th width="5%">Action</th>
+                    <th style="display:none">Action</th>
                 </tr>
 
             </thead>
@@ -100,21 +146,21 @@
                     <th>
                         @Html.Label("Consignment Date")
                     </th>
-                    <th class="">
-                        @Html.Label("Invoice To")
-                    </th>
+                    @*<th class="">
+                            @Html.Label("Invoice To")
+                        </th>*@
                     <th>
                         @Html.Label("Amount")
                     </th>
-                    <th>
-                        @Html.Label("Currency")
-                    </th>
-                    <th >
-                        @Html.Label("Debit Account")
-                    </th>
-                    <th>
-                        @Html.Label("Credit Account")
-                    </th>
+                    @*<th>
+                            @Html.Label("Currency")
+                        </th>
+                        <th >
+                            @Html.Label("Debit Account")
+                        </th>
+                        <th>
+                            @Html.Label("Credit Account")
+                        </th>*@
                     <th>
 
                     </th>
@@ -124,38 +170,43 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
+                    <tr>
 
-                    @*<td>
-            @Html.DisplayFor(modelItem => item.RCCode)
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.RCCode)
 
-        </td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ConsignmentNo)
-                    </td>
-                    <td class="text-right">                        
-                        @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.ConsignmentDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InvoicedTo)
-                    </td>
-                    <td class="text-right">
-                        @Html.DisplayFor(modelItem => item.Amount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Currency)
-                    </td>
-                    <td >
-                        @Html.DisplayFor(modelItem => item.DebitAccountName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreditAccountName)
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
-                        <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
-                    </td>
-                </tr>
+                            </td>*@
+                        <td class="details-control">
+                            <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" />
+
+                            @Html.DisplayFor(modelItem => item.ConsignmentNo)
+                        </td>
+                        <td class="text-right">
+                            @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.ConsignmentDate)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.InvoicedTo)
+                            </td>*@
+                        <td class="text-right">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.Currency)
+                            </td>
+                            <td >
+                                @Html.DisplayFor(modelItem => item.DebitAccountName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreditAccountName)
+                            </td>*@
+                        <td>
+                            <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
+                            <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
+                        </td>
+                        <td style="display:none;">
+                            @item.ID
+                        </td>
+                    </tr>
 
                 }
             </tbody>
@@ -168,8 +219,8 @@
 
 <script type="text/javascript">
     function Delete(ID) {
-        if (confirm("Are you sure, You want to Delete Country?")) {
-            window.location.href = "/RevenueCost/DeleteConfirmed/?id=" + ID;
+        if (confirm("Are you sure, You want to Delete Revenue Update?")) {
+            window.location.href = "/RevenueUpdate/DeleteConfirmed/?id=" + ID;
         }
     }
 </script>

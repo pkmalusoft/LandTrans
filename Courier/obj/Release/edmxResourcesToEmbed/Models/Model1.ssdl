@@ -1244,13 +1244,19 @@
       <PropertyRef Name="DebitNoteID" />
     </Key>
     <Property Name="DebitNoteID" Type="int" Nullable="false" />
-    <Property Name="DebitNoteNo" Type="nvarchar" MaxLength="40" />
-    <Property Name="TransDate" Type="datetime" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="DebitNoteNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="InvoiceID" Type="int" />
+    <Property Name="DebitNoteDate" Type="datetime" />
+    <Property Name="Amount" Type="money" />
     <Property Name="AcJournalID" Type="int" />
-    <Property Name="customerID" Type="int" />
-    <Property Name="FyearID" Type="int" />
+    <Property Name="FYearID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
+    <Property Name="InvoiceType" Type="nvarchar" MaxLength="5" />
+    <Property Name="RecPayID" Type="int" />
+    <Property Name="AcHeadID" Type="int" />
+    <Property Name="SupplierID" Type="int" />
+    <Property Name="IsShipping" Type="bit" />
+    <Property Name="Remarks" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="DebitNoteDetails">
     <Key>
@@ -3635,11 +3641,11 @@
     <Property Name="TypeOfLoad" Type="varchar" MaxLength="100" />
     <Property Name="IsDeleted" Type="bit" />
     <Property Name="OriginCountry" Type="nvarchar" MaxLength="100" />
-    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="100" />
     <Property Name="ForwardAgentID" Type="int" />
     <Property Name="OriginCity" Type="nvarchar" MaxLength="100" />
     <Property Name="SupplierInvoiceId" Type="int" />
     <Property Name="RecPayId" Type="int" />
+    <Property Name="ConsignmentNoNote" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="TypeOfGoods">
     <Key>

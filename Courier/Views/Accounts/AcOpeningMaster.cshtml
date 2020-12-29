@@ -110,10 +110,10 @@
                 $("#Id").val(data.data.AcOpeningID);
                 $("#AcHeadId").val(data.data.AcHeadID);
                 if (data.data.Amount >0) {
-                    $("#Amount").val(data.data.Amount * -1);
+                    $("#Amount").val(data.data.Amount);
                     $("#AccNature").val("Dr");
                 } else {
-                    $("#Amount").val(data.data.Amount);
+                    $("#Amount").val(data.data.Amount *-1);
                     $("#AccNature").val("Cr");
                 }
 

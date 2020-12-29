@@ -126,6 +126,7 @@ namespace LTMSV2.Controllers
             ViewBag.CustomerNo = doa.GetMaxCustomerCode(branchid);
             CustmorVM obj = new CustmorVM();
             obj.RoleID = 13;
+            obj.CustomerType = "CS";
             ViewBag.UserRoleId= Convert.ToInt32(Session["UserRoleID"].ToString());
             obj.Password = doa.RandomPassword(6);
             obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
@@ -166,8 +167,18 @@ namespace LTMSV2.Controllers
             obj.Email = c.Email;
             obj.WebSite = c.Website;
             obj.CountryID = c.CountryID;
-            obj.CityID = c.CityID;
-            obj.LocationID = c.LocationID;
+            if (c.CityID == 0)
+                obj.CityID = null;
+            else
+                obj.CityID = c.CityID;
+            if (c.LocationID == 0)
+            {
+                obj.LocationID = null;
+            }
+            else
+            {
+                obj.LocationID = c.LocationID;
+            }
             obj.CountryName = c.CountryName;
             obj.CityName = c.CityName;
             obj.LocationName = c.LocationName;

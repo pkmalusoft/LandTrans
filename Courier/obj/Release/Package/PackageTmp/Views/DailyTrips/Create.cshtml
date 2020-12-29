@@ -61,6 +61,11 @@
         .tablink {
             color:white;
         }
+       /* .flexTitle {
+            display: flex;
+            justify-content: space-between;
+        }*/
+
     </style>
 
 </head>
@@ -104,30 +109,32 @@
 
                     </div>
 
-                    <div class="col-md-3 form-group">
+                    <div class="col-md-3 form-group" id="divdriver">
                         <label class="headinglabel required">Driver</label>
                         @Html.TextBoxFor(model => model.DriverName, new { @class = "form-control", @required = "true" })
                         @Html.HiddenFor(model => model.DriverID)
 
                     </div>
-
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel required">Registration Number</label>
-                        @Html.DropDownListFor(model => model.VehicleID, new SelectList(ViewBag.Vehicles, "VehicleId", "RegistrationNo"), "Select", new { @class = "form-control" })
-
-                        @*@Html.TextBoxFor(model => model.RegNo, new { @class = "form-control", @required = "true" })*@
-
-
+                    <div class="col-md-3 form-group hide" id="divfwd">
+                        <label class="headinglabel required">Forwarding Agent</label>
+                        @Html.DropDownListFor(model => model.ForwardAgentID, new SelectList(@ViewBag.FwdAgents, "SupplierID", "SupplierName"), "Select", new { @class = "form-control", @required = "true" })
 
                     </div>
 
-
+                    <div class="col-md-3 form-group">
+                        <label class="headinglabel required">Registration Number</label>
+                        @Html.TextBoxFor(model => model.RegNo, new { @class = "form-control", @required = "true" })
+                        @Html.HiddenFor(model => model.VehicleID)
+                        @*@Html.TextBoxFor(model => model.RegNo, new { @class = "form-control", @required = "true" })*@
+                    </div>
 
                     <div class="col-md-3 form-group">
                         <label class="headinglabel">Route</label>
                         @Html.DropDownListFor(model => model.RouteID, new SelectList(@ViewBag.Routes, "RouteID", "RouteName"), "Select", new { @class = "form-control" })
 
                     </div>
+                </div>
+                <div class="row no-margin">
                     <div class="col-md-3 form-group">
                         <label class="headinglabel required">Originating Location</label>
                         @Html.TextBoxFor(model => model.OriginName, new { @class = "form-control", id = "OriginName", name = "HOriginName", @onFocus = "geolocate(1)", @required = "true" })
@@ -152,12 +159,16 @@
                         @*@Html.TextBoxFor(model => model.TypeOfLoad, new { @class = "form-control", @required = "true" })*@
                     </div>
 
-
-
+                    <div class="col-md-3 form-group">
+                        <label class="headinglabel">AWB No</label>
+                        @Html.TextBoxFor(model => model.ConsignmentNoNote, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row no-margin">
                     <div class="col-md-3 form-group">
                         <label class="headinglabel required">Rent </label>
 
-                        @Html.TextBoxFor(model => model.Rent, new { @onchange = "setNumberDecimal(this)", @class = "form-control textright", @required = "true" })
+                        @Html.TextBoxFor(model => model.Rent, new { @onchange = "setNumberDecimal(this)", @onkeypress = "return isNumberKey(event)" ,@class = "form-control textright", @required = "true" })
                     </div>
 
                     <div class="col-md-3 form-group">
@@ -167,21 +178,15 @@
                     </div>
 
                     <div class="col-md-3 form-group">
-                        <label class="headinglabel">Other Charge Amt</label>
-
+                        <label class="headinglabel">Other Charge Amount</label>
                         @Html.TextBoxFor(model => model.OtherCharges, new { @class = "form-control text-right", @onchange = "setNumberDecimal(this)" })
                     </div>
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel required">Other Charge Account Head(Dr.)</label>
-                        <input type="text" id="OtherChargesAcHead" name="OtherChargesAcHead" class="form-control" required />
-                        @Html.HiddenFor(model => model.OtherChargesAcHeadID)
 
-                    </div>
                     @*<div class="col-md-3 form-group">
-                            <label class="headinglabel required">Currency</label>
+            <label class="headinglabel required">Currency</label>
 
-                            @Html.DropDownListFor(model => model.CurrencyRent, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
-                        </div>*@
+            @Html.DropDownListFor(model => model.CurrencyRent, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
+        </div>*@
 
                     <div class="col-md-3 form-group">
                         <label class="headinglabel required">Rent Account Head(Dr.)</label>
@@ -194,174 +199,84 @@
 
                         @Html.TextAreaFor(model => model.TDRemarks, new { @class = "form-control" })
                     </div>
-
-                </div>
-                <div class="row no-margin">
-                    <div class="col-md-12">
-                        <h3 style="color: white">Payment Details</h3>
-                        <hr />
-                    </div>
-
-                </div>
-                <div class="row no-margin">
-
-
                     <div class="col-md-3 form-group">
-                        <label class="headinglabel">Payment Type</label>
-                        <select class="form-control" id="StatusPaymentMode" name="StatusPaymentMode">
-                            <option value="C">Cash</option>
-                            <option value="B">Bank</option>
-                        </select>
-                        @*@Html.TextBoxFor(model => model.StatusPaymentMode, new { @class = "form-control", @maxlength = "2" })*@
-                    </div>
-
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel required">Payment Account Head (Cr)</label>
-                        <input type="text" class="form-control" id="PaymentHead" name="PaymentHead" required />
-                        @Html.HiddenFor(model => model.PaymentHeadID)
-
-                    </div>
-
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel required">Control A/c (Dr)</label>
-                        <input type="text" class="form-control" id="TDcontrolAcHead" name="TDcontrolAcHead" required />
-                        @Html.HiddenFor(model => model.TDcontrolAcHeadID)
-
-                        @*@Html.DropDownListFor(model => model.TDcontrolAcHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })*@
-                    </div>
-
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel required">Amount</label>
-
-                        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control textright", @onchange = "setNumberDecimal(this)" })
-                    </div>
-
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel required">Currency</label>
-                        @Html.DropDownListFor(model => model.PaymentCurrencyID, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
-
-                    </div>
-
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel">Payment Remark</label>
-
-                        @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control" })
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel">Cheque No.</label>
-                        @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control" })
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel">Cheque Date</label>
-                        @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control" })
-                    </div>
-                </div>
-
-                <div class="row no-margin" style="padding-top: 10px">
-
-                    <div class="col-md-12 btn-right">
-
-                        <input type="button" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;
-                        <a href='@Url.Action("Index", "DailyTrips")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
-
-
-                    </div>
-                </div>
-
-
-
-            </form>
-        </div>
-        <div id="Forwarding" class="hide">
-            <section class="content">
-
-                <form id="FormFwd">
-                    <div id="validations" style="color: red; margin-left: 7px; display: none">* Please fill mandatory fields</div>
-                    @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-
-
-
-                    <div class="row no-margin">
-                        <div class="col-md-12">
-                            <h3 style="color: white">Forwarding Agent</h3>
-                            <hr />
+                        <div class="checkboxdesign text-right" style="float:right">
+                            <input type="checkbox" id="chkPaymentDetail" onclick="checkpayment()" /> &nbsp
+                            <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Add Cash/Bank Payment Details</label>
                         </div>
-
+                        </div>
                     </div>
+                    <div id="divpayment" class="hide">
+                        <div class="row no-margin">
+                            <div class="col-md-12">
+                                <div class="flexTitle">
+                                    <h3 style="color: white">Payment Details</h3>
 
-
-
-                    <div class="row no-margin">
-                        <div class="col-md-3 form-group">
-                            @Html.HiddenFor(model => model.TruckDetailID)
-                            <input type="hidden" id="VehicleType" name="VehicleType" value="F" />
-                            <label class="headinglabel required">Date</label>
-                            @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control datepicker", id = "FTDDate", @required = "true" })
-
+                                </div>
+                                <hr />
+                            </div>
 
                         </div>
+                        <div class="row no-margin">
 
-                        <div class="col-md-3 form-group">
-                            <label class="headinglabel required">Phone Number </label>
 
-                            @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control", @required = "true" })
+                            <div class="col-md-3 form-group">
+                                <label class="headinglabel">Payment Type</label>
+                                <select class="form-control" id="StatusPaymentMode" name="StatusPaymentMode">
+                                    <option value="">Select</option>
+                                    <option value="C">Cash</option>
+                                    <option value="B">Bank</option>
+                                </select>
+                                @*@Html.TextBoxFor(model => model.StatusPaymentMode, new { @class = "form-control", @maxlength = "2" })*@
+                            </div>
+
+                            <div class="col-md-3 form-group">
+                                <label class="headinglabel required">Payment Account Head (Cr)</label>
+                                <input type="text" class="form-control" id="PaymentHead" name="PaymentHead" required />
+                                @Html.HiddenFor(model => model.PaymentHeadID)
+
+                            </div>
+
+                            <div class="col-md-3 form-group">
+                                <label class="headinglabel required">Control A/c (Dr)</label>
+                                <input type="text" class="form-control" id="TDcontrolAcHead" name="TDcontrolAcHead" required />
+                                @Html.HiddenFor(model => model.TDcontrolAcHeadID)
+
+                                @*@Html.DropDownListFor(model => model.TDcontrolAcHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })*@
+                            </div>
+
+                            <div class="col-md-3 form-group">
+                                <label class="headinglabel required">Amount</label>
+
+                                @Html.TextBoxFor(model => model.Amount, new { @class = "form-control textright", @onchange = "setNumberDecimal(this)" , @onkeypress = "return isNumberKey(event)" })
+                            </div>
+
+                            <div class="col-md-3 form-group">
+                                <label class="headinglabel required">Currency</label>
+                                @Html.DropDownListFor(model => model.PaymentCurrencyID, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
+
+                            </div>
+
+                            <div class="col-md-3 form-group">
+                                <label class="headinglabel">Payment Remark</label>
+
+                                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label class="headinglabel">Cheque No.</label>
+                                @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label class="headinglabel">Cheque Date</label>
+                                @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
                         </div>
-
-
-                        <div class="col-md-3 form-group ">
-                            <label class="headinglabel required">Forwarding Agent</label>
-                            @Html.DropDownListFor(model => model.ForwardAgentID, new SelectList(@ViewBag.FwdAgents, "FAgentID", "FAgentName"), "Select", new { @class = "form-control", @required = "true" })
-
-                        </div>
-                        <div class="col-md-3 form-group">
-                            <label class="headinglabel required">Route</label>
-                            @Html.DropDownListFor(model => model.RouteID, new SelectList(@ViewBag.Routes, "RouteID", "RouteName"), "Select", new { @class = "form-control", @required = "true", @id = "FRouteId" })
-
-                        </div>
-
-                        <div class="col-md-3 form-group">
-                            <label class="headinglabel required">Origin Country</label>
-                            @Html.TextBoxFor(model => model.OriginCountry, new { @class = "form-control", id = "FOriginCountry", @required = "true" })
-
-                        </div>
-
-
-                        <div class="col-md-3 form-group">
-                            <label class="headinglabel required">Origin City</label>
-                            @Html.TextBoxFor(model => model.OriginCity, new { @class = "form-control", id = "FOriginCity", @required = "true" })
-
-                        </div>
-
-                        <div class="col-md-3 form-group">
-                            <label class="headinglabel required">Origin Location</label>
-                            @*@Html.TextBoxFor(model => model.OriginName, new { @class = "form-control", @required = "true" })*@
-                            @Html.TextBoxFor(model => model.OriginName, new { @class = "form-control", id = "Fautocomplete", @required = "true" })
-
-                        </div>
-
-                        <div class="col-md-3 form-group">
-                            <label class="headinglabel required">Account Head</label>
-                            <input type="text" id="FRentAcHead" name="FRentAcHead" class="form-control" />
-                            @Html.HiddenFor(model => model.RentAcHeadID, new { id = "FRentAcHeadID" })
-
-                        </div>
-                        <div class="col-md-3 form-group">
-                            <label class="headinglabel">Remark</label>
-
-                            @Html.TextAreaFor(model => model.TDRemarks, new { @class = "form-control" })
-                        </div>
-
                     </div>
-
-
-
                     <div class="row no-margin" style="padding-top: 10px">
 
                         <div class="col-md-12 btn-right">
 
-                            <input type="button" value="Save" class="btn btn-primary btnwidth" id="btnsaveFwd" />&nbsp;&nbsp;
+                            <input type="button" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;
                             <a href='@Url.Action("Index", "DailyTrips")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
 
 
@@ -370,11 +285,9 @@
 
 
 
-                </form>
-
-            </section>
-            @*@Html.Partial("_forwardingAgent");*@
+</form>
         </div>
+    
     </section>
 
 
@@ -382,55 +295,57 @@
 </html>
 
 <script type="text/javascript">
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31
+            && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
       function setNumberDecimal(obj) {
 
        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
     }
     function setVehicleType(obj) {
         debugger;
-        
+
         if ($("#chkHired").is(':checked')) {
-            $('#VehicleType').val('H');
-            $('#Hired').removeClass('hide');
-            $('#Forwarding').addClass('hide');
+            $('#VehicleType').val('H');            
+            $('#divdriver').removeClass('hide');
+            $('#divfwd').addClass('hide');
             //$("#chkOwn").removeAttr('checked');
             //$("#chkContract").removeAttr('checked');
             //$("#chkForward").removeAttr('checked');
         }
         else if ($("#chkOwn").is(':checked')) {
             $('#VehicleType').val('O');
-            $('#Hired').removeClass('hide');
-            $('#Forwarding').addClass('hide');
+            $('#divfwd').addClass('hide');
+            $('#divdriver').removeClass('hide');
         }
         else if ($("#chkContract").is(':checked')) {
             $('#VehicleType').val('C');
-            $('#Hired').removeClass('hide');
-            $('#Forwarding').addClass('hide');
+            $('#divfwd').addClass('hide');
+            $('#divdriver').removeClass('hide');
         }
-        else if ($("#chkForward").is(':checked')) {            
+        else if ($("#chkForward").is(':checked')) {
             $('#VehicleType').val('F');
-            $('#Hired').addClass('hide');
-            $('#Forwarding').removeClass('hide');
-            CallRouteIdChange();
+            $('#divfwd').removeClass('hide');
+            $('#divdriver').addClass('hide');            
             //$("#chkHired").removeAttr('checked');
             //$("#chkOwn").removeAttr('checked');
             //$("#chkContract").removeAttr('checked');
         }
     }
-    function CallRouteIdChange() {
-        $("#FRouteId").change(function () {
-            
-            $.ajax({
-                type: "Get",
-                url: "/DailyTrips/GetRouteDetail",
-                datatype: "Json",
-                data: { 'RouteId': $('#FRouteId').val() },
-                success: function (response) {
-                    $("#FOriginCountry").val(response.Origin);
-                    $("#FDestinationName").val(response.Destination);
-                }
-            });
-        });
+    function checkpayment() {
+        var paydetail = $("#chkPaymentDetail").is(':checked'); 
+        if (paydetail) {
+            $('#divpayment').removeClass('hide');
+        }
+        else {
+            $('#divpayment').addClass('hide');
+        }
     }
     $(document).ready(function () {
         var d = new Date();
@@ -440,7 +355,7 @@
 
         var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
         $('#TDDate').val(reqdate);
-             
+
 
         $("#RouteID").change(function () {
             $.ajax({
@@ -481,9 +396,6 @@
             $("#StatusPaymentMode").val('@Model.StatusPaymentMode'.trim());
             $("#OriginCity").val('@Model.OriginCity'.trim());
             $("#OriginCountry").val('@Model.OriginCountry'.trim());
-            $("#PhoneNumber").val('@Model.PhoneNumber');
-            @*$("#ForwardAgentID").val('@Model.ForwardAgentID');
-            $("#RouteID").val('@Model.RouteID');*@
 
 
             if ('@Model.VehicleType' == 'O') {
@@ -573,7 +485,9 @@
             maxDate: '@_maxdate',
             minDate: '@_mindate', format: 'DD-MM-YYYY HH:mm'
         });
-
+        $('#ChequeDate').datetimepicker({
+            format: 'DD-MM-YYYY'
+        });
 
 
         $("#DriverName").autocomplete({
@@ -607,6 +521,39 @@
             },
 
         });
+
+        $("#RegNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DailyTrips/VehicleRegNo',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.RegistrationNo,
+                                value: val.RegistrationNo,
+                                Id: val.VehicleID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $("#RegNo").val(ui.item.label);
+                $('#VehicleID').val(ui.item.Id);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#RegNo").val(i.item.label);
+                $('#VehicleID').val(i.item.Id);
+            },
+
+        });
         $("#RentAcHead").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -630,6 +577,7 @@
             autoFocus: false,
             focus: function (event, ui) {
                 $('#RentAcHead').val(ui.item.value);
+                $('#RentAcHeadID').val(ui.item.Id);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -645,7 +593,7 @@
                     url: '/DailyTrips/AcHead',
                     datatype: "json",
                     data: {
-                        term: request.term
+                        term: request.term, type: ''
                     },
                     success: function (data) {
                         response($.map(data, function (val, item) {
@@ -661,7 +609,8 @@
             minLength: 1,
             autoFocus: false,
             focus: function (event, ui) {
-                $('#OtherChargesAcHead').val(ui.item.value);
+                $("#OtherChargesAcHead").val(ui.item.label);
+                $('#OtherChargesAcHeadID').val(ui.item.Id);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -676,7 +625,7 @@
                     url: '/DailyTrips/AcHead',
                     datatype: "json",
                     data: {
-                        term: request.term
+                        term: request.term, type: $("#StatusPaymentMode").val()
                     },
                     success: function (data) {
                         response($.map(data, function (val, item) {
@@ -693,6 +642,7 @@
             autoFocus: false,
             focus: function (event, ui) {
                 $('#PaymentHead').val(ui.item.value);
+                $('#PaymentHeadID').val(ui.item.Id);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -794,7 +744,13 @@
             },
         });
         $("#btnsave").click(function () {
+            debugger;
+            if ($('#RentAcHeadID').val() == 0 || $('#RentAcHeadID').val() == "")
+            {
+                $('#RentAcHead').val('');
+            };
             if ($('#FormHired').valid()) {
+                
                 var data = $('#FormHired').serialize();
                 console.log(data);
                 $.ajax({
@@ -854,26 +810,7 @@
 
             },
         });
-        $("#btnsaveFwd").click(function () {
-            if ($('#FormFwd').valid()) {
-                var data = $('#FormFwd').serialize();
-                console.log(data);
-                $.ajax({
-                    type: 'POST',
-                    url: "/DailyTrips/SaveForwardVehicle",
-                    data: data,
-                    success: function (response) {
-                        if (response.success == true) {
-                            $.notify("Submitted Successfully!", "success");
-                            location.href = "/DailyTrips/Index";
-                        } else {
-                            $.notify(response.message, "error");
-                        }
-                    }
-                });
 
-            }
-        });
 
     });
 

@@ -308,5 +308,23 @@ namespace LTMSV2.Controllers
             
             return Json(RevenueDetails, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult DeleteConfirmed(int id)
+        {
+            RevenueUpdateMaster cenquery = db.RevenueUpdateMasters.Where(t => t.ID == id).FirstOrDefault();
+            if (cenquery != null)
+            {
+                db.RevenueUpdateMasters.Remove(cenquery);
+                db.SaveChanges();
+
+                TempData["SuccessMsg"] = "You have successfully Deleted Revenue Cost";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+
+                return RedirectToAction("Index");
+            }
+        }
     }
 }
