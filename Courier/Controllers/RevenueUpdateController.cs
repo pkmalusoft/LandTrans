@@ -53,11 +53,22 @@ namespace LTMSV2.Controllers
             }
             //List<RevenueUpdateMasterVM> lst = new List<RevenueUpdateMasterVM>();
             List<RevenueUpdateMasterVM> lst = RevenueDAO.GetRevenueUpdateList(ConsignmentNo, pFromDate, pToDate);
-                        
+            var list = (from d in db.RevenueUpdateMasters
+                        join c in db.InScanMasters on d.InScanID equals c.InScanID
+                        select new RevenueUpdateMasterVM
+                        {
+                            ID=d.ID,
+                           ConsignmentDate=d.EntryDate,
+                           ConsignmentNo=c.ConsignmentNo,
+
+                        }).ToList();
+
+            list.ForEach(d => d.Amount = (from s in db.RevenueUpdateDetails where s.MasterID == d.ID select s).ToList().Sum(a => a.Amount));
+
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");            
             ViewBag.ConsignmentNo = ConsignmentNo;
-            return View(lst);
+            return View(list);
         }
 
         public ActionResult Create(int id=0)
@@ -277,6 +288,25 @@ namespace LTMSV2.Controllers
 
             return Json(new { data = exrate }, JsonRequestBehavior.AllowGet);
 
+        }
+        public JsonResult GetRevenueUpdateDetails(int Id)
+        {
+            var RevenueDetails = (from s in db.RevenueUpdateDetails where s.MasterID == Id
+                                  join cu in db.CurrencyMasters on s.CurrencyId equals cu.CurrencyID
+                                  join dh in db.AcHeads on s.AcHeadDebitId equals dh.AcHeadID
+                                  join ch in db.AcHeads on s.AcHeadCreditId equals ch.AcHeadID
+                                  select new RevenueUpdateDetailVM{
+                ID=s.ID,
+                MasterID=s.MasterID,
+                CustomerId=s.CustomerId,
+                Currency=cu.CurrencyName,
+                DebitAccountName=dh.AcHead1,
+                CreditAccountName=ch.AcHead1,
+                Amount=s.Amount
+
+            }).ToList();
+            
+            return Json(RevenueDetails, JsonRequestBehavior.AllowGet);
         }
     }
 }

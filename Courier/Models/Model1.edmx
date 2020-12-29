@@ -1249,13 +1249,19 @@
             <PropertyRef Name="DebitNoteID" />
           </Key>
           <Property Name="DebitNoteID" Type="int" Nullable="false" />
-          <Property Name="DebitNoteNo" Type="nvarchar" MaxLength="40" />
-          <Property Name="TransDate" Type="datetime" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+          <Property Name="DebitNoteNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="InvoiceID" Type="int" />
+          <Property Name="DebitNoteDate" Type="datetime" />
+          <Property Name="Amount" Type="money" />
           <Property Name="AcJournalID" Type="int" />
-          <Property Name="customerID" Type="int" />
-          <Property Name="FyearID" Type="int" />
+          <Property Name="FYearID" Type="int" />
           <Property Name="AcCompanyID" Type="int" />
+          <Property Name="InvoiceType" Type="nvarchar" MaxLength="5" />
+          <Property Name="RecPayID" Type="int" />
+          <Property Name="AcHeadID" Type="int" />
+          <Property Name="SupplierID" Type="int" />
+          <Property Name="IsShipping" Type="bit" />
+          <Property Name="Remarks" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="DebitNoteDetails">
           <Key>
@@ -3640,11 +3646,11 @@
           <Property Name="TypeOfLoad" Type="varchar" MaxLength="100" />
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="OriginCountry" Type="nvarchar" MaxLength="100" />
-          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="100" />
           <Property Name="ForwardAgentID" Type="int" />
           <Property Name="OriginCity" Type="nvarchar" MaxLength="100" />
           <Property Name="SupplierInvoiceId" Type="int" />
           <Property Name="RecPayId" Type="int" />
+          <Property Name="ConsignmentNoNote" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="TypeOfGoods">
           <Key>
@@ -10747,19 +10753,6 @@
           <Property Name="AcCompanyID" Type="Int32" />
           <Property Name="DepartmentID" Type="Int32" />
         </EntityType>
-        <EntityType Name="DebitNote">
-          <Key>
-            <PropertyRef Name="DebitNoteID" />
-          </Key>
-          <Property Name="DebitNoteID" Type="Int32" Nullable="false" />
-          <Property Name="DebitNoteNo" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="TransDate" Type="DateTime" Precision="3" />
-          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <Property Name="customerID" Type="Int32" />
-          <Property Name="FyearID" Type="Int32" />
-          <Property Name="AcCompanyID" Type="Int32" />
-        </EntityType>
         <EntityType Name="DebitNoteDetail">
           <Key>
             <PropertyRef Name="DebitNoteDetailID" />
@@ -14944,7 +14937,6 @@
           <EntitySet Name="CustomerRateTypes" EntityType="Self.CustomerRateType" />
           <EntitySet Name="CustomerTypes" EntityType="Self.CustomerType" />
           <EntitySet Name="CustSuppJVs" EntityType="Self.CustSuppJV" />
-          <EntitySet Name="DebitNotes" EntityType="Self.DebitNote" />
           <EntitySet Name="DebitNoteDetails" EntityType="Self.DebitNoteDetail" />
           <EntitySet Name="Departments" EntityType="Self.Department" />
           <EntitySet Name="Designations" EntityType="Self.Designation" />
@@ -18269,19 +18261,6 @@
           <EntitySet Name="VehicleTypes" EntityType="DB_9F57C4_couriertest_newModel.VehicleType" />
           <EntitySet Name="RevenueCostMasters" EntityType="DB_9F57C4_couriertest_newModel.RevenueCostMaster" />
           <EntitySet Name="PortMasters" EntityType="DB_9F57C4_couriertest_newModel.PortMaster" />
-          <EntitySet Name="TruckDetails" EntityType="DB_9F57C4_couriertest_newModel.TruckDetail" />
-          <AssociationSet Name="FK_TruckDetails_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster">
-            <End Role="BranchMaster" EntitySet="BranchMasters" />
-            <End Role="TruckDetail" EntitySet="TruckDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TruckDetails_CurrencyMaster" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster">
-            <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
-            <End Role="TruckDetail" EntitySet="TruckDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TruckDetails_CurrencyMaster2" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2">
-            <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
-            <End Role="TruckDetail" EntitySet="TruckDetails" />
-          </AssociationSet>
           <EntitySet Name="RevenueUpdateDetails" EntityType="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" />
           <EntitySet Name="RevenueUpdateMasters" EntityType="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster" />
           <AssociationSet Name="FK_RevenueUpdateMaster_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_BranchMaster">
@@ -18310,10 +18289,6 @@
             <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
           </AssociationSet>
           <EntitySet Name="RouteMasters" EntityType="DB_9F57C4_couriertest_newModel.RouteMaster" />
-          <AssociationSet Name="FK_TruckDetails_RouteMaster" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster">
-            <End Role="RouteMaster" EntitySet="RouteMasters" />
-            <End Role="TruckDetail" EntitySet="TruckDetails" />
-          </AssociationSet>
           <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
           <EntitySet Name="CostUpdateDetails" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateDetail" />
           <EntitySet Name="CostUpdateMasters" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateMaster" />
@@ -18333,10 +18308,6 @@
             <End Role="RevenueCostMaster" EntitySet="RevenueCostMasters" />
             <End Role="CostUpdateDetail" EntitySet="CostUpdateDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_CostUpdateMaster_TruckDetail" Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail">
-            <End Role="TruckDetail" EntitySet="TruckDetails" />
-            <End Role="CostUpdateMaster" EntitySet="CostUpdateMasters" />
-          </AssociationSet>
           <EntitySet Name="DriverMasters" EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" />
           <EntitySet Name="SupplierInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" />
           <EntitySet Name="SupplierInvoices" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoice" />
@@ -18347,6 +18318,28 @@
           <AssociationSet Name="FK_SupplierInvoiceDetails_SupplierInvoice" Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice">
             <End Role="SupplierInvoice" EntitySet="SupplierInvoices" />
             <End Role="SupplierInvoiceDetail" EntitySet="SupplierInvoiceDetails" />
+          </AssociationSet>
+          <EntitySet Name="DebitNotes" EntityType="DB_9F57C4_couriertest_newModel.DebitNote" />
+          <EntitySet Name="TruckDetails" EntityType="DB_9F57C4_couriertest_newModel.TruckDetail" />
+          <AssociationSet Name="FK_TruckDetails_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster">
+            <End Role="BranchMaster" EntitySet="BranchMasters" />
+            <End Role="TruckDetail" EntitySet="TruckDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CostUpdateMaster_TruckDetail" Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail">
+            <End Role="TruckDetail" EntitySet="TruckDetails" />
+            <End Role="CostUpdateMaster" EntitySet="CostUpdateMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckDetails_CurrencyMaster" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster">
+            <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
+            <End Role="TruckDetail" EntitySet="TruckDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckDetails_CurrencyMaster2" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2">
+            <End Role="CurrencyMaster" EntitySet="CurrencyMasters" />
+            <End Role="TruckDetail" EntitySet="TruckDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckDetails_RouteMaster" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster">
+            <End Role="RouteMaster" EntitySet="RouteMasters" />
+            <End Role="TruckDetail" EntitySet="TruckDetails" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
@@ -22123,9 +22116,9 @@
           <NavigationProperty Name="SalesInvoices" Relationship="DB_9F57C4_couriertest_newModel.FK_SalesInvoice_BranchMaster" FromRole="BranchMaster" ToRole="SalesInvoice" />
           <NavigationProperty Name="SupplierMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierMaster_BranchMaster" FromRole="BranchMaster" ToRole="SupplierMaster" />
           <NavigationProperty Name="CityMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_BranchMaster_CityMaster" FromRole="BranchMaster" ToRole="CityMaster" />
-          <NavigationProperty Name="TruckDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" FromRole="BranchMaster" ToRole="TruckDetail" />
           <NavigationProperty Name="RevenueUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_BranchMaster" FromRole="BranchMaster" ToRole="RevenueUpdateMaster" />
           <NavigationProperty Name="CostUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_BranchMaster" FromRole="BranchMaster" ToRole="CostUpdateMaster" />
+          <NavigationProperty Name="TruckDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" FromRole="BranchMaster" ToRole="TruckDetail" />
         </EntityType>
         <Association Name="FK_AcGroup_BranchMaster">
           <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
@@ -22424,102 +22417,6 @@
           <Property Name="PortName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="PortCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="TruckDetail">
-          <Key>
-            <PropertyRef Name="TruckDetailID" />
-          </Key>
-          <Property Name="TruckDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ReceiptNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="VehicleID" Type="Int32" Nullable="false" />
-          <Property Name="RegNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="VehicleType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="TDDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="OriginName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="DestinationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="DriverName" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
-          <Property Name="VehicleTypeID" Type="Int32" Nullable="false" />
-          <Property Name="Rent" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="OtherCharges" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="RefTDID" Type="Int32" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <Property Name="CurrencyIDRent" Type="Int32" />
-          <Property Name="CurrencyIDOC" Type="Int32" />
-          <Property Name="StatusPaymentMode" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="PaymentHeadID" Type="Int32" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="PaymentCurrencyID" Type="Int32" />
-          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
-          <Property Name="AcCompanyID" Type="Int32" />
-          <Property Name="TDcontrolAcHeadID" Type="Int32" />
-          <Property Name="OtherChargesAcHeadID" Type="Int32" />
-          <Property Name="FYearID" Type="Int32" />
-          <Property Name="CurrencyRent" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="CurrencyOtherCharges" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="CurrencyAmount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
-          <Property Name="PayeeName" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
-          <Property Name="DriverID" Type="Int32" />
-          <Property Name="CancelDate" Type="DateTime" Precision="3" />
-          <Property Name="Reason" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="DocumentID" Type="Int32" />
-          <Property Name="RentAcHeadID" Type="Int32" />
-          <Property Name="RouteID" Type="Int32" />
-          <Property Name="TDRemarks" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="InscanID" Type="Int32" />
-          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ChequeDate" Type="DateTime" Precision="3" />
-          <Property Name="BranchID" Type="Int32" />
-          <Property Name="TypeOfLoad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" FromRole="TruckDetail" ToRole="BranchMaster" />
-          <NavigationProperty Name="CurrencyMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster" FromRole="TruckDetail" ToRole="CurrencyMaster" />
-          <NavigationProperty Name="CurrencyMaster1" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2" FromRole="TruckDetail" ToRole="CurrencyMaster" />
-          <Property Name="IsDeleted" Type="Boolean" />
-          <Property Name="OriginCountry" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ForwardAgentID" Type="Int32" />
-          <Property Name="OriginCity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="RouteMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="TruckDetail" ToRole="RouteMaster" />
-          <NavigationProperty Name="CostUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail" FromRole="TruckDetail" ToRole="CostUpdateMaster" />
-          <Property Name="SupplierInvoiceId" Type="Int32" />
-          <Property Name="RecPayId" Type="Int32" />
-        </EntityType>
-        <Association Name="FK_TruckDetails_BranchMaster">
-          <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
-          <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BranchMaster">
-              <PropertyRef Name="BranchID" />
-            </Principal>
-            <Dependent Role="TruckDetail">
-              <PropertyRef Name="BranchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TruckDetails_CurrencyMaster">
-          <End Type="DB_9F57C4_couriertest_newModel.CurrencyMaster" Role="CurrencyMaster" Multiplicity="0..1" />
-          <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CurrencyMaster">
-              <PropertyRef Name="CurrencyID" />
-            </Principal>
-            <Dependent Role="TruckDetail">
-              <PropertyRef Name="PaymentCurrencyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TruckDetails_CurrencyMaster2">
-          <End Type="DB_9F57C4_couriertest_newModel.CurrencyMaster" Role="CurrencyMaster" Multiplicity="0..1" />
-          <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CurrencyMaster">
-              <PropertyRef Name="CurrencyID" />
-            </Principal>
-            <Dependent Role="TruckDetail">
-              <PropertyRef Name="CurrencyIDRent" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="RevenueUpdateDetail">
           <Key>
             <PropertyRef Name="ID" />
@@ -22677,22 +22574,10 @@
           <Property Name="RouteName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="OrginLocationID" Type="Int32" />
           <Property Name="DestinationLocationID" Type="Int32" />
-          <NavigationProperty Name="TruckDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="RouteMaster" ToRole="TruckDetail" />
           <Property Name="Origin" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Destination" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TruckDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="RouteMaster" ToRole="TruckDetail" />
         </EntityType>
-        <Association Name="FK_TruckDetails_RouteMaster">
-          <End Type="DB_9F57C4_couriertest_newModel.RouteMaster" Role="RouteMaster" Multiplicity="0..1" />
-          <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="RouteMaster">
-              <PropertyRef Name="RouteID" />
-            </Principal>
-            <Dependent Role="TruckDetail">
-              <PropertyRef Name="RouteID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="InScanMaster">
           <Key>
             <PropertyRef Name="InScanID" />
@@ -22881,18 +22766,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CostUpdateMaster_TruckDetail">
-          <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="1" />
-          <End Type="DB_9F57C4_couriertest_newModel.CostUpdateMaster" Role="CostUpdateMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TruckDetail">
-              <PropertyRef Name="TruckDetailID" />
-            </Principal>
-            <Dependent Role="CostUpdateMaster">
-              <PropertyRef Name="TruckDetailID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="DriverMaster">
           <Key>
             <PropertyRef Name="DriverID" />
@@ -22976,6 +22849,145 @@
             </Principal>
             <Dependent Role="SupplierInvoiceDetail">
               <PropertyRef Name="SupplierInvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="DebitNote">
+          <Key>
+            <PropertyRef Name="DebitNoteID" />
+          </Key>
+          <Property Name="DebitNoteID" Type="Int32" Nullable="false" />
+          <Property Name="DebitNoteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceID" Type="Int32" />
+          <Property Name="DebitNoteDate" Type="DateTime" Precision="3" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="FYearID" Type="Int32" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="InvoiceType" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="RecPayID" Type="Int32" />
+          <Property Name="AcHeadID" Type="Int32" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="IsShipping" Type="Boolean" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TruckDetail">
+          <Key>
+            <PropertyRef Name="TruckDetailID" />
+          </Key>
+          <Property Name="TruckDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReceiptNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="VehicleID" Type="Int32" Nullable="false" />
+          <Property Name="RegNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="VehicleType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="TDDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OriginName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DestinationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DriverName" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="VehicleTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Rent" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="OtherCharges" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="RefTDID" Type="Int32" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="CurrencyIDRent" Type="Int32" />
+          <Property Name="CurrencyIDOC" Type="Int32" />
+          <Property Name="StatusPaymentMode" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="PaymentHeadID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentCurrencyID" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="TDcontrolAcHeadID" Type="Int32" />
+          <Property Name="OtherChargesAcHeadID" Type="Int32" />
+          <Property Name="FYearID" Type="Int32" />
+          <Property Name="CurrencyRent" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CurrencyOtherCharges" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CurrencyAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="PayeeName" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="DriverID" Type="Int32" />
+          <Property Name="CancelDate" Type="DateTime" Precision="3" />
+          <Property Name="Reason" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentID" Type="Int32" />
+          <Property Name="RentAcHeadID" Type="Int32" />
+          <Property Name="RouteID" Type="Int32" />
+          <Property Name="TDRemarks" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="InscanID" Type="Int32" />
+          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChequeDate" Type="DateTime" Precision="3" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="TypeOfLoad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="OriginCountry" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ForwardAgentID" Type="Int32" />
+          <Property Name="OriginCity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierInvoiceId" Type="Int32" />
+          <Property Name="RecPayId" Type="Int32" />
+          <Property Name="ConsignmentNoNote" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" FromRole="TruckDetail" ToRole="BranchMaster" />
+          <NavigationProperty Name="CostUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail" FromRole="TruckDetail" ToRole="CostUpdateMaster" />
+          <NavigationProperty Name="CurrencyMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster" FromRole="TruckDetail" ToRole="CurrencyMaster" />
+          <NavigationProperty Name="CurrencyMaster1" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2" FromRole="TruckDetail" ToRole="CurrencyMaster" />
+          <NavigationProperty Name="RouteMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="TruckDetail" ToRole="RouteMaster" />
+        </EntityType>
+        <Association Name="FK_TruckDetails_BranchMaster">
+          <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BranchMaster">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="TruckDetail">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CostUpdateMaster_TruckDetail">
+          <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="1" />
+          <End Type="DB_9F57C4_couriertest_newModel.CostUpdateMaster" Role="CostUpdateMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TruckDetail">
+              <PropertyRef Name="TruckDetailID" />
+            </Principal>
+            <Dependent Role="CostUpdateMaster">
+              <PropertyRef Name="TruckDetailID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckDetails_CurrencyMaster">
+          <End Type="DB_9F57C4_couriertest_newModel.CurrencyMaster" Role="CurrencyMaster" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CurrencyMaster">
+              <PropertyRef Name="CurrencyID" />
+            </Principal>
+            <Dependent Role="TruckDetail">
+              <PropertyRef Name="PaymentCurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckDetails_CurrencyMaster2">
+          <End Type="DB_9F57C4_couriertest_newModel.CurrencyMaster" Role="CurrencyMaster" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CurrencyMaster">
+              <PropertyRef Name="CurrencyID" />
+            </Principal>
+            <Dependent Role="TruckDetail">
+              <PropertyRef Name="CurrencyIDRent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckDetails_RouteMaster">
+          <End Type="DB_9F57C4_couriertest_newModel.RouteMaster" Role="RouteMaster" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.TruckDetail" Role="TruckDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RouteMaster">
+              <PropertyRef Name="RouteID" />
+            </Principal>
+            <Dependent Role="TruckDetail">
+              <PropertyRef Name="RouteID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -24143,20 +24155,6 @@
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
                 <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DebitNotes">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DebitNote">
-              <MappingFragment StoreEntitySet="DebitNote">
-                <ScalarProperty Name="DebitNoteID" ColumnName="DebitNoteID" />
-                <ScalarProperty Name="DebitNoteNo" ColumnName="DebitNoteNo" />
-                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-                <ScalarProperty Name="customerID" ColumnName="customerID" />
-                <ScalarProperty Name="FyearID" ColumnName="FyearID" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -31688,62 +31686,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TruckDetails">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TruckDetail">
-              <MappingFragment StoreEntitySet="TruckDetail">
-                <ScalarProperty Name="RecPayId" ColumnName="RecPayId" />
-                <ScalarProperty Name="SupplierInvoiceId" ColumnName="SupplierInvoiceId" />
-                <ScalarProperty Name="OriginCity" ColumnName="OriginCity" />
-                <ScalarProperty Name="ForwardAgentID" ColumnName="ForwardAgentID" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="TypeOfLoad" ColumnName="TypeOfLoad" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
-                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="InscanID" ColumnName="InscanID" />
-                <ScalarProperty Name="TDRemarks" ColumnName="TDRemarks" />
-                <ScalarProperty Name="RouteID" ColumnName="RouteID" />
-                <ScalarProperty Name="RentAcHeadID" ColumnName="RentAcHeadID" />
-                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
-                <ScalarProperty Name="Reason" ColumnName="Reason" />
-                <ScalarProperty Name="CancelDate" ColumnName="CancelDate" />
-                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
-                <ScalarProperty Name="PayeeName" ColumnName="PayeeName" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="CurrencyAmount" ColumnName="CurrencyAmount" />
-                <ScalarProperty Name="CurrencyOtherCharges" ColumnName="CurrencyOtherCharges" />
-                <ScalarProperty Name="CurrencyRent" ColumnName="CurrencyRent" />
-                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-                <ScalarProperty Name="OtherChargesAcHeadID" ColumnName="OtherChargesAcHeadID" />
-                <ScalarProperty Name="TDcontrolAcHeadID" ColumnName="TDcontrolAcHeadID" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="PaymentCurrencyID" ColumnName="PaymentCurrencyID" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="PaymentHeadID" ColumnName="PaymentHeadID" />
-                <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
-                <ScalarProperty Name="CurrencyIDOC" ColumnName="CurrencyIDOC" />
-                <ScalarProperty Name="CurrencyIDRent" ColumnName="CurrencyIDRent" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-                <ScalarProperty Name="RefTDID" ColumnName="RefTDID" />
-                <ScalarProperty Name="OtherCharges" ColumnName="OtherCharges" />
-                <ScalarProperty Name="Rent" ColumnName="Rent" />
-                <ScalarProperty Name="VehicleTypeID" ColumnName="VehicleTypeID" />
-                <ScalarProperty Name="DriverName" ColumnName="DriverName" />
-                <ScalarProperty Name="DestinationName" ColumnName="DestinationName" />
-                <ScalarProperty Name="OriginName" ColumnName="OriginName" />
-                <ScalarProperty Name="TDDate" ColumnName="TDDate" />
-                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
-                <ScalarProperty Name="RegNo" ColumnName="RegNo" />
-                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
-                <ScalarProperty Name="ReceiptNo" ColumnName="ReceiptNo" />
-                <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="RevenueUpdateDetails">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail">
               <MappingFragment StoreEntitySet="RevenueUpdateDetail">
@@ -32021,6 +31963,82 @@
                 <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DebitNotes">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DebitNote">
+              <MappingFragment StoreEntitySet="DebitNote">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="IsShipping" ColumnName="IsShipping" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+                <ScalarProperty Name="InvoiceType" ColumnName="InvoiceType" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="DebitNoteDate" ColumnName="DebitNoteDate" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="DebitNoteNo" ColumnName="DebitNoteNo" />
+                <ScalarProperty Name="DebitNoteID" ColumnName="DebitNoteID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TruckDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TruckDetail">
+              <MappingFragment StoreEntitySet="TruckDetail">
+                <ScalarProperty Name="ConsignmentNoNote" ColumnName="ConsignmentNoNote" />
+                <ScalarProperty Name="RecPayId" ColumnName="RecPayId" />
+                <ScalarProperty Name="SupplierInvoiceId" ColumnName="SupplierInvoiceId" />
+                <ScalarProperty Name="OriginCity" ColumnName="OriginCity" />
+                <ScalarProperty Name="ForwardAgentID" ColumnName="ForwardAgentID" />
+                <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="TypeOfLoad" ColumnName="TypeOfLoad" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="InscanID" ColumnName="InscanID" />
+                <ScalarProperty Name="TDRemarks" ColumnName="TDRemarks" />
+                <ScalarProperty Name="RouteID" ColumnName="RouteID" />
+                <ScalarProperty Name="RentAcHeadID" ColumnName="RentAcHeadID" />
+                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="CancelDate" ColumnName="CancelDate" />
+                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+                <ScalarProperty Name="PayeeName" ColumnName="PayeeName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CurrencyAmount" ColumnName="CurrencyAmount" />
+                <ScalarProperty Name="CurrencyOtherCharges" ColumnName="CurrencyOtherCharges" />
+                <ScalarProperty Name="CurrencyRent" ColumnName="CurrencyRent" />
+                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+                <ScalarProperty Name="OtherChargesAcHeadID" ColumnName="OtherChargesAcHeadID" />
+                <ScalarProperty Name="TDcontrolAcHeadID" ColumnName="TDcontrolAcHeadID" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="PaymentCurrencyID" ColumnName="PaymentCurrencyID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PaymentHeadID" ColumnName="PaymentHeadID" />
+                <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
+                <ScalarProperty Name="CurrencyIDOC" ColumnName="CurrencyIDOC" />
+                <ScalarProperty Name="CurrencyIDRent" ColumnName="CurrencyIDRent" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="RefTDID" ColumnName="RefTDID" />
+                <ScalarProperty Name="OtherCharges" ColumnName="OtherCharges" />
+                <ScalarProperty Name="Rent" ColumnName="Rent" />
+                <ScalarProperty Name="VehicleTypeID" ColumnName="VehicleTypeID" />
+                <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+                <ScalarProperty Name="DestinationName" ColumnName="DestinationName" />
+                <ScalarProperty Name="OriginName" ColumnName="OriginName" />
+                <ScalarProperty Name="TDDate" ColumnName="TDDate" />
+                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+                <ScalarProperty Name="RegNo" ColumnName="RegNo" />
+                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+                <ScalarProperty Name="ReceiptNo" ColumnName="ReceiptNo" />
+                <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

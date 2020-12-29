@@ -102,8 +102,8 @@ namespace LTMSV2.Controllers
             ViewBag.Countries = db.CountryMasters.ToList();
             ViewBag.Documents = db.DocumentSetups.ToList();
             ViewBag.VehicleTypes = db.VehicleTypes.ToList();
-            ViewBag.FwdAgents = db.ForwardingAgentMasters.ToList();
-            ViewBag.Title = "DAILY TRIPS - CREATE";
+            ViewBag.FwdAgents = db.SupplierMasters.Where(c => c.SupplierTypeID == 2).ToList();
+            ViewBag.Title = "Daily Trips - Create";
             var truckDetail = (from d in db.TruckDetails where d.TruckDetailID == Id select d).FirstOrDefault();
             if (truckDetail == null)
             {
@@ -124,7 +124,7 @@ namespace LTMSV2.Controllers
             }
             else
             {
-                ViewBag.Title = "DAILY TRIPS - MODIFY";
+                ViewBag.Title = "Daily Trips - Modify";
                 if (truckDetail.VehicleType == "H")
                 {
                     ViewBag.VehicleType = "H";
@@ -181,30 +181,58 @@ namespace LTMSV2.Controllers
                 TruckDetail.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
                 TruckDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 TruckDetail.VehicleType = Convert.ToString(data["VehicleType"]);
+
+                if (TruckDetail.VehicleType == "F")
+                {
+                    TruckDetail.ForwardAgentID = Convert.ToInt32(data["ForwardAgentID"]);
+                    TruckDetail.RegNo = Convert.ToString(data["RegNo"]);
+                }
+                else
+                {
+                    TruckDetail.ForwardAgentID = null;
+                    TruckDetail.RegNo = vehicle.RegistrationNo;
+                    TruckDetail.DriverID = Convert.ToInt32(data["DriverID"]);
+                    TruckDetail.DriverName = Convert.ToString(data["DriverName"]);
+                }
+
                 TruckDetail.TDDate = Convert.ToDateTime(data["TDDate"]);
-                TruckDetail.DriverID = Convert.ToInt32(data["DriverID"]);
-                TruckDetail.DriverName = Convert.ToString(data["DriverName"]);
-                TruckDetail.RegNo = vehicle.RegistrationNo;
-                TruckDetail.ChequeNo = Convert.ToString(data["ChequeNo"]);
-                TruckDetail.ChequeDate= Convert.ToDateTime(data["ChequeDate"]); 
+                if (TruckDetail.StatusPaymentMode == "B")
+                {
+                    if (data["ChequeNo"] != null)
+                        TruckDetail.ChequeNo = Convert.ToString(data["ChequeNo"]);
+                    try
+                    {
+                        if (data["ChequeDate"] != null)
+                            TruckDetail.ChequeDate = Convert.ToDateTime(data["ChequeDate"]);
+                    }
+                    catch (Exception ex1)
+                    {
+                        TruckDetail.ChequeDate = null;
+                    }
+                }              
+                if (data["RouteID"]!=null)
                 TruckDetail.RouteID = Convert.ToInt32(data["RouteID"]);               
+
                 TruckDetail.OriginName = Convert.ToString(data["OriginName"]);
                 TruckDetail.DestinationName = Convert.ToString(data["DestinationName"]);
                 TruckDetail.TypeOfLoad = Convert.ToString(data["TypeOfLoad"]);
                 TruckDetail.Rent = Convert.ToDecimal(data["Rent"]);
                 TruckDetail.CurrencyIDRent = Convert.ToInt32(data["CurrencyIDRent"]);
                 TruckDetail.OtherCharges = Convert.ToDecimal(data["OtherCharges"]);
-                TruckDetail.OtherChargesAcHeadID = Convert.ToInt32(data["OtherChargesAcHeadID"]);
+                TruckDetail.ConsignmentNoNote = Convert.ToString(data["ConsignmentNoNote"]);
                 //TruckDetail.CurrencyRent = Convert.ToDecimal(data["CurrencyRent"]);
                 TruckDetail.RentAcHeadID = Convert.ToInt32(data["RentAcHeadID"]);
                 TruckDetail.TDRemarks = Convert.ToString(data["TDRemarks"]);
                 TruckDetail.StatusPaymentMode = Convert.ToString(data["StatusPaymentMode"]);
-                TruckDetail.PaymentHeadID = Convert.ToInt32(data["PaymentHeadID"]);
-                TruckDetail.TDcontrolAcHeadID = Convert.ToInt32(data["TDcontrolAcHeadID"]);
-                TruckDetail.CurrencyAmount = Convert.ToDecimal(data["Amount"]);
-                TruckDetail.Amount = Convert.ToDecimal(data["Amount"]);
-                TruckDetail.PaymentCurrencyID = Convert.ToInt32(data["PaymentCurrencyID"]);
-                TruckDetail.Remarks = Convert.ToString(data["Remarks"]);
+                if (TruckDetail.StatusPaymentMode == "C" || TruckDetail.StatusPaymentMode == "B")
+                {
+                    TruckDetail.PaymentHeadID = Convert.ToInt32(data["PaymentHeadID"]);
+                    TruckDetail.TDcontrolAcHeadID = Convert.ToInt32(data["TDcontrolAcHeadID"]);
+                    TruckDetail.CurrencyAmount = Convert.ToDecimal(data["Amount"]);
+                    TruckDetail.Amount = Convert.ToDecimal(data["Amount"]);
+                    TruckDetail.PaymentCurrencyID = Convert.ToInt32(data["PaymentCurrencyID"]);
+                    TruckDetail.Remarks = Convert.ToString(data["Remarks"]);
+                }
                 TruckDetail.IsDeleted =false;
                 if (TruckDetail.TruckDetailID == 0)
                 {
@@ -314,7 +342,7 @@ namespace LTMSV2.Controllers
                 TruckDetail.VehicleType = Convert.ToString(data["VehicleType"]);
                 TruckDetail.FYearID = FYearId;
                 TruckDetail.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
-                TruckDetail.PhoneNumber = Convert.ToString(data["PhoneNumber"]);
+                TruckDetail.ConsignmentNoNote = Convert.ToString(data["ConsignmentNoNote"]);
                 TruckDetail.ForwardAgentID = Convert.ToInt32(data["ForwardAgentID"]);
                 TruckDetail.RouteID = Convert.ToInt32(data["RouteID"]);
                 TruckDetail.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -345,7 +373,7 @@ namespace LTMSV2.Controllers
             if (!String.IsNullOrEmpty(term))
             {
                 var Driver = new List<DriverMaster>();
-                Driver = db.DriverMasters.Where(d => d.DriverName.ToLower().Contains(term.ToLower())).ToList();
+                Driver = db.DriverMasters.Where(d => d.DriverName.ToLower().StartsWith(term.ToLower())).ToList();
                 return Json(Driver, JsonRequestBehavior.AllowGet);
             }
             else
@@ -355,29 +383,64 @@ namespace LTMSV2.Controllers
                 return Json(Driver, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult AcHead(string term)
+               
+            public ActionResult VehicleRegNo(string term)
         {
-
-            if (!String.IsNullOrEmpty(term))
+            if (!String.IsNullOrEmpty(term.Trim()))
             {
-                var achead = new List<AcHeadSelectAllVM>();
-                achead = (from d in db.AcHeads where d.AcHead1.ToLower().Contains(term.ToLower()) select new AcHeadSelectAllVM {
-                    AcHead = d.AcHead1,
-                    AcHeadID=d.AcHeadID
-                }).ToList();
-                return Json(achead, JsonRequestBehavior.AllowGet);
+                List<VehicleVM> list= new List<VehicleVM>();
+                list = (from c in  db.VehicleMasters join s in db.SupplierMasters on c.SupplierID equals s.SupplierID where c.RegistrationNo.ToLower().Contains(term.ToLower()) orderby c.RegistrationNo select new VehicleVM { VehicleID = c.VehicleID, RegistrationNo = c.RegistrationNo + "-" + s.SupplierName, VehicleOwner = s.SupplierName}).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                var achead = new List<AcHeadSelectAllVM>();
-                achead = (from d in db.AcHeads
-                         
-                          select new AcHeadSelectAllVM
-                          {
-                              AcHead = d.AcHead1,
-                              AcHeadID = d.AcHeadID
-                          }).ToList();
-                return Json(achead, JsonRequestBehavior.AllowGet);
+                List<VehicleVM> list = new List<VehicleVM>();
+                list = (from c in db.VehicleMasters join s in db.SupplierMasters on c.SupplierID equals s.SupplierID orderby c.RegistrationNo select new VehicleVM { VehicleID = c.VehicleID, RegistrationNo = c.RegistrationNo +"-" + s.SupplierName , VehicleOwner = s.SupplierName }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult AcHead(string term,string type)
+        {
+            int AcCompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());            
+            if (type == "C")
+            {
+               
+                   var x1 = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" orderby c.AcHead1 select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                   return Json(x1, JsonRequestBehavior.AllowGet);
+               
+            }
+            else if (type == "B")
+            {
+                var x1 = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
+                return Json(x1, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+
+                if (!String.IsNullOrEmpty(term.Trim()))
+                {
+                    var achead = new List<AcHeadSelectAllVM>();
+                    achead = (from d in db.AcHeads
+                              where d.AcHead1.ToLower().Contains(term.ToLower())
+                              select new AcHeadSelectAllVM
+                              {
+                                  AcHead = d.AcHead1,
+                                  AcHeadID = d.AcHeadID
+                              }).ToList();
+                    return Json(achead, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var achead = new List<AcHeadSelectAllVM>();
+                    achead = (from d in db.AcHeads
+
+                              select new AcHeadSelectAllVM
+                              {
+                                  AcHead = d.AcHead1,
+                                  AcHeadID = d.AcHeadID
+                              }).ToList();
+                    return Json(achead, JsonRequestBehavior.AllowGet);
+                }
             }
         }
         public JsonResult GetAcHeadsById(int acheadid, int paymentheadid, int ControlAc)

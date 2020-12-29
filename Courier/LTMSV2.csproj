@@ -224,6 +224,7 @@
     <Compile Include="Controllers\CustomerRateTypeController.cs" />
     <Compile Include="Controllers\CustomerReceiptController.cs" />
     <Compile Include="Controllers\DailyTripsController.cs" />
+    <Compile Include="Controllers\DebitNoteController.cs" />
     <Compile Include="Controllers\DeliveryRunSheetRecieptController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DepotController.cs" />
@@ -825,6 +826,7 @@
     <Compile Include="Models\DebitNoteDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DebitNoteVM.cs" />
     <Compile Include="Models\Department.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3560,6 +3562,8 @@
     <Content Include="Views\SupplierPayment\_GetAllTradeSupplierByDate.cshtml" />
     <Content Include="Views\SupplierPayment\_Table.cshtml" />
     <Content Include="Views\SupplierInvoice\Create.cshtml" />
+    <Content Include="Views\DebitNote\Index.cshtml" />
+    <Content Include="Views\DebitNote\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

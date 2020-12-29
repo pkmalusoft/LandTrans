@@ -9,6 +9,15 @@
      tfoot {
             display: table-header-group;
      }
+    .dataTables_paginate{
+        display: block!important;
+    }
+    .paginate_button{
+        display:none;
+    }
+    .dataTables_info {
+        display: block !important;
+    }
         </style>
 
 
@@ -20,7 +29,7 @@
         });
 
 
-        var table = $('#dataTables-example').DataTable();
+        var table = $('#dataTables-example').DataTable({ "pagingType": "simple" });
 
         table.columns().every(function () {
             var that = this;

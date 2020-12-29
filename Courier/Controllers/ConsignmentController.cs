@@ -1091,7 +1091,7 @@ namespace LTMSV2.Controllers
 
                 obj.CustomerCode = ""; // _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
                 obj.CustomerName = v.shippername;//  v.Consignor;
-                obj.CustomerType = "SH"; //Cash customer
+                obj.CustomerType = "CS"; //Cash customer
 
                 //obj.ContactPerson = v.ConsignorContact;
                 //obj.Address1 = v.ConsignorAddress1_Building;
@@ -1144,7 +1144,7 @@ namespace LTMSV2.Controllers
 
                 obj.CustomerCode = ""; // _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
                 obj.CustomerName = v.Consignee;//  v.Consignor;
-                obj.CustomerType = "RE"; //Cash customer
+                obj.CustomerType = "CS"; //Cash customer
 
                 //obj.ContactPerson = v.ConsignorContact;
                 //obj.Address1 = v.ConsignorAddress1_Building;

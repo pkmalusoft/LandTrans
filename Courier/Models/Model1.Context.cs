@@ -99,7 +99,6 @@ namespace LTMSV2.Models
         public virtual DbSet<CustomerRateType> CustomerRateTypes { get; set; }
         public virtual DbSet<CustomerType> CustomerTypes { get; set; }
         public virtual DbSet<CustSuppJV> CustSuppJVs { get; set; }
-        public virtual DbSet<DebitNote> DebitNotes { get; set; }
         public virtual DbSet<DebitNoteDetail> DebitNoteDetails { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Designation> Designations { get; set; }
@@ -262,7 +261,6 @@ namespace LTMSV2.Models
         public virtual DbSet<VehicleType> VehicleTypes { get; set; }
         public virtual DbSet<RevenueCostMaster> RevenueCostMasters { get; set; }
         public virtual DbSet<PortMaster> PortMasters { get; set; }
-        public virtual DbSet<TruckDetail> TruckDetails { get; set; }
         public virtual DbSet<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
         public virtual DbSet<RevenueUpdateMaster> RevenueUpdateMasters { get; set; }
         public virtual DbSet<VehicleMaster> VehicleMasters { get; set; }
@@ -273,6 +271,8 @@ namespace LTMSV2.Models
         public virtual DbSet<DriverMaster> DriverMasters { get; set; }
         public virtual DbSet<SupplierInvoiceDetail> SupplierInvoiceDetails { get; set; }
         public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
+        public virtual DbSet<DebitNote> DebitNotes { get; set; }
+        public virtual DbSet<TruckDetail> TruckDetails { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

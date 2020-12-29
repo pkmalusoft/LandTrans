@@ -1162,20 +1162,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DebitNotes">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DebitNote">
-        <MappingFragment StoreEntitySet="DebitNote">
-          <ScalarProperty Name="DebitNoteID" ColumnName="DebitNoteID" />
-          <ScalarProperty Name="DebitNoteNo" ColumnName="DebitNoteNo" />
-          <ScalarProperty Name="TransDate" ColumnName="TransDate" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-          <ScalarProperty Name="customerID" ColumnName="customerID" />
-          <ScalarProperty Name="FyearID" ColumnName="FyearID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="DebitNoteDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DebitNoteDetail">
         <MappingFragment StoreEntitySet="DebitNoteDetails">
@@ -8704,62 +8690,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TruckDetails">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TruckDetail">
-        <MappingFragment StoreEntitySet="TruckDetail">
-          <ScalarProperty Name="RecPayId" ColumnName="RecPayId" />
-          <ScalarProperty Name="SupplierInvoiceId" ColumnName="SupplierInvoiceId" />
-          <ScalarProperty Name="OriginCity" ColumnName="OriginCity" />
-          <ScalarProperty Name="ForwardAgentID" ColumnName="ForwardAgentID" />
-          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-          <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
-          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-          <ScalarProperty Name="TypeOfLoad" ColumnName="TypeOfLoad" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-          <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
-          <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
-          <ScalarProperty Name="BankName" ColumnName="BankName" />
-          <ScalarProperty Name="InscanID" ColumnName="InscanID" />
-          <ScalarProperty Name="TDRemarks" ColumnName="TDRemarks" />
-          <ScalarProperty Name="RouteID" ColumnName="RouteID" />
-          <ScalarProperty Name="RentAcHeadID" ColumnName="RentAcHeadID" />
-          <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
-          <ScalarProperty Name="Reason" ColumnName="Reason" />
-          <ScalarProperty Name="CancelDate" ColumnName="CancelDate" />
-          <ScalarProperty Name="DriverID" ColumnName="DriverID" />
-          <ScalarProperty Name="PayeeName" ColumnName="PayeeName" />
-          <ScalarProperty Name="Code" ColumnName="Code" />
-          <ScalarProperty Name="CurrencyAmount" ColumnName="CurrencyAmount" />
-          <ScalarProperty Name="CurrencyOtherCharges" ColumnName="CurrencyOtherCharges" />
-          <ScalarProperty Name="CurrencyRent" ColumnName="CurrencyRent" />
-          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-          <ScalarProperty Name="OtherChargesAcHeadID" ColumnName="OtherChargesAcHeadID" />
-          <ScalarProperty Name="TDcontrolAcHeadID" ColumnName="TDcontrolAcHeadID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="PaymentCurrencyID" ColumnName="PaymentCurrencyID" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="PaymentHeadID" ColumnName="PaymentHeadID" />
-          <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
-          <ScalarProperty Name="CurrencyIDOC" ColumnName="CurrencyIDOC" />
-          <ScalarProperty Name="CurrencyIDRent" ColumnName="CurrencyIDRent" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-          <ScalarProperty Name="RefTDID" ColumnName="RefTDID" />
-          <ScalarProperty Name="OtherCharges" ColumnName="OtherCharges" />
-          <ScalarProperty Name="Rent" ColumnName="Rent" />
-          <ScalarProperty Name="VehicleTypeID" ColumnName="VehicleTypeID" />
-          <ScalarProperty Name="DriverName" ColumnName="DriverName" />
-          <ScalarProperty Name="DestinationName" ColumnName="DestinationName" />
-          <ScalarProperty Name="OriginName" ColumnName="OriginName" />
-          <ScalarProperty Name="TDDate" ColumnName="TDDate" />
-          <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
-          <ScalarProperty Name="RegNo" ColumnName="RegNo" />
-          <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
-          <ScalarProperty Name="ReceiptNo" ColumnName="ReceiptNo" />
-          <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="RevenueUpdateDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail">
         <MappingFragment StoreEntitySet="RevenueUpdateDetail">
@@ -9037,6 +8967,82 @@
           <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
           <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
           <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DebitNotes">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DebitNote">
+        <MappingFragment StoreEntitySet="DebitNote">
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="IsShipping" ColumnName="IsShipping" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+          <ScalarProperty Name="InvoiceType" ColumnName="InvoiceType" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="DebitNoteDate" ColumnName="DebitNoteDate" />
+          <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+          <ScalarProperty Name="DebitNoteNo" ColumnName="DebitNoteNo" />
+          <ScalarProperty Name="DebitNoteID" ColumnName="DebitNoteID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TruckDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TruckDetail">
+        <MappingFragment StoreEntitySet="TruckDetail">
+          <ScalarProperty Name="ConsignmentNoNote" ColumnName="ConsignmentNoNote" />
+          <ScalarProperty Name="RecPayId" ColumnName="RecPayId" />
+          <ScalarProperty Name="SupplierInvoiceId" ColumnName="SupplierInvoiceId" />
+          <ScalarProperty Name="OriginCity" ColumnName="OriginCity" />
+          <ScalarProperty Name="ForwardAgentID" ColumnName="ForwardAgentID" />
+          <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="TypeOfLoad" ColumnName="TypeOfLoad" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+          <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+          <ScalarProperty Name="BankName" ColumnName="BankName" />
+          <ScalarProperty Name="InscanID" ColumnName="InscanID" />
+          <ScalarProperty Name="TDRemarks" ColumnName="TDRemarks" />
+          <ScalarProperty Name="RouteID" ColumnName="RouteID" />
+          <ScalarProperty Name="RentAcHeadID" ColumnName="RentAcHeadID" />
+          <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+          <ScalarProperty Name="Reason" ColumnName="Reason" />
+          <ScalarProperty Name="CancelDate" ColumnName="CancelDate" />
+          <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+          <ScalarProperty Name="PayeeName" ColumnName="PayeeName" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="CurrencyAmount" ColumnName="CurrencyAmount" />
+          <ScalarProperty Name="CurrencyOtherCharges" ColumnName="CurrencyOtherCharges" />
+          <ScalarProperty Name="CurrencyRent" ColumnName="CurrencyRent" />
+          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+          <ScalarProperty Name="OtherChargesAcHeadID" ColumnName="OtherChargesAcHeadID" />
+          <ScalarProperty Name="TDcontrolAcHeadID" ColumnName="TDcontrolAcHeadID" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="PaymentCurrencyID" ColumnName="PaymentCurrencyID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="PaymentHeadID" ColumnName="PaymentHeadID" />
+          <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
+          <ScalarProperty Name="CurrencyIDOC" ColumnName="CurrencyIDOC" />
+          <ScalarProperty Name="CurrencyIDRent" ColumnName="CurrencyIDRent" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="RefTDID" ColumnName="RefTDID" />
+          <ScalarProperty Name="OtherCharges" ColumnName="OtherCharges" />
+          <ScalarProperty Name="Rent" ColumnName="Rent" />
+          <ScalarProperty Name="VehicleTypeID" ColumnName="VehicleTypeID" />
+          <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+          <ScalarProperty Name="DestinationName" ColumnName="DestinationName" />
+          <ScalarProperty Name="OriginName" ColumnName="OriginName" />
+          <ScalarProperty Name="TDDate" ColumnName="TDDate" />
+          <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+          <ScalarProperty Name="RegNo" ColumnName="RegNo" />
+          <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+          <ScalarProperty Name="ReceiptNo" ColumnName="ReceiptNo" />
+          <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

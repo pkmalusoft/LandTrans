@@ -53,10 +53,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:32</publishTime>
     </File>
     <File Include="bin/LTMSV2.dll">
-      <publishTime>12/28/2020 20:29:08</publishTime>
+      <publishTime>12/29/2020 11:50:38</publishTime>
     </File>
     <File Include="bin/LTMSV2.pdb">
-      <publishTime>12/28/2020 20:29:08</publishTime>
+      <publishTime>12/29/2020 11:50:38</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>09/05/2018 16:10:50</publishTime>
@@ -3875,7 +3875,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/23/2020 10:09:09</publishTime>
     </File>
     <File Include="Views/CustomerMaster/Create.cshtml">
-      <publishTime>12/25/2020 18:16:51</publishTime>
+      <publishTime>12/29/2020 11:25:35</publishTime>
     </File>
     <File Include="Views/CustomerMaster/CustomerList.cshtml">
       <publishTime>12/23/2020 10:09:11</publishTime>
@@ -3887,13 +3887,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:22</publishTime>
     </File>
     <File Include="Views/CustomerMaster/Edit.cshtml">
-      <publishTime>12/23/2020 10:09:11</publishTime>
+      <publishTime>12/29/2020 11:17:45</publishTime>
     </File>
     <File Include="Views/CustomerMaster/Home.cshtml">
       <publishTime>12/22/2020 19:46:22</publishTime>
     </File>
     <File Include="Views/CustomerMaster/Index.cshtml">
-      <publishTime>12/22/2020 19:46:22</publishTime>
+      <publishTime>12/29/2020 11:34:39</publishTime>
     </File>
     <File Include="Views/CustomerMasterNew/Create.cshtml">
       <publishTime>12/22/2020 19:46:22</publishTime>
@@ -4886,7 +4886,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:26</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/25/2020 19:37:47</publishTime>
+      <publishTime>12/29/2020 11:27:29</publishTime>
     </File>
   </ItemGroup>
 </Project>

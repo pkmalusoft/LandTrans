@@ -126,7 +126,10 @@ namespace LTMSV2.Controllers
             ViewBag.CustomerNo = doa.GetMaxCustomerCode(branchid);
             CustmorVM obj = new CustmorVM();
             obj.RoleID = 13;
+            ViewBag.UserRoleId= Convert.ToInt32(Session["UserRoleID"].ToString());
             obj.Password = doa.RandomPassword(6);
+            obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+            obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
             return View(obj);
         }
 
@@ -181,7 +184,7 @@ namespace LTMSV2.Controllers
             obj.StatusTaxable = c.StatusTaxable;
             obj.EmployeeID = c.EmployeeID;
             obj.statusCommission = c.StatusCommission;
-
+            obj.VATTRN = c.VATTRN;
 
             obj.CourierServiceID = c.CourierServiceID;
             obj.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -196,6 +199,12 @@ namespace LTMSV2.Controllers
             obj.DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
             else
                 obj.DepotID = c.DepotID;
+
+            if (c.CustomerType == "CR" && c.ChkApprovedBy)
+            {
+                obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                obj.ApprovedOn = c.ApprovedOn;
+            }
 
             //UserRegistration u = new UserRegistration();
             //if (c.Email != null)
@@ -290,7 +299,7 @@ namespace LTMSV2.Controllers
                 string custform = "000000";
                 string maxcustomercode = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerCode).FirstOrDefault();
                 string last6digit = "";
-                if (maxcustomercode==null)
+                if (maxcustomercode==null || maxcustomercode=="")
                 {
                     //maxcustomercode="AA000000";
                     last6digit = "0";
@@ -422,8 +431,12 @@ namespace LTMSV2.Controllers
                 { obj.CreditLimit = c.CreditLimit.Value; }
                 else
                 { obj.CreditLimit = 0; }
-
-                obj.StatusTaxable = c.StatusTaxable.Value;
+                if (c.StatusTaxable != null)
+                { obj.StatusTaxable = c.StatusTaxable.Value; }
+                else
+                {
+                    obj.StatusTaxable = false;
+                }
 
                 if (c.EmployeeID!=null)
                     obj.EmployeeID = c.EmployeeID.Value;
@@ -446,7 +459,7 @@ namespace LTMSV2.Controllers
                 {
                     obj.BranchID = c.BranchID.Value;
                 }
-                
+                obj.VATTRN = c.VATTRN;
                 int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
                 obj.DepotID = DepotID;
                 obj.CustomerUsername = c.CustomerUsername;
@@ -455,7 +468,13 @@ namespace LTMSV2.Controllers
                 {
                     obj.UserID = c.UserID;
                 }
-                
+
+                if (c.ApprovedBy == null || c.ApprovedBy == 0)
+                {
+                    obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                    obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
+                }
+
             }
 
             return View(obj);
@@ -514,9 +533,14 @@ namespace LTMSV2.Controllers
             obj.Referal = c.Referal;
             obj.BusinessTypeId = c.BusinessTypeId;
             //obj.UserID = c.UserID;
-            
-            obj.DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString()); 
+            obj.VATTRN = c.VATTRN;
+            obj.DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
 
+            if (obj.CustomerType=="CS" && c.CustomerType == "CR" && c.ChkApprovedBy)
+            {
+                obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                obj.ApprovedOn = c.ApprovedOn;
+            }
 
             db.Entry(obj).State = EntityState.Modified;
                 db.SaveChanges();

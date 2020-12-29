@@ -95,5 +95,8 @@ namespace LTMSV2.Models
         public int? ApprovedBy { get; set; }
         public string ApprovedUserName { get; set; }
         public DateTime ApprovedOn { get; set; }
+
+        public string VATTRN { get; set; }
+        public bool ChkApprovedBy { get; set; }
     }
 }

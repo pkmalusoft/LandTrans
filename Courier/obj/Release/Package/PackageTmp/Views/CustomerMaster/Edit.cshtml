@@ -123,6 +123,38 @@
         $(":password").css({ "border-radius": "5px" });
 
         $("#CustomerType").focus();
+
+        $("#CountryName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/CountryMaster/GetCountry',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.CountryName,
+                                value: val.CountryName,
+                                CountryID: val.CountryID
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#CountryName').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#CountryName").val(i.item.label);
+                $("#CountryID").val(i.item.CountryID);
+            },
+
+        });
         $("#LocationName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -162,7 +194,108 @@
             },
 
         });
+        $("#btnApprove").click(function () {
+            var cust = $("#CustomerType option:selected").val();
+            var cust = $("#CustomerType option:selected").val();
+            var name = $("#CustomerName").val();
+            var code = $("#CustomerCode").val();
+            var add1 = $("#Address1").val();
+            var con = $("#ContactPerson").val();
+            var cou = $("#CountryName").val();
+            var city = $("#CityName").val();
+            var loc = $("#autocomplete").val();
+            var curr = $("#CurrenceyID option:selected").val();
+            var mobile = $("#Mobile").val();
+            var phone = $("#Phone").val();
+            var cre = $("#CreditLimit").val();
+            var emp = $("#EmployeeID").val();
+            var email = $("#Email").val();
+            var pass = $("#Password").val();
+            var website = $("#Website").val();
+            if (cust == "") {
+                $("#validations").show();
+                $("#CustomerType").focus();
+                return false;
+            }
+            else if (name == "") {
+                $("#validations").show();
+                $("#CustomerName").focus();
+                return false;
+            }
+            else if (cou == "") {
+                $("#validations").show();
+                $("#CountryName").focus();
+                return false;
+            }
+            if (cust != "CR" && cust != "" && name != "" && cou != "") {
+                $("#validations").hide();
+                return true;
+            }
+            //for credit 
+            if (code == "") {
+                $("#validations").show();
+                $("#CustomerCode").focus();
+                return false;
+            }
+            else if (add1 == "") {
+                $("#validations").show();
+                $("#Address1").focus();
+                return false;
+            }
+            else if (con == "") {
+                $("#validations").show();
+                $("#ContactPerson").focus();
+                return false;
+            }
+            //else if (code == "") {
+            //    $("#validations").show();
+            //    $("#CustomerCode").focus();
+            //    return false;
+            //}
 
+            else if (city == "") {
+                $("#validations").show();
+                $("#CityName").focus();
+                return false;
+            }
+            else if (loc == "") {
+                $("#validations").show();
+                $("#autocomplete").focus();
+                return false;
+            }
+            else if (curr == "") {
+                $("#validations").show();
+                $("#CurrenceyID").focus();
+                return false;
+            }
+            else if (mobile == "") {
+                $("#validations").show();
+                $("#Mobile").focus();
+                return false;
+            }
+            else if (trn == "") {
+                $("#VATTRN").focus();
+                $("#validations").show();
+                return false;
+            }
+            else if (email == "") {
+                $("#validations").show();
+                $("#Email").focus();
+                return false;
+            }
+
+            if (cre != "") {
+                if (checkNumeric(cre) == false) {
+                    $("#CreditLimit").focus();
+                    $("#validations").show();
+                    return false;
+                }
+            }
+            if (cust == "CS") {
+                $("#CustomerType").val("CR");
+            }
+
+        });
        
         $("#btnsave").click(function () {
             debugger;
@@ -408,11 +541,11 @@
                     @Html.ValidationMessageFor(model => model.ContactPerson)
                 </div>
 
-               
+
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Location</label>
-                    @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control"})
+                    @Html.TextBoxFor(model => model.LocationName, new { @class = "form-control" })
                     @*<input class="form-control" id="autocomplete" name="LocationName" placeholder="Enter your address" onFocus="geolocate()" type="text" />*@
                     @*@Html.DropDownListFor(model => model.LocationID, new SelectList(@ViewBag.location, "LocationID", "Location"), "Select", new { @class = "form-control" })*@
                     @*@Html.ValidationMessageFor(model => model.LocationID)*@
@@ -425,7 +558,7 @@
 
                 <div class="col-md-3">
                     <label class="headinglabel required">City</label>
-                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", id = "CityName", @readonly="readonly" })
+                    @Html.TextBoxFor(model => model.CityName, new { @class = "form-control", id = "CityName", @readonly = "readonly" })
                     @*<input class="form-control" id="CityID" name="CityName" placeholder="Enter your address" type="text" onFocus="geoCitylocate()" />*@
                     @*@Html.DropDownListFor(model => model.CityID, new SelectList(@ViewBag.city, "CityID", "City"), "Select", new { @class = "form-control" })*@
                     @Html.ValidationMessageFor(model => model.CityName)
@@ -435,7 +568,7 @@
                     <label class="headinglabel required">Country</label>
                     @*<input type="text" id="txtPlaces" style="width: 250px" placeholder="Enter a location" />*@
                     @*<input class="form-control" id="CountryID" name="CountryName" placeholder="Enter your Country" type="text" onFocus="geoCountrylocate()" />*@
-                    @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", id = "CountryName", @readonly = "readonly" })
+                    @Html.TextBoxFor(model => model.CountryName, new { @class = "form-control", id = "CountryName" })
                     @*@Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })*@
                     @Html.ValidationMessageFor(model => model.CountryName)
                 </div>
@@ -494,23 +627,22 @@
             <div class="row no-margin" style="padding-top: 10px">
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Role</label>
-                    @Html.DropDownListFor(model => model.RoleID, new SelectList(@ViewBag.roles, "RoleID", "RoleName"), "Select", new { @class = "form-control", @disabled = "disabled" })
-                    @Html.ValidationMessageFor(model => model.EmployeeID)
+                    <label class="headinglabel required">VAT TRN No.</label>
+                    @Html.TextBoxFor(model => model.VATTRN, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.VATTRN)
+                    @Html.HiddenFor(model => model.RoleID)
                 </div>
-
-
                 <div class="col-md-3">
                     <label class="headinglabel">Email</label>
-                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control"  })
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Email)
                 </div>
 
                 @*<div class="col-md-3">
-                        <label class="headinglabel">Password</label>
-                        @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Password)
-                    </div>*@
+                <label class="headinglabel">Password</label>
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Password)
+            </div>*@
 
                 <div class="col-md-3">
                     <label class="headinglabel">Office Time From</label>
@@ -554,7 +686,22 @@
                     @Html.ValidationMessageFor(model => model.StatusActive)
                 </div>
             </div>
+            <div class="row no-margin" style="padding-top: 10px;border:1px solid #dedede">
+                <div class="col-md-3 checkboxdesign" style="padding-top:30px">
+                    @Html.CheckBox("ApproveCustomer", new { @name = "ApproveCustomer",@id="btnApprove" }) &nbsp
+                    <label class="headinglabel">Approve Customer</label>                     
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Approved By</label>
+                    <input type="text" class="form-control" value="@Model.ApprovedUserName" readonly />
+                </div>
 
+                <div class="col-md-3">
+                    <label class="headinglabel">Approved On</label>
+                    <input type="text" class="form-control" value="@Model.ApprovedOn" readonly />
+                </div>
+
+            </div>
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-3 hide">
                     <label class="headinglabel required">Depot</label>

@@ -71,6 +71,11 @@
         $(":password").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
 
+        if (@ViewBag.UserRoleId == 1) { //if admin 
+            
+            $('#divApprove').removeClass('hide');
+            $('#ApprovedOn').val('');
+        }
         $("#Email").val('');
         $("#Password").val('');
 
@@ -79,7 +84,37 @@
         $("#CityID").empty();
         $("#LocationID").empty();
 
-                      
+        $("#CountryName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/CountryMaster/GetCountry',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.CountryName,
+                                value: val.CountryName,
+                                CountryID: val.CountryID                                
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#CountryName').val(ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#CountryName").val(i.item.label);
+                $("#CountryID").val(i.item.CountryID);                
+            },
+
+        });
       
         $("#LocationName").autocomplete({
             source: function (request, response) {
@@ -136,6 +171,118 @@
             });
 
         });
+        $("#btnApprove").click(function () {
+            debugger;
+            $("#validations").html("Plesae Fill mandatory details to Approve Customer!")
+            var cust = $("#CustomerType option:selected").val();
+            var name = $("#CustomerName").val();
+            var code = $("#CustomerCode").val();
+            var add1 = $("#Address1").val();
+            var con = $("#ContactPerson").val();          
+            var cou = $("#CountryName").val();
+            var city = $("#CityName").val();
+            var loc = $("#autocomplete").val();
+            var curr = $("#CurrenceyID option:selected").val();
+            var mobile = $("#Mobile").val();
+            var trn = $("#VATTRN").val();
+            var phone = $("#Phone").val();
+            var cre = $("#CreditLimit").val();
+            var emp = $("#EmployeeID").val();
+            var email = $("#Email").val();
+            var pass = $("#Password").val();
+            var website = $("#Website").val();
+            if (cust == "") {
+                $("#validations").show();
+                $("#CustomerType").focus();
+                return false;
+            }
+            else if (name == "") {
+                $("#validations").show();
+                $("#CustomerName").focus();
+                return false;
+            }
+            else if (cou == "") {
+                $("#validations").show();
+                $("#CountryName").focus();
+                return false;
+            }           
+            else if (code == "") {
+                $("#validations").show();
+                $("#CustomerCode").focus();
+                return false;
+            }
+            else if (add1 == "") {
+                $("#validations").show();
+                $("#Address1").focus();
+                return false;
+            }
+            else if (con == "") {
+                $("#validations").show();
+                $("#ContactPerson").focus();
+                return false;
+            }
+            //else if (code == "") {
+            //    $("#validations").show();
+            //    $("#CustomerCode").focus();
+            //    return false;
+            //}
+
+            else if (city == "") {
+                $("#validations").show();
+                $("#CityName").focus();
+                return false;
+            }
+            else if (loc == "") {
+                $("#validations").show();
+                $("#autocomplete").focus();
+                return false;
+            }
+            else if (curr == "") {
+                $("#validations").show();
+                $("#CurrenceyID").focus();
+                return false;
+            }
+            else if (mobile == "") {
+                $("#validations").show();
+                $("#Mobile").focus();
+                return false;
+            }           
+            else if (trn == "") {
+                $("#VATTRN").focus();
+                $("#validations").show();
+                return false;
+            }
+            else if (email == "") {
+                $("#validations").show();
+                $("#Email").focus();
+                return false;
+            }          
+
+            if (cre != "") {
+                if (checkNumeric(cre) == false) {
+                    $("#CreditLimit").focus();
+                    $("#validations").show();
+                    return false;
+                }
+            }
+            if (cust == "CS" && $('#ChkApprovedBy').attr('checked')) {
+                $("#CustomerType").val("CR").trigger('change');
+                var d = new Date();
+                var curr_date = d.getDate();
+                var curr_month = d.getMonth() + 1;
+                var curr_year = d.getFullYear();
+
+                var newdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+                $("#txtApprovedBy").val($('#ApprovedUserName').val());
+                $('#ApprovedOn').val(newdate);
+            }
+            else {
+                $("#CustomerType").val("CS").trigger('change');
+                $("#txtApprovedBy").val('');
+                $('#ApprovedOn').val('');
+            }
+
+        });
 
         $("#btnsave").click(function () {
             debugger;
@@ -147,7 +294,7 @@
             //var cou = $("#CountryID option:selected").val();
             //var city = $("#CityID option:selected").val();
             //var loc = $("#LocationID option:selected").val();
-
+            var trn = $("#VATTRN").val();
             var cou = $("#CountryName").val();
             var city = $("#CityName").val();
             var loc = $("#autocomplete").val();
@@ -171,7 +318,13 @@
                 $("#CustomerName").focus();
                 return false;
             }
-             if (cust != "CR" &&  cust!="" && name!="") {
+            else if (cou == "" && ($("#CountryID").val() == 0 || $("#CountryID").val() == "")) {
+                $("#CountryName").val('');
+                $("#validations").show();
+                $("#CountryName").focus();
+                return false;
+            }
+            if (cust != "CR" && cust != "" && name != "" && cou != "")  {
                  $("#validations").hide();
                 return true;
             }
@@ -196,11 +349,7 @@
             //    $("#CustomerCode").focus();
             //    return false;
             //}
-            else if (cou == "") {
-                $("#validations").show();
-                $("#CountryName").focus();
-                return false;
-            }
+           
             else if (city == "") {
                 $("#validations").show();
                 $("#CityName").focus();
@@ -239,6 +388,11 @@
                 $("#Email").focus();
                 return false;
             }
+            else if (trn == "") {
+                $("#VATTRN").focus();
+                $("#validations").show();
+                return false;
+            }
             //else if (pass == "") {
             //    $("#validations").show();
             //    return false;
@@ -251,7 +405,7 @@
                     return false;
                 }
             }
-
+            
             //if (phone != "") {
             //    debugger;
             //    if (checkPhoneNumber(phone) == false) {
@@ -437,7 +591,7 @@
 
                 <div class="col-md-3">
                     <label class="headinglabel required">Country</label>
-                    <input class="form-control" id="CountryName" name="CountryName" type="text" readonly="readonly"  />                    
+                    <input class="form-control" id="CountryName" name="CountryName" type="text"   />                    
                     @Html.ValidationMessageFor(model => model.CountryName)
                 </div>
 
@@ -493,9 +647,12 @@
             <div class="row no-margin" style="padding-top: 10px">
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Role</label>
-                    @Html.DropDownListFor(model => model.RoleID, new SelectList(@ViewBag.roles, "RoleID", "RoleName"), "Select", new { @class = "form-control", @disabled = "disabled", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.EmployeeID)
+                    <label class="headinglabel required">VAT TRN No.</label>
+                    @Html.TextBoxFor(model => model.VATTRN,  new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.VATTRN)
+                    
+                    @Html.HiddenFor(model => model.RoleID)
+                    
                 </div>
 
 
@@ -572,13 +729,33 @@
 
                 </div>
             </div>
-            <div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-12 btn-right">
-                    <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "CustomerMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+            <div class="row no-margin hide" style="padding-top: 10px;border:1px solid #dedede;" id="divApprove">
+                <div class="col-md-3 checkboxdesign" style="padding-top:30px">
+                    @Html.CheckBox("ChkApprovedBy", new { @name = "ChkApprovedBy", @id = "btnApprove" }) &nbsp
+                    <label class="headinglabel">Approve Customer</label>
                 </div>
-            </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Approved By</label>
+                    <input type="text" class="form-control" id="txtApprovedBy" value="" readonly />
+                    @Html.HiddenFor(model => model.ApprovedBy)
+                    @Html.HiddenFor(model => model.ApprovedOn)
+                    @Html.HiddenFor(model => model.ApprovedUserName)
+                    
+                </div>
 
-        </fieldset>
+                    <div class="col-md-3">
+                        <label class="headinglabel">Approved On</label>
+                        <input type="text" class="form-control" id="txtApprovedOn" value="" readonly />
+                    </div>
+
+                </div>
+                <div class="row no-margin" style="padding-top: 10px">
+                    <div class="col-md-12 btn-right">
+                        <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "CustomerMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                    </div>
+                </div>
+
+</fieldset>
     }
 
 </section>

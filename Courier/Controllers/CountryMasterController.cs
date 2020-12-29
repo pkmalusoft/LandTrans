@@ -88,9 +88,24 @@ namespace LTMSV2.Controllers
             return RedirectToAction("Index");
 
         }
-      
-            
-      
+
+
+        public ActionResult GetCountry(string term)
+        {
+            if (term.Trim() != "")
+            {
+                List<CountryMasterVM> list = new List<CountryMasterVM>();
+                list = (from c in db.CountryMasters where c.CountryName.StartsWith(term.Trim()) select new CountryMasterVM { CountryID = c.CountryID, CountryName = c.CountryName }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                List<CountryMasterVM> list = new List<CountryMasterVM>();
+                list = (from c in db.CountryMasters select new CountryMasterVM { CountryID = c.CountryID, CountryName = c.CountryName }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+
+        }
 
 
         //
