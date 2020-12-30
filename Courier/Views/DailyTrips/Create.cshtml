@@ -1,12 +1,13 @@
-﻿@model LTMSV2.Models.TruckDetail
+﻿@model LTMSV2.Models.TruckDetailVM1
 @{
     /**/
 
-    
+
     var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var _mindate = @LTMSV2.Models.CommanFunctions.GetMinFinancialDate(); //'2020/01/01',
     var _maxdate = @LTMSV2.Models.CommanFunctions.GetMaxFinancialDate();
+    int otherchargecount = 0;
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
@@ -58,10 +59,11 @@
             padding: 100px 20px;
             height: 100%;
         }
+
         .tablink {
-            color:white;
+            color: white;
         }
-       /* .flexTitle {
+        /* .flexTitle {
             display: flex;
             justify-content: space-between;
         }*/
@@ -77,36 +79,46 @@
     <div class="row no-margin">
         <div class="col-md-12 form-group d-flex" style="min-height:50px;justify-content:flex-start;background-color: #dedede; text-align: center;">
             <div class="field checkboxdesign">
-                <label class="headinglabel"><input type="radio" id="chkHired" checked name="Vtype" onchange="setVehicleType(this)" value="H" />Hired Vehicle</label>
+                <label class="headinglabel"><input type="radio" id="chkHired" checked name="Vtype" onchange="setVehicleType()" value="H" />Hired Vehicle</label>
             </div>
             <div class="field checkboxdesign">
-                <label class="headinglabel"><input type="radio" id="chkContract" name="Vtype" onchange="setVehicleType(this)" value="C" />Contract Vehicle</label>
+                <label class="headinglabel"><input type="radio" id="chkContract" name="Vtype" onchange="setVehicleType()" value="C" />Contract Vehicle</label>
             </div>
             <div class="field checkboxdesign">
-                <label class="headinglabel"><input type="radio" id="chkOwn" name="Vtype" onchange="setVehicleType(this)" value="O" />Own Vehicle</label>
+                <label class="headinglabel"><input type="radio" id="chkOwn" name="Vtype" onchange="setVehicleType()" value="O" />Own Vehicle</label>
             </div>
             <div class="field checkboxdesign">
-                <label class="headinglabel"><input type="radio" id="chkForward" name="Vtype" onchange="setVehicleType(this)" value="F" />Forward Agent</label>
+                <label class="headinglabel"><input type="radio" id="chkForward" name="Vtype" onchange="setVehicleType()" value="F" />Forward Agent</label>
             </div>
         </div>
     </div>
     <section class="content">
+        @if (TempData["ErrorMsg"] != null)
+        {
+            <script type="text/javascript">
+                 $(document).ready(function () {
+                     $.notify("@TempData["ErrorMsg"]", "warning");
+                 });
+            </script>
+        }
         <div id="Hired">
-            <form id="FormHired">
-                <div id="validations" style="color: red; margin-left: 7px; display: none">* Please fill mandatory fields</div>
+            @using (Html.BeginForm("Create", "DailyTrips", FormMethod.Post, new { @id = "formtrips" }))
+            {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
+                <div id="validations" style="color: red; margin-left: 7px; display: none">* Please fill mandatory fields</div>
 
 
                 <div class="row no-margin">
                     <div class="col-md-3 form-group">
+                        <label class="headinglabel required">Receipt No.</label>
+                        @Html.TextBoxFor(model => model.ReceiptNo, new { @class = "form-control", @required = "true",@readonly="readonly" })                        
+                    </div>
+                    <div class="col-md-3 form-group">
                         @Html.HiddenFor(model => model.TruckDetailID)
-                        <input type="hidden" id="VehicleType" name="VehicleType" value="H" />
+                        @Html.HiddenFor(model => model.VehicleType)
                         <label class="headinglabel required">Date</label>
                         @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control datepicker", @required = "true" })
-
-
                     </div>
 
                     <div class="col-md-3 form-group" id="divdriver">
@@ -117,7 +129,7 @@
                     </div>
                     <div class="col-md-3 form-group hide" id="divfwd">
                         <label class="headinglabel required">Forwarding Agent</label>
-                        @Html.DropDownListFor(model => model.ForwardAgentID, new SelectList(@ViewBag.FwdAgents, "SupplierID", "SupplierName"), "Select", new { @class = "form-control", @required = "true" })
+                        @Html.DropDownListFor(model => model.ForwardAgentID, new SelectList(@ViewBag.FwdAgents, "SupplierID", "SupplierName"), "Select", new { @class = "form-control" })
 
                     </div>
 
@@ -128,72 +140,62 @@
                         @*@Html.TextBoxFor(model => model.RegNo, new { @class = "form-control", @required = "true" })*@
                     </div>
 
+
+                </div>
+                <div class="row no-margin">
                     <div class="col-md-3 form-group">
                         <label class="headinglabel">Route</label>
                         @Html.DropDownListFor(model => model.RouteID, new SelectList(@ViewBag.Routes, "RouteID", "RouteName"), "Select", new { @class = "form-control" })
-
                     </div>
-                </div>
-                <div class="row no-margin">
                     <div class="col-md-3 form-group">
                         <label class="headinglabel required">Originating Location</label>
                         @Html.TextBoxFor(model => model.OriginName, new { @class = "form-control", id = "OriginName", name = "HOriginName", @onFocus = "geolocate(1)", @required = "true" })
-
                     </div>
-
-
                     <div class="col-md-3 form-group">
                         <label class="headinglabel required">Destination Location</label>
                         @Html.TextBoxFor(model => model.DestinationName, new { @class = "form-control", id = "DestinationName", name = "HDestinationName", @onFocus = "geolocate(2)", @required = "true" })
-
-
-                    </div>
-
-
+                  </div>
                     <div class="col-md-3 form-group">
-                        <label class="headinglabel required">Type of Load</label>
-                        <select class="form-control" id="TypeOfLoad" name="TypeOfLoad" required>
-                            <option value="Consolidated Truck">Consolidated Truck</option>
-                            <option value="Full Truck">Full Truck</option>
-                        </select>
-                        @*@Html.TextBoxFor(model => model.TypeOfLoad, new { @class = "form-control", @required = "true" })*@
-                    </div>
-
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel">AWB No</label>
-                        @Html.TextBoxFor(model => model.ConsignmentNoNote, new { @class = "form-control" })
-                    </div>
+                        <label class="headinglabel required">Load Type</label>
+                        @Html.DropDownListFor(model => model.ParcelTypeId, new SelectList(@ViewBag.parceltype, "ID", "ParcelType1"), "Select", new { @class = "form-control", @required = "true" })                        
+                    </div>                   
                 </div>
                 <div class="row no-margin">
                     <div class="col-md-3 form-group">
-                        <label class="headinglabel required">Rent </label>
-
-                        @Html.TextBoxFor(model => model.Rent, new { @onchange = "setNumberDecimal(this)", @onkeypress = "return isNumberKey(event)" ,@class = "form-control textright", @required = "true" })
+                        <label class="headinglabel">Consignment Note</label>
+                        @Html.TextBoxFor(model => model.ConsignmentNoNote, new { @class = "form-control" })
                     </div>
-
                     <div class="col-md-3 form-group">
                         <label class="headinglabel required">Currency</label>
                         @Html.DropDownListFor(model => model.CurrencyIDRent, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control", @required = "true" })
 
                     </div>
-
                     <div class="col-md-3 form-group">
-                        <label class="headinglabel">Other Charge Amount</label>
-                        @Html.TextBoxFor(model => model.OtherCharges, new { @class = "form-control text-right", @onchange = "setNumberDecimal(this)" })
+                        <label class="headinglabel required">Rent </label>
+                        @Html.TextBoxFor(model => model.Rent, new { @onchange = "setNumberDecimal(this)", @onkeypress = "return isNumberKey(event)", @class = "form-control textright", @required = "true" })
                     </div>
+                    <div class="col-md-3 form-group">
+                        <label class="headinglabel required">Rent Account Head(Dr.)</label>
+                        @*<input type="text" id="RentAcHead"value=""  name="RentAcHead" class="form-control" required />*@
+                        @Html.TextBoxFor(model => model.RentAcHead, new { @class = "form-control" })
+                        @Html.HiddenFor(model => model.RentAcHeadID)
 
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <label class="headinglabel">Other Charge Amount</label>
+                        @Html.TextBoxFor(model => model.OtherCharges, new { @class = "form-control text-right", @onchange = "setNumberDecimal(this)", @readonly = "readonly" })
+                    </div>
+                    <div class="col-md-1">
+                        @*<label class="headinglabel">Add Other Charge</label>*@
+                        <a href="javascript:void(0)" class="Allocate" title="Add Other Charge"><i class="fa fa-bars"></i></a>
+                    </div>
                     @*<div class="col-md-3 form-group">
             <label class="headinglabel required">Currency</label>
 
             @Html.DropDownListFor(model => model.CurrencyRent, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
         </div>*@
 
-                    <div class="col-md-3 form-group">
-                        <label class="headinglabel required">Rent Account Head(Dr.)</label>
-                        <input type="text" id="RentAcHead" name="RentAcHead" class="form-control" required />
-                        @Html.HiddenFor(model => model.RentAcHeadID)
 
-                    </div>
                     <div class="col-md-3 form-group">
                         <label class="headinglabel">Remark</label>
 
@@ -202,98 +204,280 @@
                     <div class="col-md-3 form-group">
                         <div class="checkboxdesign text-right" style="float:right">
                             <input type="checkbox" id="chkPaymentDetail" onclick="checkpayment()" /> &nbsp
-                            <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Add Cash/Bank Payment Details</label>
-                        </div>
+                            <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Driver Payment</label>
                         </div>
                     </div>
-                    <div id="divpayment" class="hide">
-                        <div class="row no-margin">
-                            <div class="col-md-12">
-                                <div class="flexTitle">
-                                    <h3 style="color: white">Payment Details</h3>
+                </div>
+                <div id="divpayment" class="hide">
+                    <div class="row no-margin">
+                        <div class="col-md-12">
+                            <div class="flexTitle">
+                                <h3 style="color: white">Payment Details</h3>
 
+                            </div>
+                            <hr />
+                        </div>
+
+                    </div>
+                    <div class="row no-margin">
+
+
+                        <div class="col-md-3 form-group">
+                            <label class="headinglabel">Payment Type</label>
+                            <select class="form-control" id="StatusPaymentMode" name="StatusPaymentMode">
+                                <option value="">Select</option>
+                                <option value="C">Cash</option>
+                                <option value="B">Bank</option>
+                            </select>
+                            @*@Html.TextBoxFor(model => model.StatusPaymentMode, new { @class = "form-control", @maxlength = "2" })*@
+                        </div>
+
+                        <div class="col-md-3 form-group">
+                            <label class="headinglabel required">Payment Account Head (Cr.)</label>                            
+                            @Html.TextBoxFor(model => model.PaymentHead, new { @class = "form-control" })
+                            @Html.HiddenFor(model => model.PaymentHeadID)
+
+                        </div>
+
+                        <div class="col-md-3 form-group">
+                            <label class="headinglabel required">Control A/c (Dr)</label>
+                            
+                            @Html.TextBoxFor(model => model.TDcontrolAcHead, new { @class = "form-control" })
+                            @Html.HiddenFor(model => model.TDcontrolAcHeadID)
+
+                            @*@Html.DropDownListFor(model => model.TDcontrolAcHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })*@
+                        </div>
+
+                        <div class="col-md-3 form-group">
+                            <label class="headinglabel required">Amount</label>
+
+                            @Html.TextBoxFor(model => model.Amount, new { @class = "form-control textright", @onchange = "setNumberDecimal(this)", @onkeypress = "return isNumberKey(event)" })
+                        </div>
+
+                        <div class="col-md-3 form-group">
+                            <label class="headinglabel required">Currency</label>
+                            @Html.DropDownListFor(model => model.PaymentCurrencyID, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
+
+                        </div>
+
+                        <div class="col-md-3 form-group">
+                            <label class="headinglabel">Payment Remark</label>
+
+                            @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label class="headinglabel">Cheque No.</label>
+                            @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label class="headinglabel">Cheque Date</label>
+                            @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-margin" style="padding-top: 10px">
+
+                    <div class="col-md-12 btn-right">
+
+                        <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;
+                        <a href='@Url.Action("Index", "DailyTrips")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+
+                    </div>
+                </div>
+
+                <div class="modal fade" id="popup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="border-radius:5px">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="exampleModalLabel">
+                                    Other Charges
+                                </h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+
+                                        <input type="hidden" value="@Model.otherchargesVM.Count" id="RowCount" />
+                                        <table id="ExpAllocationTable" class="table table-bordered table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>Other Charge</th>
+                                                    <th>Amount </th>
+                                                    <th>Delete </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="OtherChargeTable">
+                                                @foreach (var item in Model.otherchargesVM)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.OtherChargeName
+                                                            <input type="hidden" class="OChargeID" name="otherchargesVM[@otherchargecount].OtherChargeID" value="@item.OtherChargeID" />
+                                                        </td>
+                                                        <td style="text-align:right">
+                                                            @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount, "3")
+                                                            <input type="hidden" id="Amount_@otherchargecount" name="otherchargesVM[@otherchargecount].Amount" class="ExpAllocatedAmountDetails" value="@item.Amount" />
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            <a href="javascript:void(0)" id="DeleteAllocationRow"><i class="fa fa-times"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    otherchargecount++;
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td>
+                                                        @Html.DropDownList("OtherChargeID", new SelectList(@ViewBag.OtherCharge, "OtherChargeID", "OtherCharge1"), "Select", new { @class = "form-control" })
+                                                        @*<input type="text" id="OtherChargeName" value="" class="form-control" autocomplete="off" style="height:27px;" />
+                                                        <input type="hidden" id="OtherChargeID" value="" class="form-control" autocomplete="off" />*@
+                                                        <input type="hidden" id="OtherChargeAcHeadID" value="" class="form-control" autocomplete="off" />
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="text-right form-control txtNum" id="ExpAmount" value="0" onchange="setNumberDecimal(this)" onkeypress="return isNumberKey(event)" />
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <button type="button" style="height: 25px !important;margin-top:2px;border:0;    background: #35b8eb;color:#fff; vertical-align: middle;" index="1" id="AddExpAllocation" class="addmore">+</button>&nbsp;&nbsp;
+                                                        @*<button type="button" style="height: 25px !important;margin-top:14px; vertical-align: middle;border:none" id="AllocationClose"><i style="font-size:21px" class="fa fa-times"></i></button>*@
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
                                 </div>
-                                <hr />
                             </div>
-
-                        </div>
-                        <div class="row no-margin">
-
-
-                            <div class="col-md-3 form-group">
-                                <label class="headinglabel">Payment Type</label>
-                                <select class="form-control" id="StatusPaymentMode" name="StatusPaymentMode">
-                                    <option value="">Select</option>
-                                    <option value="C">Cash</option>
-                                    <option value="B">Bank</option>
-                                </select>
-                                @*@Html.TextBoxFor(model => model.StatusPaymentMode, new { @class = "form-control", @maxlength = "2" })*@
-                            </div>
-
-                            <div class="col-md-3 form-group">
-                                <label class="headinglabel required">Payment Account Head (Cr)</label>
-                                <input type="text" class="form-control" id="PaymentHead" name="PaymentHead" required />
-                                @Html.HiddenFor(model => model.PaymentHeadID)
-
-                            </div>
-
-                            <div class="col-md-3 form-group">
-                                <label class="headinglabel required">Control A/c (Dr)</label>
-                                <input type="text" class="form-control" id="TDcontrolAcHead" name="TDcontrolAcHead" required />
-                                @Html.HiddenFor(model => model.TDcontrolAcHeadID)
-
-                                @*@Html.DropDownListFor(model => model.TDcontrolAcHeadID, new SelectList(@ViewBag.Achead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })*@
-                            </div>
-
-                            <div class="col-md-3 form-group">
-                                <label class="headinglabel required">Amount</label>
-
-                                @Html.TextBoxFor(model => model.Amount, new { @class = "form-control textright", @onchange = "setNumberDecimal(this)" , @onkeypress = "return isNumberKey(event)" })
-                            </div>
-
-                            <div class="col-md-3 form-group">
-                                <label class="headinglabel required">Currency</label>
-                                @Html.DropDownListFor(model => model.PaymentCurrencyID, new SelectList(@ViewBag.Currency, "CurrencyID", "CurrencyName"), "Select", new { @class = "form-control" })
-
-                            </div>
-
-                            <div class="col-md-3 form-group">
-                                <label class="headinglabel">Payment Remark</label>
-
-                                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control" })
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label class="headinglabel">Cheque No.</label>
-                                @Html.TextBoxFor(model => model.ChequeNo, new { @class = "form-control", @readonly = "readonly" })
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label class="headinglabel">Cheque Date</label>
-                                @Html.TextBoxFor(model => model.ChequeDate, new { @class = "form-control", @readonly = "readonly" })
+                            <div class="modal-footer" style="padding-top: 5px">
+                                <button type="button" id="AllocationClose" class="btn btn-default" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
-                    <div class="row no-margin" style="padding-top: 10px">
+                </div>
 
-                        <div class="col-md-12 btn-right">
-
-                            <input type="button" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;
-                            <a href='@Url.Action("Index", "DailyTrips")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
-
-
-                        </div>
-                    </div>
-
-
-
-</form>
+            }
         </div>
-    
+
+
     </section>
 
 
 </body>
 </html>
+<script type="text/javascript">
+                                $(document).ready(function () {
+                                    $(".Allocate").on("click", function () {
 
+                                        $('#popup').modal('show');
+                                        //$('#popupbackground').show();
+                                    });
+
+
+                                    $("#AllocationClose").on("click", function () {
+                                        $('#popup').modal('hide');
+                                        //$('#popupbackground').hide();
+                                    });
+                                    $('#AddExpAllocation').click(function () {
+                                        var Total = 0;
+                                        var MainTotal = 0;
+                                        var selectedval = $("#OtherChargeID").val();
+                                        var exists = false;
+                                        debugger;
+                                        if (selectedval == 0) {
+                                            alert('Please select Other Charge Name!');
+                                            return;
+                                        }
+                                        $('#OtherChargeTable').find('.ExpAllocatedAmountDetails').each(function () {
+                                            debugger;
+                                            if (isNaN(parseFloat($(this).val())) === false) {
+                                                Total += parseFloat($(this).val());
+                                            }
+                                        });
+
+                                        $('#OtherChargeTable').find('.OChargeID').each(function () {
+                                            debugger;
+                                            if ($(this).val() === selectedval) {
+                                                exists = true;
+                                                alert('Already this charge added!');
+                                                return;
+                                            }
+                                        });
+                                        if (exists == true)
+                                            return;
+
+                                        if ($('#ExpAmount').val() == '' || $('#ExpAmount').val() == 0 || $('#ExpAmount').val() == undefined) {
+                                            alert('Enter Amount!')
+                                            return;
+                                        }
+                                        if (isNaN(parseFloat($('#ExpAmount').val())) === false) {
+                                            Total += parseFloat($('#ExpAmount').val());
+                                        }
+                                        $('#OtherCharges').val(parseFloat(Total).toFixed(3));
+
+                                        //var x = $("#CourierCharge").val();
+                                        ////var y = $("#PackingCharge").val();
+                                        //var z = $("#OtherCharges").val();
+                                        ////var a = $("#CustomCharge").val();
+                                        //var tot = parseFloat(x) + parseFloat(z); // + parseFloat(a); parseFloat(y)
+
+                                        //$("#OtherCharges").val(tot.toFixed(2));
+                                        //if (isNaN(parseFloat($('#amount').val())) === false) {
+                                        //    MainTotal += parseFloat($('#amount').val());
+                                        //}
+                                        //if (Total > MainTotal) {
+                                        //    alert('Amount cannot exceed total allocated amount');
+                                        //    return;
+                                        //}
+
+                                        var othercharngename = $("#OtherChargeID option:selected").text();
+                                        @*if (@otherchargecount>0)
+                                            $('#RowCount').val(@otherchargecount);*@
+
+                                        var RowCount = parseInt($('#RowCount').val());
+                                        var RowHtml = '<tr><td>' + othercharngename + '<input type="hidden" class="OChargeID"  name="otherchargesVM[' + RowCount + '].OtherChargeID" value="' + $('#OtherChargeID').val() + '"/></td>';
+                                        RowHtml = RowHtml + '<td>' + $('#ExpAmount').val() + '<input type="hidden" id="' + RowCount + '_Amount" name="otherchargesVM[' + RowCount + '].Amount" class="ExpAllocatedAmountDetails" value="' + $('#ExpAmount').val() + '"/></td>';
+                                        RowHtml = RowHtml + '<td><a href="javascript:void(0)"  class="deleteallocrow" id="DeleteAllocationRow"><i class="fa fa-times"></i></a></td>';
+                                        RowHtml = RowHtml + '</tr>';
+                                        $('#OtherChargeTable').append(RowHtml);
+                                        $('#RowCount').val(RowCount + 1);
+                                        ///otherchargecount++;
+                                        $("#OtherChargeName").val('');
+                                        $("#OtherChargeID").val(0);
+                                        $("#ExpAmount").val(0);
+                                        $('#OtherChargeName').focus()
+                                    });
+
+                                    $('.txtNum').blur(function () {
+                                        if (isNaN(parseInt($(this).val()))) {
+                                            $(this).val('0.00');
+                                        } else {
+                                            var amt = parseFloat($(this).val());
+                                            $(this).val(amt.toFixed(2));
+                                        }
+                                    });
+
+                                    $('#OtherChargeTable').on("click", "#DeleteAllocationRow", function () {
+
+                                        $(this).parent().parent().remove();
+                                    });
+
+                                    $('#details').on("click", "#DeleteAllocationRow", function () {
+
+                                        $(this).parent().parent().remove();
+                                    });
+                                });
+                                function ClearData() {
+                                    $("#ReceivedFrom").val('');
+                                    $("#SelectedReceivedFrom").val(0);
+                                    $("#amount").val('');
+                                    $("#remark1").val('');
+                                    $("#AcHeadAllocation").val('');
+                                    $("#SelectedAcHeadAllocation").val(0);
+                                    $("#ExpAmount").val('');
+                                    $("#ExpAllocationTable").find("tr:gt(0)").remove();
+                                }
+</script>
 <script type="text/javascript">
     function isNumberKey(evt) {
         var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -304,15 +488,35 @@
         return true;
     }
 
-      function setNumberDecimal(obj) {
+    function setNumberDecimal(obj) {
+        debugger;
 
        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
     }
-    function setVehicleType(obj) {
+    function setVehicleType() {
         debugger;
-
+        if ($('#TruckDetailID').val() > 0) {
+            $('#divdriver').removeClass('hide');
+            $('#divfwd').addClass('hide');
+            if ($('#VehicleType').val() == 'H') {
+                $("#chkHired").attr('checked', 'checked');
+            }
+            else if ($('#VehicleType').val() == 'O') {
+                $("#chkOwn").attr('checked', 'checked');
+            }
+            else if ($('#VehicleType').val() == 'C') {
+                $("#chkContract").attr('checked', 'checked');
+            }
+            else if ($('#VehicleType').val() == 'F') {
+                $("#chkForward").attr('checked', 'checked');
+                $('#divfwd').removeClass('hide');
+                $('#divdriver').addClass('hide');
+            }
+            return;
+        }
+        
         if ($("#chkHired").is(':checked')) {
-            $('#VehicleType').val('H');            
+            $('#VehicleType').val('H');
             $('#divdriver').removeClass('hide');
             $('#divfwd').addClass('hide');
             //$("#chkOwn").removeAttr('checked');
@@ -332,14 +536,14 @@
         else if ($("#chkForward").is(':checked')) {
             $('#VehicleType').val('F');
             $('#divfwd').removeClass('hide');
-            $('#divdriver').addClass('hide');            
+            $('#divdriver').addClass('hide');
             //$("#chkHired").removeAttr('checked');
             //$("#chkOwn").removeAttr('checked');
             //$("#chkContract").removeAttr('checked');
         }
     }
     function checkpayment() {
-        var paydetail = $("#chkPaymentDetail").is(':checked'); 
+        var paydetail = $("#chkPaymentDetail").is(':checked');
         if (paydetail) {
             $('#divpayment').removeClass('hide');
         }
@@ -355,7 +559,7 @@
 
         var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
         $('#TDDate').val(reqdate);
-
+        $('#DriverName').focus();
 
         $("#RouteID").change(function () {
             $.ajax({
@@ -385,101 +589,24 @@
 
         if ('@Model.TruckDetailID' > 0) {
 
-
-            $(".tablink").prop('disabled', true);
-            $("#RegNo").val('@Model.RegNo');
-            $("#RouteID").val('@Model.RouteID');
-            $("#TypeOfLoad").val('@Model.TypeOfLoad');
-            $("#CurrencyIDRent").val('@Model.CurrencyIDRent');
+            $("input[type='radio'][name='Vtype']").each(function (i,index) {
+                $(this).attr('disabled', 'disabled');                
+            });
+            
+            //$("#RegNo").val('@Model.RegNo');
+            //$("#RouteID").val('@Model.RouteID');            
+       //     $("#CurrencyIDRent").val('@Model.CurrencyIDRent');
             //$("#CurrencyRent").val('@Model.CurrencyRent');
-            $("#PaymentCurrencyID").val('@Model.PaymentCurrencyID');
-            $("#StatusPaymentMode").val('@Model.StatusPaymentMode'.trim());
-            $("#OriginCity").val('@Model.OriginCity'.trim());
-            $("#OriginCountry").val('@Model.OriginCountry'.trim());
+         //   $("#PaymentCurrencyID").val('@Model.PaymentCurrencyID');
+           // $("#StatusPaymentMode").val('@Model.StatusPaymentMode'.trim());
+            //$("#OriginCity").val('@Model.OriginCity'.trim());
+            //$("#OriginCountry").val('@Model.OriginCountry'.trim());
 
-
-            if ('@Model.VehicleType' == 'O') {
-                $.ajax({
-                    type: "POST",
-                    url: "/DailyTrips/GetAcHeadsById",
-                    datatype: "Json",
-                    data: { acheadid: '@Model.RentAcHeadID', paymentheadid: '@Model.PaymentHeadID', ControlAc: '@Model.TDcontrolAcHeadID' },
-                    success: function (data) {
-                        $("#ORentAcHead").val(data.Achead);
-                        $("#OPaymentHead").val(data.PaymentAc);
-                        $("#OTDcontrolAcHead").val(data.controlac);
-                    }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: "/DailyTrips/GetDriverById",
-                    datatype: "Json",
-                    data: { DriverId: '@Model.DriverID' },
-                    success: function (data) {
-                        $("#ODriverName").val(data.Driver);
-
-                    }
-                });
-            } else if ('@Model.VehicleType' == 'H') {
-                $.ajax({
-                    type: "POST",
-                    url: "/DailyTrips/GetAcHeadsById",
-                    datatype: "Json",
-                    data: { acheadid: '@Model.RentAcHeadID', paymentheadid: '@Model.PaymentHeadID', ControlAc: '@Model.TDcontrolAcHeadID' },
-                    success: function (data) {
-                        $("#RentAcHead").val(data.Achead);
-                        $("#PaymentHead").val(data.PaymentAc);
-                        $("#TDcontrolAcHead").val(data.controlac);
-                    }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: "/DailyTrips/GetDriverById",
-                    datatype: "Json",
-                    data: { DriverId: '@Model.DriverID' },
-                    success: function (data) {
-                        $("#DriverName").val(data.Driver);
-
-                    }
-                });
-            }
-            else if ('@Model.VehicleType' == 'C') {
-                $("#DocumentID").val('@Model.DocumentID');
-
-                $.ajax({
-                    type: "POST",
-                    url: "/DailyTrips/GetContractAcHeadsById",
-                    datatype: "Json",
-                    data: { paymentheadid: '@Model.PaymentHeadID', ControlAc: '@Model.TDcontrolAcHeadID' },
-                    success: function (data) {
-                        $("#CPaymentHead").val(data.PaymentAc);
-                        $("#CTDcontrolAcHead").val(data.controlac);
-                    }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: "/DailyTrips/GetDriverById",
-                    datatype: "Json",
-                    data: { DriverId: '@Model.DriverID' },
-                    success: function (data) {
-                        $("#DriverName").val(data.Driver);
-
-                    }
-                });
-            }
-            else if ('@Model.VehicleType' == 'F') {
-
-                $.ajax({
-                    type: "POST",
-                    url: "/DailyTrips/GetFwdAcHeadsById",
-                    datatype: "Json",
-                    data: { Acheadid: '@Model.RentAcHeadID' },
-                    success: function (data) {
-                        $("#FRentAcHead").val(data.controlac);
-                    }
-                });
-
-            }
+            setNumberDecimal($('#Rent'));
+            setNumberDecimal($('#OtherCharges'));
+            setNumberDecimal($('#Amount'));
+            setVehicleType()
+          
         }
         $('#TDDate').datetimepicker({
             maxDate: '@_maxdate',
@@ -750,23 +877,26 @@
                 $('#RentAcHead').val('');
             };
             if ($('#FormHired').valid()) {
-                
-                var data = $('#FormHired').serialize();
-                console.log(data);
-                $.ajax({
-                    type: 'POST',
-                    url: "/DailyTrips/SaveHiredVehicle",
-                    data: data,
-                    success: function (response) {
-                        if (response.success == true) {
-                            $.notify("Submitted Successfully!", "success");
-                            location.href = "/DailyTrips/Index";
-                        } else {
-                            $.notify(response.message, "error");
-                        }
-                    }
-                });
+                return true;
+                //    var data = $('#FormHired').serialize();
+                //    console.log(data);
+                //    $.ajax({
+                //        type: 'POST',
+                //        url: "/DailyTrips/SaveHiredVehicle",
+                //        data: data,
+                //        success: function (response) {
+                //            if (response.success == true) {
+                //                $.notify("Submitted Successfully!", "success");
+                //                location.href = "/DailyTrips/Index";
+                //            } else {
+                //                $.notify(response.message, "error");
+                //            }
+                //        }
+                //    });
 
+            }
+            else {
+                return false;
             }
         });
 

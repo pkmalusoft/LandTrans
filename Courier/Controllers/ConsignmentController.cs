@@ -104,6 +104,7 @@ namespace LTMSV2.Controllers
                 ViewBag.PaymentMode = db.tblPaymentModes.ToList();
             ViewBag.OtherCharge = db.OtherCharges.ToList();
             ViewBag.Document = db.ImpExpDocumentMasters.ToList();
+          
             List<OtherChargeDetailVM> otherchargesvm = new List<OtherChargeDetailVM>();
             QuickAWBVM v = new QuickAWBVM();
                 if (id == 0)
@@ -229,7 +230,7 @@ namespace LTMSV2.Controllers
                         inscan.CreatedDate = localDateTime;
                         inscan.LastModifiedBy = userid;
                         inscan.LastModifiedDate = localDateTime;
-
+                        
 
                         //if (v.PaymentModeId != null)
                         //{
@@ -708,8 +709,8 @@ namespace LTMSV2.Controllers
                 inscan.StatusTypeId = data.StatusTypeId;
                 inscan.CourierStatusId = data.CourierStatusID;
                 inscan.remarks = data.Remarks;
-                
 
+                
                 int statustypeid = 0;
                  
             if (data.StatusTypeId != null && data.StatusTypeId!=0)

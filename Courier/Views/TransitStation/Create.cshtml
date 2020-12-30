@@ -72,9 +72,9 @@
             @Html.ValidationMessageFor(model => model.Name)
              </div>
 
-             <div class="col-md-3 checkboxdesign" style="padding-top:15px">
+             <div class="col-md-3 checkboxdesign" >
                     @Html.CheckBox("IsActive", new { @name = "IsActive" }) &nbsp
-                    <label class="headinglabel" style="padding:10px">IsActive</label>
+                    <label class="headinglabel">IsActive</label>
                     @Html.ValidationMessageFor(model => model.IsActive)
                 </div>
 

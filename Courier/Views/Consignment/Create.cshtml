@@ -853,6 +853,7 @@
             autoFocus: false,
             focus: function (event, ui) {
                 $('#RouteName').val(ui.item.value);
+                $("#RouteID").val(ui.item.RouteID);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -871,7 +872,7 @@
     var consigneenames = [];
     var customernames = [];
      function setTwoNumberDecimal(obj) {
-
+         debugger;
        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
     }
     function setThreeNumberDecimal(obj) {
@@ -1164,17 +1165,7 @@
         else {
             $('#chkCBMCM').attr('checked', 'checked');
         }
-        $(".Allocate").on("click", function () {
-
-            $('#popup').modal('show');
-            //$('#popupbackground').show();
-        });
-
-
-        $("#AllocationClose").on("click", function () {
-            $('#popup').modal('hide');
-            //$('#popupbackground').hide();
-        });
+      
 
         $('#btnprintLabel').on('click', function () {
             debugger;
@@ -1727,12 +1718,12 @@
                 @Html.HiddenFor(model => model.CourierStatusId)
                 @Html.HiddenFor(model => model.StatusTypeId)
                 @Html.HiddenFor(model => model.PrintLabel)
-                @Html.HiddenFor(model => model.ConsignorCountryID);
-                @Html.HiddenFor(model => model.ConsignorCityID);
-                @Html.HiddenFor(model => model.ConsignorLocationID);
-                @Html.HiddenFor(model => model.ConsigneeCountryID);
-                @Html.HiddenFor(model => model.ConsigneeCityID);
-                @Html.HiddenFor(model => model.ConsigneeLocationID);
+                @Html.HiddenFor(model => model.ConsignorCountryID)
+                @Html.HiddenFor(model => model.ConsignorCityID)
+                @Html.HiddenFor(model => model.ConsignorLocationID)
+                @Html.HiddenFor(model => model.ConsigneeCountryID)
+                @Html.HiddenFor(model => model.ConsigneeCityID)
+                @Html.HiddenFor(model => model.ConsigneeLocationID)
 
                 <label class="headinglabel required">Consignment No.</label>
                 @if (@Model.InScanID == 0)
@@ -1759,7 +1750,6 @@
                 <label class="headinglabel required">Payment Mode</label>
                 @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
             </div>            
-
             <div class="col-md-4 hide">
                 <div class="flexTitle">
                     <label class="headinglabel required">Customer</label>

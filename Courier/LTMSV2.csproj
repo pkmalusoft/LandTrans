@@ -1909,6 +1909,9 @@
     <Compile Include="Models\TruckDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TruckDetailOtherCharge.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TruckDetailVM.cs" />
     <Compile Include="Models\TypeOfGood.cs">
       <DependentUpon>Model1.tt</DependentUpon>

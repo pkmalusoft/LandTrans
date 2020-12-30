@@ -15,16 +15,14 @@ namespace LTMSV2.Models
     public partial class CustomerInvoiceDetail
     {
         public int CustomerInvoiceDetailID { get; set; }
-        public Nullable<int> CustomerInvoiceID { get; set; }
-        public string AWBNo { get; set; }
-        public Nullable<decimal> CourierCharge { get; set; }
-        public Nullable<int> InScanInternationalDetailID { get; set; }
-        public string StatusPaymentMode { get; set; }
-        public Nullable<int> InscanID { get; set; }
+        public int CustomerInvoiceID { get; set; }
+        public int InScanID { get; set; }
+        public string ConsignmentNo { get; set; }
         public Nullable<int> TaxPercentage { get; set; }
+        public Nullable<decimal> FreightCharge { get; set; }
+        public Nullable<decimal> DocCharge { get; set; }
+        public Nullable<decimal> CustomsCharge { get; set; }
         public Nullable<decimal> OtherCharge { get; set; }
-        public Nullable<decimal> FuelSurcharge { get; set; }
-        public Nullable<decimal> CustomCharge { get; set; }
         public Nullable<int> RecPayStatus { get; set; }
         public Nullable<int> RecPayDetailId { get; set; }
         public Nullable<decimal> NetValue { get; set; }

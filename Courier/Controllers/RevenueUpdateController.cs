@@ -314,10 +314,16 @@ namespace LTMSV2.Controllers
             RevenueUpdateMaster cenquery = db.RevenueUpdateMasters.Where(t => t.ID == id).FirstOrDefault();
             if (cenquery != null)
             {
+                var detalist = db.RevenueUpdateDetails.Where(c => c.MasterID == id).ToList();
+                foreach(var item in detalist)
+                {
+                    db.RevenueUpdateDetails.Remove(item);
+                    db.SaveChanges();
+                }
                 db.RevenueUpdateMasters.Remove(cenquery);
                 db.SaveChanges();
 
-                TempData["SuccessMsg"] = "You have successfully Deleted Revenue Cost";
+                TempData["SuccessMsg"] = "You have successfully Deleted Revenue Update Entry";
                 return RedirectToAction("Index");
             }
             else

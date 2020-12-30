@@ -189,60 +189,60 @@ namespace LTMSV2.Controllers
                 _custinvoice.CustomerID = Convert.ToInt32(datePicker.CustomerId);
 
 
-                if (datePicker.CustomerId != null)
-                {
-                    //_details = (from c in db.InScanMasters
-                    //                //            join l in datePicker.SelectedValues on c.MovementID
-                    //            where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
-                    //            && c.PaymentModeId == 3
-                    //            && c.CustomerID == datePicker.CustomerId
-                    //            select new CustomerInvoiceDetailVM { AWBNo = c.AWBNo,
-                    //                AWBDateTime=c.TransactionDate, ConsigneeName = c.Consignee, ConsigneeCountryName = c.ConsigneeCountryName,
-                    //                CourierCharge = c.CourierCharge,
-                    //                CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
-                    //                OtherCharge = c.OtherCharge == null ? 0 : c.OtherCharge,
-                    //                StatusPaymentMode = c.StatusPaymentMode, InscanID = c.InScanID,
-                    //                MovementId = c.MovementID == null ? 0 : c.MovementID.Value,
-                    //                AWBChecked = true
-                    //            }).ToList().Where(tt => tt.MovementId != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId.Value)).ToList();
-                    _details = (from c in db.InScanMasters
-                                where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
-                                && (c.InvoiceID == null || c.InvoiceID == 0)
-                                && c.PaymentModeId == 3 //account
-                                && c.CustomerID == datePicker.CustomerId
-                                select new CustomerInvoiceDetailVM
-                                {
-                                    AWBNo = c.ConsignmentNo,
-                                    AWBDateTime = c.TransactionDate,
-                                    ConsigneeName = c.Consignee,
-                                    ConsigneeCountryName = c.ConsigneeCountryName,
-                                    CourierCharge = 100,
-                                    CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
-                                    OtherCharge = 10, //c.OtherCharge == null ? 0 : c.OtherCharge,
-                                    //StatusPaymentMode = c.StatusPaymentMode,
-                                    InscanID = c.InScanID,
-                                    MovementId = c.MovementID == null ? 0 : c.MovementID.Value,
-                                    AWBChecked = true
-                                }).ToList().Where(tt => tt.MovementId != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId.Value)).ToList();
-                }
-                int _index = 0;
-                _custinvoice.InvoiceTotal = 0;
-                _custinvoice.ChargeableWT = 0;
-                _custinvoice.CustomerInvoiceTax = 0;
-                _custinvoice.OtherCharge = 0;
-                _custinvoice.AdminPer = 0;
-                _custinvoice.AdminAmt = 0;
-                _custinvoice.FuelPer = 0;
-                _custinvoice.FuelAmt = 0;
+                //if (datePicker.CustomerId != null)
+                //{
+                //    //_details = (from c in db.InScanMasters
+                //    //                //            join l in datePicker.SelectedValues on c.MovementID
+                //    //            where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
+                //    //            && c.PaymentModeId == 3
+                //    //            && c.CustomerID == datePicker.CustomerId
+                //    //            select new CustomerInvoiceDetailVM { AWBNo = c.AWBNo,
+                //    //                AWBDateTime=c.TransactionDate, ConsigneeName = c.Consignee, ConsigneeCountryName = c.ConsigneeCountryName,
+                //    //                CourierCharge = c.CourierCharge,
+                //    //                CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
+                //    //                OtherCharge = c.OtherCharge == null ? 0 : c.OtherCharge,
+                //    //                StatusPaymentMode = c.StatusPaymentMode, InscanID = c.InScanID,
+                //    //                MovementId = c.MovementID == null ? 0 : c.MovementID.Value,
+                //    //                AWBChecked = true
+                //    //            }).ToList().Where(tt => tt.MovementId != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId.Value)).ToList();
+                //    _details = (from c in db.InScanMasters
+                //                where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
+                //                && (c.InvoiceID == null || c.InvoiceID == 0)
+                //                && c.PaymentModeId == 3 //account
+                //                && c.CustomerID == datePicker.CustomerId
+                //                select new CustomerInvoiceDetailVM
+                //                {
+                //                    AWBNo = c.ConsignmentNo,
+                //                    AWBDateTime = c.TransactionDate,
+                //                    ConsigneeName = c.Consignee,
+                //                    ConsigneeCountryName = c.ConsigneeCountryName,
+                //                    CourierCharge = 100,
+                //                    CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
+                //                    OtherCharge = 10, //c.OtherCharge == null ? 0 : c.OtherCharge,
+                //                    //StatusPaymentMode = c.StatusPaymentMode,
+                //                    InscanID = c.InScanID,
+                //                    MovementId = c.MovementID == null ? 0 : c.MovementID.Value,
+                //                    AWBChecked = true
+                //                }).ToList().Where(tt => tt.MovementId != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId.Value)).ToList();
+                //}
+                //int _index = 0;
+                //_custinvoice.InvoiceTotal = 0;
+                //_custinvoice.ChargeableWT = 0;
+                //_custinvoice.CustomerInvoiceTax = 0;
+                //_custinvoice.OtherCharge = 0;
+                //_custinvoice.AdminPer = 0;
+                //_custinvoice.AdminAmt = 0;
+                //_custinvoice.FuelPer = 0;
+                //_custinvoice.FuelAmt = 0;
 
                 
-                foreach (var item in _details)
-                {
-                    _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
-                    _custinvoice.TotalCharges = _custinvoice.TotalCharges + _details[_index].TotalCharges;
+                //foreach (var item in _details)
+                //{
+                //    _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+                //    _custinvoice.TotalCharges = _custinvoice.TotalCharges + _details[_index].TotalCharges;
 
-                    _index++;
-                }
+                //    _index++;
+                //}
 
                 _custinvoice.InvoiceTotal = _custinvoice.TotalCharges;
                 //_custinvoice.InvoiceTotal = Convert.ToDecimal(customerinvoice.TotalCharges) + Convert.ToDecimal(customerinvoice.ChargeableWT) + customerinvoice.AdminAmt + customerinvoice.FuelAmt + customerinvoice.OtherCharge;
@@ -279,13 +279,13 @@ namespace LTMSV2.Controllers
                 _custinvoice.CustomerInvoiceNo = model.CustomerInvoiceNo;
                 _custinvoice.InvoiceDate = model.InvoiceDate;
                 _custinvoice.CustomerID = model.CustomerID;
-                _custinvoice.CustomerInvoiceTax = model.CustomerInvoiceTax;
-                _custinvoice.ChargeableWT = model.ChargeableWT;                                               
-                _custinvoice.AdminPer = model.AdminPer;
-                _custinvoice.AdminAmt = model.AdminAmt;
-                _custinvoice.FuelPer = model.FuelPer;
-                _custinvoice.FuelAmt = model.FuelAmt;
-                _custinvoice.OtherCharge = model.OtherCharge;
+                //_custinvoice.CustomerInvoiceTax = model.CustomerInvoiceTax;
+                //_custinvoice.ChargeableWT = model.ChargeableWT;                                               
+                //_custinvoice.AdminPer = model.AdminPer;
+                //_custinvoice.AdminAmt = model.AdminAmt;
+                //_custinvoice.FuelPer = model.FuelPer;
+                //_custinvoice.FuelAmt = model.FuelAmt;
+                //_custinvoice.OtherCharge = model.OtherCharge;
                 _custinvoice.InvoiceTotal = model.InvoiceTotal;
                 _custinvoice.AcFinancialYearID = yearid;
                 _custinvoice.AcCompanyID = companyId;
@@ -308,18 +308,19 @@ namespace LTMSV2.Controllers
                             CustomerInvoiceDetail _detail = new CustomerInvoiceDetail();
                             _detail.CustomerInvoiceDetailID = db.CustomerInvoiceDetails.Select(x => x.CustomerInvoiceDetailID).DefaultIfEmpty(0).Max() + 1;
                             _detail.CustomerInvoiceID = _custinvoice.CustomerInvoiceID;
-                            _detail.AWBNo = e_details.AWBNo;
-                            _detail.InscanID = e_details.InscanID;
-                            _detail.StatusPaymentMode = e_details.StatusPaymentMode;
-                            _detail.CourierCharge = e_details.CourierCharge;
-                            _detail.CustomCharge = e_details.CustomCharge;
-                            _detail.OtherCharge = e_details.OtherCharge;                            
+                            _detail.ConsignmentNo = e_details.ConsignmentNo;
+                            _detail.InScanID = e_details.InScanID;
+                            //_detail.StatusPaymentMode = e_details.StatusPaymentMode;
+                            _detail.FreightCharge = e_details.FreightCharge;
+                            _detail.CustomsCharge = e_details.CustomsCharge;
+                            _detail.OtherCharge = e_details.OtherCharge;
+                            _detail.DocCharge = e_details.DocCharge;
                             _detail.NetValue =  e_details.TotalCharges;
                             db.CustomerInvoiceDetails.Add(_detail);
                             db.SaveChanges();
 
                             //inscan invoice modified
-                            InScanMaster _inscan = db.InScanMasters.Find(e_details.InscanID);
+                            InScanMaster _inscan = db.InScanMasters.Find(e_details.InScanID);
                             _inscan.InvoiceID = _custinvoice.CustomerInvoiceID;
                             db.Entry(_inscan).State = EntityState.Modified;
                             db.SaveChanges();
@@ -353,35 +354,35 @@ namespace LTMSV2.Controllers
             _custinvoice.InvoiceDate = _invoice.InvoiceDate;            
             _custinvoice.CustomerInvoiceNo = _invoice.CustomerInvoiceNo;
             _custinvoice.CustomerID = _invoice.CustomerID;
-            _custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
-            _custinvoice.FuelPer = _invoice.FuelPer;
-            _custinvoice.FuelAmt = _invoice.FuelAmt;
-            _custinvoice.AdminPer = _invoice.AdminPer;
-            _custinvoice.AdminAmt = _invoice.AdminAmt;
-            _custinvoice.OtherCharge = _invoice.OtherCharge;
-            _custinvoice.ChargeableWT = _invoice.ChargeableWT;
+            //_custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
+            //_custinvoice.FuelPer = _invoice.FuelPer;
+            //_custinvoice.FuelAmt = _invoice.FuelAmt;
+            //_custinvoice.AdminPer = _invoice.AdminPer;
+            //_custinvoice.AdminAmt = _invoice.AdminAmt;
+            //_custinvoice.OtherCharge = _invoice.OtherCharge;
+            //_custinvoice.ChargeableWT = _invoice.ChargeableWT;
             _custinvoice.InvoiceTotal= _invoice.InvoiceTotal;
                        
-            List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
-            _details = (from c in db.CustomerInvoiceDetails
-                        join ins in db.InScanMasters on  c.InscanID equals ins.InScanID
-                        where c.CustomerInvoiceID == id
-                        select new CustomerInvoiceDetailVM { CustomerInvoiceDetailID = c.CustomerInvoiceDetailID, CustomerInvoiceID = c.CustomerInvoiceID, AWBNo = c.AWBNo,AWBDateTime=ins.TransactionDate, CustomCharge=c.CustomCharge,
-                            CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, ConsigneeCountryName=ins.ConsigneeCountryName,ConsigneeName=ins.Consignee,
-                            StatusPaymentMode = c.StatusPaymentMode, InscanID = c.InscanID ,AWBChecked=true }).ToList();
+            //List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
+            //_details = (from c in db.CustomerInvoiceDetails
+            //            join ins in db.InScanMasters on  c.InscanID equals ins.InScanID
+            //            where c.CustomerInvoiceID == id
+            //            select new CustomerInvoiceDetailVM { CustomerInvoiceDetailID = c.CustomerInvoiceDetailID, CustomerInvoiceID = c.CustomerInvoiceID, AWBNo = c.AWBNo,AWBDateTime=ins.TransactionDate, CustomCharge=c.CustomCharge,
+            //                CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, ConsigneeCountryName=ins.ConsigneeCountryName,ConsigneeName=ins.Consignee,
+            //                StatusPaymentMode = c.StatusPaymentMode, InscanID = c.InscanID ,AWBChecked=true }).ToList();
 
             int _index = 0;
          
-            foreach (var item in _details)
-            {
-                _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
-                _custinvoice.TotalCharges += _details[_index].TotalCharges;
-                _index++;
-            }
+            //foreach (var item in _details)
+            //{
+            //    _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+            //    _custinvoice.TotalCharges += _details[_index].TotalCharges;
+            //    _index++;
+            //}
             
-            _custinvoice.CustomerInvoiceDetailsVM = _details;
+            //_custinvoice.CustomerInvoiceDetailsVM = _details;
 
-            Session["InvoiceListing"] = _details;
+//            Session["InvoiceListing"] = _details;
             return View(_custinvoice);
 
         }
@@ -397,13 +398,7 @@ namespace LTMSV2.Controllers
                 CustomerInvoice _custinvoice = new CustomerInvoice();
                 _custinvoice = db.CustomerInvoices.Find(model.CustomerInvoiceID);                                                              
                 _custinvoice.InvoiceDate = model.InvoiceDate;                
-                _custinvoice.CustomerInvoiceTax = model.CustomerInvoiceTax;
-                _custinvoice.ChargeableWT = model.ChargeableWT;
-                _custinvoice.AdminPer = model.AdminPer;
-                _custinvoice.AdminAmt = model.AdminAmt;
-                _custinvoice.FuelPer = model.FuelPer;
-                _custinvoice.FuelAmt = model.FuelAmt;
-                _custinvoice.OtherCharge = model.OtherCharge;
+                _custinvoice.TaxPercent = model.TaxPercent;                
                 _custinvoice.InvoiceTotal = model.InvoiceTotal;
                 db.Entry(_custinvoice).State = EntityState.Modified;
                 db.SaveChanges();
@@ -422,17 +417,18 @@ namespace LTMSV2.Controllers
                             CustomerInvoiceDetail _detail = new CustomerInvoiceDetail();
                             _detail.CustomerInvoiceDetailID = db.CustomerInvoiceDetails.Select(x => x.CustomerInvoiceDetailID).DefaultIfEmpty(0).Max() + 1;
                             _detail.CustomerInvoiceID = _custinvoice.CustomerInvoiceID;
-                            _detail.AWBNo = e_details.AWBNo;
-                            _detail.InscanID = e_details.InscanID;
-                            _detail.StatusPaymentMode = e_details.StatusPaymentMode;
-                            _detail.CourierCharge = e_details.CourierCharge;
-                            _detail.CustomCharge = e_details.CustomCharge;
+                            _detail.ConsignmentNo = e_details.ConsignmentNo;
+                            _detail.InScanID = e_details.InScanID;
+                            //_detail.StatusPaymentMode = e_details.StatusPaymentMode;
+                            _detail.FreightCharge = e_details.FreightCharge; 
+                            _detail.CustomsCharge = e_details.CustomsCharge;
+                            _detail.DocCharge = e_details.DocCharge;
                             _detail.OtherCharge = e_details.OtherCharge;
                             db.CustomerInvoiceDetails.Add(_detail);
                             db.SaveChanges();
 
                             //inscan invoice modified
-                            InScanMaster _inscan = db.InScanMasters.Find(e_details.InscanID);
+                            InScanMaster _inscan = db.InScanMasters.Find(e_details.InScanID);
                             _inscan.InvoiceID = _custinvoice.CustomerInvoiceID;
                             db.Entry(_inscan).State = EntityState.Modified;
                             db.SaveChanges();
@@ -462,7 +458,7 @@ namespace LTMSV2.Controllers
                             db.CustomerInvoiceDetails.Remove(_detail);
                             db.SaveChanges();
                             ////inscan invoice modified
-                            InScanMaster _inscan = db.InScanMasters.Find(e_details.InscanID);
+                            InScanMaster _inscan = db.InScanMasters.Find(e_details.InScanID);
                             _inscan.InvoiceID = null;
                             db.Entry(_inscan).State = EntityState.Modified;
                             db.SaveChanges();
@@ -491,15 +487,16 @@ namespace LTMSV2.Controllers
                         && c.CustomerID == Id
                         select new CustomerInvoiceDetailVM
                         {
-                            AWBNo = c.ConsignmentNo,
+                            ConsignmentNo = c.ConsignmentNo,
                             AWBDateTime=c.TransactionDate,
                             ConsigneeName = c.Consignee,
                             ConsigneeCountryName = c.ConsigneeCountryName,
-                            CourierCharge = 10,
-                            CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
+                            FreightCharge = 10,
+                            CustomsCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
                             OtherCharge = 0, //c.OtherCharge == null ? 0 : c.OtherCharge,
+                            DocCharge = 0, //c.OtherCharge == null ? 0 : c.OtherCharge,
                             //StatusPaymentMode = c.StatusPaymentMode,
-                            InscanID = c.InScanID,
+                            InScanID = c.InScanID,
                             MovementId = c.MovementID == null ? 0 : c.MovementID.Value,AWBChecked=true
                         }).ToList().Where(tt => tt.MovementId != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId.Value)).ToList();
             
@@ -509,22 +506,22 @@ namespace LTMSV2.Controllers
             CustomerInvoiceVM customerInvoice = new CustomerInvoiceVM();
             foreach (var item in _details)
                 {
-                    _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+                    _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].FreightCharge) + Convert.ToDecimal(_details[_index].CustomsCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
                     customerInvoice.TotalCharges += _details[_index].TotalCharges;
                     _index++;
                 }
 
 
-            if (customerInvoice.CustomerInvoiceTax != 0)
-            {
-                customerInvoice.ChargeableWT = (Convert.ToDouble(customerInvoice.TotalCharges) * (Convert.ToDouble(customerInvoice.CustomerInvoiceTax) / Convert.ToDouble(100.00)));
+            //if (customerInvoice.CustomerInvoiceTax != 0)
+            //{
+            //    customerInvoice.ChargeableWT = (Convert.ToDouble(customerInvoice.TotalCharges) * (Convert.ToDouble(customerInvoice.CustomerInvoiceTax) / Convert.ToDouble(100.00)));
 
-                customerInvoice.AdminAmt = (Convert.ToDecimal(customerInvoice.TotalCharges) * (Convert.ToDecimal(customerInvoice.AdminPer) / Convert.ToDecimal(100)));
+            //    customerInvoice.AdminAmt = (Convert.ToDecimal(customerInvoice.TotalCharges) * (Convert.ToDecimal(customerInvoice.AdminPer) / Convert.ToDecimal(100)));
 
-                customerInvoice.FuelAmt = (Convert.ToDecimal(customerInvoice.TotalCharges) * (Convert.ToDecimal(customerInvoice.FuelPer) / Convert.ToDecimal(100)));
+            //    customerInvoice.FuelAmt = (Convert.ToDecimal(customerInvoice.TotalCharges) * (Convert.ToDecimal(customerInvoice.FuelPer) / Convert.ToDecimal(100)));
 
-                customerInvoice.InvoiceTotal = Convert.ToDecimal(customerInvoice.TotalCharges) + Convert.ToDecimal(customerInvoice.ChargeableWT) + customerInvoice.AdminAmt + customerInvoice.FuelAmt;
-            }
+            //    customerInvoice.InvoiceTotal = Convert.ToDecimal(customerInvoice.TotalCharges) + Convert.ToDecimal(customerInvoice.ChargeableWT) + customerInvoice.AdminAmt + customerInvoice.FuelAmt;
+            //}
 
             customerInvoice.CustomerInvoiceDetailsVM = _details;
 
@@ -535,9 +532,9 @@ namespace LTMSV2.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetCourierType()
+        public JsonResult GetParcelType()
         {
-            var lstcourier=db.CourierMovements.ToList();
+            var lstcourier=db.ParcelTypes.ToList();
             return Json(new { data = lstcourier }, JsonRequestBehavior.AllowGet);
         }
 
@@ -555,55 +552,13 @@ namespace LTMSV2.Controllers
                     if (item.AWBChecked)
                     {
 
-                        _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+                        _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].FreightCharge) + Convert.ToDecimal(_details[_index].CustomsCharge) + Convert.ToDecimal(_details[_index].OtherCharge) + Convert.ToDecimal(_details[_index].DocCharge);
                         customerinvoice.TotalCharges += _details[_index].TotalCharges;
                     }
                     _index++;
 
                 }
-                if (customerinvoice.OtherCharge==null)
-                {
-                    customerinvoice.OtherCharge = 0;
-                }
-                if (customerinvoice.CustomerInvoiceTax==null)
-                { 
-                    customerinvoice.CustomerInvoiceTax = 0; 
-                }
-
-                if (customerinvoice.AdminPer ==null)
-                {
-                    customerinvoice.AdminPer = 0;
-                }
-                if (customerinvoice.FuelPer == null)
-                {
-                    customerinvoice.FuelPer = 0;
-                }
-
-                if (customerinvoice.CustomerInvoiceTax != 0)
-                {
-                    customerinvoice.ChargeableWT = (Convert.ToDouble(customerinvoice.TotalCharges) * (Convert.ToDouble(customerinvoice.CustomerInvoiceTax) / Convert.ToDouble(100.00)));
-                }
-                else
-                {
-                    customerinvoice.ChargeableWT = 0;
-                }
-                if (customerinvoice.AdminPer != 0) { 
-                    customerinvoice.AdminAmt = (Convert.ToDecimal(customerinvoice.TotalCharges) * (Convert.ToDecimal(customerinvoice.AdminPer) / Convert.ToDecimal(100)));
-                }
-                else
-                {
-                    customerinvoice.AdminAmt = 0;
-                }
-            if (customerinvoice.FuelPer != 0)
-            { 
-                customerinvoice.FuelAmt = (Convert.ToDecimal(customerinvoice.TotalCharges) * (Convert.ToDecimal(customerinvoice.FuelPer) / Convert.ToDecimal(100)));
-            }
-            else
-            {
-                customerinvoice.FuelAmt = 0;
-            }
-
-                    customerinvoice.InvoiceTotal = Convert.ToDecimal(customerinvoice.TotalCharges) + Convert.ToDecimal(customerinvoice.ChargeableWT) + customerinvoice.AdminAmt + customerinvoice.FuelAmt + customerinvoice.OtherCharge;
+                customerinvoice.InvoiceTotal = Convert.ToDecimal(customerinvoice.TotalCharges);
                 
             }
             return Json(new { data=customerinvoice  }, JsonRequestBehavior.AllowGet);
@@ -647,13 +602,13 @@ namespace LTMSV2.Controllers
             _custinvoice.CustomerInvoiceNo = _invoice.CustomerInvoiceNo;
             _custinvoice.CustomerID = _invoice.CustomerID;
             _custinvoice.CustomerName = db.CustomerMasters.Find(_invoice.CustomerID).CustomerName;
-            _custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
-            _custinvoice.FuelPer = _invoice.FuelPer;
-            _custinvoice.FuelAmt = _invoice.FuelAmt;
-            _custinvoice.AdminPer = _invoice.AdminPer;
-            _custinvoice.AdminAmt = _invoice.AdminAmt;
-            _custinvoice.OtherCharge = _invoice.OtherCharge;
-            _custinvoice.ChargeableWT = _invoice.ChargeableWT;
+            //_custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
+            //_custinvoice.FuelPer = _invoice.FuelPer;
+            //_custinvoice.FuelAmt = _invoice.FuelAmt;
+            //_custinvoice.AdminPer = _invoice.AdminPer;
+            //_custinvoice.AdminAmt = _invoice.AdminAmt;
+            //_custinvoice.OtherCharge = _invoice.OtherCharge;
+            //_custinvoice.ChargeableWT = _invoice.ChargeableWT;
             _custinvoice.InvoiceTotal = _invoice.InvoiceTotal;
             
             string monetaryunit = Session["MonetaryUnit"].ToString();
@@ -662,29 +617,29 @@ namespace LTMSV2.Controllers
             var comp = db.AcCompanies.Find(companyid);
             _custinvoice.CurrencyName = db.CurrencyMasters.Find(comp.CurrencyID).Symbol;
             List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
-            _details = (from c in db.CustomerInvoiceDetails
-                        join ins in db.InScanMasters on c.InscanID equals ins.InScanID
-                        where c.CustomerInvoiceID == id
-                        select new CustomerInvoiceDetailVM
-                        {
-                            CustomerInvoiceDetailID = c.CustomerInvoiceDetailID,
-                            CustomerInvoiceID = c.CustomerInvoiceID,
-                            AWBNo = c.AWBNo,
-                            AWBDateTime = ins.TransactionDate,
-                            CustomCharge = c.CustomCharge,
-                            CourierCharge = c.CourierCharge,
-                            OtherCharge = c.OtherCharge,
-                            ConsigneeCountryName = ins.ConsigneeCountryName,
-                            ConsigneeName = ins.Consignee,
-                            //StatusPaymentMode = c.StatusPaymentMode,
-                            InscanID = c.InscanID,
-                            AWBChecked = true
-                        }).ToList();
+            //_details = (from c in db.CustomerInvoiceDetails
+            //            join ins in db.InScanMasters on c.InscanID equals ins.InScanID
+            //            where c.CustomerInvoiceID == id
+            //            select new CustomerInvoiceDetailVM
+            //            {
+            //                CustomerInvoiceDetailID = c.CustomerInvoiceDetailID,
+            //                CustomerInvoiceID = c.CustomerInvoiceID,
+            //                AWBNo = c.AWBNo,
+            //                AWBDateTime = ins.TransactionDate,
+            //                CustomCharge = c.CustomCharge,
+            //                CourierCharge = c.CourierCharge,
+            //                OtherCharge = c.OtherCharge,
+            //                ConsigneeCountryName = ins.ConsigneeCountryName,
+            //                ConsigneeName = ins.Consignee,
+            //                //StatusPaymentMode = c.StatusPaymentMode,
+            //                InscanID = c.InscanID,
+            //                AWBChecked = true
+            //            }).ToList();
 
             int _index = 0;
             foreach (var item in _details)
             {
-                _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+                _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].FreightCharge) + Convert.ToDecimal(_details[_index].CustomsCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
                 _custinvoice.TotalCharges += _details[_index].TotalCharges;
                 _index++;
             }
@@ -716,13 +671,13 @@ namespace LTMSV2.Controllers
             _custinvoice.CustomerCityName = _cust.CityName;
             _custinvoice.CustomerPhoneNo = _cust.Phone;
 
-            _custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
-            _custinvoice.FuelPer = _invoice.FuelPer;
-            _custinvoice.FuelAmt = _invoice.FuelAmt;
-            _custinvoice.AdminPer = _invoice.AdminPer;
-            _custinvoice.AdminAmt = _invoice.AdminAmt;
-            _custinvoice.OtherCharge = _invoice.OtherCharge;
-            _custinvoice.ChargeableWT = _invoice.ChargeableWT;
+            //_custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
+            //_custinvoice.FuelPer = _invoice.FuelPer;
+            //_custinvoice.FuelAmt = _invoice.FuelAmt;
+            //_custinvoice.AdminPer = _invoice.AdminPer;
+            //_custinvoice.AdminAmt = _invoice.AdminAmt;
+            //_custinvoice.OtherCharge = _invoice.OtherCharge;
+            //_custinvoice.ChargeableWT = _invoice.ChargeableWT;
             _custinvoice.InvoiceTotal = _invoice.InvoiceTotal;
             //_custinvoice.invoiceFooter = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "Invoicefooter" select c.Text1).FirstOrDefault();
             _custinvoice.generalSetup = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "InvoiceFooter" && c.BranchId==branchid select c).FirstOrDefault();
@@ -741,29 +696,29 @@ namespace LTMSV2.Controllers
             _custinvoice.InvoiceTotalInWords = NumberToWords.ConvertAmount(Convert.ToDouble(_custinvoice.InvoiceTotal), monetaryunit);
 
             List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
-            _details = (from c in db.CustomerInvoiceDetails
-                        join ins in db.InScanMasters on c.InscanID equals ins.InScanID
-                        where c.CustomerInvoiceID == id
-                        select new CustomerInvoiceDetailVM
-                        {
-                            CustomerInvoiceDetailID = c.CustomerInvoiceDetailID,
-                            CustomerInvoiceID = c.CustomerInvoiceID,
-                            Origin =ins.ConsignorCountryName,
-                            AWBNo = c.AWBNo,
-                            AWBDateTime = ins.TransactionDate,
-                            Weight =ins.Weight,
-                            Pieces =ins.Pieces,                            
-                            CustomCharge = c.CustomCharge,
-                            CourierCharge = c.CourierCharge,
-                            OtherCharge = c.OtherCharge,
-                            ConsigneeCountryName = ins.ConsigneeCountryName,
-                            ConsigneeName = ins.Consignee,
-                            //StatusPaymentMode = c.StatusPaymentMode,
-                            MovementId=ins.MovementID,
-                            ParcelTypeId=ins.ParcelTypeId,
-                            InscanID = c.InscanID,
-                            AWBChecked = true
-                        }).ToList();
+            //_details = (from c in db.CustomerInvoiceDetails
+            //            join ins in db.InScanMasters on c.InscanID equals ins.InScanID
+            //            where c.CustomerInvoiceID == id
+            //            select new CustomerInvoiceDetailVM
+            //            {
+            //                CustomerInvoiceDetailID = c.CustomerInvoiceDetailID,
+            //                CustomerInvoiceID = c.CustomerInvoiceID,
+            //                Origin =ins.ConsignorCountryName,
+            //                ConsignmentNo = c.AWBNo,
+            //                AWBDateTime = ins.TransactionDate,
+            //                Weight =ins.Weight,
+            //                Pieces =ins.Pieces,                            
+            //                CustomsCharge = c.CustomCharge,
+            //                FreightCharge = c.CourierCharge,
+            //                OtherCharge = c.OtherCharge,
+            //                ConsigneeCountryName = ins.ConsigneeCountryName,
+            //                ConsigneeName = ins.Consignee,
+            //                //StatusPaymentMode = c.StatusPaymentMode,
+            //                MovementId=ins.MovementID,
+            //                ParcelTypeId=ins.ParcelTypeId,
+            //                InscanID = c.InscanID,
+            //                AWBChecked = true
+            //            }).ToList();
 
             int _index = 0;
             foreach (var item in _details)
@@ -774,7 +729,7 @@ namespace LTMSV2.Controllers
                     _custinvoice.ParcelType = db.ParcelTypes.Find(item.ParcelTypeId).ParcelType1;
                 }
 
-                _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+                _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].FreightCharge) + Convert.ToDecimal(_details[_index].CustomsCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
                 _custinvoice.TotalCharges += _details[_index].TotalCharges;
                 _index++;
             }

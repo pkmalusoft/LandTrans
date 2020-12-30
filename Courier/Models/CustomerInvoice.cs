@@ -24,28 +24,11 @@ namespace LTMSV2.Models
         public string CustomerInvoiceNo { get; set; }
         public int CustomerID { get; set; }
         public System.DateTime InvoiceDate { get; set; }
-        public Nullable<decimal> CustomerInvoiceTax { get; set; }
-        public Nullable<bool> StatusContractCustomer { get; set; }
+        public Nullable<decimal> TaxPercent { get; set; }
         public Nullable<int> AcJournalID { get; set; }
         public bool StatusClose { get; set; }
         public int FYearID { get; set; }
         public Nullable<int> AcCompanyID { get; set; }
-        public Nullable<decimal> OtherCharge { get; set; }
-        public Nullable<decimal> ClearingCharge { get; set; }
-        public Nullable<int> ClearingChargeHeadID { get; set; }
-        public Nullable<int> OtherChargeHeadID { get; set; }
-        public Nullable<int> FuelSurChargeHeadID { get; set; }
-        public Nullable<decimal> FuelPer { get; set; }
-        public Nullable<decimal> AdminPer { get; set; }
-        public Nullable<decimal> FuelAmt { get; set; }
-        public Nullable<decimal> AdminAmt { get; set; }
-        public Nullable<double> ChargeableWT { get; set; }
-        public string CalogiRef { get; set; }
-        public Nullable<System.DateTime> calogidate { get; set; }
-        public Nullable<bool> statusColoader { get; set; }
-        public Nullable<decimal> CostAmt { get; set; }
-        public Nullable<decimal> Revenue { get; set; }
-        public Nullable<decimal> CCharge { get; set; }
         public Nullable<decimal> InvoiceTotal { get; set; }
         public bool IsDeleted { get; set; }
         public Nullable<int> AcFinancialYearID { get; set; }

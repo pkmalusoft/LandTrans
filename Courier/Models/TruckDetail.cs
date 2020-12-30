@@ -62,7 +62,6 @@ namespace LTMSV2.Models
         public string ChequeNo { get; set; }
         public Nullable<System.DateTime> ChequeDate { get; set; }
         public Nullable<int> BranchID { get; set; }
-        public string TypeOfLoad { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
         public string OriginCountry { get; set; }
         public Nullable<int> ForwardAgentID { get; set; }
@@ -70,6 +69,7 @@ namespace LTMSV2.Models
         public Nullable<int> SupplierInvoiceId { get; set; }
         public Nullable<int> RecPayId { get; set; }
         public string ConsignmentNoNote { get; set; }
+        public Nullable<int> ParcelTypeId { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

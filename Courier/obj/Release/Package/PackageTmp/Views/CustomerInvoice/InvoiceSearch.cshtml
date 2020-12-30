@@ -102,7 +102,7 @@
 
               $.ajax({
                 type: "Get",
-                url: "/CustomerInvoice/GetCourierType",
+                  url: "/CustomerInvoice/GetParcelType",
                 datatype: "Json",
                   success: function (response) {
                       
@@ -116,7 +116,7 @@
                         var flag = 0;
                         for (var j = 0 ; j < o_st.length; j++) {
                             debugger;
-                                if (o_st[j] == value.MovementID) {
+                                if (o_st[j] == value.ParcelTypeID) {
                                     flag = 1;
                                     break;
                                 }
@@ -124,10 +124,10 @@
                         }
 
                         if (flag == 1) {
-                            $('#movementid').append('<option value="' + value.MovementID + '" selected=true>' + value.MovementType + '</option>');
+                            $('#movementid').append('<option value="' + value.ParcelTypeID + '" selected=true>' + value.ParcelType + '</option>');
                         }
                         else {
-                            $('#movementid').append('<option value="' + value.MovementID + '">' + value.MovementType + '</option>');
+                            $('#movementid').append('<option value="' + value.ParcelTypeID + '">' + value.ParcelType + '</option>');
                         }
 
                     });
@@ -198,7 +198,7 @@
             <input type="submit" value="Filter Customer" id="search" class="btn btn-primary" style="margin-top:31px" />&nbsp;&nbsp;
         </div>*@
     <div class="col-md-2">
-        <label class="headinglabel required ">Courier Type</label>
+        <label class="headinglabel required ">Load Type</label>
 
         <select id="movementid" name="SelectedValues" multiple="multiple" class="form-control">
             <option value=""></option>

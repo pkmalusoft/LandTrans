@@ -6,7 +6,19 @@
                 Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
                 var Depots = ViewBag.Depots as IEnumerable<LTMSV2.Models.tblDepot>;
 }
+<style type="text/css">
 
+    .searchdiv {
+        background-color: #fff;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 500px;
+        margin-bottom: 40px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+    }
+</style>
 
 <script type="text/javascript">
     var AWBItems = [];
@@ -186,31 +198,33 @@
     {
         @Html.ValidationSummary(true)
         <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+
         <fieldset>
+            <div class="searchdiv sm-width">
             <div class="row no-margin">
                 <input type="hidden" value="@Model.RouteID" id="RouteID" name="RouteID" />
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <label class="headinglabel required">Route Code</label>
                     @Html.TextBoxFor(model => model.RouteCode, new { @class = "form-control", @required = "required" })
                     @Html.ValidationMessageFor(model => model.RouteCode)
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <label class="headinglabel required">Route Name</label>
                     @Html.TextBoxFor(model => model.RouteName, new { @class = "form-control", @required = "required" })
                     @Html.ValidationMessageFor(model => model.RouteName)
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <label class="headinglabel required">Origin</label>
                     <input type="text" class="form-control" id="OriginName" name="OriginName" required />
                     @Html.HiddenFor(model => model.OrginLocationID)
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <label class="headinglabel required">Destination</label>
                     <input type="text" class="form-control" id="DestinationName" name="DestinationName" required />
                     @Html.HiddenFor(model => model.DestinationLocationID)
@@ -223,7 +237,7 @@
 
             <div class="row no-margin">
 
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <label class="headinglabel required">Transit Depot</label>
                     <select class="form-control" id="DepotId" name="DepotId">
                         <option value="">Select</option>
@@ -234,12 +248,13 @@
                     </select>
                 </div>
 
-                <div class="col-md-3" style="padding-top:10px">
+                <div class="col-md-12 text-right" style="padding-top:10px">
                     <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
 
                 </div>
 
             </div>
+        </div>
 
 
             <div class="row no-margin" style="padding-top:30px">

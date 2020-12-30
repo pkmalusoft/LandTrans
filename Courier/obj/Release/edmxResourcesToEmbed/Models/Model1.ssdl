@@ -1053,28 +1053,11 @@
     <Property Name="CustomerInvoiceNo" Type="nvarchar" MaxLength="50" />
     <Property Name="CustomerID" Type="int" Nullable="false" />
     <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
-    <Property Name="CustomerInvoiceTax" Type="money" />
-    <Property Name="StatusContractCustomer" Type="bit" />
+    <Property Name="TaxPercent" Type="decimal" Precision="10" Scale="2" />
     <Property Name="AcJournalID" Type="int" />
     <Property Name="StatusClose" Type="bit" Nullable="false" />
     <Property Name="FYearID" Type="int" Nullable="false" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="OtherCharge" Type="money" />
-    <Property Name="ClearingCharge" Type="money" />
-    <Property Name="ClearingChargeHeadID" Type="int" />
-    <Property Name="OtherChargeHeadID" Type="int" />
-    <Property Name="FuelSurChargeHeadID" Type="int" />
-    <Property Name="FuelPer" Type="money" />
-    <Property Name="AdminPer" Type="money" />
-    <Property Name="FuelAmt" Type="money" />
-    <Property Name="AdminAmt" Type="money" />
-    <Property Name="ChargeableWT" Type="float" />
-    <Property Name="CalogiRef" Type="nvarchar" MaxLength="200" />
-    <Property Name="calogidate" Type="datetime" />
-    <Property Name="statusColoader" Type="bit" />
-    <Property Name="CostAmt" Type="money" />
-    <Property Name="Revenue" Type="money" />
-    <Property Name="CCharge" Type="money" />
     <Property Name="InvoiceTotal" Type="money" />
     <Property Name="IsDeleted" Type="bit" Nullable="false" />
     <Property Name="AcFinancialYearID" Type="int" />
@@ -1085,16 +1068,14 @@
       <PropertyRef Name="CustomerInvoiceDetailID" />
     </Key>
     <Property Name="CustomerInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CustomerInvoiceID" Type="int" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="CourierCharge" Type="money" />
-    <Property Name="InScanInternationalDetailID" Type="int" />
-    <Property Name="StatusPaymentMode" Type="nvarchar" MaxLength="50" />
-    <Property Name="InscanID" Type="int" />
+    <Property Name="CustomerInvoiceID" Type="int" Nullable="false" />
+    <Property Name="InScanID" Type="int" Nullable="false" />
+    <Property Name="ConsignmentNo" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="TaxPercentage" Type="int" />
+    <Property Name="FreightCharge" Type="money" />
+    <Property Name="DocCharge" Type="money" />
+    <Property Name="CustomsCharge" Type="money" />
     <Property Name="OtherCharge" Type="money" />
-    <Property Name="FuelSurcharge" Type="money" />
-    <Property Name="CustomCharge" Type="money" />
     <Property Name="RecPayStatus" Type="int" />
     <Property Name="RecPayDetailId" Type="int" />
     <Property Name="NetValue" Type="money" />
@@ -2979,6 +2960,7 @@
     <Property Name="CostAcHeadID" Type="int" />
     <Property Name="AcCompanyId" Type="int" />
     <Property Name="BranchID" Type="int" />
+    <Property Name="RevenueGroup" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="RevenueType">
     <Key>
@@ -3638,7 +3620,6 @@
     <Property Name="ChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="ChequeDate" Type="datetime" />
     <Property Name="BranchID" Type="int" />
-    <Property Name="TypeOfLoad" Type="varchar" MaxLength="100" />
     <Property Name="IsDeleted" Type="bit" />
     <Property Name="OriginCountry" Type="nvarchar" MaxLength="100" />
     <Property Name="ForwardAgentID" Type="int" />
@@ -3646,6 +3627,18 @@
     <Property Name="SupplierInvoiceId" Type="int" />
     <Property Name="RecPayId" Type="int" />
     <Property Name="ConsignmentNoNote" Type="varchar" MaxLength="100" />
+    <Property Name="ParcelTypeId" Type="int" />
+  </EntityType>
+  <EntityType Name="TruckDetailOtherCharge">
+    <Key>
+      <PropertyRef Name="TruckDetailOtherChargeID" />
+    </Key>
+    <Property Name="TruckDetailOtherChargeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OtherChargeID" Type="int" />
+    <Property Name="Amount" Type="money" />
+    <Property Name="TruckDetailId" Type="int" />
+    <Property Name="TaxPercentage" Type="numeric" Precision="6" Scale="2" />
+    <Property Name="Reimbursement" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="TypeOfGoods">
     <Key>
@@ -4537,7 +4530,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
-    <End Role="CustomerInvoice" Type="Self.CustomerInvoice" Multiplicity="0..1">
+    <End Role="CustomerInvoice" Type="Self.CustomerInvoice" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="CustomerInvoiceDetails" Type="Self.CustomerInvoiceDetails" Multiplicity="*" />
@@ -8799,6 +8792,7 @@
     <EntitySet Name="Transit" EntityType="Self.Transit" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TransportMode" EntityType="Self.TransportMode" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TruckDetail" EntityType="Self.TruckDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TruckDetailOtherCharge" EntityType="Self.TruckDetailOtherCharge" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TypeOfGoods" EntityType="Self.TypeOfGoods" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UMDesignation" EntityType="Self.UMDesignation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UMForms" EntityType="Self.UMForms" Schema="dbo" store:Type="Tables" />

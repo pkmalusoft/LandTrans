@@ -33,6 +33,7 @@ namespace LTMSV2.Models
         public Nullable<int> CostAcHeadID { get; set; }
         public Nullable<int> AcCompanyId { get; set; }
         public Nullable<int> BranchID { get; set; }
+        public string RevenueGroup { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }

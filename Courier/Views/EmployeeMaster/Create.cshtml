@@ -574,7 +574,7 @@
                         @Html.ValidationMessageFor(model => model.StatusCommision)
                     </div>*@
 
-                <div class="col-md-3 checkboxdesign" style="padding-top:15px">
+                <div class="col-md-3 checkboxdesign verticalcheckbox" >
                     @Html.CheckBox("StatusActive", new { @name = "StatusActive", @tabindex = 17 }) &nbsp;&nbsp;
                     <label class="headinglabel">Active</label>
                     @Html.ValidationMessageFor(model => model.StatusActive)

@@ -88,8 +88,6 @@ namespace LTMSV2.Models
         public virtual DbSet<CurrencyMaster> CurrencyMasters { get; set; }
         public virtual DbSet<CustomerContract> CustomerContracts { get; set; }
         public virtual DbSet<CustomerEnquiry> CustomerEnquiries { get; set; }
-        public virtual DbSet<CustomerInvoice> CustomerInvoices { get; set; }
-        public virtual DbSet<CustomerInvoiceDetail> CustomerInvoiceDetails { get; set; }
         public virtual DbSet<CustomerMaster> CustomerMasters { get; set; }
         public virtual DbSet<CustomerMultiContract> CustomerMultiContracts { get; set; }
         public virtual DbSet<CustomerNotification> CustomerNotifications { get; set; }
@@ -265,13 +263,16 @@ namespace LTMSV2.Models
         public virtual DbSet<RevenueUpdateMaster> RevenueUpdateMasters { get; set; }
         public virtual DbSet<VehicleMaster> VehicleMasters { get; set; }
         public virtual DbSet<RouteMaster> RouteMasters { get; set; }
-        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
         public virtual DbSet<CostUpdateDetail> CostUpdateDetails { get; set; }
         public virtual DbSet<CostUpdateMaster> CostUpdateMasters { get; set; }
         public virtual DbSet<DriverMaster> DriverMasters { get; set; }
         public virtual DbSet<SupplierInvoiceDetail> SupplierInvoiceDetails { get; set; }
         public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
         public virtual DbSet<DebitNote> DebitNotes { get; set; }
+        public virtual DbSet<TruckDetailOtherCharge> TruckDetailOtherCharges { get; set; }
+        public virtual DbSet<CustomerInvoice> CustomerInvoices { get; set; }
+        public virtual DbSet<CustomerInvoiceDetail> CustomerInvoiceDetails { get; set; }
+        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
         public virtual DbSet<TruckDetail> TruckDetails { get; set; }
     
         [DbFunction("Entities1", "IDs")]

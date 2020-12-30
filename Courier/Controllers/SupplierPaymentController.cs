@@ -119,7 +119,7 @@ namespace LTMSV2.Controllers
             List<CurrencyMaster> Currencys = new List<CurrencyMaster>();
             Currencys = MM.GetCurrency();
 
-            string DocNo = RP.GetMaxRecieptDocumentNo();
+            string DocNo = RP.GetMaxPaymentDocumentNo();
 
             ViewBag.DocumentNos = DocNo;
             if (pagetype == 1)
@@ -371,6 +371,7 @@ namespace LTMSV2.Controllers
                     //ViewBag.acheadbank = Context1.AcHeadSelectForBank(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
                     ViewBag.achead = acheadforcash;
                     ViewBag.acheadbank = acheadforbank;
+                    ViewBag.SupplierType = Context1.SupplierTypes.ToList();
                     cust.recPayDetail = Context1.RecPayDetails.Where(item => item.RecPayID == id).ToList();
                     cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
                     foreach (var item in cust.recPayDetail)
@@ -418,6 +419,7 @@ namespace LTMSV2.Controllers
 
                     ViewBag.achead = acheadforcash;
                     ViewBag.acheadbank = acheadforbank;
+                    ViewBag.SupplierType = Context1.SupplierTypes.ToList();
 
 
                     cust.RecPayDate = System.DateTime.UtcNow;
@@ -784,10 +786,10 @@ namespace LTMSV2.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetSupplierName(string term)
+        public JsonResult GetSupplierName(string term,int SupplierTypeId)
         {
             var customerlist = (from c1 in Context1.SupplierMasters
-                              where   c1.SupplierName.ToLower().Contains(term.ToLower())
+                              where   c1.SupplierName.ToLower().Contains(term.ToLower()) && c1.SupplierTypeID == SupplierTypeId
                                 orderby c1.SupplierName ascending
                                 select new { SupplierID = c1.SupplierID, SupplierName = c1.SupplierName }).ToList();
 

@@ -56,4 +56,17 @@ namespace LTMSV2.Models
         public string Origin { get; set; }
         public string Destination { get; set; }
     }
+
+    public class TruckDetailVM1 : TruckDetail
+    {
+        public string RentAcHead { get;set;}
+        public string PaymentHead { get; set; }
+        public string TDcontrolAcHead { get; set; }
+        public List<TruckDetailOtherChargeVM> otherchargesVM { get; set; }
+    }
+
+    public class TruckDetailOtherChargeVM:TruckDetailOtherCharge
+    {
+        public string OtherChargeName { get; set; }
+    }
 }

@@ -15,7 +15,7 @@
         background-color: #fff;
         width: 100%;
         margin: 0 auto;
-        max-width: 500px;
+        max-width: 750px;
         padding: 20px;
         margin-top: 50px;
         border-radius: 10px;
@@ -34,8 +34,11 @@
 
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
-       
-       
+
+        $('#RevenueGroup1').val($('#RevenueGroup').val()).trigger('change');
+        $('#RevenueGroup1').change(function () {
+            $('#RevenueGroup').val($('#RevenueGroup1').val());
+        });
         $("#RevenueHeadName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -144,6 +147,7 @@
 
                 <div class="row no-margin">
                     @Html.HiddenFor(model => model.RCID)
+                    @Html.HiddenFor(model => model.RevenueGroup)
                     <div class="form-group row">
                         <div class="col-md-3">
                             <label class="required headinglabel">Revenue Component</label>
@@ -167,7 +171,7 @@
                     <div class="form-group row">
                         <div class="col-md-3">
                         </div>
-                        <div class="col-md-9 checkboxdesign" style="padding-top: 10px">
+                        <div class="col-md-9 checkboxdesign verticalcheckbox">
                             @Html.CheckBox("RevenueMandatory", new { @name = "RevenueMandatory" }) &nbsp
                             <label class="headinglabel">Revenue Mandatory</label>
                         </div>
@@ -180,6 +184,16 @@
                             @Html.TextBoxFor(model => model.RevenueHeadName, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.RevenueHeadName)
                             @Html.HiddenFor(model => model.RevenueAcHeadID)
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class=" headinglabel">Revenue Group</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.DropDownList("RevenueGroup1", new SelectList(@ViewBag.RevenueGroup, "TypeName", "TypeName", Model.RevenueGroup), "Select", new { @class = "form-control",@id="RevenueGroup1" })
+                            @Html.ValidationMessageFor(model => model.RevenueGroup)
 
                         </div>
                     </div>
@@ -204,7 +218,7 @@
                     <div class="form-group row">
                         <div class="col-md-3">
                         </div>
-                        <div class="col-md-9 checkboxdesign" style="padding-top: 10px">
+                        <div class="col-md-9 checkboxdesign verticalcheckbox">
                             @Html.CheckBox("CostMandatory", new { @name = "CostMandatory" }) &nbsp
                             <label class="headinglabel">Cost Mandatory</label>
                         </div>
@@ -221,7 +235,7 @@
                     </div>
 
                     <div class="row no-margin" style="padding-top:10px">
-                        <div class="" style="text-align:right;padding:10px">
+                        <div class="" style="text-align:right;">
 
                             <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" />
 

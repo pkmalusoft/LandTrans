@@ -1058,28 +1058,11 @@
           <Property Name="CustomerInvoiceNo" Type="nvarchar" MaxLength="50" />
           <Property Name="CustomerID" Type="int" Nullable="false" />
           <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
-          <Property Name="CustomerInvoiceTax" Type="money" />
-          <Property Name="StatusContractCustomer" Type="bit" />
+          <Property Name="TaxPercent" Type="decimal" Precision="10" Scale="2" />
           <Property Name="AcJournalID" Type="int" />
           <Property Name="StatusClose" Type="bit" Nullable="false" />
           <Property Name="FYearID" Type="int" Nullable="false" />
           <Property Name="AcCompanyID" Type="int" />
-          <Property Name="OtherCharge" Type="money" />
-          <Property Name="ClearingCharge" Type="money" />
-          <Property Name="ClearingChargeHeadID" Type="int" />
-          <Property Name="OtherChargeHeadID" Type="int" />
-          <Property Name="FuelSurChargeHeadID" Type="int" />
-          <Property Name="FuelPer" Type="money" />
-          <Property Name="AdminPer" Type="money" />
-          <Property Name="FuelAmt" Type="money" />
-          <Property Name="AdminAmt" Type="money" />
-          <Property Name="ChargeableWT" Type="float" />
-          <Property Name="CalogiRef" Type="nvarchar" MaxLength="200" />
-          <Property Name="calogidate" Type="datetime" />
-          <Property Name="statusColoader" Type="bit" />
-          <Property Name="CostAmt" Type="money" />
-          <Property Name="Revenue" Type="money" />
-          <Property Name="CCharge" Type="money" />
           <Property Name="InvoiceTotal" Type="money" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
           <Property Name="AcFinancialYearID" Type="int" />
@@ -1090,16 +1073,14 @@
             <PropertyRef Name="CustomerInvoiceDetailID" />
           </Key>
           <Property Name="CustomerInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CustomerInvoiceID" Type="int" />
-          <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="CourierCharge" Type="money" />
-          <Property Name="InScanInternationalDetailID" Type="int" />
-          <Property Name="StatusPaymentMode" Type="nvarchar" MaxLength="50" />
-          <Property Name="InscanID" Type="int" />
+          <Property Name="CustomerInvoiceID" Type="int" Nullable="false" />
+          <Property Name="InScanID" Type="int" Nullable="false" />
+          <Property Name="ConsignmentNo" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="TaxPercentage" Type="int" />
+          <Property Name="FreightCharge" Type="money" />
+          <Property Name="DocCharge" Type="money" />
+          <Property Name="CustomsCharge" Type="money" />
           <Property Name="OtherCharge" Type="money" />
-          <Property Name="FuelSurcharge" Type="money" />
-          <Property Name="CustomCharge" Type="money" />
           <Property Name="RecPayStatus" Type="int" />
           <Property Name="RecPayDetailId" Type="int" />
           <Property Name="NetValue" Type="money" />
@@ -2984,6 +2965,7 @@
           <Property Name="CostAcHeadID" Type="int" />
           <Property Name="AcCompanyId" Type="int" />
           <Property Name="BranchID" Type="int" />
+          <Property Name="RevenueGroup" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="RevenueType">
           <Key>
@@ -3643,7 +3625,6 @@
           <Property Name="ChequeNo" Type="varchar" MaxLength="50" />
           <Property Name="ChequeDate" Type="datetime" />
           <Property Name="BranchID" Type="int" />
-          <Property Name="TypeOfLoad" Type="varchar" MaxLength="100" />
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="OriginCountry" Type="nvarchar" MaxLength="100" />
           <Property Name="ForwardAgentID" Type="int" />
@@ -3651,6 +3632,18 @@
           <Property Name="SupplierInvoiceId" Type="int" />
           <Property Name="RecPayId" Type="int" />
           <Property Name="ConsignmentNoNote" Type="varchar" MaxLength="100" />
+          <Property Name="ParcelTypeId" Type="int" />
+        </EntityType>
+        <EntityType Name="TruckDetailOtherCharge">
+          <Key>
+            <PropertyRef Name="TruckDetailOtherChargeID" />
+          </Key>
+          <Property Name="TruckDetailOtherChargeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OtherChargeID" Type="int" />
+          <Property Name="Amount" Type="money" />
+          <Property Name="TruckDetailId" Type="int" />
+          <Property Name="TaxPercentage" Type="numeric" Precision="6" Scale="2" />
+          <Property Name="Reimbursement" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TypeOfGoods">
           <Key>
@@ -4542,7 +4535,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
-          <End Role="CustomerInvoice" Type="Self.CustomerInvoice" Multiplicity="0..1">
+          <End Role="CustomerInvoice" Type="Self.CustomerInvoice" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="CustomerInvoiceDetails" Type="Self.CustomerInvoiceDetails" Multiplicity="*" />
@@ -8804,6 +8797,7 @@
           <EntitySet Name="Transit" EntityType="Self.Transit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransportMode" EntityType="Self.TransportMode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TruckDetail" EntityType="Self.TruckDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TruckDetailOtherCharge" EntityType="Self.TruckDetailOtherCharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TypeOfGoods" EntityType="Self.TypeOfGoods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UMDesignation" EntityType="Self.UMDesignation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UMForms" EntityType="Self.UMForms" Schema="dbo" store:Type="Tables" />
@@ -10532,62 +10526,6 @@
           <Property Name="ConsignorCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CustomerMaster" Relationship="Self.FK_CustomerEnquiry_CustomerMaster" FromRole="CustomerEnquiry" ToRole="CustomerMaster" />
           <NavigationProperty Name="EmployeeMaster" Relationship="Self.FK_CustomerEnquiry_EmployeeMaster" FromRole="CustomerEnquiry" ToRole="EmployeeMaster" />
-        </EntityType>
-        <EntityType Name="CustomerInvoice">
-          <Key>
-            <PropertyRef Name="CustomerInvoiceID" />
-          </Key>
-          <Property Name="CustomerInvoiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerInvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerID" Type="Int32" Nullable="false" />
-          <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CustomerInvoiceTax" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="StatusContractCustomer" Type="Boolean" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <Property Name="StatusClose" Type="Boolean" Nullable="false" />
-          <Property Name="FYearID" Type="Int32" Nullable="false" />
-          <Property Name="AcCompanyID" Type="Int32" />
-          <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ClearingCharge" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ClearingChargeHeadID" Type="Int32" />
-          <Property Name="OtherChargeHeadID" Type="Int32" />
-          <Property Name="FuelSurChargeHeadID" Type="Int32" />
-          <Property Name="FuelPer" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="AdminPer" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="FuelAmt" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="AdminAmt" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ChargeableWT" Type="Double" />
-          <Property Name="CalogiRef" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="calogidate" Type="DateTime" Precision="3" />
-          <Property Name="statusColoader" Type="Boolean" />
-          <Property Name="CostAmt" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Revenue" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="CCharge" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="InvoiceTotal" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <Property Name="AcFinancialYearID" Type="Int32" />
-          <Property Name="BranchID" Type="Int32" />
-          <NavigationProperty Name="CustomerInvoiceDetails" Relationship="Self.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoice" ToRole="CustomerInvoiceDetails" />
-        </EntityType>
-        <EntityType Name="CustomerInvoiceDetail">
-          <Key>
-            <PropertyRef Name="CustomerInvoiceDetailID" />
-          </Key>
-          <Property Name="CustomerInvoiceDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerInvoiceID" Type="Int32" />
-          <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CourierCharge" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="InScanInternationalDetailID" Type="Int32" />
-          <Property Name="StatusPaymentMode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="InscanID" Type="Int32" />
-          <Property Name="TaxPercentage" Type="Int32" />
-          <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="FuelSurcharge" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="CustomCharge" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="RecPayStatus" Type="Int32" />
-          <Property Name="RecPayDetailId" Type="Int32" />
-          <Property Name="NetValue" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="CustomerInvoice" Relationship="Self.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoiceDetails" ToRole="CustomerInvoice" />
         </EntityType>
         <EntityType Name="CustomerMaster">
           <Key>
@@ -13706,20 +13644,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
-          <End Role="CustomerInvoice" Type="Self.CustomerInvoice" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="CustomerInvoiceDetails" Type="Self.CustomerInvoiceDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerInvoice">
-              <PropertyRef Name="CustomerInvoiceID" />
-            </Principal>
-            <Dependent Role="CustomerInvoiceDetails">
-              <PropertyRef Name="CustomerInvoiceID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CustomerMaster_LocationMaster">
           <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="0..1" />
           <End Role="CustomerMaster" Type="Self.CustomerMaster" Multiplicity="*" />
@@ -14926,8 +14850,6 @@
           <EntitySet Name="CurrencyMasters" EntityType="Self.CurrencyMaster" />
           <EntitySet Name="CustomerContracts" EntityType="Self.CustomerContract" />
           <EntitySet Name="CustomerEnquiries" EntityType="Self.CustomerEnquiry" />
-          <EntitySet Name="CustomerInvoices" EntityType="Self.CustomerInvoice" />
-          <EntitySet Name="CustomerInvoiceDetails" EntityType="Self.CustomerInvoiceDetail" />
           <EntitySet Name="CustomerMasters" EntityType="Self.CustomerMaster" />
           <EntitySet Name="CustomerMultiContracts" EntityType="Self.CustomerMultiContract" />
           <EntitySet Name="CustomerNotifications" EntityType="Self.CustomerNotification" />
@@ -15265,10 +15187,6 @@
           <AssociationSet Name="FK_CustomerEnquiry_EmployeeMaster" Association="Self.FK_CustomerEnquiry_EmployeeMaster">
             <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
             <End Role="CustomerEnquiry" EntitySet="CustomerEnquiries" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CustomerInvoiceDetails_CustomerInvoice" Association="Self.FK_CustomerInvoiceDetails_CustomerInvoice">
-            <End Role="CustomerInvoice" EntitySet="CustomerInvoices" />
-            <End Role="CustomerInvoiceDetails" EntitySet="CustomerInvoiceDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_CustomerMaster_LocationMaster" Association="Self.FK_CustomerMaster_LocationMaster">
             <End Role="LocationMaster" EntitySet="LocationMasters" />
@@ -18289,7 +18207,6 @@
             <End Role="EmployeeMaster" EntitySet="EmployeeMasters" />
           </AssociationSet>
           <EntitySet Name="RouteMasters" EntityType="DB_9F57C4_couriertest_newModel.RouteMaster" />
-          <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
           <EntitySet Name="CostUpdateDetails" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateDetail" />
           <EntitySet Name="CostUpdateMasters" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateMaster" />
           <AssociationSet Name="FK_CostUpdateMaster_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_BranchMaster">
@@ -18320,6 +18237,14 @@
             <End Role="SupplierInvoiceDetail" EntitySet="SupplierInvoiceDetails" />
           </AssociationSet>
           <EntitySet Name="DebitNotes" EntityType="DB_9F57C4_couriertest_newModel.DebitNote" />
+          <EntitySet Name="TruckDetailOtherCharges" EntityType="DB_9F57C4_couriertest_newModel.TruckDetailOtherCharge" />
+          <EntitySet Name="CustomerInvoices" EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoice" />
+          <EntitySet Name="CustomerInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail" />
+          <EntitySet Name="InScanMasters" EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" />
+          <AssociationSet Name="FK_CustomerInvoiceDetails_CustomerInvoice" Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice">
+            <End Role="CustomerInvoice" EntitySet="CustomerInvoices" />
+            <End Role="CustomerInvoiceDetail" EntitySet="CustomerInvoiceDetails" />
+          </AssociationSet>
           <EntitySet Name="TruckDetails" EntityType="DB_9F57C4_couriertest_newModel.TruckDetail" />
           <AssociationSet Name="FK_TruckDetails_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster">
             <End Role="BranchMaster" EntitySet="BranchMasters" />
@@ -22408,6 +22333,7 @@
           <Property Name="BranchID" Type="Int32" />
           <NavigationProperty Name="RevenueUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" FromRole="RevenueCostMaster" ToRole="RevenueUpdateDetail" />
           <NavigationProperty Name="CostUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_RevenueCostMaster" FromRole="RevenueCostMaster" ToRole="CostUpdateDetail" />
+          <Property Name="RevenueGroup" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PortMaster">
           <Key>
@@ -22577,108 +22503,6 @@
           <Property Name="Origin" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Destination" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="TruckDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="RouteMaster" ToRole="TruckDetail" />
-        </EntityType>
-        <EntityType Name="InScanMaster">
-          <Key>
-            <PropertyRef Name="InScanID" />
-          </Key>
-          <Property Name="InScanID" Type="Int32" Nullable="false" />
-          <Property Name="EnquiryNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TransactionDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ConsignmentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PickupRequestDate" Type="DateTime" Precision="3" />
-          <Property Name="RequestSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AcCompanyID" Type="Int32" />
-          <Property Name="BranchID" Type="Int32" />
-          <Property Name="DepotID" Type="Int32" />
-          <Property Name="DeviceID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CustomerID" Type="Int32" />
-          <Property Name="Consignor" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorPhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="ConsignorCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="ConsignorLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ConsignorFax" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Consignee" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneePhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="ConsigneeCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="ConsigneeLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ConsigneeFax" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AssignedEmployeeID" Type="Int32" />
-          <Property Name="PickupRemarks" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="PickupReadyTime" Type="DateTime" Precision="3" />
-          <Property Name="EnteredByID" Type="Int32" />
-          <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="IsEnquiry" Type="Boolean" />
-          <Property Name="CourierStatusID" Type="Int32" />
-          <Property Name="PickedUpEmpID" Type="Int32" />
-          <Property Name="PickedupDate" Type="DateTime" Precision="3" />
-          <Property Name="ItemID" Type="Int32" />
-          <Property Name="PackageID" Type="Int32" />
-          <Property Name="Pieces" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="Volume" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="MovementID" Type="Int32" />
-          <Property Name="StatusCustomsDocument" Type="Boolean" />
-          <Property Name="DespatchDate" Type="DateTime" Precision="3" />
-          <Property Name="DocumentID" Type="Int32" />
-          <Property Name="StatusTransit" Type="Boolean" />
-          <Property Name="TransitID" Type="Int32" />
-          <Property Name="RouteID" Type="Int32" />
-          <Property Name="IsNCND" Type="Boolean" />
-          <Property Name="TransitDepotID" Type="Int32" />
-          <Property Name="NCNDRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="MaterialCostInvoiceNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ExportImportCode" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="ProductTypeID" Type="Int32" />
-          <Property Name="CustomerRateID" Type="Int32" />
-          <Property Name="QuickInscanID" Type="Int32" />
-          <Property Name="SubReasonId" Type="Int32" />
-          <Property Name="Freight" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="NetTotal" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ParcelTypeId" Type="Int32" />
-          <Property Name="MaterialCost" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="CustomsValue" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="StatusTypeId" Type="Int32" />
-          <Property Name="IsDeleted" Type="Boolean" />
-          <Property Name="PaymentModeId" Type="Int32" />
-          <Property Name="DepotReceivedBy" Type="Int32" />
-          <Property Name="InvoiceID" Type="Int32" />
-          <Property Name="CustomerShipperSame" Type="Boolean" Nullable="false" />
-          <Property Name="DRSID" Type="Int32" />
-          <Property Name="AcFinancialYearID" Type="Int32" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <Property Name="ManifestID" Type="Int32" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="LastModifiedBy" Type="Int32" />
-          <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="SeparateDoc" Type="Boolean" />
-          <Property Name="DocumentSetupID" Type="Int32" />
-          <Property Name="CustomsInvoiceValue" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="LabelPrinting" Type="Boolean" />
-          <Property Name="TruckDetailId" Type="Int32" />
-          <Property Name="CBM_Unit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="VolumeWeight" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="CBM_length" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="CBM_width" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="CBM_height" Type="Decimal" Precision="18" Scale="3" />
-          <Property Name="ConsignorCountryID" Type="Int32" />
-          <Property Name="ConsignorLocationID" Type="Int32" />
-          <Property Name="ConsignorCityID" Type="Int32" />
-          <Property Name="ConsigneeLocationID" Type="Int32" />
-          <Property Name="ConsigneeCountryID" Type="Int32" />
-          <Property Name="ConsigneeCityID" Type="Int32" />
         </EntityType>
         <EntityType Name="CostUpdateDetail">
           <Key>
@@ -22871,6 +22695,170 @@
           <Property Name="IsShipping" Type="Boolean" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="TruckDetailOtherCharge">
+          <Key>
+            <PropertyRef Name="TruckDetailOtherChargeID" />
+          </Key>
+          <Property Name="TruckDetailOtherChargeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OtherChargeID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TruckDetailId" Type="Int32" />
+          <Property Name="TaxPercentage" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="Reimbursement" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CustomerInvoice">
+          <Key>
+            <PropertyRef Name="CustomerInvoiceID" />
+          </Key>
+          <Property Name="CustomerInvoiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerInvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="StatusClose" Type="Boolean" Nullable="false" />
+          <Property Name="FYearID" Type="Int32" Nullable="false" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="InvoiceTotal" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoice" ToRole="CustomerInvoiceDetail" />
+        </EntityType>
+        <EntityType Name="CustomerInvoiceDetail">
+          <Key>
+            <PropertyRef Name="CustomerInvoiceDetailID" />
+          </Key>
+          <Property Name="CustomerInvoiceDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerInvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="InScanID" Type="Int32" Nullable="false" />
+          <Property Name="ConsignmentNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TaxPercentage" Type="Int32" />
+          <Property Name="FreightCharge" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="DocCharge" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CustomsCharge" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="OtherCharge" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="RecPayStatus" Type="Int32" />
+          <Property Name="RecPayDetailId" Type="Int32" />
+          <Property Name="NetValue" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="CustomerInvoice" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoiceDetail" ToRole="CustomerInvoice" />
+        </EntityType>
+        <EntityType Name="InScanMaster">
+          <Key>
+            <PropertyRef Name="InScanID" />
+          </Key>
+          <Property Name="InScanID" Type="Int32" Nullable="false" />
+          <Property Name="EnquiryNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransactionDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ConsignmentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PickupRequestDate" Type="DateTime" Precision="3" />
+          <Property Name="RequestSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="DepotID" Type="Int32" />
+          <Property Name="DeviceID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="Consignor" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorPhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ConsignorCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ConsignorLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ConsignorFax" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Consignee" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeContact" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeAddress1_Building" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeAddress2_Street" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeAddress3_PinCode" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneePhone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeCountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ConsigneeCityName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ConsigneeLocationName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ConsigneeFax" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedEmployeeID" Type="Int32" />
+          <Property Name="PickupRemarks" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="PickupReadyTime" Type="DateTime" Precision="3" />
+          <Property Name="EnteredByID" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsEnquiry" Type="Boolean" />
+          <Property Name="CourierStatusID" Type="Int32" />
+          <Property Name="PickedUpEmpID" Type="Int32" />
+          <Property Name="PickedupDate" Type="DateTime" Precision="3" />
+          <Property Name="ItemID" Type="Int32" />
+          <Property Name="PackageID" Type="Int32" />
+          <Property Name="Pieces" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="Volume" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MovementID" Type="Int32" />
+          <Property Name="StatusCustomsDocument" Type="Boolean" />
+          <Property Name="DespatchDate" Type="DateTime" Precision="3" />
+          <Property Name="DocumentID" Type="Int32" />
+          <Property Name="StatusTransit" Type="Boolean" />
+          <Property Name="TransitID" Type="Int32" />
+          <Property Name="RouteID" Type="Int32" />
+          <Property Name="IsNCND" Type="Boolean" />
+          <Property Name="TransitDepotID" Type="Int32" />
+          <Property Name="NCNDRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MaterialCostInvoiceNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ExportImportCode" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ProductTypeID" Type="Int32" />
+          <Property Name="CustomerRateID" Type="Int32" />
+          <Property Name="QuickInscanID" Type="Int32" />
+          <Property Name="SubReasonId" Type="Int32" />
+          <Property Name="Freight" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="NetTotal" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ParcelTypeId" Type="Int32" />
+          <Property Name="MaterialCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CustomsValue" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="StatusTypeId" Type="Int32" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="PaymentModeId" Type="Int32" />
+          <Property Name="DepotReceivedBy" Type="Int32" />
+          <Property Name="InvoiceID" Type="Int32" />
+          <Property Name="CustomerShipperSame" Type="Boolean" Nullable="false" />
+          <Property Name="DRSID" Type="Int32" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="ManifestID" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedBy" Type="Int32" />
+          <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="SeparateDoc" Type="Boolean" />
+          <Property Name="DocumentSetupID" Type="Int32" />
+          <Property Name="CustomsInvoiceValue" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="LabelPrinting" Type="Boolean" />
+          <Property Name="TruckDetailId" Type="Int32" />
+          <Property Name="CBM_Unit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="VolumeWeight" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="CBM_length" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="CBM_width" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="CBM_height" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="ConsignorCountryID" Type="Int32" />
+          <Property Name="ConsignorLocationID" Type="Int32" />
+          <Property Name="ConsignorCityID" Type="Int32" />
+          <Property Name="ConsigneeLocationID" Type="Int32" />
+          <Property Name="ConsigneeCountryID" Type="Int32" />
+          <Property Name="ConsigneeCityID" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_CustomerInvoiceDetails_CustomerInvoice">
+          <End Type="DB_9F57C4_couriertest_newModel.CustomerInvoice" Role="CustomerInvoice" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail" Role="CustomerInvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerInvoice">
+              <PropertyRef Name="CustomerInvoiceID" />
+            </Principal>
+            <Dependent Role="CustomerInvoiceDetail">
+              <PropertyRef Name="CustomerInvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="TruckDetail">
           <Key>
             <PropertyRef Name="TruckDetailID" />
@@ -22917,7 +22905,6 @@
           <Property Name="ChequeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ChequeDate" Type="DateTime" Precision="3" />
           <Property Name="BranchID" Type="Int32" />
-          <Property Name="TypeOfLoad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="OriginCountry" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ForwardAgentID" Type="Int32" />
@@ -22925,6 +22912,7 @@
           <Property Name="SupplierInvoiceId" Type="Int32" />
           <Property Name="RecPayId" Type="Int32" />
           <Property Name="ConsignmentNoNote" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ParcelTypeId" Type="Int32" />
           <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" FromRole="TruckDetail" ToRole="BranchMaster" />
           <NavigationProperty Name="CostUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail" FromRole="TruckDetail" ToRole="CostUpdateMaster" />
           <NavigationProperty Name="CurrencyMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster" FromRole="TruckDetail" ToRole="CurrencyMaster" />
@@ -23950,62 +23938,6 @@
                 <ScalarProperty Name="ConsigneeCityName" ColumnName="ConsigneeCityName" />
                 <ScalarProperty Name="ConsignorCountryName" ColumnName="ConsignorCountryName" />
                 <ScalarProperty Name="ConsignorCityName" ColumnName="ConsignorCityName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerInvoices">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoice">
-              <MappingFragment StoreEntitySet="CustomerInvoice">
-                <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
-                <ScalarProperty Name="CustomerInvoiceNo" ColumnName="CustomerInvoiceNo" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-                <ScalarProperty Name="CustomerInvoiceTax" ColumnName="CustomerInvoiceTax" />
-                <ScalarProperty Name="StatusContractCustomer" ColumnName="StatusContractCustomer" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
-                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
-                <ScalarProperty Name="ClearingCharge" ColumnName="ClearingCharge" />
-                <ScalarProperty Name="ClearingChargeHeadID" ColumnName="ClearingChargeHeadID" />
-                <ScalarProperty Name="OtherChargeHeadID" ColumnName="OtherChargeHeadID" />
-                <ScalarProperty Name="FuelSurChargeHeadID" ColumnName="FuelSurChargeHeadID" />
-                <ScalarProperty Name="FuelPer" ColumnName="FuelPer" />
-                <ScalarProperty Name="AdminPer" ColumnName="AdminPer" />
-                <ScalarProperty Name="FuelAmt" ColumnName="FuelAmt" />
-                <ScalarProperty Name="AdminAmt" ColumnName="AdminAmt" />
-                <ScalarProperty Name="ChargeableWT" ColumnName="ChargeableWT" />
-                <ScalarProperty Name="CalogiRef" ColumnName="CalogiRef" />
-                <ScalarProperty Name="calogidate" ColumnName="calogidate" />
-                <ScalarProperty Name="statusColoader" ColumnName="statusColoader" />
-                <ScalarProperty Name="CostAmt" ColumnName="CostAmt" />
-                <ScalarProperty Name="Revenue" ColumnName="Revenue" />
-                <ScalarProperty Name="CCharge" ColumnName="CCharge" />
-                <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerInvoiceDetails">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail">
-              <MappingFragment StoreEntitySet="CustomerInvoiceDetails">
-                <ScalarProperty Name="CustomerInvoiceDetailID" ColumnName="CustomerInvoiceDetailID" />
-                <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
-                <ScalarProperty Name="AWBNo" ColumnName="AWBNo" />
-                <ScalarProperty Name="CourierCharge" ColumnName="CourierCharge" />
-                <ScalarProperty Name="InScanInternationalDetailID" ColumnName="InScanInternationalDetailID" />
-                <ScalarProperty Name="StatusPaymentMode" ColumnName="StatusPaymentMode" />
-                <ScalarProperty Name="InscanID" ColumnName="InscanID" />
-                <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
-                <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
-                <ScalarProperty Name="FuelSurcharge" ColumnName="FuelSurcharge" />
-                <ScalarProperty Name="CustomCharge" ColumnName="CustomCharge" />
-                <ScalarProperty Name="RecPayStatus" ColumnName="RecPayStatus" />
-                <ScalarProperty Name="RecPayDetailId" ColumnName="RecPayDetailId" />
-                <ScalarProperty Name="NetValue" ColumnName="NetValue" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -31662,6 +31594,7 @@
           <EntitySetMapping Name="RevenueCostMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueCostMaster">
               <MappingFragment StoreEntitySet="RevenueCostMaster">
+                <ScalarProperty Name="RevenueGroup" ColumnName="RevenueGroup" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="AcCompanyId" ColumnName="AcCompanyId" />
                 <ScalarProperty Name="CostAcHeadID" ColumnName="CostAcHeadID" />
@@ -31767,109 +31700,6 @@
                 <ScalarProperty Name="RouteName" ColumnName="RouteName" />
                 <ScalarProperty Name="RouteCode" ColumnName="RouteCode" />
                 <ScalarProperty Name="RouteID" ColumnName="RouteID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="InScanMasters">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
-              <MappingFragment StoreEntitySet="InScanMaster">
-                <ScalarProperty Name="ConsigneeCityID" ColumnName="ConsigneeCityID" />
-                <ScalarProperty Name="ConsigneeCountryID" ColumnName="ConsigneeCountryID" />
-                <ScalarProperty Name="ConsigneeLocationID" ColumnName="ConsigneeLocationID" />
-                <ScalarProperty Name="ConsignorCityID" ColumnName="ConsignorCityID" />
-                <ScalarProperty Name="ConsignorLocationID" ColumnName="ConsignorLocationID" />
-                <ScalarProperty Name="ConsignorCountryID" ColumnName="ConsignorCountryID" />
-                <ScalarProperty Name="CBM_height" ColumnName="CBM_height" />
-                <ScalarProperty Name="CBM_width" ColumnName="CBM_width" />
-                <ScalarProperty Name="CBM_length" ColumnName="CBM_length" />
-                <ScalarProperty Name="VolumeWeight" ColumnName="VolumeWeight" />
-                <ScalarProperty Name="CBM_Unit" ColumnName="CBM_Unit" />
-                <ScalarProperty Name="TruckDetailId" ColumnName="TruckDetailId" />
-                <ScalarProperty Name="LabelPrinting" ColumnName="LabelPrinting" />
-                <ScalarProperty Name="CustomsInvoiceValue" ColumnName="CustomsInvoiceValue" />
-                <ScalarProperty Name="DocumentSetupID" ColumnName="DocumentSetupID" />
-                <ScalarProperty Name="SeparateDoc" ColumnName="SeparateDoc" />
-                <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
-                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="ManifestID" ColumnName="ManifestID" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
-                <ScalarProperty Name="CustomerShipperSame" ColumnName="CustomerShipperSame" />
-                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
-                <ScalarProperty Name="DepotReceivedBy" ColumnName="DepotReceivedBy" />
-                <ScalarProperty Name="PaymentModeId" ColumnName="PaymentModeId" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="StatusTypeId" ColumnName="StatusTypeId" />
-                <ScalarProperty Name="CustomsValue" ColumnName="CustomsValue" />
-                <ScalarProperty Name="MaterialCost" ColumnName="MaterialCost" />
-                <ScalarProperty Name="ParcelTypeId" ColumnName="ParcelTypeId" />
-                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
-                <ScalarProperty Name="Freight" ColumnName="Freight" />
-                <ScalarProperty Name="SubReasonId" ColumnName="SubReasonId" />
-                <ScalarProperty Name="QuickInscanID" ColumnName="QuickInscanID" />
-                <ScalarProperty Name="CustomerRateID" ColumnName="CustomerRateID" />
-                <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
-                <ScalarProperty Name="ExportImportCode" ColumnName="ExportImportCode" />
-                <ScalarProperty Name="MaterialCostInvoiceNo" ColumnName="MaterialCostInvoiceNo" />
-                <ScalarProperty Name="NCNDRemark" ColumnName="NCNDRemark" />
-                <ScalarProperty Name="TransitDepotID" ColumnName="TransitDepotID" />
-                <ScalarProperty Name="IsNCND" ColumnName="IsNCND" />
-                <ScalarProperty Name="RouteID" ColumnName="RouteID" />
-                <ScalarProperty Name="TransitID" ColumnName="TransitID" />
-                <ScalarProperty Name="StatusTransit" ColumnName="StatusTransit" />
-                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
-                <ScalarProperty Name="DespatchDate" ColumnName="DespatchDate" />
-                <ScalarProperty Name="StatusCustomsDocument" ColumnName="StatusCustomsDocument" />
-                <ScalarProperty Name="MovementID" ColumnName="MovementID" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="Volume" ColumnName="Volume" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="Pieces" ColumnName="Pieces" />
-                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
-                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
-                <ScalarProperty Name="PickedupDate" ColumnName="PickedupDate" />
-                <ScalarProperty Name="PickedUpEmpID" ColumnName="PickedUpEmpID" />
-                <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
-                <ScalarProperty Name="IsEnquiry" ColumnName="IsEnquiry" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="EnteredByID" ColumnName="EnteredByID" />
-                <ScalarProperty Name="PickupReadyTime" ColumnName="PickupReadyTime" />
-                <ScalarProperty Name="PickupRemarks" ColumnName="PickupRemarks" />
-                <ScalarProperty Name="AssignedEmployeeID" ColumnName="AssignedEmployeeID" />
-                <ScalarProperty Name="ConsigneeFax" ColumnName="ConsigneeFax" />
-                <ScalarProperty Name="ConsigneeLocationName" ColumnName="ConsigneeLocationName" />
-                <ScalarProperty Name="ConsigneeCityName" ColumnName="ConsigneeCityName" />
-                <ScalarProperty Name="ConsigneeCountryName" ColumnName="ConsigneeCountryName" />
-                <ScalarProperty Name="ConsigneePhone" ColumnName="ConsigneePhone" />
-                <ScalarProperty Name="ConsigneeAddress3_PinCode" ColumnName="ConsigneeAddress3_PinCode" />
-                <ScalarProperty Name="ConsigneeAddress2_Street" ColumnName="ConsigneeAddress2_Street" />
-                <ScalarProperty Name="ConsigneeAddress1_Building" ColumnName="ConsigneeAddress1_Building" />
-                <ScalarProperty Name="ConsigneeContact" ColumnName="ConsigneeContact" />
-                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
-                <ScalarProperty Name="ConsignorFax" ColumnName="ConsignorFax" />
-                <ScalarProperty Name="ConsignorLocationName" ColumnName="ConsignorLocationName" />
-                <ScalarProperty Name="ConsignorCityName" ColumnName="ConsignorCityName" />
-                <ScalarProperty Name="ConsignorCountryName" ColumnName="ConsignorCountryName" />
-                <ScalarProperty Name="ConsignorPhone" ColumnName="ConsignorPhone" />
-                <ScalarProperty Name="ConsignorAddress3_PinCode" ColumnName="ConsignorAddress3_PinCode" />
-                <ScalarProperty Name="ConsignorAddress2_Street" ColumnName="ConsignorAddress2_Street" />
-                <ScalarProperty Name="ConsignorAddress1_Building" ColumnName="ConsignorAddress1_Building" />
-                <ScalarProperty Name="ConsignorContact" ColumnName="ConsignorContact" />
-                <ScalarProperty Name="Consignor" ColumnName="Consignor" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
-                <ScalarProperty Name="DepotID" ColumnName="DepotID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="RequestSource" ColumnName="RequestSource" />
-                <ScalarProperty Name="PickupRequestDate" ColumnName="PickupRequestDate" />
-                <ScalarProperty Name="ConsignmentNo" ColumnName="ConsignmentNo" />
-                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
-                <ScalarProperty Name="EnquiryNo" ColumnName="EnquiryNo" />
-                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -31986,9 +31816,162 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TruckDetailOtherCharges">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TruckDetailOtherCharge">
+              <MappingFragment StoreEntitySet="TruckDetailOtherCharge">
+                <ScalarProperty Name="Reimbursement" ColumnName="Reimbursement" />
+                <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
+                <ScalarProperty Name="TruckDetailId" ColumnName="TruckDetailId" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="OtherChargeID" ColumnName="OtherChargeID" />
+                <ScalarProperty Name="TruckDetailOtherChargeID" ColumnName="TruckDetailOtherChargeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerInvoices">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoice">
+              <MappingFragment StoreEntitySet="CustomerInvoice">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="TaxPercent" ColumnName="TaxPercent" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="CustomerInvoiceNo" ColumnName="CustomerInvoiceNo" />
+                <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerInvoiceDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail">
+              <MappingFragment StoreEntitySet="CustomerInvoiceDetails">
+                <ScalarProperty Name="NetValue" ColumnName="NetValue" />
+                <ScalarProperty Name="RecPayDetailId" ColumnName="RecPayDetailId" />
+                <ScalarProperty Name="RecPayStatus" ColumnName="RecPayStatus" />
+                <ScalarProperty Name="OtherCharge" ColumnName="OtherCharge" />
+                <ScalarProperty Name="CustomsCharge" ColumnName="CustomsCharge" />
+                <ScalarProperty Name="DocCharge" ColumnName="DocCharge" />
+                <ScalarProperty Name="FreightCharge" ColumnName="FreightCharge" />
+                <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
+                <ScalarProperty Name="ConsignmentNo" ColumnName="ConsignmentNo" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
+                <ScalarProperty Name="CustomerInvoiceDetailID" ColumnName="CustomerInvoiceDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InScanMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
+              <MappingFragment StoreEntitySet="InScanMaster">
+                <ScalarProperty Name="ConsigneeCityID" ColumnName="ConsigneeCityID" />
+                <ScalarProperty Name="ConsigneeCountryID" ColumnName="ConsigneeCountryID" />
+                <ScalarProperty Name="ConsigneeLocationID" ColumnName="ConsigneeLocationID" />
+                <ScalarProperty Name="ConsignorCityID" ColumnName="ConsignorCityID" />
+                <ScalarProperty Name="ConsignorLocationID" ColumnName="ConsignorLocationID" />
+                <ScalarProperty Name="ConsignorCountryID" ColumnName="ConsignorCountryID" />
+                <ScalarProperty Name="CBM_height" ColumnName="CBM_height" />
+                <ScalarProperty Name="CBM_width" ColumnName="CBM_width" />
+                <ScalarProperty Name="CBM_length" ColumnName="CBM_length" />
+                <ScalarProperty Name="VolumeWeight" ColumnName="VolumeWeight" />
+                <ScalarProperty Name="CBM_Unit" ColumnName="CBM_Unit" />
+                <ScalarProperty Name="TruckDetailId" ColumnName="TruckDetailId" />
+                <ScalarProperty Name="LabelPrinting" ColumnName="LabelPrinting" />
+                <ScalarProperty Name="CustomsInvoiceValue" ColumnName="CustomsInvoiceValue" />
+                <ScalarProperty Name="DocumentSetupID" ColumnName="DocumentSetupID" />
+                <ScalarProperty Name="SeparateDoc" ColumnName="SeparateDoc" />
+                <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ManifestID" ColumnName="ManifestID" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+                <ScalarProperty Name="DRSID" ColumnName="DRSID" />
+                <ScalarProperty Name="CustomerShipperSame" ColumnName="CustomerShipperSame" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="DepotReceivedBy" ColumnName="DepotReceivedBy" />
+                <ScalarProperty Name="PaymentModeId" ColumnName="PaymentModeId" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="StatusTypeId" ColumnName="StatusTypeId" />
+                <ScalarProperty Name="CustomsValue" ColumnName="CustomsValue" />
+                <ScalarProperty Name="MaterialCost" ColumnName="MaterialCost" />
+                <ScalarProperty Name="ParcelTypeId" ColumnName="ParcelTypeId" />
+                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
+                <ScalarProperty Name="Freight" ColumnName="Freight" />
+                <ScalarProperty Name="SubReasonId" ColumnName="SubReasonId" />
+                <ScalarProperty Name="QuickInscanID" ColumnName="QuickInscanID" />
+                <ScalarProperty Name="CustomerRateID" ColumnName="CustomerRateID" />
+                <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
+                <ScalarProperty Name="ExportImportCode" ColumnName="ExportImportCode" />
+                <ScalarProperty Name="MaterialCostInvoiceNo" ColumnName="MaterialCostInvoiceNo" />
+                <ScalarProperty Name="NCNDRemark" ColumnName="NCNDRemark" />
+                <ScalarProperty Name="TransitDepotID" ColumnName="TransitDepotID" />
+                <ScalarProperty Name="IsNCND" ColumnName="IsNCND" />
+                <ScalarProperty Name="RouteID" ColumnName="RouteID" />
+                <ScalarProperty Name="TransitID" ColumnName="TransitID" />
+                <ScalarProperty Name="StatusTransit" ColumnName="StatusTransit" />
+                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+                <ScalarProperty Name="DespatchDate" ColumnName="DespatchDate" />
+                <ScalarProperty Name="StatusCustomsDocument" ColumnName="StatusCustomsDocument" />
+                <ScalarProperty Name="MovementID" ColumnName="MovementID" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Pieces" ColumnName="Pieces" />
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="PickedupDate" ColumnName="PickedupDate" />
+                <ScalarProperty Name="PickedUpEmpID" ColumnName="PickedUpEmpID" />
+                <ScalarProperty Name="CourierStatusID" ColumnName="CourierStatusID" />
+                <ScalarProperty Name="IsEnquiry" ColumnName="IsEnquiry" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="EnteredByID" ColumnName="EnteredByID" />
+                <ScalarProperty Name="PickupReadyTime" ColumnName="PickupReadyTime" />
+                <ScalarProperty Name="PickupRemarks" ColumnName="PickupRemarks" />
+                <ScalarProperty Name="AssignedEmployeeID" ColumnName="AssignedEmployeeID" />
+                <ScalarProperty Name="ConsigneeFax" ColumnName="ConsigneeFax" />
+                <ScalarProperty Name="ConsigneeLocationName" ColumnName="ConsigneeLocationName" />
+                <ScalarProperty Name="ConsigneeCityName" ColumnName="ConsigneeCityName" />
+                <ScalarProperty Name="ConsigneeCountryName" ColumnName="ConsigneeCountryName" />
+                <ScalarProperty Name="ConsigneePhone" ColumnName="ConsigneePhone" />
+                <ScalarProperty Name="ConsigneeAddress3_PinCode" ColumnName="ConsigneeAddress3_PinCode" />
+                <ScalarProperty Name="ConsigneeAddress2_Street" ColumnName="ConsigneeAddress2_Street" />
+                <ScalarProperty Name="ConsigneeAddress1_Building" ColumnName="ConsigneeAddress1_Building" />
+                <ScalarProperty Name="ConsigneeContact" ColumnName="ConsigneeContact" />
+                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+                <ScalarProperty Name="ConsignorFax" ColumnName="ConsignorFax" />
+                <ScalarProperty Name="ConsignorLocationName" ColumnName="ConsignorLocationName" />
+                <ScalarProperty Name="ConsignorCityName" ColumnName="ConsignorCityName" />
+                <ScalarProperty Name="ConsignorCountryName" ColumnName="ConsignorCountryName" />
+                <ScalarProperty Name="ConsignorPhone" ColumnName="ConsignorPhone" />
+                <ScalarProperty Name="ConsignorAddress3_PinCode" ColumnName="ConsignorAddress3_PinCode" />
+                <ScalarProperty Name="ConsignorAddress2_Street" ColumnName="ConsignorAddress2_Street" />
+                <ScalarProperty Name="ConsignorAddress1_Building" ColumnName="ConsignorAddress1_Building" />
+                <ScalarProperty Name="ConsignorContact" ColumnName="ConsignorContact" />
+                <ScalarProperty Name="Consignor" ColumnName="Consignor" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+                <ScalarProperty Name="DepotID" ColumnName="DepotID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="RequestSource" ColumnName="RequestSource" />
+                <ScalarProperty Name="PickupRequestDate" ColumnName="PickupRequestDate" />
+                <ScalarProperty Name="ConsignmentNo" ColumnName="ConsignmentNo" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="EnquiryNo" ColumnName="EnquiryNo" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="TruckDetails">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TruckDetail">
               <MappingFragment StoreEntitySet="TruckDetail">
+                <ScalarProperty Name="ParcelTypeId" ColumnName="ParcelTypeId" />
                 <ScalarProperty Name="ConsignmentNoNote" ColumnName="ConsignmentNoNote" />
                 <ScalarProperty Name="RecPayId" ColumnName="RecPayId" />
                 <ScalarProperty Name="SupplierInvoiceId" ColumnName="SupplierInvoiceId" />
@@ -31996,7 +31979,6 @@
                 <ScalarProperty Name="ForwardAgentID" ColumnName="ForwardAgentID" />
                 <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="TypeOfLoad" ColumnName="TypeOfLoad" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
                 <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />

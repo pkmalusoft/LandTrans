@@ -31,6 +31,7 @@ namespace LTMSV2.Controllers
             RevenueCostMasterVM vm = new RevenueCostMasterVM();
             vm.RCID = 0;
             ViewBag.Title = "Revenue Cost- Create";
+
             if (id > 0)
             {
                 ViewBag.Title = "Revenue Cost- Modify";
@@ -46,9 +47,15 @@ namespace LTMSV2.Controllers
                 vm.CostRate = v.CostRate;
                 vm.RevenueRate = v.RevenueRate;
                 vm.RevenueMandatory = v.RevenueMandatory;
+                vm.RevenueGroup = v.RevenueGroup;
             }
 
-
+            List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();            
+            lsttype.Add(new VoucherTypeVM { TypeName = "Freight" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Document Charge" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Customs Duty" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Other" });
+            ViewBag.RevenueGroup = lsttype;            
             return View(vm);
         }
 
@@ -79,8 +86,9 @@ namespace LTMSV2.Controllers
                 
                 vm.CostMandatory = v.CostMandatory;
                 vm.RevenueMandatory = v.RevenueMandatory;
-        
-             if (v.RCID ==0)
+                vm.RevenueGroup = v.RevenueGroup;
+
+            if (v.RCID ==0)
             {
                 db.RevenueCostMasters.Add(vm);
                 db.SaveChanges();
