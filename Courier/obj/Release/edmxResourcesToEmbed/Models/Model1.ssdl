@@ -3130,6 +3130,7 @@
     <Property Name="AcHeadID" Type="int" />
     <Property Name="FyearID" Type="int" />
     <Property Name="cid" Type="int" />
+    <Property Name="BranchId" Type="int" />
   </EntityType>
   <EntityType Name="SupplierInvoiceDetails">
     <Key>
@@ -3142,6 +3143,9 @@
     <Property Name="Rate" Type="money" Nullable="false" />
     <Property Name="CurrencyID" Type="int" Nullable="false" />
     <Property Name="CurrencyAmount" Type="money" Nullable="false" />
+    <Property Name="Amount" Type="money" />
+    <Property Name="TaxPercentage" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Value" Type="money" />
   </EntityType>
   <EntityType Name="SupplierMaster">
     <Key>

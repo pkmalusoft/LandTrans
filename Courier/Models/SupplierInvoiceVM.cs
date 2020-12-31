@@ -11,4 +11,19 @@ namespace LTMSV2.Models
         public string SupplierType { get; set; }
         public decimal Amount { get; set; }
     }
+    public class SupplierInvoiceDetailVM
+    {
+        public int SupplierInvoiceDetailID { get; set; }
+        public int SupplierInvoiceID { get; set; }
+        public string Particulars { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Rate { get; set; }
+        public int CurrencyID { get; set; }
+        public decimal CurrencyAmount { get; set; }
+        public Nullable<decimal> Amount { get; set; }
+        public Nullable<decimal> TaxPercentage { get; set; }
+        public Nullable<decimal> Value { get; set; }
+        public string InvNo { get; set; }
+        public string Currency { get; set; }
+    }
 }

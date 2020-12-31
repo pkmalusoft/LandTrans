@@ -47,7 +47,7 @@
 </section>
 <div class="col-md-12">
     <p class="indexbtnpadding pull-right">
-        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+        @Html.ActionLink("Create New", "Create", new { id=0}, new { @class = "btn btn-primary btnwidth" })
     </p>
 </div>
 <div class="clearfix"></div>
@@ -96,7 +96,7 @@
                         @Html.Label("Invoice No")
                     </th>
                     <th>
-                        @Html.Label("Supplier Nme")
+                        @Html.Label("Supplier Name")
                     </th>
                     <th>
                         @Html.Label("Supplier Type")
@@ -134,7 +134,7 @@
                         </td>                        
                         <td>
                             <a href="@Url.Action("Create", new { id = item.SupplierInvoiceID })"><i class="fa fa-pencil"></i></a>|
-                            <a href="#" onclick="Delete(ID=@item.SupplierInvoiceID"><i class="fa fa-times"></i></a>
+                            <a href="#" onclick="Delete(@item.SupplierInvoiceID)"><i class="fa fa-times"></i></a>
                         </td>
                     </tr>
 
@@ -150,7 +150,7 @@
 <script type="text/javascript">
     function Delete(ID) {
         if (confirm("Are you sure, You want to Delete Invoice?")) {
-            window.location.href = "/SupplierInvoice/DeleteConfirmed/?id=" + ID;
+            window.location.href = "/SupplierInvoice/Delete?id=" + ID;
         }
     }
 </script>

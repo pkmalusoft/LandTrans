@@ -53,10 +53,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:32</publishTime>
     </File>
     <File Include="bin/LTMSV2.dll">
-      <publishTime>12/30/2020 20:34:54</publishTime>
+      <publishTime>12/31/2020 10:34:59</publishTime>
     </File>
     <File Include="bin/LTMSV2.pdb">
-      <publishTime>12/30/2020 20:34:54</publishTime>
+      <publishTime>12/31/2020 10:34:59</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>09/05/2018 16:10:50</publishTime>
@@ -3296,7 +3296,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:18</publishTime>
     </File>
     <File Include="Models/Model1.edmx.diagram">
-      <publishTime>12/30/2020 18:27:32</publishTime>
+      <publishTime>12/31/2020 10:22:55</publishTime>
     </File>
     <File Include="Reports/AccLedger.pdf">
       <publishTime>10/28/2020 14:36:29</publishTime>
@@ -4688,10 +4688,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/SupplierInvoice/Create.cshtml">
-      <publishTime>12/28/2020 19:26:00</publishTime>
+      <publishTime>12/31/2020 10:28:43</publishTime>
     </File>
     <File Include="Views/SupplierInvoice/Index.cshtml">
-      <publishTime>12/28/2020 19:03:15</publishTime>
+      <publishTime>12/31/2020 10:28:44</publishTime>
+    </File>
+    <File Include="Views/SupplierInvoice/InvoiceList.cshtml">
+      <publishTime>12/31/2020 10:28:44</publishTime>
     </File>
     <File Include="Views/SupplierPayment/SupplierPayment.cshtml">
       <publishTime>12/30/2020 10:09:18</publishTime>

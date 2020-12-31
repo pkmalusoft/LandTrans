@@ -1,7 +1,415 @@
-﻿
+﻿@model LTMSV2.Models.SupplierInvoiceVM
+
 @{
     ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var _decimal = @Session["Decimal"].ToString();
+    int i = 0;
+    LTMSV2.Models.Entities1 db = new LTMSV2.Models.Entities1();
 }
+<style>
+    .w-6 {
+        width: 6%;
+    }
 
-<h2>Create</h2>
+    .charegRow {
+        background: #f8fbff;
+    }
 
+        .charegRow td {
+            border: 0 !important;
+        }
+
+        .charegRow label {
+            font-size: 14px !important;
+        }
+
+    .taxBlock .col-md-2, .taxBlock .col-md-3 {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .align_self {
+        margin-top: 31px;
+    }
+
+    .w-12 {
+        width: 12%;
+    }
+
+    .taxBlock label {
+        margin: 0;
+    }
+
+    .btn {
+        min-width: 100px !important;
+    }
+</style>
+<script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+
+<script type="text/javascript">
+    var AWBItems = [];
+    var RemoveAWBItems = [];
+
+    function addCommas(nStr) {
+        debugger;
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+    }
+    function setTwoNumberDecimal(obj) {
+
+       $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+    }
+
+    function setThreeNumberDecimal(obj) {
+       $(obj).val(parseFloat($(obj).val()).toFixed(3));
+}
+    $(function () {
+        $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+        $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+        $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+
+        var d = new Date();
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth() + 1;
+        var curr_year = d.getFullYear();
+
+        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+
+        $('#InvoiceDate').val(reqdate);
+    });
+    $(document).ready(function () {
+         if ('@Model.SupplierInvoiceID' > 0) {
+             $.ajax({
+                type: "POST",
+                 url: "/SupplierInvoice/GetSupplierInvDetails",
+                datatype: "Json",
+                data: { Id: '@Model.SupplierInvoiceID' },
+                success: function (response) {
+                    $.each(response.InvoiceDetails, function (index, value) {
+                        debugger;
+                        AWBItems.push(value);
+                        $("#detailsbody").append('<tr awbno="' + value.InvNo + '"><td>' + value.Particulars + '</td><td>' + parseFloat(value.Rate).toFixed(3) + '</td><td>' + value.Quantity + '</td><td>' + value.Currency + '</td><td>' + parseFloat(value.CurrencyAmount).toFixed(3) + '</td><td>' + parseFloat(value.Amount).toFixed(3) + '</td><td>' + value.TaxPercentage + '</td><td>' + parseFloat(value.Value).toFixed(3) + '</td><td><a awbno="' + value.InvNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+
+                    });
+
+                }
+            });
+
+                   
+
+
+        }
+
+        $("#SupplierName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/SupplierPayment/GetSupplierName',
+                    datatype: "json",
+                    data: {
+                        term: request.term, SupplierTypeId: $("#vendortype").val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.SupplierName,
+                                value: val.SupplierName,
+                                ID: val.SupplierID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#SupplierName").val(i.item.label);
+                $('#SupplierID').val(i.item.ID);
+
+
+            },
+
+        });
+        $("#btnadd").on('click', function () {
+            debugger;
+            var Particulars = $("#Particulars").val();
+            var Rate = $("#Rate").val();
+            var Qty = $("#Qty").val();
+            var currency = $("#currency").val();
+            var Taxpercent = $("#Taxpercent").val();
+            if (Particulars == null || Particulars == "") {
+                $("#validations").show();
+            }
+            else if (Rate == null || Rate == "") {
+                $("#validations").show();
+            }
+            else if (Qty == null || Qty == "") {
+                $("#validations").show();
+            }
+            else if (currency == null || currency == "") {
+                $("#validations").show();
+            }
+            else if (Taxpercent == null || Taxpercent == "") {
+                $("#validations").show();
+            } else {
+                $("#validations").hide();
+                $.ajax({
+                    type: "POST",
+                    url: "/SupplierInvoice/SetSupplierInvDetails",
+                    datatype: "Json",
+                    data: { invno: $("#InvoiceNo").val(), Particulars: Particulars, Rate: Rate, Qty: Qty, currency: currency, Taxpercent: Taxpercent },
+                    success: function (response) {
+                        AWBItems.push(response.InvoiceDetails);
+                        $("#detailsbody").append('<tr awbno="' + response.InvoiceDetails.InvNo + '"><td>' + response.InvoiceDetails.Particulars + '</td><td>' + parseFloat(response.InvoiceDetails.Rate).toFixed(3) + '</td><td>' + response.InvoiceDetails.Quantity + '</td><td>' + response.InvoiceDetails.Currency + '</td><td>' + parseFloat(response.InvoiceDetails.CurrencyAmount).toFixed(3) + '</td><td>' + parseFloat(response.InvoiceDetails.Amount).toFixed(3) + '</td><td>' + response.InvoiceDetails.TaxPercentage + '</td><td>' + parseFloat(response.InvoiceDetails.Value).toFixed(3) + '</td><td><a awbno="' + response.InvoiceDetails.InvNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+
+                         $("#Particulars").val('');
+                        $("#Rate").val('');
+                        $("#Qty").val('');
+                       $("#currency").val('');
+                        $("#Taxpercent").val('');
+                    }
+                });
+            }
+        });
+        $("#details").on('click', '.rem', function () {
+            var remove_awbono = $(this).attr('awbno');
+
+            var tempAWBItems = [];
+            $.each(AWBItems, function (index, value) {
+                debugger;
+                if (value.InvNo == remove_awbono) {
+                    RemoveAWBItems.push(value);
+                    return;
+                }
+            });
+            $.each(AWBItems, function (index, value) {
+                debugger;
+                if (value.InvNo != remove_awbono) {
+                    tempAWBItems.push(value);
+                }
+
+            });
+            AWBItems = [];
+            AWBItems = tempAWBItems;
+            $("#detailsbody").html('');
+            var i = 1;
+            $.each(AWBItems, function (index, item) {
+                $("#detailsbody").append('<tr awbno="' + item.InvNo + '"><td>' + item.Particulars + '</td><td>' + parseFloat(item.Rate).toFixed(3) + '</td><td>' + item.Quantity + '</td><td>' + item.Currency + '</td><td>' + parseFloat(item.CurrencyAmount).toFixed(3) + '</td><td>' + parseFloat(item.Amount).toFixed(3) + '</td><td>' + item.TaxPercentage + '</td><td>' + parseFloat(item.Value).toFixed(3) + '</td><td><a awbno="' + item.InvNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                i++;
+            });
+        });
+        $("#btnsave").click(function () {
+            var supplier = $("#SupplierName").val();
+            var SupplierID = $("#SupplierID").val();
+            var InvoiceDate = $("#InvoiceDate").val();
+            var InvoiceDate = $("#InvoiceDate").val();
+            var Id = $("#Id").val();
+           
+            if (AWBItems.length == 0) {
+                $.notify("Invoice Details not found! ", "warning");
+                return false;
+            } else if (supplier == null || supplier=='')
+            {
+                $("#validations").show();
+                return false;
+            }
+            else if (InvoiceDate == null || InvoiceDate == '') {
+                $("#validations").show();
+                return false;
+            }
+
+            else {
+                $("#validations").hide();
+                $.ajax({
+                    type: "POST",
+                    url: "/SupplierInvoice/SaveSupplierInvoice",
+                    datatype: "Json",
+                    data: { Id: Id, SupplierID: SupplierID, InvoiceDate: InvoiceDate, InvoiceNo: $("#InvoiceNo").val(),  Details: JSON.stringify(AWBItems) },
+                    success: function (response) {
+                        if (response.status == "ok") {
+
+                            $.notify(response.message, "success");
+                            location.href='@Url.Action("Index","SupplierInvoice")';
+                        }
+                        else {
+
+                            $.notify(response.message, "warning");
+                            return false;
+                        }
+                    }
+                });
+            }
+        });
+    });
+    function ChangeSupplier() {
+        $("#SupplierName").val('');
+        $("#SupplierID").val('');
+    }
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">Supplier Invoice -Create</h1>
+</section>
+
+<section class="content">
+
+
+
+    <fieldset>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+
+            <input type="hidden" id="Id" name="Id" value="@Model.SupplierID" />
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-2">
+                    <label class=" required headinglabel">Supplier Type</label>
+                    <select class="form-control" id="vendortype" onchange="ChangeSupplier()">
+                        @foreach (var item in ViewBag.SupplierType)
+                        {
+                            <option value="@item.SupplierTypeID">@item.SupplierType1</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required ">Supplier</label>
+                    @Html.HiddenFor(model => model.SupplierID)
+                    @*@Html.DropDownListFor(model => model.CustomerId, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @required = "true" })*@
+                    @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SupplierName)
+                </div>
+
+                <div class="col-md-2">
+                    <label class="headinglabel required "> Invoice No</label>
+                    @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control txttarget", @required = "true", @readonly = "true" })
+                    @Html.ValidationMessageFor(model => model.InvoiceNo)
+                </div>
+                <div class="col-md-2">
+                    @Html.HiddenFor(model => model.SupplierInvoiceID)
+
+                    <label class="headinglabel required "> Invoice Date</label>
+                    @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right txttarget", @required = "true" })
+                    @Html.ValidationMessageFor(model => model.InvoiceDate)
+
+                </div>
+
+                <div class="col-md-3 align_self">
+                    <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
+
+                </div>
+            </div>
+            <h2>Details</h2>
+            <hr />
+            <br />
+            <div class="row no-margin">
+                `
+                <div class="col-md-3">
+                    <label class="headinglabel required "> Particulars</label>
+
+                    <input type="text" class="form-control" id="Particulars" name="Particulars" />
+                </div>
+                <div class="col-md-2">
+
+
+                    <label class="headinglabel required "> Rate</label>
+
+                    <input type="text" class="form-control" id="Rate" name="Rate" onchange="setThreeNumberDecimal(this)" />
+
+                </div>
+
+
+                <div class="col-md-1">
+                    <label class="headinglabel required "> Qty</label>
+
+                    <input type="number" class="form-control" id="Qty" name="Qty" />
+                </div>
+                <div class="col-md-2">
+
+
+                    <label class="headinglabel required "> Currency</label>
+
+                    <select class="form-control" id="currency" name="currency">
+                        <option value="">Select</option>
+                        @foreach (var item in ViewBag.Currency)
+                        {
+                            <option value="@item.CurrencyID">@item.CurrencyName</option>
+                        }
+                    </select>
+
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel "> Tax %</label>
+
+                    <input type="number" class="form-control" id="Taxpercent" name="Taxpercent" />
+                </div>
+
+                <div class="col-md-1 " style="padding-top:10px">
+                    <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                </div>
+            </div>
+
+
+
+            <div class="row no-margin" style="padding-top: 10px">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-responsive" id="details" style="background-color: white">
+
+                        <thead>
+                            <tr>
+
+                                <th>Particulars</th>
+                                <th>Rate</th>
+                                <th>Qty</th>
+                                <th>Currency</th>
+                                <th>Exchange Rate</th>
+                                <th>Value</th>
+                                <th>Tax(%)</th>
+                                <th>Net Value</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="input-table" id="detailsbody">
+                            @*@{Html.RenderPartial("InvoiceList", Model);}*@
+                          
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+
+
+
+        }
+    </fieldset>
+</section>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":text").css({ "border-radius": "5px" });
+        $("select").css({ "border-radius": "5px" });
+
+    });
+</script>

@@ -21,6 +21,9 @@ namespace LTMSV2.Models
         public decimal Rate { get; set; }
         public int CurrencyID { get; set; }
         public decimal CurrencyAmount { get; set; }
+        public Nullable<decimal> Amount { get; set; }
+        public Nullable<decimal> TaxPercentage { get; set; }
+        public Nullable<decimal> Value { get; set; }
     
         public virtual SupplierInvoice SupplierInvoice { get; set; }
     }

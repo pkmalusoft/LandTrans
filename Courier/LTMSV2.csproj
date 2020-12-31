@@ -3567,6 +3567,7 @@
     <Content Include="Views\SupplierInvoice\Create.cshtml" />
     <Content Include="Views\DebitNote\Index.cshtml" />
     <Content Include="Views\DebitNote\List.cshtml" />
+    <Content Include="Views\SupplierInvoice\InvoiceList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

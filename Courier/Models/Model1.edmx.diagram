@@ -417,10 +417,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_CostUpdateMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_RevenueCostMaster" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" Width="1.5" PointX="25.375" PointY="41.75" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" Width="1.5" PointX="13" PointY="47.625" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoice" Width="1.5" PointX="15.75" PointY="104.625" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNote" Width="1.5" PointX="27.375" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TruckDetailOtherCharge" Width="1.5" PointX="28.375" PointY="25.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoice" Width="1.5" PointX="42.375" PointY="29" />
@@ -433,6 +429,10 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoice" Width="1.5" PointX="15.75" PointY="110.5" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" Width="1.5" PointX="18" PointY="110.875" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
