@@ -139,7 +139,11 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function (e, i) {              
+                $("#txtDebitHead").val(i.item.label);
+                $('#txtDebitHeadId').val(i.item.AcHeadID);
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtDebitHead").val(i.item.label);
@@ -169,7 +173,11 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function (e, i) {                
+                $("#txtCreditHead").val(i.item.label);
+                $('#txtCreditHeadId').val(i.item.AcHeadID);
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtCreditHead").val(i.item.label);
@@ -181,7 +189,7 @@
         $("#txtRevenueCost").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/RevenueUpdate/RevenueCost',
+                    url: '/CostUpdate/CostComponent',
                     datatype: "json",
                     data: {
                         term: request.term
@@ -200,7 +208,13 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function (event, i) {
+                $("#txtRevenueCost").val(i.item.label);
+                $("#txtRevenueCostId").val(i.item.ID);
+                $("#txtCreditHeadId").val(i.item.RevenueAcHeadID);
+                $("#txtCreditHead").val(i.item.RevenueAcHeadName);                
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtRevenueCost").val(i.item.label);
@@ -232,7 +246,12 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function (e, i) {                
+                $("#txtSupplier").val(i.item.label);
+                $('#txtSupplierId').val(i.item.SupplierID);
+
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtSupplier").val(i.item.label);

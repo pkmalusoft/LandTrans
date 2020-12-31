@@ -106,6 +106,16 @@ namespace LTMSV2.Controllers
             ViewBag.VehicleTypes = db.VehicleTypes.ToList();
             ViewBag.FwdAgents = db.SupplierMasters.Where(c => c.SupplierTypeID == 2).ToList();
             ViewBag.OtherCharge = db.OtherCharges.ToList();
+            var transtypes = new SelectList(new[]
+                                        {
+                                        new { ID = "N", trans = "Select" },                                            
+                                            new { ID = "C", trans = "Cash" },
+                                            new { ID = "B", trans = "Bank" },
+
+                                        },
+            "ID", "trans", "N");
+
+            ViewBag.StatusPaymentMode = transtypes;
             ViewBag.Title = "Daily Trips - Create";
             TruckDetailVM1 vm1 = new TruckDetailVM1();
             var truckDetail = (from d in db.TruckDetails where d.TruckDetailID == Id select d).FirstOrDefault();
@@ -127,11 +137,15 @@ namespace LTMSV2.Controllers
                 PickupRequestDAO _dao = new PickupRequestDAO();
                 vm1.ReceiptNo = _dao.GetTDSReceiptNo(companyId,branchid);
                 vm1.VehicleType = "H";
+                vm1.CurrencyIDRent = Convert.ToInt32(Session["CurrencyId"].ToString());
+
                 List<TruckDetailOtherChargeVM> otherchargesvm = new List<TruckDetailOtherChargeVM>();
                 vm1.otherchargesVM = otherchargesvm;
+                ViewBag.EditMode = "false";
             }
             else
             {
+                ViewBag.EditMode = "true";
                 List<TruckDetailOtherChargeVM> otherchargesvm = new List<TruckDetailOtherChargeVM>();
                 ViewBag.Title = "Daily Trips - Modify";              
                 vm1.TruckDetailID = truckDetail.TruckDetailID;
@@ -152,7 +166,7 @@ namespace LTMSV2.Controllers
                 vm1.TDRemarks = truckDetail.TDRemarks;
                 vm1.VehicleType = truckDetail.VehicleType;
                 vm1.OtherCharges = truckDetail.OtherCharges;
-                vm1.StatusPaymentMode = truckDetail.StatusPaymentMode;
+                vm1.StatusPaymentMode = truckDetail.StatusPaymentMode.Trim();
                 vm1.ChequeDate = truckDetail.ChequeDate;
                 vm1.ChequeNo = truckDetail.ChequeNo;
                 vm1.ConsignmentNoNote = truckDetail.ConsignmentNoNote;
@@ -161,7 +175,7 @@ namespace LTMSV2.Controllers
                 vm1.CurrencyIDRent = truckDetail.CurrencyIDRent;
                 vm1.PaymentCurrencyID = truckDetail.PaymentCurrencyID;
                 vm1.PaymentHeadID = truckDetail.PaymentHeadID;
-              
+                vm1.Remarks = truckDetail.Remarks;
                 if (truckDetail.PaymentHeadID != null)
                 {
                     vm1.PaymentHead = db.AcHeads.Find(truckDetail.PaymentHeadID).AcHead1;
@@ -367,17 +381,27 @@ namespace LTMSV2.Controllers
          public ActionResult Drivers(string term)
         {
            
-            if (!String.IsNullOrEmpty(term))
+            if (!String.IsNullOrEmpty(term.Trim()))
             {
                 var Driver = new List<DriverMaster>();
-                Driver = db.DriverMasters.Where(d => d.DriverName.ToLower().StartsWith(term.ToLower())).ToList();
-                return Json(Driver, JsonRequestBehavior.AllowGet);
+                var lst = (from c in db.DriverMasters
+                           join v in db.VehicleMasters on c.VehicleID equals v.VehicleID into gj
+                           from subpet in gj.DefaultIfEmpty()
+                           where c.DriverName.ToLower().Contains(term.Trim().ToLower())
+                           orderby c.DriverName
+                           select new { DriverID = c.DriverID, DriverName = c.DriverName, VehicleId = c.VehicleID, RegNo = subpet.RegistrationNo ?? string.Empty }).ToList();
+                         
+                return Json(lst, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 var Driver = new List<DriverMaster>();
-                Driver = db.DriverMasters.ToList();
-                return Json(Driver, JsonRequestBehavior.AllowGet);
+                var lst = (from c in db.DriverMasters
+                           join v in db.VehicleMasters on c.VehicleID equals v.VehicleID into gj
+                           from subpet in gj.DefaultIfEmpty()                           
+                           orderby c.DriverName
+                           select new { DriverID = c.DriverID, DriverName = c.DriverName, VehicleId = c.VehicleID, RegNo = subpet.RegistrationNo ?? string.Empty }).ToList();
+                return Json(lst, JsonRequestBehavior.AllowGet);
             }
         }
                

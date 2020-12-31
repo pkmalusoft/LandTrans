@@ -66,7 +66,7 @@ namespace LTMSV2.Controllers
                                     && (c.CourierStatusID == pStatusId || (pStatusId == 0))  //&& c.CourierStatusID >= 4)
                                     && c.IsDeleted==false 
                                     orderby c.TransactionDate descending, c.ConsignmentNo descending
-                                    select new QuickAWBVM { ConsignmentNo = c.ConsignmentNo, shippername = c.Consignor, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone }).ToList();  //, requestsource=subpet3.RequestTypeName 
+                                    select new QuickAWBVM { ConsignmentNo = c.ConsignmentNo, shippername = c.Consignor, ConsignorCountryName=c.ConsignorCountryName,ConsigneeCountryName=c.ConsigneeCountryName,ConsignorPhone=c.ConsignorPhone, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone,InvoiceTo=c.InvoiceTo }).ToList();  //, requestsource=subpet3.RequestTypeName 
 
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
@@ -104,7 +104,11 @@ namespace LTMSV2.Controllers
                 ViewBag.PaymentMode = db.tblPaymentModes.ToList();
             ViewBag.OtherCharge = db.OtherCharges.ToList();
             ViewBag.Document = db.ImpExpDocumentMasters.ToList();
-          
+            List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
+            //lsttype.Add(new VoucherTypeVM { TypeName = "All" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });
+            ViewBag.InvoiceTo = lsttype;
             List<OtherChargeDetailVM> otherchargesvm = new List<OtherChargeDetailVM>();
             QuickAWBVM v = new QuickAWBVM();
                 if (id == 0)
@@ -278,7 +282,7 @@ namespace LTMSV2.Controllers
                     {
                         inscan.Weight = Convert.ToDecimal(v.Weight);
                     }
-                    
+                    inscan.InvoiceTo = v.InvoiceTo;
                     inscan.CBM_Unit = v.CBM_Unit;
                     inscan.CBM_length = v.Length;
                     inscan.CBM_height = v.Height;
@@ -519,8 +523,9 @@ namespace LTMSV2.Controllers
                       //  _dao.AWBAccountsPosting(inscan.InScanID);
 
                     
-                        TempData["ShowLabelPrint"] = "true";
-                        return RedirectToAction("Create",new { id = inscan.InScanID });
+                    TempData["ShowLabelPrint"] = "false";
+                    //return RedirectToAction("Index");
+                    return RedirectToAction("Create",new { id = 0 });
 
                     
 
@@ -550,6 +555,11 @@ namespace LTMSV2.Controllers
             ViewBag.PickupRequestStatus = db.PickUpRequestStatus.ToList();
             ViewBag.CourierStatusList = db.CourierStatus.ToList();
             ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
+            List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
+            //lsttype.Add(new VoucherTypeVM { TypeName = "All" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });
+            ViewBag.InvoiceTo = lsttype;
             return View(v);
         }
 
@@ -671,11 +681,21 @@ namespace LTMSV2.Controllers
             string status = "ok";
             try
             {
-                var list = (from c1 in db.ImpExpDocumentMasters
-                                   where c1.DocumentName.ToLower().StartsWith(term.ToLower())
-                                   orderby c1.DocumentName ascending
-                                   select new { DocumentId = c1.DocumentID, DocumentName = c1.DocumentName, ImpExpCode = c1.IMPEXPCode }).ToList();
-                return Json(list, JsonRequestBehavior.AllowGet);                
+                if (!String.IsNullOrEmpty(term.Trim()))
+                {
+                    var list = (from c1 in db.ImpExpDocumentMasters
+                                where c1.DocumentName.ToLower().Contains(term.ToLower())
+                                orderby c1.DocumentName ascending
+                                select new { DocumentId = c1.DocumentID, DocumentName = c1.DocumentName, ImpExpCode = c1.IMPEXPCode }).ToList();
+                    return Json(list, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var list = (from c1 in db.ImpExpDocumentMasters                                
+                                orderby c1.DocumentName ascending
+                                select new { DocumentId = c1.DocumentID, DocumentName = c1.DocumentName, ImpExpCode = c1.IMPEXPCode }).ToList();
+                    return Json(list, JsonRequestBehavior.AllowGet);
+                }
                 
             }
 
@@ -709,7 +729,8 @@ namespace LTMSV2.Controllers
                 inscan.StatusTypeId = data.StatusTypeId;
                 inscan.CourierStatusId = data.CourierStatusID;
                 inscan.remarks = data.Remarks;
-
+                if (data.InvoiceTo!=null)
+                inscan.InvoiceTo = data.InvoiceTo;
                 
                 int statustypeid = 0;
                  
@@ -1530,7 +1551,7 @@ namespace LTMSV2.Controllers
         public JsonResult GetCustomerName(string term)
         {
             var customerlist = (from c1 in db.CustomerMasters
-                                where c1.CustomerType == "CR" && c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                                where c1.CustomerType == "CR" && c1.CustomerName.ToLower().Contains(term.ToLower())
                                 orderby c1.CustomerName ascending
                                 select new {CustomerID= c1.CustomerID, CustomerName=c1.CustomerName, CustomerType=c1.CustomerType }).ToList();                                
 
@@ -1588,7 +1609,7 @@ namespace LTMSV2.Controllers
             if (term.Trim() != "")
             {
                List<ShipperVM> shipperlist = (from c1 in db.CustomerMasters
-                                   where c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                                   where c1.CustomerName.ToLower().Contains(term.ToLower())
                                    orderby c1.CustomerName ascending
                                    select new ShipperVM() { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct().ToList();
 
@@ -2390,7 +2411,13 @@ namespace LTMSV2.Controllers
 
             return Json(objCust, JsonRequestBehavior.AllowGet);
         }
-
+        public ActionResult GetRouteTripData(int RouteId,string despatchdate)
+        {
+            DateTime tdate = Convert.ToDateTime(despatchdate);
+            var itemlist = (from c in db.TruckDetails join v in db.VehicleMasters on c.VehicleID equals v.VehicleID where c.RouteID == RouteId && c.TDDate == tdate.Date select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.RegNo + "-" + c.DriverName }).ToList();            
+            return Json(itemlist, JsonRequestBehavior.AllowGet);
+            
+        }
         public class PickUp
         {
             public int CustomerID { get; set; }

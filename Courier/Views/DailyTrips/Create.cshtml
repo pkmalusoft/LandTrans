@@ -76,23 +76,26 @@
     <section class="content-header">
         <h1 class="headingfont">@ViewBag.Title</h1>
     </section>
-    <div class="row no-margin">
-        <div class="col-md-12 form-group d-flex" style="min-height:50px;justify-content:flex-start;background-color: #dedede; text-align: center;">
-            <div class="field checkboxdesign">
+    
+    <section class="content">
+
+
+    	<div class="row no-margin">
+        <div class="col-md-12 form-group bg-info d-flex" style="min-height:50px; justify-content: space-around ">
+            <div class="field checkboxdesign verticalcheckbox">
                 <label class="headinglabel"><input type="radio" id="chkHired" checked name="Vtype" onchange="setVehicleType()" value="H" />Hired Vehicle</label>
             </div>
-            <div class="field checkboxdesign">
+            <div class="field checkboxdesign verticalcheckbox">
                 <label class="headinglabel"><input type="radio" id="chkContract" name="Vtype" onchange="setVehicleType()" value="C" />Contract Vehicle</label>
             </div>
-            <div class="field checkboxdesign">
+            <div class="field checkboxdesign verticalcheckbox">
                 <label class="headinglabel"><input type="radio" id="chkOwn" name="Vtype" onchange="setVehicleType()" value="O" />Own Vehicle</label>
             </div>
-            <div class="field checkboxdesign">
+            <div class="field checkboxdesign verticalcheckbox">
                 <label class="headinglabel"><input type="radio" id="chkForward" name="Vtype" onchange="setVehicleType()" value="F" />Forward Agent</label>
             </div>
         </div>
     </div>
-    <section class="content">
         @if (TempData["ErrorMsg"] != null)
         {
             <script type="text/javascript">
@@ -202,7 +205,7 @@
                         @Html.TextAreaFor(model => model.TDRemarks, new { @class = "form-control" })
                     </div>
                     <div class="col-md-3 form-group">
-                        <div class="checkboxdesign text-right" style="float:right">
+                        <div class="checkboxdesign " >
                             <input type="checkbox" id="chkPaymentDetail" onclick="checkpayment()" /> &nbsp
                             <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Driver Payment</label>
                         </div>
@@ -223,12 +226,9 @@
 
 
                         <div class="col-md-3 form-group">
-                            <label class="headinglabel">Payment Type</label>
-                            <select class="form-control" id="StatusPaymentMode" name="StatusPaymentMode">
-                                <option value="">Select</option>
-                                <option value="C">Cash</option>
-                                <option value="B">Bank</option>
-                            </select>
+                            <label class="headinglabel">Payment Type</label>                            
+                            @Html.DropDownListFor(model => model.StatusPaymentMode, ViewBag.transtypes as SelectList, new { @class = "form-control" })
+
                             @*@Html.TextBoxFor(model => model.StatusPaymentMode, new { @class = "form-control", @maxlength = "2" })*@
                         </div>
 
@@ -490,8 +490,11 @@
 
     function setNumberDecimal(obj) {
         debugger;
-
-       $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+        if ($(obj).val() == "") {
+            $(obj).val(0);
+          }        
+        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+        
     }
     function setVehicleType() {
         debugger;
@@ -514,7 +517,7 @@
             }
             return;
         }
-        
+
         if ($("#chkHired").is(':checked')) {
             $('#VehicleType').val('H');
             $('#divdriver').removeClass('hide');
@@ -557,9 +560,18 @@
         var curr_month = d.getMonth() + 1;
         var curr_year = d.getFullYear();
 
-        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+        var reqdate = curr_date + "-" + curr_month + "-" + curr_year; // + ' ' + d.getHours() + ':' + d.getMinutes();
         $('#TDDate').val(reqdate);
         $('#DriverName').focus();
+
+        $("#ParcelTypeId").change(function () {
+            if ($("#ParcelTypeId").val() == 2) {
+                $('#ConsignmentNoNote').attr('readonly', 'readonly');
+            }
+            else {
+                $('#ConsignmentNoNote').removeAttr('readonly');
+            }
+        });
 
         $("#RouteID").change(function () {
             $.ajax({
@@ -580,21 +592,48 @@
                 $("#ChequeDate").val('');
                 $("#ChequeNo").attr('readonly', 'readonly');
                 $("#ChequeDate").attr('readonly', 'readonly');
+                $("#PaymentHead").attr('required','required');
+                $('#TDcontrolAcHead').attr('required', 'required');
+                $('#Amount').attr('required', 'required');
+                $('#PaymentCurrencyID').attr('required', 'required')
             }
-            else {
+            else if ($("#StatusPaymentMode").val() == "B") {
                 $("#ChequeNo").removeAttr('readonly');
                 $("#ChequeDate").removeAttr('readonly');
+
+                $("#PaymentHead").attr('required', 'required');
+                $('#TDcontrolAcHead').attr('required', 'required');
+                $('#Amount').attr('required', 'required');
+                $('#PaymentCurrencyID').attr('required', 'required')
+            }
+            else {
+                $("#PaymentHead").removeAttr('required');
+                $('#TDcontrolAcHead').removeAttr('required');
+                $('#Amount').removeAttr('required');
+                $('#PaymentCurrencyID').removeAttr('required');
             }
         });
 
-        if ('@Model.TruckDetailID' > 0) {
-
+        if (@ViewBag.EditMode==true) {
+            debugger;
             $("input[type='radio'][name='Vtype']").each(function (i,index) {
-                $(this).attr('disabled', 'disabled');                
+                $(this).attr('disabled', 'disabled');
             });
-            
+            $("#ParcelTypeId").trigger('change');
+            if ($("#ParcelTypeId").val() == 2) {
+                $('#ConsignmentNoNote').attr('readonly', 'readonly');
+            }
+            else {
+                $('#ConsignmentNoNote').removeAttr('readonly');
+            }
+            $('#StatusPaymentMode').val('@Model.StatusPaymentMode').trigger('change');
+            if ($('#StatusPaymentMode').val() == 'C' || $('#StatusPaymentMode').val() == 'B') {
+                $("#chkPaymentDetail").attr('checked', 'checked');
+                checkpayment();
+            }
+
             //$("#RegNo").val('@Model.RegNo');
-            //$("#RouteID").val('@Model.RouteID');            
+            //$("#RouteID").val('@Model.RouteID');
        //     $("#CurrencyIDRent").val('@Model.CurrencyIDRent');
             //$("#CurrencyRent").val('@Model.CurrencyRent');
          //   $("#PaymentCurrencyID").val('@Model.PaymentCurrencyID');
@@ -606,11 +645,11 @@
             setNumberDecimal($('#OtherCharges'));
             setNumberDecimal($('#Amount'));
             setVehicleType()
-          
+
         }
         $('#TDDate').datetimepicker({
             maxDate: '@_maxdate',
-            minDate: '@_mindate', format: 'DD-MM-YYYY HH:mm'
+            minDate: '@_mindate', format: 'DD-MM-YYYY'
         });
         $('#ChequeDate').datetimepicker({
             format: 'DD-MM-YYYY'
@@ -631,6 +670,8 @@
                                 label: val.DriverName,
                                 value: val.DriverName,
                                 Id: val.DriverID,
+                                VehicleId: val.VehicleId,
+                                RegNo:val.RegNo
                             }
                         }))
                     }
@@ -640,12 +681,30 @@
             autoFocus: false,
             focus: function (event, ui) {
                 $('#DriverName').val(ui.item.value);
+                $('#DriverID').val(ui.item.Id);
+                if (ui.item.VehicleId != null) {
+                    $("#RegNo").val(ui.item.RegNo);
+                    $('#VehicleID').val(ui.item.VehicleId);
+                }
             },
             select: function (e, i) {
                 e.preventDefault();
                 $("#DriverName").val(i.item.label);
                 $('#DriverID').val(i.item.Id);
-            },
+                if (i.item.VehicleId != null) {
+                    $("#RegNo").val(i.item.RegNo);
+                    $('#VehicleID').val(i.item.VehicleId);
+                }
+            }            
+           //change: function(e, i) {
+               
+           //    if ($('#VehicleID').val() == 0) {
+           //        $("#RegNo").val('');
+           //    }
+           //     //console.log($("#RegNo").val());
+           //     //console.log($('#VehicleID').val());
+                                
+           // }
 
         });
 
@@ -801,6 +860,7 @@
             autoFocus: false,
             focus: function (event, ui) {
                 $('#TDcontrolAcHead').val(ui.item.value);
+                $('#TDcontrolAcHeadID').val(ii.item.Id);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -876,7 +936,17 @@
             {
                 $('#RentAcHead').val('');
             };
+
             if ($('#FormHired').valid()) {
+
+                if ($('#StatusPaymentMode').val() == 'C' || $('#StatusPaymentMode').val() == 'B') {
+
+                    if ($('#PaymentHeadID').val() == 0 || $('#PaymentHead').val() == "") {
+                        $('#PaymentHeadID').val(0);
+                        $('#PaymentHead').focus();
+                        return false;
+                    };
+                }
                 return true;
                 //    var data = $('#FormHired').serialize();
                 //    console.log(data);

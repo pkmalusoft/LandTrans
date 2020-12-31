@@ -62,6 +62,7 @@ namespace LTMSV2.Models
         
         public string paymentmode { get; set; }
         public int? PaymentModeId { get; set; }
+        public string InvoiceTo { get; set; }
         public string code { get; set; }
         public string CBM_Unit { get; set; }
         public decimal Length { get; set; }
@@ -79,6 +80,8 @@ namespace LTMSV2.Models
         public bool SeparateDoc { get; set; }
         public DateTime DespatchDate { get; set; }
         public string RouteName { get; set; }
+        public int TruckDetailID { get; set; }
+        public string VehicleRegNo { get; set; }
         public int RouteID { get; set; }
         public Decimal? CourierCharge { get; set; }
 

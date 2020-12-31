@@ -18,29 +18,78 @@
     var AWBItems = [];
     var RemoveAWBItems = [];
     $(document).ready(function () {
+        $("#SupplierName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/GetSupplierName',
+                    datatype: "json",
+                    data: {
+                        term: request.term, SupplierTypeId: $('input[name="Type"]:checked').val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.SupplierName,
+                                value: val.SupplierName,
+                                ID: val.SupplierID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#SupplierName").val(i.item.label);
+                $('#SupplierId').val(i.item.ID);
+            },
+
+        });
+        $("#CustomerName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/GetCustomerName',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.CustomerName,
+                                value: val.CustomerName,
+                                ID: val.customerId,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#CustomerName").val(i.item.label);
+                $('#CustomerId').val(i.item.ID);
+            },
+
+        });
+
         $('input[type=radio][name=Type]').change(function () {
             if (this.value == 'C') {
-                $("#divCustomers").css("display", "block");
-                $("#divAgents").css("display", "none");
-                $("#divHVehicles").css("display", "none");
+                $("#divCustomers").css("display", "block");                $
                 $("#divSuppliers").css("display", "none");
             }
             else if (this.value == 'F') {
-                $("#divCustomers").css("display", "none");
-                $("#divAgents").css("display", "block");
-                $("#divHVehicles").css("display", "none");
-                $("#divSuppliers").css("display", "none");
+                $("#divCustomers").css("display", "none");              
+                $("#divSuppliers").css("display", "block");
             }
             else if (this.value == 'H') {
                 $("#divCustomers").css("display", "none");
-                $("#divAgents").css("display", "none");
-                $("#divHVehicles").css("display", "block");
-                $("#divSuppliers").css("display", "none");
+                $("#divSuppliers").css("display", "block");
             }
             else if (this.value == 'S') {
                 $("#divCustomers").css("display", "none");
-                $("#divAgents").css("display", "none");
-                $("#divHVehicles").css("display", "none");
                 $("#divSuppliers").css("display", "block");
             }
         });
@@ -96,18 +145,19 @@
             }
             else {
                 $("#validations").hide();
+                $('input[name=Type]').attr("disabled", true);
+
                 $.ajax({
                     type: "POST",
                     url: "/Accounts/SetInvoicesDetails",
                     datatype: "Json",
                     data: { InvoiceNo: InvoiceNo, Invoicedate: Invoicedate, LastTransdate: LastTransdate, Amount: Amount, Drcr: Drcr },
                     success: function (response) {
-                        AWBItems = response.InvoiceDetails;
-                        $.each(AWBItems, function (index, item) {
-                            debugger;
-                            var dr_Cr = item.StatusClose == 1 ? "Dr" : "Cr";
-                            $("#detailsbody").append('<tr awbno="' + item.InvoiceNo + '"><td>' + item.InvoiceNo + '</td><td>' + moment(item.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(item.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + item.Amount + '</td><td>' + dr_Cr + '</td><td><a awbno="' + item.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
-                        });
+                        AWBItems.push(response.InvoiceDetails);
+                       
+                        var dr_Cr = response.InvoiceDetails.StatusClose == 1 ? "Dr" : "Cr";
+                        $("#detailsbody").append('<tr awbno="' + response.InvoiceDetails.InvoiceNo + '"><td>' + response.InvoiceDetails.InvoiceNo + '</td><td>' + moment(response.InvoiceDetails.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(response.InvoiceDetails.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + parseFloat(response.InvoiceDetails.Amount).toFixed(3) + '</td><td>' + dr_Cr + '</td><td><a awbno="' + response.InvoiceDetails.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                      
 
                     }
                 });
@@ -126,19 +176,16 @@
 
 
         $("#details").on('click', '.rem', function () {
-            debugger;
             var remove_awbono = $(this).attr('awbno');
 
             var tempAWBItems = [];
             $.each(AWBItems, function (index, value) {
-                debugger;
                 if (value.AWB == remove_awbono) {
                     RemoveAWBItems.push(value);
                     return;
                 }
             });
             $.each(AWBItems, function (index, value) {
-                debugger;
                 if (value.AWB != remove_awbono) {
                     tempAWBItems.push(value);
                 }
@@ -149,8 +196,8 @@
             //$(this).parent().parent().remove();
             $("#detailsbody").html('');
             $.each(AWBItems, function (index, item) {
-                var dr_Cr = item.StatusClose == 1 ? "Dr" : "Cr";
-                $("#detailsbody").append('<tr awbno="' + item.InvoiceNo + '"><td>' + item.InvoiceNo + '</td><td>' + moment(item.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(item.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + item.Amount + '</td><td>' + dr_Cr + '</td><td><a awbno="' + item.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                var dr_Cr = item.StatusClose == 1 ? "Debit" : "Credit";
+                $("#detailsbody").append('<tr awbno="' + item.InvoiceNo + '"><td>' + item.InvoiceNo + '</td><td>' + moment(item.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(item.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + parseFloat(item.Amount).toFixed(3) + '</td><td>' + dr_Cr + '</td><td><a awbno="' + item.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
             });
         });
         var index = 0;
@@ -188,11 +235,11 @@
                     datatype: "Json",
                     data: { InvoiceNo: InvoiceNo, Invoicedate: Invoicedate, LastTransdate: LastTransdate, Amount: Amount, Drcr: Drcr },
                     success: function (response) {
-                        AWBItems = response.InvoiceDetails;
-                        $.each(AWBItems, function (index, item) {
-                            var dr_Cr = item.StatusClose == 1 ? "Dr" : "Cr";
-                            $("#detailsbody").append('<tr awbno="' + item.InvoiceNo + '"><td>' + item.InvoiceNo + '</td><td>' + moment(item.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(item.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + item.Amount + '</td><td>' + dr_Cr + '</td><td><a awbno="' + item.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
-                        });
+                        AWBItems.push(response.InvoiceDetails);
+                       
+                        var dr_Cr = response.InvoiceDetails.StatusClose == 1 ? "Debit" : "Credit";
+                        $("#detailsbody").append('<tr awbno="' + response.InvoiceDetails.InvoiceNo + '"><td>' + response.InvoiceDetails.InvoiceNo + '</td><td>' + moment(response.InvoiceDetails.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(response.InvoiceDetails.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + parseFloat(response.InvoiceDetails.Amount).toFixed(3) + '</td><td>' + dr_Cr + '</td><td><a awbno="' + response.InvoiceDetails.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                      
 
                     }
                 });
@@ -207,7 +254,11 @@
 
 
        
-        $('#btnsave').click(function () {
+        $('#btncancel').click(function () {
+            location.reload();
+        });
+
+            $('#btnsave').click(function () {
             var Type = $('input[name="Type"]:checked').val();
             var PartyId = 0;
             if (Type == "C") {
@@ -254,7 +305,6 @@
     
     });
     function GetInvoices() {
-        debugger;
        var Type= $('input[name="Type"]:checked').val();
         var PartyId =0;       
         if (Type == "C") {
@@ -281,15 +331,19 @@
                 data: { Type: Type, PartyId: PartyId },
                 success: function (response) {
                     $("#Remarks").val(response.Remarks);
-                    AWBItems = response.InvoiceDetails;
-                    $.each(AWBItems, function (index, item) {
-                        var dr_Cr = item.StatusClose == 1 ? "Dr" : "Cr";
-                        $("#detailsbody").append('<tr awbno="' + item.InvoiceNo + '"><td>' + item.InvoiceNo + '</td><td>' + moment(item.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(item.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + item.Amount + '</td><td>' + dr_Cr + '</td><td><a awbno="' + item.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                    
+                    $.each(response.InvoiceDetails, function (index, item) {
+                        AWBItems.push(item);
+                        var dr_Cr = item.StatusClose == 1 ? "Debit" : "Credit";
+                        $("#detailsbody").append('<tr awbno="' + item.InvoiceNo + '"><td>' + item.InvoiceNo + '</td><td>' + moment(item.InvoiceDate).format("DD-MM-YYYY") + '</td><td>' + moment(item.LastTransDate).format("DD-MM-YYYY") + '</td><td>' + parseFloat(item.Amount).toFixed(3) + '</td><td>' + dr_Cr + '</td><td><a awbno="' + item.InvoiceNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
                     });
 
                 }
             });
         }
+    }
+    function setThreeNumberDecimal(obj) {
+        $(obj).val(parseFloat($(obj).val()).toFixed(3));
     }
 </script>
 
@@ -303,6 +357,7 @@
         <div class="row no-margin btn-right" style="padding-top:10px">
             <div class="col-md-12">
                 <input type="button" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+                <input type="button" value="Cancel" class="btn btn-danger btnwidth" data-toggle="tooltip" title="Click here" id="btncancel" />
 
             </div>
         </div>
@@ -334,12 +389,12 @@
                     <input type="radio" id="FwdAgent" name="Type" value="F">
                     <label for="FwdAgent">Forwarding Agents  </label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="HireVehicle" name="Type" value="H">
-                    <label for="HireVehicle">Hired Vehicles  </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="HireVehicle">Hired Drivers  </label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="Supplier" name="Type" value="S">
-                    <label for="Supplier">Supplier  </label>
+                    <label for="Supplier">Sundry Supplier  </label>
                 </div>
                 <div class="col-md-1">
-                    <label>Op Date  </label>
+                    <label>Opening Date  </label>
                 </div>
                 <div class="col-md-2">
                     <input type="text" class="form-control" value="@ViewBag.Opdate">
@@ -353,53 +408,14 @@
                     <label class="headinglabel required">Customers</label>
                 </div>
                 <div class="col-md-9">
-                  <select name="CustomerId" id="CustomerId" class="form-control">
-                      <option value="">Select</option>
-                     @foreach(var item in Customers)
-                     {
-                         <option value="@item.CustomerID">@item.CustomerName</option>
-                     }
-                  </select>
+                    <input type="hidden" id="CustomerId" name="CustomerId" />
+                    <input type="text" id="CustomerName" name="CustomerName" class="form-control" required/>
+
                 </div>
 
 
             </div>
-            <div class="row no-margin form-group" id="divAgents" style="display:none">
-
-
-                <div class="col-md-2">
-                    <label class="headinglabel required">Forwarding Agents</label>
-                </div>
-                <div class="col-md-9">
-                    <select name="AgentId" id="AgentId" class="form-control">
-                        <option value="">Select</option>
-                        @foreach (var item in Agents)
-                        {
-                            <option value="@item.FAgentID">@item.FAgentName</option>
-                        }
-                    </select>
-                </div>
-
-
-            </div>
-            <div class="row no-margin form-group" id="divHVehicles" style="display:none">
-
-
-                <div class="col-md-2">
-                    <label class="headinglabel required">Hired Vehicles</label>
-                </div>
-                <div class="col-md-9">
-                    <select name="HiredVehicle" id="HiredVehicle" class="form-control">
-                        <option value="">Select</option>
-                        @foreach (var item in Suppliers)
-                        {
-                            <option value="@item.SupplierID">@item.SupplierName</option>
-                        }
-                    </select>
-                </div>
-
-
-            </div>
+           
             <div class="row no-margin form-group" id="divSuppliers" style="display:none">
 
 
@@ -407,13 +423,9 @@
                     <label class="headinglabel required">Suppliers</label>
                 </div>
                 <div class="col-md-9">
-                    <select name="SupplierId" id="SupplierId" class="form-control">
-                        <option value="">Select</option>
-                        @foreach (var item in Suppliers)
-                        {
-                            <option value="@item.SupplierID">@item.SupplierName</option>
-                        }
-                    </select>
+                    <input type="hidden" id="SupplierId" name="SupplierId" />
+                    <input type="text" id="SupplierName" name="SupplierName"  class="form-control" required/>
+                   
                 </div>
 
 
@@ -437,27 +449,27 @@
 
             <div class="row no-margin  form-group">
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="headinglabel required">Invoice No.</label>
                     <input type="text" id="InvoiceNo" class="form-control" />
 
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="headinglabel required">Invoice Date</label>
                     <input type="text" id="Invoicedate" class="form-control" />
 
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="headinglabel required">Last Trans. Date</label>
                     <input type="text" id="LastTransdate" class="form-control" />
 
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="headinglabel required">Amount</label>
-                    <input type="text" id="Amount" class="form-control" />
+                    <input type="text" id="Amount" onchange="setThreeNumberDecimal(this)" class="form-control" />
 
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="headinglabel required">Dr/Cr</label>
                     <select id="Drcr" class="form-control">
                         <option value="1">Dr</option>
@@ -465,7 +477,7 @@
                     </select>
 
                 </div>
-                <div class="col-md-3" style="padding-top:10px">
+                <div class="col-md-2" style="padding-top:10px">
                     <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
 
                 </div>

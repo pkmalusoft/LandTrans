@@ -1,7 +1,7 @@
 ﻿@model LTMSV2.Models.DriverMaster
 
 @{
-    ViewBag.Title = "Create";
+    
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 }
 
@@ -227,9 +227,9 @@
                     @Html.ValidationMessageFor(model => model.VisaExpDate)
                 </div>
                 <div class="col-md-3 ">
-                    <label class="headinglabel required">Vehicle Type</label>
-                    @Html.DropDownListFor(model => model.VehicleTypeID, new SelectList(@ViewBag.Vehicletype, "VehicleTypeID", "VehicleType1"), "Select", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.VehicleTypeID)
+                    <label class="headinglabel required">Vehicle RegNo.</label>
+                    @Html.DropDownListFor(model => model.VehicleID, new SelectList(@ViewBag.Vehicles, "VehicleID", "RegistrationNo"), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.VehicleID)
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Sponsor Name</label>

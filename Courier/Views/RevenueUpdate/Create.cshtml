@@ -68,6 +68,8 @@
                         debugger;
                         var i = $('#details > tbody > tr').length - 1;
                         var paytype = item.PaymentType;
+                        var paytypeid = item.PaymentModeId;
+                        var invoiceto = item.InvoiceTo;
                         var currencyid = item.CurrencyId;
                         var currencyname = item.Currency;
                         var exchangerate = item.ExchangeRate;
@@ -75,7 +77,7 @@
                         var revenuecostid = item.RevenueCostMasterID;
                         var amount = item.Amount;
                         var famount = parseFloat(amount * exchangerate).toFixed(2);
-                        var invoicedto = item.InvoicedTo;
+                        var customername = item.CustomerName;
                         var customerid = item.CustomerId;
                         var DebitHead = item.DebitAccountName;
                         var DebitHeadId = item.AcHeadDebitId;
@@ -83,13 +85,14 @@
                         var CreditHeadId = item.AcHeadCreditId;
                         var DetailID = item.ID;
 
-                        var objHtml = '<tr>' + '<td style="padding-left:10px">' + paytype + '<input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input type="hidden" name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead value="' + paytype + '" name="DetailVM[' + i + '].Paymenttype"></td>';
+                        var objHtml = '<tr>' + '<td style="padding-left:10px">' + paytype + '<input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input type="hidden" name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead value="' + paytypeid + '" name="DetailVM[' + i + '].PaymentModeId"></td>';
+                        objHtml = objHtml + '<td style="padding-left:10px">' + invoiceto + '<input type="hidden" value="' + invoiceto + '" name="DetailVM[' + i + '].InvoiceTo"></td>';
                         objHtml = objHtml + '<td style="padding-left:10px">' + currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
                         objHtml = objHtml + '<td class="textright" style="padding-right:10px">' + exchangerate + '<input type="hidden" class="JAcAmt" value=' + exchangerate + ' name="DetailVM[' + i + '].ExchangeRate"></td>';
                         objHtml = objHtml + '<td class=textright style="padding-right:10px">' + revenuecost + '<input type="hidden" class="JAcAmt" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
                         objHtml = objHtml + '<td class style="padding-right:10px">' + amount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
                         objHtml = objHtml + '<td class style="padding-right:10px">' + famount + '</td>';
-                        objHtml = objHtml + '<td style="padding-left:10px">' + invoicedto + '<input type="hidden" value=' + customerid + ' name="DetailVM[' + i + '].CustomerId"></td>'
+                        objHtml = objHtml + '<td style="padding-left:10px">' + customername + '<input type="hidden" value=' + customerid + ' name="DetailVM[' + i + '].CustomerId"></td>'
                         objHtml = objHtml + '<td style="padding-left:10px">' + DebitHead + '<input type="hidden" value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
                         objHtml = objHtml + '<td style="padding-left:10px">' + CreditHead + '<input type="hidden" value="' + CreditHeadId + '" name="DetailVM[' + i + '].AcHeadCreditId"></td>';
                         //  objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
@@ -117,7 +120,7 @@
 
 
 
-        $('#EntryDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#EntryDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
         $("#txtDebitHead").autocomplete({
             source: function (request, response) {
@@ -139,7 +142,12 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function(e, i)
+            {
+                $("#txtDebitHead").val(i.item.label);
+                $('#txtDebitHeadId').val(i.item.AcHeadID);
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtDebitHead").val(i.item.label);
@@ -169,7 +177,11 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function (e, i) {
+                $("#txtCreditHead").val(i.item.label);
+                $('#txtCreditHeadId').val(i.item.AcHeadID);
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtCreditHead").val(i.item.label);
@@ -200,7 +212,13 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function (e, i) {
+                $("#txtRevenueCost").val(i.item.label);
+                $("#txtRevenueCostId").val(i.item.ID);
+                $("#txtCreditHeadId").val(i.item.RevenueAcHeadID);
+                $("#txtCreditHead").val(i.item.RevenueAcHeadName);
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtRevenueCost").val(i.item.label);
@@ -232,7 +250,11 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function (e, i) {                
+                $("#txtCustomer").val(i.item.label);
+                $('#txtCustomerId').val(i.item.CustomerId);
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtCustomer").val(i.item.label);
@@ -277,25 +299,31 @@
         $('#PaymentType').change(function () {
             debugger;
             if ($('#PaymentType').val() == "Pickup Cash") {
-                
+
                 $('#txtCustomer').val('');
                 $('#txtCustomerId').val('');
                 $('#txtCustomer').attr('readonly', 'readonly');
+                $('#InvoiceTo').attr('readonly', 'readonly');
             }
-            else if ($('#PaymentType').val() == "Shipper") {
+            else {
+                $('#InvoiceTo').removeAttr('readonly');
+            }
+           
+
+        });
+        $('#InvoiceTo').change(function () {
+             if ($('#InvoiceTo').val() == "Shipper") {
                 $('#txtCustomer').val($('#ConsignorName').val());
                 $('#txtCustomerId').val($('#ConsignorId').val());
                 $('#txtCustomer').attr('readonly', 'readonly');
             }
-            else if ($('#PaymentType').val() == "Consignee") {
+             else if ($('#InvoiceTo').val() == "Consignee") {
                 $('#txtCustomer').val($('#ConsigneeName').val());
                 $('#txtCustomerId').val($('#ConsigneeId').val());
                 $('#txtCustomer').attr('readonly', 'readonly');
 
             }
-
-        });
-
+        })
         $('#CurrencyId').change(function () {
             $.ajax({
                 url: '/RevenueUpdate/GetCurrencyExRate',
@@ -345,6 +373,11 @@
                 $("#txtAmount").focus();
                 return false;
             }
+            else if ($("#PaymentType").val() != "Pickup Cash" && $('#InvoiceTo').val() == "") {
+                $('#spanerr').html("Select Invoice to!");
+                $("#InvoiceTo").focus();
+                return false;
+            }         
             else if ($("#PaymentType").val() != "Pickup Cash" && ($('#txtCustomer').val() == "" || $('#txtCustomerId').val() == "0" || $('#txtCustomerId').val() == ""))
             {
                 $('#spanerr').html("Select Customer!");
@@ -382,7 +415,9 @@
                 var str = "";
                 var totalamt = 0;
                 var i = $('#details > tbody > tr').length - 1;
-                var paytype = $('#PaymentType').val();
+                var paytype = $("#PaymentType option:selected").text();
+                var paytypeid = $('#PaymentType').val();
+                var invoiceto = $('#InvoiceTo').val();
                 var currencyid = $('#CurrencyId').val();
                 var currencyname = $("#CurrencyId option:selected").text();
                 var exchangerate = $('#ExchangeRate').val();
@@ -398,7 +433,8 @@
                 var CreditHeadId = $('#txtCreditHeadId').val();
                 var DetailID = 0;
 
-                var objHtml = '<tr>' + '<td style="padding-left:10px">' + paytype + '<input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input type="hidden" name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead value="' + paytype + '" name="DetailVM[' + i + '].Paymenttype"></td>';
+                var objHtml = '<tr>' + '<td style="padding-left:10px">' + paytype + '<input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input type="hidden" name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead value="' + paytypeid + '" name="DetailVM[' + i + '].PaymentModeId"></td>';
+                objHtml = objHtml + '<td style="padding-left:10px">' + invoiceto + '<input type="hidden" value="' + invoiceto + '" name="DetailVM[' + i + '].InvoiceTo"></td>';
                 objHtml = objHtml + '<td style="padding-left:10px">' + currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
                 objHtml = objHtml + '<td class="textright" style="padding-right:10px">' + exchangerate + '<input type="hidden" class="JAcAmt" value=' + exchangerate + ' name="DetailVM[' + i + '].ExchangeRate"></td>';
                 objHtml = objHtml + '<td class=textright style="padding-right:10px">' + revenuecost + '<input type="hidden" class="JAcAmt" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
@@ -518,51 +554,56 @@
                     <span id="spanerr" style="color:red"></span>
                     </div>
                 </div>
-                <div class="row no-margin">
-                    <div class="col-md-1">
-                        <label class="headinglabel required">Pay Type</label>
-                        @Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentType, "TypeName", "TypeName", 0), "Select", new { @class = "form-control", @id = "PaymentType" })
-                    </div>
-                    <div class="col-md-1">
-                        <label class="headinglabel required">Currency</label>
-                        @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyName", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
-                        @Html.HiddenFor(model => model.ExchangeRate)
-                    </div>
-
-                    <div class="col-md-2">
-                        <label class="headinglabel label1">Revenue Cost</label>
-                        <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
-                        <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
-                    </div>
-                    <div class="col-md-1">
-                        <label class="headinglabel">Amount</label>
-                        <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
-                    </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel">Invoiced To</label>
-                        <input type="text" id="txtCustomer" class="form-control" autocomplete="off" />
-                        <input type="hidden" id="txtCustomerId" class="form-control" autocomplete="off" />
-                    </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel">Debit Account</label>
-                        <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
-                        <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
-                    </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel">Credit Account Head</label>
-                        <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
-                        <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
-                    </div>
-                    <div class="col-md-1" style="padding-top:30px">
-                        <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data" onclick="ClearData()">-</button>&nbsp;&nbsp;
-                        <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
-                    </div>
+            <div class="row no-margin">
+                <div class="col-md-1">
+                    <label class="headinglabel required">Pay Type</label>
+                    @Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentType, "ID", "PaymentModeText", 0), "Select", new { @class = "form-control", @id = "PaymentType" })
                 </div>
+                <div class="col-md-1">
+                    <label class="headinglabel required">Invoice To</label>
+                    @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "Select", new { @class = "form-control", @id = "InvoiceTo" })                    
+                </div>
+                <div class="col-md-1">
+                    <label class="headinglabel required">Currency</label>
+                    @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyName", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
+                    @Html.HiddenFor(model => model.ExchangeRate)
+                </div>
+
+                <div class="col-md-2">
+                    <label class="headinglabel label1">Revenue Cost</label>
+                    <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
+                    <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col-md-1">
+                    <label class="headinglabel">Amount</label>
+                    <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
+                </div>
+                <div class="col-md-1">
+                    <label class="headinglabel">Customer</label>
+                    <input type="text" id="txtCustomer" class="form-control" autocomplete="off" />
+                    <input type="hidden" id="txtCustomerId" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel">Debit Account</label>
+                    <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
+                    <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel">Credit Account Head</label>
+                    <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
+                    <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col-md-1" style="padding-top:30px">
+                    <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data" onclick="ClearData()">-</button>&nbsp;&nbsp;
+                    <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
+                </div>
+            </div>
                 <br />
                 <div class="row no-margin" style="padding-top:10px">
                     <table class="table table-bordered table-responsive" id="details">
                         <tr>
                             <td style="width:5%">Payment Mode</td>
+                            <td style="width:5%">Invoice To</td>
                             <td style="width:5%">Currency</td>
                             <td style="width:5%">Ex.Rate</td>
                             <td style="width:15%">Revenue</td>
@@ -570,7 +611,8 @@
                             <td style="width:5%">Amount(F.C)</td>
                             <td style="width:15%">Invoiced To</td>
                             <td style="width:15%">Debit Chart of Account</td>
-                            <td style="width:15%">Credit Chat of Account</td>
+                            <td style="width:5%">Credit Chat of Account</td>
+                            <td></td>
                         </tr>
                     </table>
                 </div>

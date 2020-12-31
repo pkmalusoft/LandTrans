@@ -77,9 +77,9 @@ namespace LTMSV2.Controllers
         public ActionResult GetRouteData(string term)
         {
 
-            if (!String.IsNullOrEmpty(term))
+            if (!String.IsNullOrEmpty(term.Trim()))
             {
-                List<RouteMasterVM> itemlist = (from c in db.RouteMasters where c.RouteName.ToLower().StartsWith(term.ToLower()) orderby c.RouteName select new RouteMasterVM { RouteID = c.RouteID, RouteName = c.RouteName }).ToList();
+                List<RouteMasterVM> itemlist = (from c in db.RouteMasters where c.RouteName.ToLower().Contains(term.Trim().ToLower()) orderby c.RouteName select new RouteMasterVM { RouteID = c.RouteID, RouteName = c.RouteName }).ToList();
 
 
                 return Json(itemlist, JsonRequestBehavior.AllowGet);

@@ -24,6 +24,8 @@ namespace LTMSV2.Models
         public Nullable<decimal> Amount { get; set; }
         public Nullable<decimal> TaxPercentage { get; set; }
         public Nullable<decimal> Value { get; set; }
+        public Nullable<int> RecPayStatus { get; set; }
+        public Nullable<int> RecPayDetailId { get; set; }
     
         public virtual SupplierInvoice SupplierInvoice { get; set; }
     }

@@ -91,7 +91,6 @@
             <th>Receipt Number</th>
             <th>Vendor</th>
             <th class="right_text">Amount</th>
-            <th>Currency</th>
             <th style="width:120px;"></th>
         </tr>
     </tfoot>
@@ -114,13 +113,12 @@
                     @Html.DisplayFor(modelItem => item.PartyName)
                 </td>
                 <td class="tdtarget " style="text-align:right!important">@Html.DisplayFor(modelItem => item.Amount)</td>
-                <td class="tdtarget">@Html.DisplayFor(modelItem => item.Remarks)</td>
 
                 <td>
 
                     @if (ismodify)
                     {
-                        <a href='@Url.Action("CustomerTradeReceipt", "CustomerReceipt", new { id = item.RecPayID })' data-toggle="tooltip" data-placement="left" title="Click here"><i class="fa fa-pencil"></i></a>
+                        <a href='@Url.Action("SupplierPayment", "SupplierPayment", new { id = item.RecPayID })' data-toggle="tooltip" data-placement="left" title="Click here"><i class="fa fa-pencil"></i></a>
                     }
                     |
                     @if (isdelete)

@@ -73,26 +73,35 @@ namespace LTMSV2.Controllers
 
         public ActionResult Create(int id=0)
         {
+            int userId = Convert.ToInt32(Session["UserID"].ToString());
             ViewBag.Title = "Revenue Update - Create";
             ViewBag.employee = db.EmployeeMasters.ToList();
-            List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
-            lsttype.Add(new VoucherTypeVM { TypeName = "Pickup Cash" });
-            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
-            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });            
 
-            ViewBag.PaymentType = lsttype;
+            ViewBag.PaymentType = db.tblPaymentModes.ToList();
             ViewBag.Currency = db.CurrencyMasters.ToList();
             ViewBag.Consignment = db.InScanMasters.ToList();
+            List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
+            //lsttype.Add(new VoucherTypeVM { TypeName = "All" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });
+
+            ViewBag.InvoiceTo = lsttype;
             RevenueUpdateMasterVM vm = new RevenueUpdateMasterVM();
             if (id==0)
             {
                 vm.ID = 0;
                 vm.DetailVM = new List<RevenueUpdateDetailVM>();
                 vm.EntryDate = DateTime.Now;
+                var emp = db.EmployeeMasters.Where(cc => cc.UserID == userId).FirstOrDefault();
+                if (emp != null)
+                {
+                    vm.EmployeeID = emp.EmployeeID;
+                }
                 ViewBag.EditMode = "false";
             }
             else
             {
+                ViewBag.Title = "Revenue Update - Modify";
                 RevenueUpdateMaster v = db.RevenueUpdateMasters.Find(id);
                 vm.ID = v.ID;
                 vm.EntryDate = v.EntryDate;
@@ -152,9 +161,10 @@ namespace LTMSV2.Controllers
                             detail.CurrencyId = vm.DetailVM[i].CurrencyId;
                             detail.CustomerId = vm.DetailVM[i].CustomerId;
                             detail.ExchangeRate = vm.DetailVM[i].ExchangeRate;
-                            detail.PaymentType = vm.DetailVM[i].PaymentType;
+                            detail.PaymentModeId = vm.DetailVM[i].PaymentModeId;
+                            detail.InvoiceTo= vm.DetailVM[i].InvoiceTo;
 
-                            db.RevenueUpdateDetails.Add(detail);
+                        db.RevenueUpdateDetails.Add(detail);
                             db.SaveChanges();
 
                         }
@@ -171,9 +181,10 @@ namespace LTMSV2.Controllers
                                 detail.CurrencyId = vm.DetailVM[i].CurrencyId;
                                 detail.CustomerId = vm.DetailVM[i].CustomerId;
                                 detail.ExchangeRate = vm.DetailVM[i].ExchangeRate;
-                                detail.PaymentType = vm.DetailVM[i].PaymentType;
+                                detail.PaymentModeId = vm.DetailVM[i].PaymentModeId;
+                                detail.InvoiceTo = vm.DetailVM[i].InvoiceTo;
 
-                                db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+                            db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
                                 db.SaveChanges();
                             }
 

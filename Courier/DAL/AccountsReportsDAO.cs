@@ -471,7 +471,7 @@ namespace LTMSV2.DAL
         }
 
 
-        public static string GenerateAWBRegister()
+        public static string GenerateConsignmentRegister()
         {
             int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
             int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
@@ -485,7 +485,7 @@ namespace LTMSV2.DAL
             comd = new SqlCommand();
             comd.Connection = sqlConn;
             comd.CommandType = CommandType.StoredProcedure;
-            comd.CommandText = "sp_AWBRegisterReport";
+            comd.CommandText = "sp_ConsignmentNoteRegisterReport";
             comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyy"));
             comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@BranchId", branchid);
@@ -498,50 +498,53 @@ namespace LTMSV2.DAL
             {
                 comd.Parameters.AddWithValue("@PaymentModeId", reportparam.PaymentModeId);
             }
-            if (reportparam.ParcelTypeId == null)
+            
+            if (reportparam.InvoicedTo == null)
             {
-                comd.Parameters.AddWithValue("@ParcelTypeId", 0);
+                comd.Parameters.AddWithValue("@InvoiceTo", "");
             }
             else
             {
-                comd.Parameters.AddWithValue("@ParcelTypeId", reportparam.ParcelTypeId);
+                comd.Parameters.AddWithValue("@InvoicedTo", reportparam.InvoicedTo);
             }
-            comd.Parameters.AddWithValue("@MovementId", reportparam.MovementId);
+            comd.Parameters.AddWithValue("@ParcelTypeId", reportparam.ParcelTypeId);
 
             comd.Parameters.AddWithValue("@SortBy", reportparam.SortBy);
 
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
             sqlAdapter.SelectCommand = comd;
             DataSet ds = new DataSet();
-            sqlAdapter.Fill(ds, "AWBRegister");
+            sqlAdapter.Fill(ds, "ConsignmentRegister");
 
             //generate XSD to design report
-            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "AWBRegister.xsd"));
-            //ds.WriteXmlSchema(writer);
-            //writer.Close();
+            System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "ConsignmentRegister.xsd"));
+            ds.WriteXmlSchema(writer);
+            writer.Close();
 
             ReportDocument rd = new ReportDocument();
-            if (reportparam.ReportType == "Date")
-            {
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "ConsignmentRegister.rpt"));
 
-                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister.rpt"));
-            }
-            else if (reportparam.ReportType == "Movement")
-            {
-                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_MovementWise.rpt"));
-            }
-            else if (reportparam.ReportType == "PaymentMode")
-            {
-                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_Payment.rpt"));
-            }
-            else if (reportparam.ReportType == "ParcelType")
-            {
-                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_ParcelType.rpt"));
-            }
-            else if (reportparam.ReportType == "Summary")
-            {
-                rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_Summary.rpt"));
-            }
+            //if (reportparam.ReportType == "Date")
+            //{
+
+            
+            //}
+            //else if (reportparam.ReportType == "Movement")
+            //{
+            //    rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_MovementWise.rpt"));
+            //}
+            //else if (reportparam.ReportType == "PaymentMode")
+            //{
+            //    rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_Payment.rpt"));
+            //}
+            //else if (reportparam.ReportType == "ParcelType")
+            //{
+            //    rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_ParcelType.rpt"));
+            //}
+            //else if (reportparam.ReportType == "Summary")
+            //{
+            //    rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_Summary.rpt"));
+            //}
 
             rd.SetDataSource(ds);
 
@@ -554,7 +557,7 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             //rd.ParameterFields[0].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Airway Bill Register");
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment Note Register");
             string period = "For the Period From " + reportparam.FromDate.Date.ToString("dd MMM yyyy") + " to " + reportparam.ToDate.Date.ToString("dd MMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 

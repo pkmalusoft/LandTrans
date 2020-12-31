@@ -38,9 +38,10 @@ namespace LTMSV2.DAL
                     obj.ConsignmentDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["ConsignmentDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
                     obj.Currency = ds.Tables[0].Rows[i]["CurrencyName"].ToString();
                     obj.PaymentType = ds.Tables[0].Rows[i]["PaymentType"].ToString();
+                    obj.InvoiceTo  = ds.Tables[0].Rows[i]["InvoiceTo"].ToString();
                     obj.DebitAccountName = ds.Tables[0].Rows[i]["DebitAccountHead"].ToString();
                     obj.CreditAccountName = ds.Tables[0].Rows[i]["CreditAccountHead"].ToString();
-                    obj.InvoicedTo = ds.Tables[0].Rows[i]["CustomerName"].ToString();
+                    obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
                     if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
                     {
                         obj.Amount = 0;
@@ -84,11 +85,13 @@ namespace LTMSV2.DAL
                     obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
                     obj.AcHeadDebitId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadDebitId"].ToString());
                     obj.AcHeadCreditId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadCreditId"].ToString());
-                    obj.PaymentType = ds.Tables[0].Rows[i]["PaymentType"].ToString();
+                    obj.PaymentModeId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["PaymentModeId"].ToString());
+                    obj.InvoiceTo  = ds.Tables[0].Rows[i]["InvoiceTo"].ToString();
                     obj.DebitAccountName = ds.Tables[0].Rows[i]["DebitAccountHead"].ToString();
                     obj.CreditAccountName = ds.Tables[0].Rows[i]["CreditAccountHead"].ToString();                    
                     obj.Currency = ds.Tables[0].Rows[i]["CurrencyName"].ToString();                    
-                    obj.InvoicedTo = ds.Tables[0].Rows[i]["CustomerName"].ToString();                    
+                    obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
+                    obj.PaymentType = ds.Tables[0].Rows[i]["PaymentType"].ToString();
                     objList.Add(obj);
                 }
             }

@@ -32,6 +32,9 @@ namespace LTMSV2.Models
         public Nullable<int> FyearID { get; set; }
         public Nullable<int> cid { get; set; }
         public Nullable<int> BranchId { get; set; }
+        public Nullable<bool> StatusClose { get; set; }
+        public Nullable<decimal> InvoiceTotal { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     
         public virtual SupplierMaster SupplierMaster { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

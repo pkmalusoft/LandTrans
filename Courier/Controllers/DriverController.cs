@@ -21,12 +21,13 @@ namespace LTMSV2.Controllers
         {
 
             ViewBag.Supplier = db.SupplierMasters.ToList();
+            ViewBag.Vehicles = db.VehicleMasters.ToList();
             ViewBag.Vehicletype = db.VehicleTypes.ToList();
-            ViewBag.Title = "Driver Master -Create";
+            ViewBag.Title = "Driver Master - Create";
             DriverMaster vm = new DriverMaster();
             if (id>0)
             {
-                ViewBag.Title = "Driver -Modify";
+                ViewBag.Title = "DriverMaster - Modify";
                 vm = db.DriverMasters.Find(id);
             }
 

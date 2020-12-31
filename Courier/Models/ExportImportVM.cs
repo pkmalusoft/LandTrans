@@ -150,7 +150,8 @@ namespace LTMSV2.Models
         public bool Create { get; set; }
 
         public int? PaymentModeId { get; set; }
-        public int? ParcelTypeId { get; set; }                
+        public string ParcelTypeId { get; set; }
+        public string InvoicedTo { get; set; }
         public string MovementId { get; set; }
         public int[] SelectedValues { get; set; }
         public string Output { get; set; }

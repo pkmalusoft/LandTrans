@@ -3813,15 +3813,13 @@ new AcGroupModel()
         }
         public JsonResult SetInvoicesDetails(string InvoiceNo, string Invoicedate, string LastTransdate, decimal Amount, int Drcr )
         {
-            var InvoiceDetails = new List<AcOPInvoiceDetail>();
             var invoice= new AcOPInvoiceDetail();
             invoice.InvoiceNo = InvoiceNo;
             invoice.InvoiceDate = Convert.ToDateTime(Invoicedate);
             invoice.LastTransDate = Convert.ToDateTime(LastTransdate);
             invoice.Amount = Convert.ToDecimal(Amount);
             invoice.StatusClose = Drcr==1?true:false;
-            InvoiceDetails.Add(invoice);
-            return Json(new {  InvoiceDetails = InvoiceDetails }, JsonRequestBehavior.AllowGet);
+            return Json(new {  InvoiceDetails = invoice }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult SaveOpInvoice(string Type,int PartyId,string Remarks,string Details)
         {
@@ -3951,6 +3949,48 @@ new AcGroupModel()
             db.SaveChanges();
             ViewBag.SuccessMsg = "You have successfully deleted Account Opening Master";
             return RedirectToAction("AcOpeningMaster");
+
+        }
+        [HttpGet]
+        public JsonResult GetSupplierName(string term, string SupplierTypeId)
+        {
+            var supplierType = new SupplierType();
+            if(SupplierTypeId=="H")
+            {
+                supplierType = (from d in db.SupplierTypes where d.SupplierType1 == "Hired Drivers" select d).FirstOrDefault();
+            }
+            else if(SupplierTypeId=="F")
+            {
+                supplierType = (from d in db.SupplierTypes where d.SupplierType1 == "Forwarding Agents" select d).FirstOrDefault();
+
+            }
+            else if (SupplierTypeId == "S")
+            {
+                supplierType = (from d in db.SupplierTypes where d.SupplierType1 == "Sundry Suppliers" select d).FirstOrDefault();
+
+            }
+            if(supplierType==null)
+            {
+                supplierType = new SupplierType();
+            }
+            var customerlist = (from c1 in db.SupplierMasters
+                                where c1.SupplierName.ToLower().Contains(term.ToLower()) && c1.SupplierTypeID == supplierType.SupplierTypeID
+                                orderby c1.SupplierName ascending
+                                select new { SupplierID = c1.SupplierID, SupplierName = c1.SupplierName }).ToList();
+
+            return Json(customerlist, JsonRequestBehavior.AllowGet);
+
+        }
+        [HttpGet]
+        public JsonResult GetCustomerName(string term)
+        {
+            
+            var customerlist = (from c1 in db.CustomerMasters
+                                where c1.CustomerName.ToLower().Contains(term.ToLower()) 
+                                orderby c1.CustomerName ascending
+                                select new { customerId = c1.CustomerID, CustomerName = c1.CustomerName }).ToList();
+
+            return Json(customerlist, JsonRequestBehavior.AllowGet);
 
         }
     }

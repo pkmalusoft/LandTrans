@@ -210,7 +210,45 @@ namespace LTMSV2.DAL
 
 
         }
+        public static int AddSupplierRecieptPayment(CustomerRcieptVM RecPy, string UserID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_InsertSupplierRecPay";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayDate", RecPy.RecPayDate);
+            cmd.Parameters.AddWithValue("@DocumentNo", RecPy.DocumentNo);
+            //cmd.Parameters.AddWithValue("@CustomerID", RecPy.CustomerID);
+            cmd.Parameters.AddWithValue("@SupplierID", RecPy.SupplierID);
+            cmd.Parameters.AddWithValue("@BusinessCentreID", RecPy.BusinessCentreID);
+            cmd.Parameters.AddWithValue("@BankName", RecPy.BankName);
+            cmd.Parameters.AddWithValue("@ChequeNo", RecPy.ChequeNo);
+            cmd.Parameters.AddWithValue("@ChequeDate", RecPy.ChequeDate);
+            cmd.Parameters.AddWithValue("@Remarks", RecPy.Remarks);
+            cmd.Parameters.AddWithValue("@AcJournalID", RecPy.AcJournalID);
+            cmd.Parameters.AddWithValue("@StatusRec", RecPy.StatusRec);
+            cmd.Parameters.AddWithValue("@StatusEntry", RecPy.StatusEntry);
+            cmd.Parameters.AddWithValue("@StatusOrigin", RecPy.StatusOrigin);
+            cmd.Parameters.AddWithValue("@FYearID", RecPy.FYearID);
+            cmd.Parameters.AddWithValue("@AcCompanyID", RecPy.AcCompanyID);
+            cmd.Parameters.AddWithValue("@EXRate", RecPy.EXRate);
+            cmd.Parameters.AddWithValue("@FMoney", RecPy.FMoney);
+            cmd.Parameters.AddWithValue("@UserID", RecPy.UserID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
 
+
+        }
         public static List<CustomerReceivable> SPGetAllLocalCurrencyCustRecievable(int FinancialyearId)
         {
             List<CustomerReceivable> crecs = new List<CustomerReceivable>();
@@ -346,6 +384,40 @@ namespace LTMSV2.DAL
 
                                    
         }
+        public static int InsertRecpayDetailsForSupplier(int RecPayID, int InvoiceID, int JInvoiceID, decimal Amount, string Remarks, string StatusInvoice, bool StatusAdvance, string statusReceip, string InvDate, string InvNo, int CurrencyID, int invoiceStatus, int JobID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_InsertRecPayDetailsForSupplier";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayID", RecPayID);
+            cmd.Parameters.AddWithValue("@InvoiceID", InvoiceID);
+            cmd.Parameters.AddWithValue("@Amount", Amount);
+            cmd.Parameters.AddWithValue("@Remarks", Remarks);
+            cmd.Parameters.AddWithValue("@StatusInvoice", StatusInvoice);
+            cmd.Parameters.AddWithValue("@StatusAdvance", StatusAdvance);
+            cmd.Parameters.AddWithValue("@statusReceipt", statusReceip);
+            cmd.Parameters.AddWithValue("@InvDate", InvDate);
+            cmd.Parameters.AddWithValue("@InvNo", InvNo);
+            cmd.Parameters.AddWithValue("@CurrencyID", CurrencyID);
+            cmd.Parameters.AddWithValue("@invoiceStatus", invoiceStatus);
+            cmd.Parameters.AddWithValue("@JobID", JobID);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
+
+
+        }
 
         public static void InsertJournalOfCustomer(int RecpayID, int fyearId)
         {
@@ -370,6 +442,20 @@ namespace LTMSV2.DAL
         //    return query;
         //}
 
+        public static void InsertJournalOfSupplier(int RecpayID, int fyearId)
+        {
+            //SP_InsertJournalEntryForRecPay
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_InsertJournalEntryForSupplierRecPay";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayID", RecpayID);
+            cmd.Parameters.AddWithValue("@AcFinnancialYearId", fyearId);
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+
+            //Context1.SP_InsertJournalEntryForRecPay(RecpayID, fyaerId);
+        }
 
         public static void DeleteCustomerReceipt(int RecPayID)
         {

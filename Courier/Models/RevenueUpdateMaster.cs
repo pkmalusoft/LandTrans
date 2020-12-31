@@ -18,6 +18,7 @@ namespace LTMSV2.Models
         public RevenueUpdateMaster()
         {
             this.RevenueUpdateDetails = new HashSet<RevenueUpdateDetail>();
+            this.RevenueUpdateDetails1 = new HashSet<RevenueUpdateDetail>();
         }
     
         public int ID { get; set; }
@@ -31,5 +32,7 @@ namespace LTMSV2.Models
         public virtual InScan InScan { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RevenueUpdateDetail> RevenueUpdateDetails1 { get; set; }
     }
 }

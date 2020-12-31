@@ -695,8 +695,19 @@
             },
             minLength: 0,
             autoFocus: false,
-            focus: function (event, ui) {
-                $('#shippername').val(ui.item.value);
+            focus: function (event, i) {
+                $('#shippername').val(i.item.value);
+                $("#shippername").val(i.item.label);
+                $("#ConsignorContact").val(i.item.ContactPerson);
+                $("#ConsignorAddress1_Building").val(i.item.Address1);
+                $("#ConsignorAddress2_Street").val(i.item.Address2);
+
+                $("#ConsignorAddress3_PinCode").val(i.item.Pincode);
+
+                $("#ConsignorPhone").val(i.item.Phone);
+                $("#ConsignorCountryName").val(i.item.CountryName);
+                $("#ConsignorCityName").val(i.item.CityName);
+                $("#ConsignorLocationName").val(i.item.LocationName);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -829,7 +840,52 @@
             },
 
         });
+        //$("#RouteName").change(function () {
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/Consignment/GetRouteTripData",
+        //        datatype: "Json",
+        //        data: { 'RouteId': $('#RouteID').val(), despatchdate: $('#DespatchDate').val() },
+        //        success: function (response) {
+        //            conosle.log(response);
+        //            $('#VehicleRegNo').val(response.RegNo);
 
+        //        }
+        //    });
+
+                   
+        $("#VehicleRegNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Consignment/GetRouteTripData",
+                    datatype: "json",
+                    data: { 'RouteId': $('#RouteID').val(), despatchdate: $('#DespatchDate').val() },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.RegNo,
+                                value: val.RegNo,
+                                TruckDetailID: val.TruckDetailID
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#VehicleRegNo').val(ui.item.value);
+                $("#TruckDetailID").val(ui.item.TruckDetailID);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#VehicleRegNo").val(i.item.label);
+                $("#TruckDetailID").val(i.item.RouteID);
+            }
+
+
+        });
+    
         $("#RouteName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -859,7 +915,7 @@
                 e.preventDefault();
                 $("#RouteName").val(i.item.label);
                 $("#RouteID").val(i.item.RouteID);
-            },
+            }
 
         });
     });
@@ -1566,13 +1622,13 @@
             $('#TransactionDate').datetimepicker({
                 maxDate:'@_maxdate',
                 minDate: '@_mindate',
-                format: 'DD-MM-YYYY HH:mm'
+                format: 'DD-MM-YYYY'
             });
 
              $('#DespatchDate').datetimepicker({
                 maxDate:'@_maxdate',
                 minDate: '@_mindate',
-                format: 'DD-MM-YYYY HH:mm'
+                format: 'DD-MM-YYYY'
             });
         });
         var d = new Date();
@@ -1749,7 +1805,12 @@
             <div class="col-md-2">
                 <label class="headinglabel required">Payment Mode</label>
                 @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
-            </div>            
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel required">Invoice To</label>
+                @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "Select", new { @class = "form-control", @id = "InvoiceTo" })
+                
+            </div>
             <div class="col-md-4 hide">
                 <div class="flexTitle">
                     <label class="headinglabel required">Customer</label>
@@ -2054,7 +2115,7 @@
                                 </div>
                             </div>
                             </div>
-                                     <div class="row no-margin">
+                              <div class="row no-margin">
                                     <div class="col-md-6">
                                         <label class="headinglabel">Despatch Date</label>
                                         @Html.TextBoxFor(model => model.DespatchDate, new { @class = "form-control", @required = "true" })
@@ -2068,6 +2129,13 @@
                                     @Html.HiddenFor(model => model.RouteID)
                                 </div>
                             </div>
+                              <div class="row-margin">
+                                  <div class="col-md-12">
+                                      <label class="headinglabe">Vehicle</label>
+                                      @Html.TextBoxFor(model => model.VehicleRegNo, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Vehicle Reg No." })                                      
+                                      @Html.HiddenFor(model => model.TruckDetailID)
+                                  </div>
+                              </div>
                         </div>
                     </div>
 

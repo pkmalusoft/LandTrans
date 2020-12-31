@@ -40,5 +40,6 @@ namespace LTMSV2.Models
         public bool IsOwner { get; set; }
         public string CountryName { get; set; }
         public Nullable<int> SupplierID { get; set; }
+        public Nullable<int> VehicleID { get; set; }
     }
 }

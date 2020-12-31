@@ -1315,6 +1315,7 @@
     <Property Name="IsOwner" Type="bit" Nullable="false" />
     <Property Name="CountryName" Type="varchar" MaxLength="200" />
     <Property Name="SupplierID" Type="int" />
+    <Property Name="VehicleID" Type="int" />
   </EntityType>
   <EntityType Name="DRR">
     <Key>
@@ -2215,6 +2216,7 @@
     <Property Name="ConsigneeLocationID" Type="int" />
     <Property Name="ConsigneeCountryID" Type="int" />
     <Property Name="ConsigneeCityID" Type="int" />
+    <Property Name="InvoiceTo" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
@@ -2986,12 +2988,13 @@
     <Property Name="ExpectedAmount" Type="money" />
     <Property Name="InvoiceId" Type="int" />
     <Property Name="IsPerfomaCod" Type="bit" />
-    <Property Name="PaymentType" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadDebitId" Type="int" />
     <Property Name="AcHeadCreditId" Type="int" />
     <Property Name="CustomerId" Type="int" />
     <Property Name="CurrencyId" Type="int" />
     <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="3" />
+    <Property Name="InvoiceTo" Type="varchar" MaxLength="50" />
+    <Property Name="PaymentModeId" Type="int" />
   </EntityType>
   <EntityType Name="RevenueUpdateMaster">
     <Key>
@@ -3131,6 +3134,9 @@
     <Property Name="FyearID" Type="int" />
     <Property Name="cid" Type="int" />
     <Property Name="BranchId" Type="int" />
+    <Property Name="StatusClose" Type="bit" />
+    <Property Name="InvoiceTotal" Type="money" />
+    <Property Name="IsDeleted" Type="bit" />
   </EntityType>
   <EntityType Name="SupplierInvoiceDetails">
     <Key>
@@ -3146,6 +3152,8 @@
     <Property Name="Amount" Type="money" />
     <Property Name="TaxPercentage" Type="decimal" Precision="10" Scale="2" />
     <Property Name="Value" Type="money" />
+    <Property Name="RecPayStatus" Type="int" />
+    <Property Name="RecPayDetailId" Type="int" />
   </EntityType>
   <EntityType Name="SupplierMaster">
     <Key>

@@ -23,13 +23,15 @@ namespace LTMSV2.Models
     public class ReceiptVM
         {
         public int RecPayID { get; set; }
-        public DateTime RecPayDate { get; set; }
+        public DateTime? RecPayDate { get; set; }
         public string DocumentNo { get; set; }
         public string PartyName { get; set; }
         public string Remarks { get; set; }
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
     public decimal Currency { get; set; }
-   }
+        public string CurrencyName { get; set; }
+
+    }
     public class CustomerReceivable
     {
         public int InvoiceId { get; set; }
@@ -203,6 +205,8 @@ namespace LTMSV2.Models
                 cust.RecPayDate = item.RecPayDate;
                 cust.DocumentNo = item.DocumentNo;
                 cust.SupplierID = item.SupplierID;
+                cust.customerName = Context1.SupplierMasters.Find(item.SupplierID).SupplierName;
+
                 var cashOrBankID = (from t in Context1.AcHeads where t.AcHead1 == item.BankName select t.AcHeadID).FirstOrDefault();
                 cust.CashBank = (cashOrBankID).ToString();
                 cust.ChequeBank = (cashOrBankID).ToString();

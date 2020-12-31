@@ -96,7 +96,7 @@ namespace LTMSV2.Controllers
 
 
 
-        public ActionResult Create()
+        public ActionResult Create(int id=0)
         {
             var transtypes = new SelectList(new[] 
                                         {
@@ -121,16 +121,28 @@ namespace LTMSV2.Controllers
             ViewBag.Depot = data;
 
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            
-            PickupRequestDAO doa = new PickupRequestDAO();
-            ViewBag.CustomerNo = doa.GetMaxCustomerCode(branchid);
+            ViewBag.UserRoleId = Convert.ToInt32(Session["UserRoleID"].ToString());
             CustmorVM obj = new CustmorVM();
-            obj.RoleID = 13;
-            obj.CustomerType = "CS";
-            ViewBag.UserRoleId= Convert.ToInt32(Session["UserRoleID"].ToString());
-            obj.Password = doa.RandomPassword(6);
-            obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
-            obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
+            if (id == 0)
+            {
+                ViewBag.Title = "Customer - Create";
+                PickupRequestDAO doa = new PickupRequestDAO();
+                ViewBag.CustomerNo = doa.GetMaxCustomerCode(branchid);
+                obj.CustomerID = 0;
+                obj.RoleID = 13;
+                obj.CustomerType = "CS";
+                
+                obj.Password = doa.RandomPassword(6);
+                obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
+                obj.CurrenceyID = Convert.ToInt32(Session["CurrencyId"].ToString());
+            }
+            else
+            {
+                ViewBag.Title = "Customer - Modify";
+                obj = GetDetail(id);
+            }
+
             return View(obj);
         }
 
@@ -142,17 +154,28 @@ namespace LTMSV2.Controllers
             string locationname = c.LocationName;
             string country = c.CountryName;
             string city = c.CityName;
+
+
             CustomerMaster obj = new CustomerMaster();
             PickupRequestDAO _dao = new PickupRequestDAO();
-            int max = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerID).FirstOrDefault();
+            if (c.CustomerID == 0)
+            {
+                
+                int max = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerID).FirstOrDefault();
+                int accompanyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                obj.CustomerID = max + 1;
+                obj.AcCompanyID = accompanyid; 
+
+                obj.CustomerCode = c.CustomerCode; //  _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
+            }
+            else
+            {
+                obj = db.CustomerMasters.Find(c.CustomerID);
 
 
-            int accompanyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-            int branchid= Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            obj.CustomerID = max + 1;
-            obj.AcCompanyID = accompanyid;
 
-            obj.CustomerCode = c.CustomerCode; //  _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
+            }
             obj.CustomerName = c.CustomerName;
             obj.CustomerType = c.CustomerType;
 
@@ -263,9 +286,18 @@ namespace LTMSV2.Controllers
                 try
                 {
                   //  obj.UserID = u.UserID;
-
+                  if (obj.CustomerID>0)
+                {
+                    db.Entry(obj).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                else
+                {
                     db.CustomerMasters.Add(obj);
                     db.SaveChanges();
+                }
+                    
+                    
                     if (c.EmailNotify==true)
                     {
                         EmailDAO _emaildao = new EmailDAO();
@@ -490,7 +522,117 @@ namespace LTMSV2.Controllers
 
             return View(obj);
         }
+        public CustmorVM GetDetail(int id)
+        {
+            CustmorVM obj = new CustmorVM();
+            var c = (from d in db.CustomerMasters where d.CustomerID == id select d).FirstOrDefault();
+            UserRegistration u = new UserRegistration();
+            if (c.UserID != null)
+            {
+                //UserRegistration x = (from a in db.UserRegistrations where a.UserName == c.Email select a).FirstOrDefault();
+                UserRegistration x = (from a in db.UserRegistrations where a.UserID == c.UserID select a).FirstOrDefault();
 
+                if (x != null)
+                {
+                    if (x.RoleID != null)
+                        if (obj.RoleID == 0)
+                            obj.RoleID = 13;
+                        else
+                            obj.RoleID = Convert.ToInt32(x.RoleID);
+                }
+            }
+            obj.RoleID = 13;
+            obj.CustomerID = c.CustomerID;
+
+            if (c.AcCompanyID != null)
+                obj.AcCompanyID = c.AcCompanyID.Value;
+            else
+                obj.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+
+            obj.CustomerCode = c.CustomerCode;
+            obj.CustomerName = c.CustomerName;
+            obj.CustomerType = c.CustomerType;
+
+            obj.ReferenceCode = c.ReferenceCode;
+            obj.ContactPerson = c.ContactPerson;
+            obj.Address1 = c.Address1;
+            obj.Address2 = c.Address2;
+            obj.Address3 = c.Address3;
+            obj.Phone = c.Phone;
+            obj.Mobile = c.Mobile;
+            obj.Fax = c.Fax;
+            obj.Email = c.Email;
+            obj.Website = c.WebSite;
+
+            if (c.CountryID != null)
+                obj.CountryID = c.CountryID.Value;
+            if (c.CityID != null)
+                obj.CityID = c.CityID.Value;
+            if (c.LocationID != null)
+                obj.LocationID = c.LocationID.Value; 
+            obj.CountryName = c.CountryName;
+            obj.LocationName = c.LocationName;
+            obj.CityName = c.CityName;
+
+            if (c.CurrencyID != null)
+                obj.CurrenceyID = c.CurrencyID.Value;
+            else
+                obj.CurrenceyID = Convert.ToInt32(Session["CurrencyId"].ToString());
+
+            obj.StatusActive = c.StatusActive.Value;
+            if (c.CreditLimit != null)
+            { obj.CreditLimit = c.CreditLimit.Value; }
+            else
+            { obj.CreditLimit = 0; }
+            if (c.StatusTaxable != null)
+            { obj.StatusTaxable = c.StatusTaxable.Value; }
+            else
+            {
+                obj.StatusTaxable = false;
+            }
+
+            if (c.EmployeeID != null)
+                obj.EmployeeID = c.EmployeeID.Value;
+            if (c.statusCommission != null)
+            { obj.StatusCommission = c.statusCommission.Value; }
+            if (c.BusinessTypeId != null)
+            {
+                obj.BusinessTypeId = Convert.ToInt32(c.BusinessTypeId);
+            }
+            if (c.Referal != null)
+            { obj.Referal = c.Referal; }
+
+            obj.OfficeTimeFrom = c.OfficeOpenTime;
+            obj.OfficeTimeTo = c.OfficeCloseTime;
+
+            if (c.CourierServiceID != null)
+                obj.CourierServiceID = c.CourierServiceID.Value;
+
+            if (c.BranchID != null)
+            {
+                obj.BranchID = c.BranchID.Value;
+            }
+            obj.VATTRN = c.VATTRN;
+            int DepotID = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            obj.DepotID = DepotID;
+            obj.CustomerUsername = c.CustomerUsername;
+            obj.Password = c.Password;
+            if (c.UserID != null)
+            {
+                obj.UserID = c.UserID;
+            }
+
+            if (c.ApprovedBy == null || c.ApprovedBy == 0)
+            {
+                obj.ApprovedBy = Convert.ToInt32(Session["UserID"]);
+                obj.ApprovedUserName = Convert.ToString(Session["UserName"]);
+            }
+
+            return obj;
+
+
+
+        }
         //
         // POST: /CustomerMaster/Edit/5
         [HttpPost]

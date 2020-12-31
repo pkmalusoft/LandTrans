@@ -54,9 +54,9 @@ namespace LTMSV2.Controllers
         {
             tblPackages o = new tblPackages();
             List<tblPackages> list = new tblPackages().GetPackages(o);
-            if (!String.IsNullOrEmpty(term))
+            if (!String.IsNullOrEmpty(term.Trim()))
             {
-                List<PackageVM> itemlist = (from c in list  where c.PackageDescription.ToLower().StartsWith(term.ToLower()) orderby c.PackageDescription select new PackageVM { PackageID = c.PackageID, PackageName = c.PackageDescription  }).ToList();
+                List<PackageVM> itemlist = (from c in list  where c.PackageDescription.ToLower().Contains(term.ToLower()) orderby c.PackageDescription select new PackageVM { PackageID = c.PackageID, PackageName = c.PackageDescription  }).ToList();
                                 
                 return Json(itemlist, JsonRequestBehavior.AllowGet);
 

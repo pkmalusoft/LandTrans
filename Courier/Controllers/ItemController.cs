@@ -56,9 +56,9 @@ namespace LTMSV2.Controllers
         public ActionResult GetItemMasterData(string term)
         {
             
-            if (!String.IsNullOrEmpty(term))
+            if (!String.IsNullOrEmpty(term.Trim()))
             {                
-                List<ItemMasterVM> itemlist= (from c in db.ItemMasters where c.ItemName.ToLower().StartsWith(term.ToLower()) orderby c.ItemName select new ItemMasterVM { ItemID = c.ItemID, ItemName=c.ItemName}).ToList();
+                List<ItemMasterVM> itemlist= (from c in db.ItemMasters where c.ItemName.ToLower().Contains(term.Trim().ToLower()) orderby c.ItemName select new ItemMasterVM { ItemID = c.ItemID, ItemName=c.ItemName}).ToList();
 
                 
                 return Json(itemlist, JsonRequestBehavior.AllowGet);

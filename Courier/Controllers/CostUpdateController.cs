@@ -82,6 +82,7 @@ namespace LTMSV2.Controllers
             }
             else
             {
+                ViewBag.Title = "Cost Update - Modify";
                 CostUpdateMaster v = db.CostUpdateMasters.Find(id);
                 vm.ID = v.ID;
                 vm.EntryDate = v.EntryDate;
@@ -238,13 +239,13 @@ namespace LTMSV2.Controllers
             return Json(new { data=list }, JsonRequestBehavior.AllowGet);
 
         }
-        public ActionResult RevenueCost(string term)
+        public ActionResult CostComponent(string term)
         {
             int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            if (!String.IsNullOrEmpty(term))
+            if (!String.IsNullOrEmpty(term.Trim()))
             {
                 List<RevenueCostMasterVM> list = new List<RevenueCostMasterVM>();
-                list = (from c in db.RevenueCostMasters join a in db.AcHeads on c.RevenueAcHeadID equals a.AcHeadID  where c.RevenueComponent.ToLower().StartsWith(term.ToLower()) orderby c.RevenueComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.RevenueComponent ,RevenueAcHeadID=c.RevenueAcHeadID , RevenueHeadName =a.AcHead1}).ToList();
+                list = (from c in db.RevenueCostMasters join a in db.AcHeads on c.RevenueAcHeadID equals a.AcHeadID  where c.RevenueComponent.ToLower().StartsWith(term.ToLower()) orderby c.CostComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.CostComponent ,RevenueAcHeadID=c.CostAcHeadID , RevenueHeadName =a.AcHead1}).ToList();
 
                 return Json(list, JsonRequestBehavior.AllowGet);
 
@@ -253,7 +254,8 @@ namespace LTMSV2.Controllers
             else
             {
                 List<RevenueCostMasterVM> list = new List<RevenueCostMasterVM>();
-                list = (from c in db.RevenueCostMasters orderby c.RevenueComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.RevenueComponent }).ToList();
+                list = (from c in db.RevenueCostMasters join a in db.AcHeads on c.RevenueAcHeadID equals a.AcHeadID orderby c.CostComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.CostComponent, RevenueAcHeadID = c.CostAcHeadID, RevenueHeadName = a.AcHead1 }).ToList();
+                //list = (from c in db.RevenueCostMasters orderby c.CostComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.CostComponent }).ToList();
                 return Json(list, JsonRequestBehavior.AllowGet);
             }
         }

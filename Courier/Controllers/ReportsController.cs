@@ -128,7 +128,7 @@ namespace LTMSV2.Controllers
                 reportparam = new AWBReportParam();
                 reportparam.FromDate = pFromDate;
                 reportparam.ToDate = pToDate;
-                reportparam.ParcelTypeId = 0;
+                reportparam.ParcelTypeId ="1,2";
                 reportparam.PaymentModeId= 0;
                 reportparam.MovementId = "1,2,3,4";
                 reportparam.Output = "PDF";
@@ -152,15 +152,20 @@ namespace LTMSV2.Controllers
 
             SessionDataModel.SetAWBReportParam(reportparam);
             ViewBag.PaymentMode = db.tblPaymentModes.ToList();
-            ViewBag.parceltype = db.ParcelTypes.ToList();
-            ViewBag.Movement = db.CourierMovements.ToList();
+            List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
+            //lsttype.Add(new VoucherTypeVM { TypeName = "All" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });
+
+            ViewBag.InvoiceTo = lsttype;
+            //ViewBag.Movement = db.CourierMovements.ToList();
             return View(reportparam);
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AWBReportParam([Bind(Include = "FromDate,ToDate,PaymentModeId,SelectedValues,MovementId,ParcelTypeId,Output,ReportType,SortBy")] AWBReportParam picker)
+        public ActionResult AWBReportParam([Bind(Include = "FromDate,ToDate,PaymentModeId,SelectedValues,MovementId,ParcelTypeId,Output,ReportType,SortBy,InvoicedTo")] AWBReportParam picker)
         {
             AWBReportParam model = new AWBReportParam
             {
@@ -171,21 +176,22 @@ namespace LTMSV2.Controllers
                 MovementId =picker.MovementId,
                 Output = picker.Output,
                 ReportType=picker.ReportType,
-                SortBy =picker.SortBy
-                
+                SortBy =picker.SortBy,
+                InvoicedTo=picker.InvoicedTo
+
             };
             model.MovementId = "";
             if (picker.SelectedValues != null)
             {
                 foreach (var item in picker.SelectedValues)
                 {
-                    if (model.MovementId == "")
+                    if (model.ParcelTypeId == "")
                     {
-                        model.MovementId = item.ToString();
+                        model.ParcelTypeId = item.ToString();
                     }
                     else
                     {
-                        model.MovementId = model.MovementId + "," + item.ToString();
+                        model.ParcelTypeId = model.ParcelTypeId + "," + item.ToString();
                     }
 
                 }
@@ -194,7 +200,7 @@ namespace LTMSV2.Controllers
             ViewBag.Token = model;
             SessionDataModel.SetAWBReportParam(model);
 
-            AccountsReportsDAO.GenerateAWBRegister();
+            AccountsReportsDAO.GenerateConsignmentRegister();
             return RedirectToAction("AWBRegister", "Reports");
 
 

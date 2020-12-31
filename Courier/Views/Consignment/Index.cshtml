@@ -342,11 +342,8 @@
                             @Html.Label("Receiver/Consignee")
                         </th>
                         <th width="3%" class="tdphone">
-                            Phone No.
-                        </th>
-                        <th width="15%">
-                            @Html.Label("Destination")
-                        </th>
+                            Invoice To
+                        </th>                       
                         <th>
                             @Html.Label("Payment Mode")
                         </th>
@@ -375,9 +372,7 @@
                         <th>
 
                         </th>
-                        <th>
-
-                        </th>
+                      
                         <th>
 
                         </th>
@@ -410,17 +405,18 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.shippername)
+                                @Html.DisplayFor(modelItem => item.ConsignorCountryName)
+                                @Html.DisplayFor(modelItem => item.ConsignorPhone)
                             </td>
 
                             <td>
                                 @Html.DisplayFor(modelItem => item.consigneename)
-                            </td>
-                            <td class="tdphone">
+                                @Html.DisplayFor(modelItem => item.ConsigneeCountryName)
                                 @Html.DisplayFor(modelItem => item.ConsigneePhone)
                             </td>
-                            <td class="textright">
-                                @Html.DisplayFor(modelItem => item.destination)
-                            </td>
+                            <td class="tdphone">
+                                @Html.DisplayFor(modelItem => item.InvoiceTo)
+                            </td>                            
                             <td>
                                 @Html.DisplayFor(modelItem => item.paymentmode)
                             </td>

@@ -111,5 +111,6 @@ namespace LTMSV2.Models
         public Nullable<int> ConsigneeLocationID { get; set; }
         public Nullable<int> ConsigneeCountryID { get; set; }
         public Nullable<int> ConsigneeCityID { get; set; }
+        public string InvoiceTo { get; set; }
     }
 }

@@ -33,7 +33,7 @@
     $(document).ready(function () {
         $.ajax({
             type: "Get",
-            url: "/CustomerInvoice/GetCourierType",
+            url: "/CustomerInvoice/GetParcelType",
             datatype: "Json",
             success: function (response) {
 
@@ -46,7 +46,7 @@
                     var flag = 0;
                     for (var j = 0; j < o_st.length; j++) {
 
-                        if (o_st[j] == value.MovementID) {
+                        if (o_st[j] == value.ParcelTypeID) {
                             flag = 1;
                             break;
                         }
@@ -54,10 +54,10 @@
                     }
 
                     if (flag == 1) {
-                        $('#movementid').append('<option value="' + value.MovementID + '" selected=true>' + value.MovementType + '</option>');
+                        $('#movementid').append('<option value="' + value.ParcelTypeID + '" selected=true>' + value.ParcelType1 + '</option>');
                     }
                     else {
-                        $('#movementid').append('<option value="' + value.MovementID + '">' + value.MovementType + '</option>');
+                        $('#movementid').append('<option value="' + value.ParcelTypeID + '">' + value.ParcelType1 + '</option>');
                     }
 
                 });
@@ -172,7 +172,7 @@
         @Html.HiddenFor(model => model.MovementId)
         @Html.HiddenFor(model => model.SortBy)
         @Html.HiddenFor(model => model.ReportType)
-        <label class="headinglabel">Courier Type</label> <br />
+        <label class="headinglabel">Load Type</label> <br />
         <select id="movementid" name="SelectedValues" multiple="multiple">
             <option value=""></option>
         </select>
@@ -182,8 +182,8 @@
     </div>
     <div class="row no-margin " style="padding-top:10px">
     <div class="col-md-4">
-        <label class="headinglabel required">Parcel Type</label>
-        @Html.DropDownListFor(model => model.ParcelTypeId, new SelectList(@ViewBag.parceltype, "ID", "ParcelType1"), "All", new { @class = "form-control" })
+        <label class="headinglabel required">Invoice To</label>
+        @Html.DropDownListFor(model => model.InvoicedTo, new SelectList(@ViewBag.InvoiceTo, "TypeName", "TypeName"), "All", new { @class = "form-control" })
     </div>
     <div class="col-md-4">
         <label class="headinglabel">Payment Mode</label>
@@ -195,8 +195,8 @@
         @Html.DropDownList("GroupBy", new List<SelectListItem>
         {
             //new SelectListItem{ Text="Select",Value = "" },            
-            new SelectListItem{ Text="Movement Type", Value = "Movement" },
-            new SelectListItem{ Text="Parcel Type", Value = "ParcelType" },
+            new SelectListItem{ Text="Invoice To", Value = "InvoiceTo" },
+            new SelectListItem{ Text="Load Type", Value = "ParcelType" },
             new SelectListItem{ Text="PaymentMode", Value = "PaymentMode" },
             new SelectListItem{ Text="Courier Type", Value = "Summary" },
 

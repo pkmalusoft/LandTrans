@@ -67,6 +67,7 @@ namespace LTMSV2.Controllers
         {
             ViewBag.Branch = db.BranchMasters.ToList();
             ViewBag.VehicleType = db.VehicleTypes.ToList();
+            
             ViewBag.SupplierType = db.SupplierTypes.ToList();
             ViewBag.Achead = db.AcHeads.ToList();
             VehiclesVM v = new VehiclesVM();

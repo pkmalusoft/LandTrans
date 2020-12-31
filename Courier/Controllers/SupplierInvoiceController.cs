@@ -147,6 +147,8 @@ namespace LTMSV2.Controllers
         {
             try
             {
+                var IDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceDetailVM>>(Details);
+
                 var Supplierinvoice = (from d in db.SupplierInvoices where d.SupplierInvoiceID == Id select d).FirstOrDefault();
                 if (Supplierinvoice == null)
                 {
@@ -163,14 +165,15 @@ namespace LTMSV2.Controllers
                 Supplierinvoice.InvoiceNo = InvoiceNo;
                 Supplierinvoice.AccompanyID = Convert.ToInt32(Session["CurrentCompanyID"]); 
                 Supplierinvoice.BranchId = Convert.ToInt32(Session["CurrentBranchID"]); 
-                Supplierinvoice.FyearID = Convert.ToInt32(Session["fyearid"]); 
-
+                Supplierinvoice.FyearID = Convert.ToInt32(Session["fyearid"]);
+                Supplierinvoice.InvoiceTotal = IDetails.Sum(d => d.Amount);
+                Supplierinvoice.StatusClose = false;
+                Supplierinvoice.IsDeleted = false;
                 if (Supplierinvoice.SupplierInvoiceID == 0)
                 {
                     db.SupplierInvoices.Add(Supplierinvoice);
                 }
                 db.SaveChanges();
-                var IDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceDetailVM>>(Details);
                 foreach (var item in IDetails)
                 {
                     var InvoiceDetail = new SupplierInvoiceDetail();
@@ -198,13 +201,14 @@ namespace LTMSV2.Controllers
         }
         public ActionResult Delete (int id)
         {
+            var details = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == id select d).ToList();
+            db.SupplierInvoiceDetails.RemoveRange(details);
+            db.SaveChanges();
             SupplierInvoice invoice = (from d in db.SupplierInvoices where d.SupplierInvoiceID == id select d).FirstOrDefault();
             //invoice.SupplierInvoiceDetails = null;
             db.SupplierInvoices.Remove(invoice);
             db.SaveChanges();
-            var details = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == id select d).ToList();
-            db.SupplierInvoiceDetails.RemoveRange(details);
-            db.SaveChanges();
+           
             TempData["SuccessMsg"] = "You have successfully Deleted Supplier Invoice.";
             return RedirectToAction("Index");
         }
