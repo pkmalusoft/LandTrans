@@ -78,7 +78,7 @@ namespace LTMSV2.Controllers
         public ActionResult GetTripRouteData(string term, string TripDate)
         {
 
-            if (!String.IsNullOrEmpty(term) && TripDate != "")
+            if (!String.IsNullOrEmpty(term.Trim()) && TripDate != "")
             {
                 DateTime pFromDate;
                 pFromDate = Convert.ToDateTime(TripDate);
@@ -86,7 +86,7 @@ namespace LTMSV2.Controllers
 
                 List<RouteMasterVM> itemlist = (from c in db.RouteMasters
                                                 join truck in db.TruckDetails on c.RouteID equals truck.RouteID
-                                                where c.RouteName.ToLower().StartsWith(term.ToLower()) && truck.TDDate >= pFromDate && truck.TDDate <= toDate && truck.VehicleType.Trim()!="F"
+                                                where c.RouteName.ToLower().Contains(term.ToLower()) && truck.TDDate >= pFromDate && truck.TDDate <= toDate && truck.VehicleType.Trim()!="F"
                                                 orderby c.RouteName
                                                 select new RouteMasterVM { RouteID = c.RouteID, RouteName = c.RouteName }).ToList();
                
@@ -118,9 +118,9 @@ namespace LTMSV2.Controllers
                                             where c.TDDate >= pFromDate && c.TDDate <= toDate && c.RouteID == RouteId
                                             orderby c.RegNo
                                             select new VehicleVM { VehicleID = c.VehicleID, VehicleDescription = c.RegNo+" - "+c.DriverName }).ToList();
-                if (!String.IsNullOrEmpty(term))
+                if (!String.IsNullOrEmpty(term.Trim()))
                 {
-                    itemlist = itemlist.Where(d => d.VehicleDescription.ToLower().Contains(term.ToLower())).ToList();
+                    itemlist = itemlist.Where(d => d.VehicleDescription.ToLower().Contains(term.Trim().ToLower())).ToList();
                 }
 
                 itemlist = itemlist.GroupBy(d => d.VehicleID).Select(g => g.First()).ToList();

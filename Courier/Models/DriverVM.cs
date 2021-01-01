@@ -7,6 +7,7 @@ namespace LTMSV2.Models
 {
     public class DriverVM :DriverMaster
     {
+        public string RegNo { get; set; }
 
     }
 }

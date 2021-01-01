@@ -168,8 +168,8 @@
     <div class="col-md-3" style="padding-top:30px">
         <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("AccessRights", "MenuRole")?id=' + $('#RoleId').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>        
     </div>
-    <div class="cold-md-9" style="padding-top:30px">
-        <input type="button" value="Save" id="btnsave" disabled class="btn btn-primary btnwidth " />&nbsp;&nbsp;
+    <div class="cold-md-6 text-right" style="padding-top:30px">
+        <input type="button" value="Save" id="btnsave"  class="btn btn-primary btnwidth " />&nbsp;&nbsp;
         <a class="btn btn-danger btnwidth float-right" id="btncancel"  href="Javascript:void(0)" style="" onclick="location.href='@Url.Action("AccessRights", "MenuRole")?id=' + $('#RoleId').val()">Cancel</a>
         @*@Html.ActionLink("Cancel", "AccessRights", null, new { @class = "btn btn-danger btnwidth float-right" })*@
     </div>

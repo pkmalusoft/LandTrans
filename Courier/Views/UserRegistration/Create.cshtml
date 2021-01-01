@@ -269,7 +269,7 @@
                       });
         </script>
     }
-
+    <div class="searchdiv sm-width">
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
@@ -279,7 +279,7 @@
 
             <div class="row no-margin">
 
-                <div class="col-md-6">
+                <div class="col-md-12">
 
                     @Html.HiddenFor(model => model.UserReferenceId)
                     @Html.HiddenFor(model => model.UserID)
@@ -294,8 +294,8 @@
 
 
             </div>
-            <div class="row no-margin" style="padding-top:10px">
-                <div class="col-md-6">
+            <div class="row no-margin" >
+                <div class="col-md-12">
 
                     <label class="required headinglabel" id="lblusername">User Name</label>
                     @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
@@ -303,22 +303,22 @@
                 </div>
             </div>
 
-            <div class="row no-margin" style="padding-top:10px">
-                <div class="col-md-6">
+            <div class="row no-margin">
+                <div class="col-md-12">
                     <label class="required headinglabel">Email</label>
                     @Html.TextBoxFor(model => model.EmailId, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.EmailId)
                 </div>
             </div>
-            <div class="row no-margin" style="padding-top:10px">
+            <div class="row no-margin" >
 
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <label class="required headinglabel">Password <a id="apassshow">Show</a> </label>
                     <input type="text" id="txtpass" value="@Model.Password" class="form-control hide" />
                     @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Password)
                 </div>
-                <div class="col-md-6" style="padding-top:40px">
+                <div class="col-md-4" style="padding-top:40px">
                     <a href="javascript:void(0);" onclick="getpassword();" id="btngenerate">Generate Password</a>
                 </div>
                 @*<div class="col-md-3">
@@ -329,16 +329,16 @@
 
 
             </div>
-            <div class="row no-margin" style="padding-top:10px">
-                <div class="col-md-4 checkboxdesign" style="padding-top:20px">
+            <div class="row no-margin" >
+                <div class="col-md-12 checkboxdesign verticalcheckbox" style="padding-top:20px">
 
                     @Html.CheckBox("EmailNotify", new { @name = "EmailSend" }) &nbsp <label class="headinglabel">Send Notification to user by Email</label>
                     @Html.ValidationMessageFor(model => model.EmailNotify)
 
                 </div>
             </div>
-            <div class="row no-margin" style="padding-top:10px">
-                <div class="col-md-6 checkboxdesign">
+            <div class="row no-margin" >
+                <div class="col-md-12 checkboxdesign verticalcheckbox">
 
                     @Html.CheckBox("IsActive", new { @name = "StatusActive" }) &nbsp <label class="headinglabel">Is Active</label>
                     @Html.ValidationMessageFor(model => model.IsActive)
@@ -356,7 +356,7 @@
 
         </fieldset>
     }
-
+</div>
 </section>
 
 @*@section Scripts {

@@ -521,7 +521,7 @@
                 </div>
             </div>
             <div class="row no-margin">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     @Html.HiddenFor(model => model.ID, new { })
                     @Html.HiddenFor(model => model.ConsignorId, new { })
                     @Html.HiddenFor(model => model.ConsignorName, new { })
@@ -534,18 +534,18 @@
                     @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.EntryDate)
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="headinglabel required">Entered By</label>
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="headinglabel required">Consignment No.</label>
                     @Html.DropDownListFor(model => model.InScanID, new SelectList(@ViewBag.Consignment, "InScanID", "ConsignmentNo"), "Select", new { @class = "form-control" })
                     @*@Html.TextBoxFor(model => model.ConsignmentNo, new { @class = "form-control" })*@
                 </div>
             </div>
 
-            <div class="row no-margin">
+            <div class="col-md-12 sub_title_block">
                 <h4 style="color:#0094ff">Add Cost Details</h4>
                 <hr style="margin-bottom:0px" />
             </div>

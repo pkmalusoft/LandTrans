@@ -704,20 +704,25 @@
                     @Html.DropDownListFor(model => model.BusinessTypeId, new SelectList(@ViewBag.businessType, "Id", "BusinessType1"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.BusinessTypeId)
                 </div>
-                <div class="col-md-2 checkboxdesign" style="padding-top: 30px">
+                <div class="col-md-2 checkboxdesign" style="padding-top: 30px; display: none">
                     @Html.CheckBox("StatusCommission", new { @name = "StatusCommission" }) &nbsp
                     <label class="headinglabel">Allow Commission To Courier</label>
                     @Html.ValidationMessageFor(model => model.StatusCommission)
                 </div>
-                <div class="col-md-2 checkboxdesign" style="padding-top:30px">
+                <div class="col-md-2 checkboxdesign" style="padding-top:30px; display: none">
                     @Html.CheckBox("StatusTaxable", new { @name = "StatusTaxable" }) &nbsp
                     <label class="headinglabel">Taxable</label>
                     @Html.ValidationMessageFor(model => model.StatusTaxable)
                 </div>
-                <div class="col-md-2 checkboxdesign" style="padding-top: 30px">
+                <div class="col-md-3 checkboxdesign justify-center" style="padding-top: 30px">
                     @Html.CheckBox("StatusActive", new { @name = "StatusActive", @checked = "checked" }) &nbsp
                     <label class="headinglabel">Active</label>
                     @Html.ValidationMessageFor(model => model.StatusActive)
+                </div>
+                 <div class="col-md-3 checkboxdesign justify-center" style="padding-top: 30px">
+                    @Html.CheckBox("EmailNotify", new { @name = "EmailNotify" }) &nbsp
+                    <label class="headinglabel">Email Notification to Customer</label>
+                    @Html.ValidationMessageFor(model => model.EmailNotify)
                 </div>
             </div>
             <div class="row no-margin" style="padding-top: 10px">
@@ -727,23 +732,20 @@
                     @Html.ValidationMessageFor(model => model.DepotID)
 
                 </div>
-                <div class="col-md-3 checkboxdesign" style="padding-top: 30px">
-                    @Html.CheckBox("EmailNotify", new { @name = "EmailNotify" }) &nbsp
-                    <label class="headinglabel">Email Notification to Customer</label>
-                    @Html.ValidationMessageFor(model => model.EmailNotify)
-                </div>
-                <div class="col-md-3" style="padding-top: 20px">
-
-
-
-                </div>
+               
+               
             </div>
-            <div class="row no-margin hide" style="padding-top: 10px;border:1px solid #dedede;" id="divApprove">
-                <div class="col-md-3 checkboxdesign" style="padding-top:30px">
+
+            <div class="col-md-6">
+                <div class="row no-margin">
+            <div class="col-md-12 checkboxdesign" style="padding-bottom: 10px">
                     @Html.CheckBox("ChkApprovedBy", new { @name = "ChkApprovedBy", @id = "btnApprove" }) &nbsp
                     <label class="headinglabel">Approve Customer</label>
                 </div>
-                <div class="col-md-3">
+            </div>
+            <div class="row no-margin hide" style="padding: 30px;border:1px solid #dedede;" id="divApprove">
+                
+                <div class="col-md-12">
                     <label class="headinglabel">Approved By</label>
                     <input type="text" class="form-control" id="txtApprovedBy" value="" readonly />
                     @Html.HiddenFor(model => model.ApprovedBy)
@@ -752,12 +754,13 @@
                     
                 </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-12">
                         <label class="headinglabel">Approved On</label>
                         <input type="text" class="form-control" id="txtApprovedOn" value="" readonly />
                     </div>
 
                 </div>
+            </div>
                 <div class="row no-margin" style="padding-top: 10px">
                     <div class="col-md-12 btn-right">
                         <input type="submit" value="Save" class="btn btn-primary btnwidth" id="btnsave" />&nbsp;&nbsp;<a href='@Url.Action("Index", "CustomerMaster", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>

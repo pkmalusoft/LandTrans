@@ -96,14 +96,14 @@ namespace LTMSV2.Controllers
 
         #endregion
 
-        #region "AWBRegister"
+        #region "ConsignmentRegister"
         public ActionResult AWBRegister()
         {
-            ViewBag.ReportName = "AirWay Bill Register";
+            ViewBag.ReportName = "Consignment Note Register";
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("AWBRegister_"))
+                if (!currentreport.Contains("ConsignmentRegister_"))
                 {
                     Session["ReportOutput"] = null;
                 }

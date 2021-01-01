@@ -138,6 +138,7 @@ namespace LTMSV2.Controllers
                 vm1.ReceiptNo = _dao.GetTDSReceiptNo(companyId,branchid);
                 vm1.VehicleType = "H";
                 vm1.CurrencyIDRent = Convert.ToInt32(Session["CurrencyId"].ToString());
+                vm1.PaymentCurrencyID = Convert.ToInt32(Session["CurrencyId"].ToString());
 
                 List<TruckDetailOtherChargeVM> otherchargesvm = new List<TruckDetailOtherChargeVM>();
                 vm1.otherchargesVM = otherchargesvm;
@@ -256,7 +257,11 @@ namespace LTMSV2.Controllers
                 }
 
                 TruckDetail.TDDate = Convert.ToDateTime(data.TDDate);
-                if (TruckDetail.StatusPaymentMode == "B")
+                if (data.StatusPaymentMode != null)
+                    TruckDetail.StatusPaymentMode = Convert.ToString(data.StatusPaymentMode);
+                else
+                    TruckDetail.StatusPaymentMode = "N";
+                if (TruckDetail.StatusPaymentMode.Trim() == "B")
                 {
                     if (data.ChequeNo != null)
                         TruckDetail.ChequeNo = Convert.ToString(data.ChequeNo);
@@ -283,9 +288,8 @@ namespace LTMSV2.Controllers
                 //TruckDetail.CurrencyRent = Convert.ToDecimal(data.CurrencyRent);
                 TruckDetail.RentAcHeadID = Convert.ToInt32(data.RentAcHeadID);
                 TruckDetail.TDRemarks = Convert.ToString(data.TDRemarks);
-                if (data.StatusPaymentMode!=null)
-                TruckDetail.StatusPaymentMode = Convert.ToString(data.StatusPaymentMode);
-                if (TruckDetail.StatusPaymentMode == "C" || TruckDetail.StatusPaymentMode == "B")
+                
+                if (TruckDetail.StatusPaymentMode.Trim() == "C" || TruckDetail.StatusPaymentMode.Trim() == "B")
                 {
                     TruckDetail.PaymentHeadID = Convert.ToInt32(data.PaymentHeadID);
                     TruckDetail.TDcontrolAcHeadID = Convert.ToInt32(data.TDcontrolAcHeadID);

@@ -379,31 +379,39 @@
         <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
         <fieldset>
             <div class="row no-margin  form-group">
-                <div class="col-md-1">
+                <!-- <div class="col-md-1">
                     <label class="headinglabel">Type</label>
 
-                </div>
-                <div class="col-md-8">
+                </div> -->
+                <div class="col-md-12 col-md-12 form-group bg-info pageTabs d-flex">
+                    <div class="field checkboxdesign verticalcheckbox">
                     <input type="radio" id="Customer" name="Type" value="C" checked="checked">
-                    <label for="Customer">Customers  </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="Customer" class="headinglabel ">Customers  </label>
+                </div>
+                <div class="field checkboxdesign verticalcheckbox">
                     <input type="radio" id="FwdAgent" name="Type" value="F">
-                    <label for="FwdAgent">Forwarding Agents  </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="FwdAgent" class="headinglabel ">Forwarding Agents  </label>
+                </div>
+                <div class="field checkboxdesign verticalcheckbox">
                     <input type="radio" id="HireVehicle" name="Type" value="H">
-                    <label for="HireVehicle">Hired Drivers  </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="HireVehicle" class="headinglabel ">Hired Drivers  </label>
+                </div>
+                <div class="field checkboxdesign verticalcheckbox">
                     <input type="radio" id="Supplier" name="Type" value="S">
-                    <label for="Supplier">Sundry Supplier  </label>
+                    <label for="Supplier" class="headinglabel ">Sundry Supplier  </label>
                 </div>
-                <div class="col-md-1">
-                    <label>Opening Date  </label>
                 </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" value="@ViewBag.Opdate">
-                </div>
+                
             </div>
             <br />
             <div class="row no-margin form-group" id="divCustomers">
-
-
+                <div class="col-md-7">
+                <div class="col-md-2">
+                    <label class="headinglabel ">Opening Date  </label>
+                </div>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" value="@ViewBag.Opdate">
+                </div>
                 <div class="col-md-2">
                     <label class="headinglabel required">Customers</label>
                 </div>
@@ -414,7 +422,6 @@
                 </div>
 
 
-            </div>
            
             <div class="row no-margin form-group" id="divSuppliers" style="display:none">
 
@@ -439,7 +446,8 @@
                     @Html.HiddenFor(model => model.Remarks)
                 </div>
             </div>
-
+</div>
+</div>
 
             <div class="row no-margin form-group">
                 <div class="col-md-12">

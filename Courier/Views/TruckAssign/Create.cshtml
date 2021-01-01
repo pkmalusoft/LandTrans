@@ -49,6 +49,7 @@
             autoFocus: false,
             focus: function (event, ui) {
                 $('#RouteName').val(ui.item.value);
+                $("#RouteID").val(ui.item.ItemID);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -80,6 +81,7 @@
             autoFocus: false,
             focus: function (event, ui) {
                 $('#VechicleName').val(ui.item.value);
+                $("#VehicleID").val(ui.item.ItemID);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -406,18 +408,18 @@
         <fieldset>
             <div class="row no-margin">
 
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="headinglabel required">Trip Date</label>
                     @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.TDDate)
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="headinglabel required">Route</label>
                     @Html.TextBoxFor(model => model.RouteName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Route Name" })
                     @Html.HiddenFor(model => model.RouteID)
                 </div>
-                <div class="col-md-3">
-                    <label class="headinglabel required">Vechile</label>
+                <div class="col-md-4">
+                    <label class="headinglabel required">Vehicle</label>
                     @Html.TextBoxFor(model => model.VechicleName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Vechile Name - Driver Name" })
                     @Html.HiddenFor(model => model.VehicleID)
                 </div>

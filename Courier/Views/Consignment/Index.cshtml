@@ -261,7 +261,7 @@
 
     </script>
     <section class="content-header">
-        <h1 class="headingfont">Consignments</h1>
+        <h1 class="headingfont">Consignment</h1>
 
     </section>
 
@@ -330,7 +330,7 @@
                 <thead>
                     <tr>
                         <th width="8%">
-                            Consignment No.
+                            CN. Note.
                         </th>
                         <th width="8%">
                             @Html.Label("Transaction Date")
@@ -340,6 +340,9 @@
                         </th>
                         <th width="15%">
                             @Html.Label("Receiver/Consignee")
+                        </th>
+                        <th>
+                            @Html.Label("Parcel Type")
                         </th>
                         <th width="3%" class="tdphone">
                             Invoice To
@@ -370,9 +373,11 @@
 
                         </th>
                         <th>
-
                         </th>
-                      
+
+                        <th>
+                        </th>
+
                         <th>
 
                         </th>
@@ -404,17 +409,20 @@
                                 @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.InScanDate)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.shippername)
-                                @Html.DisplayFor(modelItem => item.ConsignorCountryName)
+                                @Html.DisplayFor(modelItem => item.shippername)<br />
+                                @Html.DisplayFor(modelItem => item.ConsignorCountryName)<br />
                                 @Html.DisplayFor(modelItem => item.ConsignorPhone)
                             </td>
 
                             <td>
-                                @Html.DisplayFor(modelItem => item.consigneename)
-                                @Html.DisplayFor(modelItem => item.ConsigneeCountryName)
+                                @Html.DisplayFor(modelItem => item.consigneename) <br />
+                                @Html.DisplayFor(modelItem => item.ConsigneeCountryName)<br />
                                 @Html.DisplayFor(modelItem => item.ConsigneePhone)
                             </td>
-                            <td class="tdphone">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PackageName)
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.InvoiceTo)
                             </td>                            
                             <td>

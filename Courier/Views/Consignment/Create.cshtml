@@ -1,6 +1,6 @@
 ﻿@model LTMSV2.Models.QuickAWBVM
 @{
-    ViewBag.Title = "Create";
+    
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());
     var _mindate = @LTMSV2.Models.CommanFunctions.GetMinFinancialDate(); //'2020/01/01',
@@ -1697,7 +1697,7 @@
 <section class="content-header">
     <div class="row">
         <div class="col-md-5 pull-left">
-            <h1 class="headingfont">Consignment  - Create</h1>
+            <h1 class="headingfont">@ViewBag.Title</h1>
         </div>
         <div class="col-md-5 pull-right text-right">
             <h2 class="awb" id="h2awb"><strong>@ViewBag.AWBNo</strong></h2>
@@ -1748,14 +1748,14 @@
 
 
 <section class="content">
-    @if (TempData["ShowLabelPrint"] != null)
+    @*@if (TempData["ShowLabelPrint"] != null)
     {
         <script type="text/javascript">
                   $(document).ready(function () {
                       ShowLabelPrinting();
                  });
         </script>
-    }
+    }*@
     @using (Html.BeginForm("Create", "Consignment", FormMethod.Post, new { @id = "quickAWB" }))
     {
         @Html.AntiForgeryToken()
@@ -1807,8 +1807,8 @@
                 @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
             </div>
             <div class="col-md-2">
-                <label class="headinglabel required">Invoice To</label>
-                @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "Select", new { @class = "form-control", @id = "InvoiceTo" })
+                <label class="headinglabel">Invoice To</label>
+                @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "", new { @class = "form-control", @id = "InvoiceTo" })
                 
             </div>
             <div class="col-md-4 hide">
@@ -1853,30 +1853,30 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="headinglabel required">Contact Person</label>
-                            @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @required = "true", @placeholder = "Contact Person" })
+                            <label class="headinglabel">Contact Person</label>
+                            @Html.TextBoxFor(model => model.ConsignorContact, new { @class = "form-control txttarget", @placeholder = "Contact Person" })
                             @Html.ValidationMessageFor(model => model.ConsignorContact, "", new { @class = "text-danger", @placeholder = "Contact Person" })
                         </div>
                     </div>
                     <div class="row no-margin" id="divcustomer2">
 
                         <div class="col-md-3">
-                            <label class="headinglabel required">Telephone No</label>
-                            @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control textright", @required = "true", @placeholder = "Telephone" })
+                            <label class="headinglabel">Phone No.</label>
+                            @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control textright",  @placeholder = "Telephone" })
                         </div>
 
                         <div class="col-md-3">
-                            <label class="headinglabel required">Flat/Building</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress1_Building, new { @class = "form-control txttarget", @required = "true", @placeholder = "Flat/Building" })
+                            <label class="headinglabel">Flat/Building</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress1_Building, new { @class = "form-control txttarget", @placeholder = "Flat/Building" })
                         </div>
 
                         <div class="col-md-3">
-                            <label class="headinglabel required">Street</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress2_Street, new { @class = "form-control txttarget", @required = "true", @placeholder = "Street" })
+                            <label class="headinglabel">Street</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress2_Street, new { @class = "form-control txttarget", @placeholder = "Street" })
                         </div>
                         <div class="col-md-3">
-                            <label class="headinglabel required">Pincode</label>
-                            @Html.TextBoxFor(model => model.ConsignorAddress3_PinCode, new { @class = "form-control text-right txttarget", @required = "true", @placeholder = "PinCode" })
+                            <label class="headinglabel">Pincode</label>
+                            @Html.TextBoxFor(model => model.ConsignorAddress3_PinCode, new { @class = "form-control text-right txttarget", @placeholder = "PinCode" })
                         </div>
                     </div>
                     <div class="row no-margin" id="divcustomer3">
@@ -1916,11 +1916,11 @@
                     <div class="row no-margin">
                         <div class="col-md-6">
                             <label class="headinglabel required">Name</label>
-                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control", @required = "true", @autocomplete = "false" })
+                            @Html.TextBoxFor(model => model.Consignee, new { @class = "form-control", @required = "true", @autocomplete = false })
                         </div>
                         <div class="col-md-6">
-                            <label class="headinglabel required">Contact Person</label>
-                            @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget", @required = "true" })
+                            <label class="headinglabel">Contact Person</label>
+                            @Html.TextBoxFor(model => model.ConsigneeContact, new { @class = "form-control txttarget" })
                         </div>
                     </div>
                     <div class="row no-margin">
@@ -1928,12 +1928,12 @@
 
 
                         <div class="col-md-3">
-                            <label class="headinglabel required">Telephone No</label>
-                            @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control textright", @required = "true" })
+                            <label class="headinglabel">Phone No.</label>
+                            @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control textright"})
                         </div>
                         <div class="col-md-3">
-                            <label class="headinglabel required">Flat/Building</label>
-                            @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget", @required = "true" })
+                            <label class="headinglabel">Flat/Building</label>
+                            @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget"})
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel">Street</label>
@@ -1987,8 +1987,8 @@
                             @Html.DropDownListFor(model => model.MovementTypeID, new SelectList(@ViewBag.Movement, "MovementID", "MovementType"), "Select", new { @class = "form-control", @required = "true" })
                         </div>
                         <div class="col-md-3">
-                            <label class="headinglabel required">Product Type</label>
-                            @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control", @required = "true" })
+                            <label class="headinglabel">Product Type</label>
+                            @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control"})
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel required">Parcel Type</label>
@@ -2033,10 +2033,10 @@
                                     </div>
                                      <div class="col-md-3 d-flex" style="padding-top:32px">
                                         @Html.HiddenFor(model => model.CBM_Unit)
-                                        <div class="field checkboxdesign">
+                                        <div class="field checkboxdesign verticalcheckbox">
                                             <label class="headinglabel"><input type="radio" id="chkCBMInch" name="cbmUnit" />Inch</label>
                                         </div>
-                                        <div class="field checkboxdesign">
+                                        <div class="field checkboxdesign verticalcheckbox">
                                             <label class="headinglabel"><input type="radio" id="chkCBMCM" name="cbmUnit" />CM</label>
                                         </div>
                                     </div>
@@ -2050,23 +2050,23 @@
                                         @Html.TextBoxFor(model => model.Weight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                      <div class="col-md-2">
-                                        <label class="headinglabel required">Len</label>
+                                        <label class="headinglabel">Len</label>
                                         @Html.TextBoxFor(model => model.Length, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="headinglabel required">Width</label>
+                                        <label class="headinglabel">Width</label>
                                         @Html.TextBoxFor(model => model.Width, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="headinglabel required">Hght</label>
+                                        <label class="headinglabel">Hght</label>
                                         @Html.TextBoxFor(model => model.Height, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="headinglabel required">Vol</label>
+                                        <label class="headinglabel">Vol</label>
                                         @Html.TextBoxFor(model => model.Volume, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="headinglabel required">Vol Wght</label>
+                                        <label class="headinglabel">Vol Wght</label>
                                         @Html.TextBoxFor(model => model.VolumeWeight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                 </div>
@@ -2078,65 +2078,68 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 " >
+                        <div class="col-md-6 ">
                             <div class="row no-margin">
                                 <div class="col-md-12">
                                     <div class="col-md-4">
-                                        <label class="headinglabel required">Customs Inv. Value</label>
-                                        @Html.TextBoxFor(model => model.CustomsInvoiceValue, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)", @required = "true", @minimum = 0.1 })
+                                        <label class="headinglabel">Customs Inv. Value</label>
+                                        @Html.TextBoxFor(model => model.CustomsInvoiceValue, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)",  @minimum = 0.1 })
                                     </div>
                                     <div class="col-md-5">
-                                        <label class="headinglabel required">Document Made</label>
-                                        @Html.TextBoxFor(model => model.DocumentSetupName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Document Name" })
+                                        <label class="headinglabel">Document Made</label>
+                                        @Html.TextBoxFor(model => model.DocumentSetupName, new { @class = "form-control txttarget", @style = "", @placeholder = "Document Name" })
                                         @Html.HiddenFor(model => model.DocumentSetupId)
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="headinglabel required">Imp/Exp. Code</label>
-                                        @Html.TextBoxFor(model => model.ExportImportCode, new { @class = "form-control", @required = "true" })
+                                        <label class="headinglabel">Imp/Exp. Code</label>
+                                        @Html.TextBoxFor(model => model.ExportImportCode, new { @class = "form-control" })
                                     </div>
 
                                 </div>
                             </div>
+                            @*<div class="row no-margin">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <label class="headinglabel required">Freight</label>
+                    @Html.TextBoxFor(model => model.Freight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @minimum = 0.1 })
+                </div>
+
+        </div>
+        </div>*@
                             <div class="row no-margin">
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <label class="headinglabel required">Freight</label>
-                                        @Html.TextBoxFor(model => model.Freight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
-                                    </div>
-                                    <div class="col-md-8 d-flex">
-                                    <div class="col-md-4 checkboxdesign" style="padding-top: 32px">
-                                        @Html.CheckBox("ISNCND", new { @name = "ISNCND" }) &nbsp;
-                                        <label class="headinglabel">NCND</label>
-                                    </div>
-                                    <div class=" checkboxdesign" style="padding-top: 32px">
-                                        @Html.CheckBox("SeparateDoc", new { @name = "SeparateDoc" }) &nbsp;
-                                        <label class="headinglabel">Separate Docs</label>
-                                    </div>
+                                <div class="col-md-6">
+                                    <label class="headinglabel required">Despatch Date</label>
+                                    @Html.TextBoxFor(model => model.DespatchDate, new { @class = "form-control"})
+                                    @Html.ValidationMessageFor(model => model.DespatchDate, "", new { @class = "text-danger" })
                                 </div>
-                            </div>
-                            </div>
-                              <div class="row no-margin">
-                                    <div class="col-md-6">
-                                        <label class="headinglabel">Despatch Date</label>
-                                        @Html.TextBoxFor(model => model.DespatchDate, new { @class = "form-control", @required = "true" })
-                                        @Html.ValidationMessageFor(model => model.DespatchDate, "", new { @class = "text-danger" })
-                                    </div>
-                           
-                              
+
+
                                 <div class="col-md-6">
                                     <label class="headinglabel required">Route</label>
                                     @Html.TextBoxFor(model => model.RouteName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Route Name" })
                                     @Html.HiddenFor(model => model.RouteID)
                                 </div>
                             </div>
-                              <div class="row-margin">
-                                  <div class="col-md-12">
-                                      <label class="headinglabe">Vehicle</label>
-                                      @Html.TextBoxFor(model => model.VehicleRegNo, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Vehicle Reg No." })                                      
-                                      @Html.HiddenFor(model => model.TruckDetailID)
-                                  </div>
-                              </div>
-                        </div>
+                            <div class="row-margin">
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <label class="headinglabel">Vehicle</label>
+                                        @Html.TextBoxFor(model => model.VehicleRegNo, new { @class = "form-control txttarget", @style = "", @placeholder = "Vehicle Reg No." })
+                                        @Html.HiddenFor(model => model.TruckDetailID)
+                                    </div>
+                                    <div class="col-md-6 d-flex">
+                                        <div class="col-md-6 checkboxdesign" style="padding-top: 32px">
+                                            @Html.CheckBox("ISNCND", new { @name = "ISNCND" }) &nbsp;
+                                            <label class="headinglabel">NCND</label>
+                                        </div>
+                                        <div class="col-md-6 checkboxdesign" style="padding-top: 32px">
+                                            @Html.CheckBox("SeparateDoc", new { @name = "SeparateDoc" }) &nbsp;
+                                            <label class="headinglabel">Separate Docs</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
                     </div>
 
 
@@ -2170,13 +2173,13 @@
             <div class="row no-margin">
 
                 <div class="col-md-6">
-                    <label class="headinglabel">Created By & Date  </label>
+                    <label class="headinglabel red">Created By & Date  </label>
                     @Html.DisplayFor(model => model.CreatedByName, new { @class = "form-control" }) &nbsp;&nbsp;
                     @Html.DisplayFor(model => model.CreatedByDate, new { @class = "form-control" })
                 </div>
 
                 <div class="col-md-6">
-                    <label class="headinglabel">Last Modified By & Date  </label>
+                    <label class="headinglabel red">Last Modified By & Date  </label>
                     @Html.DisplayFor(model => model.LastModifiedByName, new { @class = "form-control" }) &nbsp;&nbsp;
                     @Html.DisplayFor(model => model.LastModifiedDate, new { @class = "form-control" })
                 </div>

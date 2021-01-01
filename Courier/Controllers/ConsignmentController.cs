@@ -52,6 +52,7 @@ namespace LTMSV2.Controllers
                 //List<QuickAWBVM> lst = (from c in db.InScans join t1 in db.CityMasters on c.ConsignorCityID equals t1.CityID join t2 in db.CityMasters on c.ConsigneeCityID equals t2.CityID join t3 in db.CustomerMasters on c.CustomerID equals t3.CustomerID select new QuickAWBVM { ConsignmentNo = c.AWBNo, customer = t3.CustomerName, shippername = c.ConsignorContact, consigneename = c.Consignee, origin = t1.City, destination = t2.City,InScanID=c.InScanID,InScanDate=c.InScanDate }).ToList();
                 //List<QuickAWBVM> lst = (from c in db.InScans select new QuickAWBVM { ConsignmentNo = c.AWBNo,shippername = c.Consignor, consigneename = c.Consignee, destination = c.DestinationLocation, InScanID = c.InScanID, InScanDate = c.InScanDate }).ToList();
             List<QuickAWBVM> lst = (from c in db.InScanMasters
+                                    join p in db.ParcelTypes on c.ParcelTypeId equals p.ID
                                     join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
                                     from subpet in gj.DefaultIfEmpty()
                                     join pet1 in db.CourierStatus on c.CourierStatusID equals pet1.CourierStatusID into gj1
@@ -66,7 +67,7 @@ namespace LTMSV2.Controllers
                                     && (c.CourierStatusID == pStatusId || (pStatusId == 0))  //&& c.CourierStatusID >= 4)
                                     && c.IsDeleted==false 
                                     orderby c.TransactionDate descending, c.ConsignmentNo descending
-                                    select new QuickAWBVM { ConsignmentNo = c.ConsignmentNo, shippername = c.Consignor, ConsignorCountryName=c.ConsignorCountryName,ConsigneeCountryName=c.ConsigneeCountryName,ConsignorPhone=c.ConsignorPhone, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone,InvoiceTo=c.InvoiceTo }).ToList();  //, requestsource=subpet3.RequestTypeName 
+                                    select new QuickAWBVM { ConsignmentNo = c.ConsignmentNo, shippername = c.Consignor, ConsignorCountryName=c.ConsignorCountryName,ConsigneeCountryName=c.ConsigneeCountryName,ConsignorPhone=c.ConsignorPhone, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone,InvoiceTo=c.InvoiceTo ,PackageName=p.ParcelType1 }).ToList();  //, requestsource=subpet3.RequestTypeName 
 
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
@@ -105,14 +106,15 @@ namespace LTMSV2.Controllers
             ViewBag.OtherCharge = db.OtherCharges.ToList();
             ViewBag.Document = db.ImpExpDocumentMasters.ToList();
             List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
-            //lsttype.Add(new VoucherTypeVM { TypeName = "All" });
-            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
-            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });
+            //lsttype.Add(new VoucherTypeVM { TypeName = "All" });            
+            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper or Consignee" });            
+            lsttype.Add(new VoucherTypeVM { TypeName = "Only Consignee" });
             ViewBag.InvoiceTo = lsttype;
             List<OtherChargeDetailVM> otherchargesvm = new List<OtherChargeDetailVM>();
             QuickAWBVM v = new QuickAWBVM();
                 if (id == 0)
                 {
+                ViewBag.Title = "Consignment - Create";
                     ViewBag.Enquiry = db.InScanMasters.Where(dd => dd.CourierStatusID == 4).ToList();
                     PickupRequestDAO doa = new PickupRequestDAO();
                     ViewBag.AWBNO = doa.GetMaAWBNo(companyId, branchid);
@@ -143,7 +145,8 @@ namespace LTMSV2.Controllers
             }
                 else
                 {
-                    ViewBag.Enquiry = db.InScanMasters.ToList();
+                ViewBag.Title = "Consignment - Modify";
+                ViewBag.Enquiry = db.InScanMasters.ToList();
                     v = GetAWBDetail(id);
                 otherchargesvm = (from c in db.InscanOtherCharges join o in db.OtherCharges on c.OtherChargeID equals o.OtherChargeID where c.InscanID == id select new OtherChargeDetailVM { InscanID = id, OtherChargeID = c.OtherChargeID, OtherChargeName = o.OtherCharge1, Amount = c.Amount }).ToList();
                 if (otherchargesvm == null)
@@ -374,6 +377,7 @@ namespace LTMSV2.Controllers
                         }
 
                         inscan.IsDeleted = false;
+                        TempData["SuccessMsg"] = "Saved Successfull!";
                         db.InScanMasters.Add(inscan);
                         db.SaveChanges();
                         AddAWBTrackStatus(inscan.InScanID);
@@ -419,13 +423,13 @@ namespace LTMSV2.Controllers
 
                         db.Entry(inscan).State = EntityState.Modified;
                         db.SaveChanges();
-                        
+                        TempData["SuccessMsg"] = "Updated Successfully!";
                         //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
                         //    _dao.AWBAccountsPosting(inscan.InScanID);
-                        
+
                         //SaveConsignee(v);
-                        TempData["SuccessMsg"] = customersavemessage + "\n" +  "You have successfully updated Airway Bill";
-                        
+                        //TempData["SuccessMsg"] = customersavemessage + "\n" +  "You have successfully updated Airway Bill";
+
                     }
 
                     //if (v.InScanID == 0)
@@ -520,12 +524,19 @@ namespace LTMSV2.Controllers
                     }
                     //accounts posting  for payment mode pickupcash and cod and Account on 30/nov/2020
                     //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
-                      //  _dao.AWBAccountsPosting(inscan.InScanID);
+                    //  _dao.AWBAccountsPosting(inscan.InScanID);
 
                     
                     TempData["ShowLabelPrint"] = "false";
                     //return RedirectToAction("Index");
-                    return RedirectToAction("Create",new { id = 0 });
+                    if (v.InScanID == 0)
+                    {
+                        return RedirectToAction("Create", new { id = 0 });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
 
                     
 
@@ -1578,7 +1589,7 @@ namespace LTMSV2.Controllers
             //                   where c1.Consignee.ToLower().StartsWith(term.ToLower())
             //                   orderby c1.Consignee ascending
             //                   select new { Name = c1.Consignee, ContactPerson = c1.ConsigneeContact, Phone = c1.ConsigneePhone, LocationName = c1.ConsigneeLocationName, CityName = c1.ConsigneeCityName, CountryName = c1.ConsigneeCountryName, Address1 = c1.ConsigneeAddress1_Building, Address2 = c1.ConsigneeAddress2_Street, PinCode = c1.ConsigneeAddress3_PinCode }).Distinct();
-            if (term != "")
+            if (term.Trim() != "")
             {
                 var shipperlist = (from c1 in db.CustomerMasters
                                    where c1.CustomerName.ToLower().StartsWith(term.ToLower())

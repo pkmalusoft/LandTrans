@@ -500,7 +500,7 @@
                 </div>
             </div>
             <div class="row no-margin">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     @Html.HiddenFor(model => model.ID, new { })
                     @Html.HiddenFor(model => model.ConsignorId, new { })
                     @Html.HiddenFor(model => model.ConsignorName, new { })
@@ -513,18 +513,18 @@
                     @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.EntryDate)
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="headinglabel required">Entered By</label>
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="headinglabel required">Truck Detail No.</label>
                     @Html.DropDownListFor(model => model.TruckDetailID, new SelectList(@ViewBag.Trips, "TruckDetailID", "ReceiptNo"), "Select", new { @class = "form-control" })
                     @*@Html.TextBoxFor(model => model.ConsignmentNo, new { @class = "form-control" })*@
                 </div>
             </div>
 
-            <div class="row no-margin">
+            <div class="col-md-12 sub_title_block">
                 <h4 style="color:#0094ff">Add Cost Details</h4>
                 <hr style="margin-bottom:0px" />
             </div>
@@ -555,16 +555,16 @@
                         <input type="hidden" id="txtSupplierId" class="form-control" autocomplete="off" />
                     </div>
                     <div class="col-md-2">
-                        <label class="headinglabel">Debit Chart of Account</label>
+                        <label class="headinglabel">Debit Account</label>
                         <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
                         <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
                     </div>
                     <div class="col-md-2">
-                        <label class="headinglabel">Credit Chart of Account</label>
+                        <label class="headinglabel">Credit Account</label>
                         <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
                         <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
                     </div>
-                    <div class="col-md-1" style="padding-top:30px">
+                    <div class="col-md-1 text-right" style="padding-top:30px">
                         <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data" onclick="ClearData()">-</button>&nbsp;&nbsp;
                         <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
                     </div>

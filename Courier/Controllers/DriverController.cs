@@ -13,8 +13,13 @@ namespace LTMSV2.Controllers
         // GET: Driver
         public ActionResult Index()
         {
-            List<DriverVM> list = (from c in db.DriverMasters orderby c.DriverName select new DriverVM { DriverID = c.DriverID, DriverName = c.DriverName, LicenseNo = c.LicenseNo, SponsorName = c.SponsorName, PhoneNo1 = c.PhoneNo1 ,PhoneNo2=c.PhoneNo2 }).ToList();
-            return View(list);
+            var lst = (from c in db.DriverMasters
+                       join v in db.VehicleMasters on c.VehicleID equals v.VehicleID into gj
+                       from subpet in gj.DefaultIfEmpty()                       
+                       orderby c.DriverName
+                        //select new { DriverID = c.DriverID, DriverName = c.DriverName, VehicleId = c.VehicleID, }).ToList();
+                   select new DriverVM { DriverID = c.DriverID, DriverName = c.DriverName, LicenseNo = c.LicenseNo, SponsorName = c.SponsorName, PhoneNo1 = c.PhoneNo1 ,PhoneNo2=c.PhoneNo2, RegNo = subpet.RegistrationNo ?? string.Empty }).ToList();
+            return View(lst);
         }
 
         public ActionResult Create(int id=0)
