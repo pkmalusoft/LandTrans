@@ -73,10 +73,12 @@ namespace LTMSV2.Controllers
             VehiclesVM v = new VehiclesVM();
             if (id>0)
             {
+                ViewBag.Title = "Vechicle Master - Modify";
                 v = getVehicleDetail(id);
             }
             else
             {
+                ViewBag.Title = "Vechicle Master - Create";
                 v.InsuranceExpDate = null;
                 v.RegExpirydate = DateTime.Now.Date;
                 v.DepreciationDate = null;
@@ -205,8 +207,13 @@ namespace LTMSV2.Controllers
             v.RegistrationNo = data.RegistrationNo;
             v.RegisteredUnder = data.RegisteredUnder;
 
-            if (data.SupplierID!=null)
+            if (data.SupplierID != null)
+            {
                 v.SupplierID = data.SupplierID.Value;
+                var supplier= db.SupplierMasters.Find(v.SupplierID);
+                if (supplier != null)
+                    v.SupplierName = supplier.SupplierName;
+            }
 
             //if (data.SupplierTypeID != null)
             //    v.SupplierTypeId = data.SupplierTypeID.Value;
@@ -223,9 +230,16 @@ namespace LTMSV2.Controllers
             v.InsuranceCompName = data.InsuranceCompName;
             v.Model = data.Model;
             v.MakeYear = data.MakeYear;
-            v.PurchaseValue = data.PurchaseValue.Value;
+
+            if (data.PurchaseValue!=null)
+              v.PurchaseValue = data.PurchaseValue.Value;
+
+            if (data.InsuredValue!=null)
             v.InsuredValue = data.InsuredValue.Value;
-            v.ScrapValue = data.ScrapValue.Value;
+
+            if (data.ScrapValue!=null)
+              v.ScrapValue = data.ScrapValue.Value;
+
             v.PolicyNo = data.PolicyNo;
             v.ContractNo = data.ContractNo;
             v.ContractRate = data.ContractRate;

@@ -885,17 +885,21 @@ namespace LTMSV2.Controllers
             {
                 inscan.SeparateDoc =false;
             }
-            if (data.DocumentSetupID!= null)
+            if (data.DocumentSetupID!= null || data.DocumentSetupID!=0)
             {
                 inscan.DocumentSetupId = data.DocumentSetupID.Value;
-                inscan.DocumentSetupName = db.ImpExpDocumentMasters.Find(data.DocumentSetupID).DocumentName;
+                var imp = db.ImpExpDocumentMasters.Find(data.DocumentSetupID);
+                if (imp != null)
+                {
+                    inscan.DocumentSetupName = imp.DocumentName;
+                }
                 inscan.ExportImportCode = data.ExportImportCode;
             }
             else
             {
                 inscan.DocumentSetupId = 0;
             }
-            if (data.ItemID != null)
+            if (data.ItemID != null && data.ItemID!=0)
             {
                 inscan.ItemId = data.ItemID.Value;
                 if (inscan.ItemId > 0)
@@ -922,13 +926,19 @@ namespace LTMSV2.Controllers
             }
 
 
-            if (data.RouteID != null)
+            if (data.RouteID != null && data.RouteID != 0)
             {
                 inscan.RouteID = data.RouteID.Value;
                 if (inscan.RouteID > 0)
-                    inscan.RouteName = db.RouteMasters.Find(inscan.RouteID).RouteName;
-                else
-                    inscan.RouteName = "";
+                { 
+                    var route = db.RouteMasters.Find(inscan.RouteID);
+                
+
+                    if (route != null)
+                        inscan.RouteName = route.RouteName;
+                    else
+                        inscan.RouteName = "";
+                }
             }
             else
             {

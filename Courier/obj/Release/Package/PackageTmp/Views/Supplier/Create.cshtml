@@ -273,6 +273,7 @@
             var phone = $("#Phone").val();
             var ExpCode = $("#ExportCode").val();
             var maxcreditdays = $('#MaxCreditDays').val();
+            var suppliertype = $('#SupplierTypeID').val();
             var regex = /^[0-9 ]+$/
             var isValid = regex.test(ExpCode);
             
@@ -281,50 +282,72 @@
 
             if (sup == "") {
                 $("#alert").show();
+                $("#SupplierName").focus();
                 return false;
             }
             else if (con == "") {
                 $("#alert").show();
+                $("#ContactPerson").focus();
                 return false;
             }
             else if ($('#LocationName').val() == "")
             {
+                $('#LocationName').focus();
                 $("#alert").show();
                 return false;
             }
             else if ($('#CityName').val() == "") {
+                $('#CityName').focus();
                 $("#alert").show();
                 return false;
             }
             else if ($('#CountryName').val() == "") {
+                $('#CountryName').focus();
                 $("#alert").show();
                 return false;
             } 
             else if (phone == "") {
-
+                $("#Phone").focus();
                 $("#alert").show();
                 return false;
             }
-            else if (email == "") {
+            //else if (email == "") {
 
-                $("#alert").show();
-                return false;
-            }
+            //    $("#alert").show();
+            //    return false;
+            //}
             //else if (maxcreditdays == "" || maxcreditdays == "0")
             //{
             //    $("#alert").show();
             //    return false;
 
             //}
-            else if (ref == "") {
-                $("#alert").show();
-                return false;
-            }          
+            //else if (ref == "") {
+            //    $("#alert").show();
+            //    return false;
+            //}          
                     
             else if ($('#ExportCode').val()!="" && !isValid) {
                 alert("Exporter Code must be a Number.");
                 return false;
             } 
+            else if (suppliertype == '' || suppliertype==0)
+            {
+                $("#alert").show();
+                $('#SupplierTypeId').focus();
+                return false;
+            }
+            else if (suppliertype == '4' && $('#RegistrationNo').val()=='') {
+                $("#alert").show();
+                $('#RegistrationNo').focus();
+                return false;
+            }
+            else if ($('#AcHeadID').val() = '')
+            {
+                $("#alert").show();
+                $('#AcHeadID').focus();
+                return false;
+            }
             else {
                 $("#alert").hide();
                 return true;
@@ -462,7 +485,7 @@
                 </div>
                 <div class="row no-margin" style="padding-top:10px">
                     <div class="col-md-3">
-                        <label class="required headinglabel">Email</label>
+                        <label class="headinglabel">Email</label>
 
                         @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Email)
