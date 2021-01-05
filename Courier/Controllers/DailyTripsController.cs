@@ -139,6 +139,12 @@ namespace LTMSV2.Controllers
                 vm1.VehicleType = "H";
                 vm1.CurrencyIDRent = Convert.ToInt32(Session["CurrencyId"].ToString());
                 vm1.PaymentCurrencyID = Convert.ToInt32(Session["CurrencyId"].ToString());
+                var ac = db.AcHeadControls.Where(cc => cc.Pagecontrol == 1 && cc.AccountName == "Rent Account").FirstOrDefault();
+                if (ac != null)
+                {
+                    vm1.RentAcHeadID = ac.AccountHeadID;
+                    vm1.RentAcHead = db.AcHeads.Where(cc => cc.AcHeadID == vm1.RentAcHeadID).FirstOrDefault().AcHead1;
+                }
 
                 List<TruckDetailOtherChargeVM> otherchargesvm = new List<TruckDetailOtherChargeVM>();
                 vm1.otherchargesVM = otherchargesvm;

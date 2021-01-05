@@ -178,7 +178,7 @@
                         @Html.TextBoxFor(model => model.Rent, new { @onchange = "setNumberDecimal(this)", @onkeypress = "return isNumberKey(event)", @class = "form-control textright", @required = "true" })
                     </div>
                     <div class="col-md-3 form-group">
-                        <label class="headinglabel required">Rent Account Head(Cr.)</label>
+                        <label class="headinglabel required">Rent Account Head(Dr.)</label>
                         @*<input type="text" id="RentAcHead"value=""  name="RentAcHead" class="form-control" required />*@
                         @Html.TextBoxFor(model => model.RentAcHead, new { @class = "form-control" })
                         @Html.HiddenFor(model => model.RentAcHeadID)
@@ -616,9 +616,11 @@
             }
         });
 
-        if (@ViewBag.EditMode==true) {
-            debugger;
-            $("input[type='radio'][name='Vtype']").each(function (i,index) {
+        if (@ViewBag.EditMode== true) {
+            if ($('#RentAcHeadID').val() > 0) {
+                $('#RentAcHead').attr('readonly', 'readonly');
+            }
+            $("input[type='radio'][name='Vtype']").each(function (i, index) {
                 $(this).attr('disabled', 'disabled');
             });
             $("#ParcelTypeId").trigger('change');
@@ -634,20 +636,16 @@
                 checkpayment();
             }
 
-            //$("#RegNo").val('@Model.RegNo');
-            //$("#RouteID").val('@Model.RouteID');
-       //     $("#CurrencyIDRent").val('@Model.CurrencyIDRent');
-            //$("#CurrencyRent").val('@Model.CurrencyRent');
-         //   $("#PaymentCurrencyID").val('@Model.PaymentCurrencyID');
-           // $("#StatusPaymentMode").val('@Model.StatusPaymentMode'.trim());
-            //$("#OriginCity").val('@Model.OriginCity'.trim());
-            //$("#OriginCountry").val('@Model.OriginCountry'.trim());
-
             setNumberDecimal($('#Rent'));
             setNumberDecimal($('#OtherCharges'));
             setNumberDecimal($('#Amount'));
             setVehicleType()
 
+        }
+        else {
+            if ($('#RentAcHeadID').val() > 0) {
+                $('#RentAcHead').attr('readonly', 'readonly');
+            }
         }
         $('#TDDate').datetimepicker({
             maxDate: '@_maxdate',
