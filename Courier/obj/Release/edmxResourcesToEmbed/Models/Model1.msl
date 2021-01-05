@@ -8699,37 +8699,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CostUpdateDetails">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CostUpdateDetail">
-        <MappingFragment StoreEntitySet="CostUpdateDetail">
-          <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
-          <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
-          <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
-          <ScalarProperty Name="AcHeadCreditId" ColumnName="AcHeadCreditId" />
-          <ScalarProperty Name="AcHeadDebitId" ColumnName="AcHeadDebitId" />
-          <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
-          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
-          <ScalarProperty Name="ExpectedAmount" ColumnName="ExpectedAmount" />
-          <ScalarProperty Name="IsPerfomaInvoice" ColumnName="IsPerfomaInvoice" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="RevenueCostMasterID" ColumnName="RevenueCostMasterID" />
-          <ScalarProperty Name="MasterID" ColumnName="MasterID" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="CostUpdateMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CostUpdateMaster">
-        <MappingFragment StoreEntitySet="CostUpdateMaster">
-          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="DriverMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.DriverMaster">
         <MappingFragment StoreEntitySet="DriverMaster">
@@ -8891,6 +8860,7 @@
     <EntitySetMapping Name="RevenueUpdateDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail">
         <MappingFragment StoreEntitySet="RevenueUpdateDetail">
+          <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
           <ScalarProperty Name="PaymentModeId" ColumnName="PaymentModeId" />
           <ScalarProperty Name="InvoiceTo" ColumnName="InvoiceTo" />
           <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
@@ -8909,9 +8879,50 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SupplierInvoices">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoice">
+        <MappingFragment StoreEntitySet="SupplierInvoice">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
+          <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <ScalarProperty Name="cid" ColumnName="cid" />
+          <ScalarProperty Name="FyearID" ColumnName="FyearID" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="AcDiscJournalID" ColumnName="AcDiscJournalID" />
+          <ScalarProperty Name="AcJOurnalID" ColumnName="AcJOurnalID" />
+          <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+          <ScalarProperty Name="AccompanyID" ColumnName="AccompanyID" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplierInvoiceDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail">
+        <MappingFragment StoreEntitySet="SupplierInvoiceDetails">
+          <ScalarProperty Name="RecPayDetailId" ColumnName="RecPayDetailId" />
+          <ScalarProperty Name="RecPayStatus" ColumnName="RecPayStatus" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="CurrencyAmount" ColumnName="CurrencyAmount" />
+          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+          <ScalarProperty Name="Rate" ColumnName="Rate" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Particulars" ColumnName="Particulars" />
+          <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+          <ScalarProperty Name="SupplierInvoiceDetailID" ColumnName="SupplierInvoiceDetailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
+          <ScalarProperty Name="COM" ColumnName="COM" />
+          <ScalarProperty Name="CargoDescription" ColumnName="CargoDescription" />
           <ScalarProperty Name="InvoiceTo" ColumnName="InvoiceTo" />
           <ScalarProperty Name="ConsigneeCityID" ColumnName="ConsigneeCityID" />
           <ScalarProperty Name="ConsigneeCountryID" ColumnName="ConsigneeCountryID" />
@@ -9013,42 +9024,33 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="SupplierInvoices">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoice">
-        <MappingFragment StoreEntitySet="SupplierInvoice">
-          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-          <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
-          <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
-          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-          <ScalarProperty Name="cid" ColumnName="cid" />
-          <ScalarProperty Name="FyearID" ColumnName="FyearID" />
-          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-          <ScalarProperty Name="AcDiscJournalID" ColumnName="AcDiscJournalID" />
-          <ScalarProperty Name="AcJOurnalID" ColumnName="AcJOurnalID" />
-          <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
-          <ScalarProperty Name="AccompanyID" ColumnName="AccompanyID" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-          <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
+    <EntitySetMapping Name="CostUpdateDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CostUpdateDetail">
+        <MappingFragment StoreEntitySet="CostUpdateDetail">
+          <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+          <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+          <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+          <ScalarProperty Name="AcHeadCreditId" ColumnName="AcHeadCreditId" />
+          <ScalarProperty Name="AcHeadDebitId" ColumnName="AcHeadDebitId" />
+          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+          <ScalarProperty Name="ExpectedAmount" ColumnName="ExpectedAmount" />
+          <ScalarProperty Name="IsPerfomaInvoice" ColumnName="IsPerfomaInvoice" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="RevenueCostMasterID" ColumnName="RevenueCostMasterID" />
+          <ScalarProperty Name="MasterID" ColumnName="MasterID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="SupplierInvoiceDetails">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail">
-        <MappingFragment StoreEntitySet="SupplierInvoiceDetails">
-          <ScalarProperty Name="RecPayDetailId" ColumnName="RecPayDetailId" />
-          <ScalarProperty Name="RecPayStatus" ColumnName="RecPayStatus" />
-          <ScalarProperty Name="Value" ColumnName="Value" />
-          <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="CurrencyAmount" ColumnName="CurrencyAmount" />
-          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-          <ScalarProperty Name="Rate" ColumnName="Rate" />
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="Particulars" ColumnName="Particulars" />
-          <ScalarProperty Name="SupplierInvoiceID" ColumnName="SupplierInvoiceID" />
-          <ScalarProperty Name="SupplierInvoiceDetailID" ColumnName="SupplierInvoiceDetailID" />
+    <EntitySetMapping Name="CostUpdateMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CostUpdateMaster">
+        <MappingFragment StoreEntitySet="CostUpdateMaster">
+          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -42,7 +42,7 @@
           $("#CustomerName").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/QuickAWB/GetCustomerName',
+                    url: '/Consignment/GetCustomerName',
                     datatype: "json",
                     data: {
                         term: request.term
@@ -124,10 +124,10 @@
                         }
 
                         if (flag == 1) {
-                            $('#movementid').append('<option value="' + value.ParcelTypeID + '" selected=true>' + value.ParcelType + '</option>');
+                            $('#movementid').append('<option value="' + value.ParcelTypeID + '" selected=true>' + value.ParcelType1 + '</option>');
                         }
                         else {
-                            $('#movementid').append('<option value="' + value.ParcelTypeID + '">' + value.ParcelType + '</option>');
+                            $('#movementid').append('<option value="' + value.ParcelTypeID + '">' + value.ParcelType1 + '</option>');
                         }
 
                     });

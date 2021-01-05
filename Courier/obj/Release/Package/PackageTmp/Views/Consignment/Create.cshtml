@@ -119,8 +119,13 @@
             },
             minLength: 0,
             autoFocus: false,
-            focus: function (event, ui) {
-                $('#ConsignorLocationName').val(ui.item.value);
+            focus: function (event, i) {
+                $("#ConsignorLocationName").val(i.item.label);
+                $("#ConsignorLocationID").val(i.item.LocationID);
+                $("#ConsignorCountryName").val(i.item.CountryName);
+                $("#ConsignorCountryID").val(i.item.CountryID);
+                $("#ConsignorCityName").val(i.item.CityName);
+                $("#ConsignorCityID").val(i.item.CityID);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -159,8 +164,13 @@
             },
             minLength: 0,
             autoFocus: false,
-            focus: function (event, ui) {
-                $('#ConsigneeLocationName').val(ui.item.value);
+            focus: function (event, i) {
+                $('#ConsigneeLocationName').val(i.item.value);
+                $("#ConsigneeLocationID").val(i.item.LocationID);
+                $("#ConsigneeCountryName").val(i.item.CountryName);
+                $("#ConsigneeCountryID").val(i.item.CountryID);
+                $("#ConsigneeCityName").val(i.item.CityName);
+                $("#ConsigneeCityID").val(i.item.CityID);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -442,132 +452,21 @@
         }
         $('#PaymentModeId').change(function () {
             var modeid = $('#PaymentModeId').val();
-            if (modeid == 1 || modeid == 2) { //PKP
-                $("#customer").attr("readonly", "readonly");
-                $("#CustomerandShipperSame").attr("disabled", "disabled");
-                fillcustomerdetail(modeid);
-
+            if (modeid == 1) { //PKP
+                $('#InvoiceTo1').html('');
             }
-            else {
-                $('#customer').val('');
-                $('#CustomerID').val(0);
-                $("#customer").removeAttr("readonly");
-                $("#CustomerandShipperSame").removeAttr("disabled", "disabled");
+            else if (modeid == 2) {
+                $('#InvoiceTo1').html('');
+                var html = '<option>Consignee</option>'
+                $('#InvoiceTo1').html(html);
             }
-            if (modeid == 1 || modeid == 3) {
-                $("#Consignee1").autocomplete({
-                    source: function (request, response) {
-                        $.ajax({
-                            url: '/Consignment/GetReceiverName',
-                            datatype: "json",
-                            data: {
-                                term: request.term
-                            },
-                            success: function (data) {
-                                response($.map(data, function (val, item) {
-                                    return {
-                                        label: val.Name,
-                                        value: val.Name,
-                                        ContactPerson: val.ContactPerson,
-                                        Address1: val.Address1,
-                                        Address2: val.Address2,
-                                        Pincode: val.PinCode,
-                                        Phone: val.Phone,
-                                        CountryName: val.CountryName,
-                                        CityName: val.CityName,
-                                        LocationName: val.LocationName,
-
-                                    }
-                                }))
-                            }
-                        })
-                    },
-                    minLength: 1,
-                    autoFocus: false,
-                    focus: function (event, ui) {
-                        $('#Consignee').val(ui.item.value);
-                    },
-                    select: function (e, i) {
-                        e.preventDefault();
-                        $("#Consignee").val(i.item.label);
-                        $("#ConsigneeContact").val(i.item.ContactPerson);
-                        $("#ConsigneeAddress1_Building").val(i.item.Address1);
-                        $("#ConsigneeAddress2_Street").val(i.item.Address2);
-                        $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);
-
-                        $("#ConsigneePhone").val(i.item.Phone);
-                        $("#ConsigneeCountryName").val(i.item.CountryName);
-                        $("#ConsigneeCityName").val(i.item.CityName);
-                        $("#ConsigneeLocationName").val(i.item.LocationName);
-
-                    },
-
-                });
+            else if (modeid == 3) {
+                $('#InvoiceTo1').html('');
+                var html = '<option>Shipper</option>';
+                html = html + '<option>Consignee</option>';
+                html = html + '<option>Others</option>';
+                $('#InvoiceTo1').html(html);
             }
-            else { //code
-
-                $("#Consignee1").autocomplete({
-                    source: function (request, response) {
-                        $.ajax({
-                            url: '/Consignment/GetReceiverName', //'/Consignment/GetConsigneeName',
-                            datatype: "json",
-                            data: {
-                                term: request.term
-                            },
-                            success: function (data) {
-                                response($.map(data, function (val, item) {
-                                    return {
-                                        label: val.Name,
-                                        value: val.Name,
-                                        ContactPerson: val.ContactPerson,
-                                        Address1: val.Address1,
-                                        Address2: val.Address2,
-                                        Pincode: val.PinCode,
-                                        Phone: val.Phone,
-                                        CountryName: val.CountryName,
-                                        CityName: val.CityName,
-                                        LocationName: val.LocationName,
-
-                                    }
-                                }))
-                            }
-                        })
-                    },
-                    minLength: 1,
-                    autoFocus: false,
-                    focus: function (event, ui) {
-                        $('#Consignee').val(ui.item.value);
-                    },
-                    select: function (e, i) {
-                        e.preventDefault();
-                        $("#Consignee").val(i.item.label);
-                        $("#ConsigneeContact").val(i.item.ContactPerson);
-                        $("#ConsigneeAddress1_Building").val(i.item.Address1);
-                        $("#ConsigneeAddress2_Street").val(i.item.Address2);
-
-                        $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);
-                        $("#ConsigneePhone").val(i.item.Phone);
-                        $("#ConsigneeCountryName").val(i.item.CountryName);
-                        $("#ConsigneeCityName").val(i.item.CityName);
-                        $("#ConsigneeLocationName").val(i.item.LocationName);
-
-                    },
-
-                });
-
-            }
-            //if ($('#CustomerID').val() == 0 && modeid != 1) {
-            //    alert("For New Cash Customer....Selected Payment Type is not allowed");
-            //    $('#PaymentModeId').val(1).trigger('change');
-            //}
-            //else {
-
-            //    if ($("#hdnCustomerType").val() == "CS"  && modeid != 1) {
-            //        //alert("Not a Credit Customer....Selected Payment Type is not allowed");
-            //        alert("For Cash Customer....Selected Payment Type is not allowed");
-            //        $('#PaymentModeId').val(1).trigger('change');
-            //    }
-            //}
 
         });
         
@@ -695,8 +594,7 @@
             },
             minLength: 0,
             autoFocus: false,
-            focus: function (event, i) {
-                $('#shippername').val(i.item.value);
+            focus: function (event, i) {                
                 $("#shippername").val(i.item.label);
                 $("#ConsignorContact").val(i.item.ContactPerson);
                 $("#ConsignorAddress1_Building").val(i.item.Address1);
@@ -754,14 +652,23 @@
                     }
                 })
             },
-            minLength: 1,
+            minLength: 0,
             autoFocus: false,
-            focus: function (event, ui) {
-                $('#Consignee1').val(ui.item.value);
+            focus: function (event, i) {
+                $("#Consignee").val(i.item.label);
+                $("#ConsigneeContact").val(i.item.ContactPerson);
+                $("#ConsigneeAddress1_Building").val(i.item.Address1);
+                $("#ConsigneeAddress2_Street").val(i.item.Address2);
+                $("#ConsigneeAddress3_PinCode").val(i.item.Pincode);
+
+                $("#ConsigneePhone").val(i.item.Phone);
+                $("#ConsigneeCountryName").val(i.item.CountryName);
+                $("#ConsigneeCityName").val(i.item.CityName);
+                $("#ConsigneeLocationName").val(i.item.LocationName);
             },
             select: function (e, i) {
                 e.preventDefault();
-                $("#Consignee1").val(i.item.label);
+                $("#Consignee").val(i.item.label);
                 $("#ConsigneeContact").val(i.item.ContactPerson);
                 $("#ConsigneeAddress1_Building").val(i.item.Address1);
                 $("#ConsigneeAddress2_Street").val(i.item.Address2);
@@ -828,10 +735,11 @@
                     }
                 })
             },
-            minLength: 1,
+            minLength: 0,
             autoFocus: false,
             focus: function (event, ui) {
                 $('#PackageName').val(ui.item.value);
+                $("#PackageId").val(ui.item.PackageID);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -1186,7 +1094,7 @@
         $("select").css({ "border-radius": "5px" });
 
         $("#ConsignmentNo").focus();
-
+        
         $("#OtherChargeName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -1221,7 +1129,9 @@
         else {
             $('#chkCBMCM').attr('checked', 'checked');
         }
-      
+        $('#InvoiceTo1').change(function () {
+            $('#InvoiceTo').val($('#InvoiceTo1').val());
+        })
 
         $('#btnprintLabel').on('click', function () {
             debugger;
@@ -1273,7 +1183,7 @@
             var tot = parseFloat(x) * parseFloat(y) * parseFloat(z);
             $('#Volume').val(tot);
             var w = $('#Weight').val();
-            var vw = tot / parseFloat(w);
+            var vw = tot / parseFloat(w);           
             $('#VolumeWeight').val(vw.toFixed(3));
 
         }
@@ -1484,7 +1394,23 @@
                 });
         })
         $("#btnsave").click(function () {
-            
+            debugger;
+            var weight = 0;
+            var volweight = 0;
+            if ($('#Weight').val() == "") {
+                $('#Weight').val(0);
+            }
+            if ($('#VolumeWeight').val() == "") {
+                $('#VolumeWeight').val(0);
+            }
+
+            weight = parseFloat($('#Weight').val());
+            volweight = parseFloat($('#VolumeWeight').val());
+            if (weight == 0 && volweight == 0) {
+                alert("Enter Weight or Volume Weight!");
+                $('#Weight').focus();
+                return false;
+            }
             var fullform = $('#quickAWB').valid();
             
             if ($("#ConsignmentNo").val() != "") {
@@ -1507,6 +1433,12 @@
             if ($("#IsAvailable").val() == 1) {
                 alert("AWB Already Exist..!");
                 $('#ConsignmentNo').focus();
+                return false;
+            }
+            else if (weight == 0 && volweight == 0)
+            {
+                alert("Enter Weight or Volume Weight!");
+                $('#Weight').focus();
                 return false;
             }
             else {
@@ -1642,45 +1574,12 @@
         var divitems = $('#divcustomer1').find('.form-control');
 
         if (@ViewBag.EditMode== true) {
-
-             //$('#divcustomer1').find('.form-control').each(function(index,item) {
-             //   console.log(item);
-             //    $(item).attr('disabled', 'disabled');
-             //});
-
-            //$('#divcustomer2').find('.form-control').each(function(index,item) {
-            //    console.log(item);
-            //     $(item).attr('disabled', 'disabled');
-            //});
-
-            //$('#divcustomer3').find('.form-control').each(function(index,item) {
-            //    console.log(item);
-            //     $(item).attr('disabled', 'disabled');
-            //});
-
-             var movetype = $('#MovementTypeID option:selected').text();
-            if (movetype == 'Domestic') {
-                $('#materialcost').removeAttr('Disabled');
-            }
-            else {
-                $('#materialcost').val(0);
-                $('#materialcost').attr('Disabled', 'disabled');
-            }
-
-              setTwoNumberDecimal($("#CourierCharge")); //.val('0.00');
-            setTwoNumberDecimal($("#PackingCharge")); //.val('0.00');
-            setTwoNumberDecimal($("#OtherCharge")); //.val('0.00');
-            setTwoNumberDecimal($("#CustomCharge")); //.val('0.00');
-            setTwoNumberDecimal($("#totalCharge")); //.val('0.00');
-            setTwoNumberDecimal($("#materialcost")); //.val('0.00');
+            
+            $('#InvoiceTo1').val($('#InvoiceTo').val()).trigger('change');
+            
         }
         else {
-              $('#TransactionDate').val(reqdate);
-         $("#CourierCharge").val('0.00');
-        $("#PackingCharge").val('0.00');
-        $("#OtherCharge").val('0.00');
-        $("#CustomCharge").val('0.00');
-            $("#totalCharge").val('0.00');
+             $('#TransactionDate').val(reqdate);       
             $("#PaymentModeId").trigger('change');
 
         if ( $('#InScanID').val() == "0" || $('#InScanID').val() == 0 || $('#InScanID').val() == null) {
@@ -1748,14 +1647,23 @@
 
 
 <section class="content">
-    @*@if (TempData["ShowLabelPrint"] != null)
+    @if (TempData["SuccessMsg"] != null)
     {
         <script type="text/javascript">
                   $(document).ready(function () {
-                      ShowLabelPrinting();
+                      $.notify("@TempData["SuccessMsg"]", "success");
                  });
         </script>
-    }*@
+    }
+
+    @*@if (TempData["ShowLabelPrint"] != null)
+        {
+            <script type="text/javascript">
+                      $(document).ready(function () {
+                          ShowLabelPrinting();
+                     });
+            </script>
+        }*@
     @using (Html.BeginForm("Create", "Consignment", FormMethod.Post, new { @id = "quickAWB" }))
     {
         @Html.AntiForgeryToken()
@@ -1764,7 +1672,7 @@
         <input type="hidden" id="IsAvailable" value="0" />
 
         <div class="row no-margin">
-            <div class="col-md-2">
+            <div class="col-md-2 col-2-5">
                 <input type="hidden" id="hdnCustomerType" value="0" />
                 @Html.HiddenFor(model => model.InScanID)
                 @Html.HiddenFor(model => model.BranchID)
@@ -1791,40 +1699,37 @@
             }
 
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 col-2-5">
 
                 <label class="headinglabel">Transaction Date</label>
                 @Html.TextBoxFor(model => model.TransactionDate, new { @class = "form-control", @required = "true" })
                 @Html.ValidationMessageFor(model => model.TransactionDate, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 col-2-5">
                 <label class="headinglabel">Pickup Request No.</label>
                 @*@Html.TextBoxFor(model => model.EnquiryNo, new { @class = "form-control" })*@
                 @Html.DropDownListFor(model => model.EnquiryNo, new SelectList(@ViewBag.Enquiry, "EnquiryNo", "EnquiryNo"), "Select", new { @class = "form-control" })
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 col-2-5">
                 <label class="headinglabel required">Payment Mode</label>
                 @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "Select", new { @class = "form-control", @required = "true" })
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 col-2-5">
                 <label class="headinglabel">Invoice To</label>
-                @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "", new { @class = "form-control", @id = "InvoiceTo" })
-                
+                @Html.DropDownList("InvoiceTo1", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "", new { @class = "form-control", @id = "InvoiceTo1" })
+                @Html.HiddenFor(mode => Model.InvoiceTo)
             </div>
-            <div class="col-md-4 hide">
-                <div class="flexTitle">
-                    <label class="headinglabel required">Customer</label>
-                    <div class="checkboxdesign text-right" style="float:right">
-                        @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
-                        <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">copy address to shipper</label>
+            @*<div class="col-md-4 hide">
+                    <div class="flexTitle">
+                        <label class="headinglabel required">Customer</label>
+                        <div class="checkboxdesign text-right" style="float:right">
+                            @Html.CheckBox("CustomerandShipperSame", new { @name = "CustomerandShipperSame" }) &nbsp
+                            <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">copy address to shipper</label>
+                        </div>
                     </div>
-                </div>
-                @Html.HiddenFor(model => model.CustomerID, new { @class = "form-control txttarget" })
-                @Html.TextBoxFor(model => model.customer, new { @class = "form-control txttarget", @required = "true" })
-                @*<input type="text" id="Consignor" name="Consignor" class="form-control" autocomplete="off" />*@
-
-                @*@Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control" })*@
-            </div>
+                    @Html.HiddenFor(model => model.CustomerID, new { @class = "form-control txttarget" })
+                    @Html.TextBoxFor(model => model.customer, new { @class = "form-control txttarget" })
+                </div>*@
         </div>
 
 
@@ -1849,7 +1754,7 @@
                     <div class="row no-margin">
                         <div class="col-md-6">
                             <label class="headinglabel required">Name</label>
-                            @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Shipper Name",autocomplete="off" })
+                            @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Shipper Name", autocomplete = "off" })
                         </div>
 
                         <div class="col-md-6">
@@ -1862,7 +1767,7 @@
 
                         <div class="col-md-3">
                             <label class="headinglabel">Phone No.</label>
-                            @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control textright",  @placeholder = "Telephone" })
+                            @Html.TextBoxFor(model => model.ConsignorPhone, new { @class = "form-control textright", @placeholder = "Telephone" })
                         </div>
 
                         <div class="col-md-3">
@@ -1886,7 +1791,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel required">Location</label>
-                            @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget", @required = "true",  @placeholder = "Location" })
+                            @Html.TextBoxFor(model => model.ConsignorLocationName, new { @class = "form-control txttarget", @required = "true", @placeholder = "Location" })
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel required">Origin City</label>
@@ -1924,16 +1829,16 @@
                         </div>
                     </div>
                     <div class="row no-margin">
-                       
+
 
 
                         <div class="col-md-3">
                             <label class="headinglabel">Phone No.</label>
-                            @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control textright"})
+                            @Html.TextBoxFor(model => model.ConsigneePhone, new { @class = "form-control textright" })
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel">Flat/Building</label>
-                            @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget"})
+                            @Html.TextBoxFor(model => model.ConsigneeAddress1_Building, new { @class = "form-control txttarget" })
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel">Street</label>
@@ -1988,7 +1893,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel">Product Type</label>
-                            @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control"})
+                            @Html.DropDownListFor(model => model.ProductTypeID, new SelectList(@ViewBag.ProductType, "ProductTypeID", "ProductName"), "Select", new { @class = "form-control" })
                         </div>
                         <div class="col-md-3">
                             <label class="headinglabel required">Parcel Type</label>
@@ -2014,14 +1919,17 @@
                     <div class="clearfix"></div>
 
                     <div class="row no-margin flex wrap">
-                        <div class="col-md-6 border-right" >
+                        <div class="col-md-6 border-right">
                             <div class="row no-margin">
                                 <div class="col-md-12">
-                                    <div class="col-md-3">
-                                        <label class="headinglabel required">Item</label>
-                                        @Html.TextBoxFor(model => model.ItemName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Item  Name" })
-                                        @Html.HiddenFor(model => model.ItemId)
-                                    </div>
+                                    <label class="headinglabel required">Item</label>
+                                    @Html.TextAreaFor(model => model.CargoDescription, new { @class = "txttarget", @required = "true", @style = "", @placeholder = "Item  Name", @rows = 2, @cols = 95 })
+
+                                </div>
+                            </div>
+                            <div class="row no-margin">
+                                <div class="col-md-12">
+
                                     <div class="col-md-3">
                                         <label class="headinglabel required">Package</label>
                                         @Html.TextBoxFor(model => model.PackageName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Package Name" })
@@ -2031,26 +1939,28 @@
                                         <label class="headinglabel required">No. of Package</label>
                                         @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright", @onkeypress = "return isNumberKey1(event)", @required = "true", @maxlength = 13 })
                                     </div>
-                                     <div class="col-md-3 d-flex" style="padding-top:32px">
-                                        @Html.HiddenFor(model => model.CBM_Unit)
-                                        <div class="field checkboxdesign verticalcheckbox">
-                                            <label class="headinglabel"><input type="radio" id="chkCBMInch" name="cbmUnit" />Inch</label>
-                                        </div>
-                                        <div class="field checkboxdesign verticalcheckbox">
-                                            <label class="headinglabel"><input type="radio" id="chkCBMCM" name="cbmUnit" />CM</label>
+                                    <div class="col-md-3 text-right">
+                                        <div class="innerCheckbox">
+                                            @Html.HiddenFor(model => model.CBM_Unit)
+                                            <div class="field checkboxdesign verticalcheckbox justify-center">
+                                                <label class="headinglabel"><input type="radio" id="chkCBMInch" name="cbmUnit" />Inch</label>
+                                            </div>
+                                            <div class="field checkboxdesign justify-center" style="padding-top: 5px!important">
+                                                <label class="headinglabel"><input type="radio" id="chkCBMCM" name="cbmUnit" />CM</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row no-margin">
                                 <div class="col-md-12">
-                                    
+
                                     <div class="col-md-2">
-                                        <label class="headinglabel required">Wght</label>
+                                        <label class="headinglabel required">Weight</label>
                                         @Html.TextBoxFor(model => model.Weight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
-                                     <div class="col-md-2">
-                                        <label class="headinglabel">Len</label>
+                                    <div class="col-md-2">
+                                        <label class="headinglabel">Length</label>
                                         @Html.TextBoxFor(model => model.Length, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                     <div class="col-md-2">
@@ -2058,7 +1968,7 @@
                                         @Html.TextBoxFor(model => model.Width, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="headinglabel">Hght</label>
+                                        <label class="headinglabel">Height</label>
                                         @Html.TextBoxFor(model => model.Height, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                     <div class="col-md-2">
@@ -2066,14 +1976,14 @@
                                         @Html.TextBoxFor(model => model.Volume, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="headinglabel">Vol Wght</label>
+                                        <label class="headinglabel required required">Vol Weight</label>
                                         @Html.TextBoxFor(model => model.VolumeWeight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @required = "true", @minimum = 0.1 })
                                     </div>
                                 </div>
                             </div>
                             <div class="row no-margin">
                                 <div class="col-md-12">
-                                  
+
 
                                 </div>
                             </div>
@@ -2083,7 +1993,7 @@
                                 <div class="col-md-12">
                                     <div class="col-md-4">
                                         <label class="headinglabel">Customs Inv. Value</label>
-                                        @Html.TextBoxFor(model => model.CustomsInvoiceValue, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)",  @minimum = 0.1 })
+                                        @Html.TextBoxFor(model => model.CustomsInvoiceValue, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setTwoNumberDecimal(this)", @minimum = 0.1 })
                                     </div>
                                     <div class="col-md-5">
                                         <label class="headinglabel">Document Made</label>
@@ -2098,18 +2008,18 @@
                                 </div>
                             </div>
                             @*<div class="row no-margin">
-            <div class="col-md-12">
-                <div class="col-md-4">
-                    <label class="headinglabel required">Freight</label>
-                    @Html.TextBoxFor(model => model.Freight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @minimum = 0.1 })
-                </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-4">
+                                            <label class="headinglabel required">Freight</label>
+                                            @Html.TextBoxFor(model => model.Freight, new { @class = "form-control textright", @onkeypress = "return isNumberKey(event)", @onchange = "setThreeNumberDecimal(this)", @minimum = 0.1 })
+                                        </div>
 
-        </div>
-        </div>*@
+                                </div>
+                                </div>*@
                             <div class="row no-margin">
                                 <div class="col-md-6">
                                     <label class="headinglabel required">Despatch Date</label>
-                                    @Html.TextBoxFor(model => model.DespatchDate, new { @class = "form-control"})
+                                    @Html.TextBoxFor(model => model.DespatchDate, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.DespatchDate, "", new { @class = "text-danger" })
                                 </div>
 
@@ -2127,19 +2037,25 @@
                                         @Html.TextBoxFor(model => model.VehicleRegNo, new { @class = "form-control txttarget", @style = "", @placeholder = "Vehicle Reg No." })
                                         @Html.HiddenFor(model => model.TruckDetailID)
                                     </div>
-                                    <div class="col-md-6 d-flex">
-                                        <div class="col-md-6 checkboxdesign" style="padding-top: 32px">
-                                            @Html.CheckBox("ISNCND", new { @name = "ISNCND" }) &nbsp;
-                                            <label class="headinglabel">NCND</label>
-                                        </div>
-                                        <div class="col-md-6 checkboxdesign" style="padding-top: 32px">
-                                            @Html.CheckBox("SeparateDoc", new { @name = "SeparateDoc" }) &nbsp;
-                                            <label class="headinglabel">Separate Docs</label>
+                                    <div class="col-md-6 text-right" style="margin-top:3px;">
+                                        <div class="innerCheckbox">
+                                            <div class="checkboxdesign verticalcheckbox">
+                                                @Html.CheckBox("ISNCND", new { @name = "ISNCND" }) &nbsp;
+                                                <label class="headinglabel">NCND</label>
+                                            </div>
+                                            <div class="checkboxdesign verticalcheckbox">
+                                                @Html.CheckBox("SeparateDoc", new { @name = "SeparateDoc" }) &nbsp;
+                                                <label class="headinglabel">Separate Docs</label>
+                                            </div>
+                                            <div class="checkboxdesign verticalcheckbox">
+                                                @Html.CheckBox("COM", new { @name = "COM" }) &nbsp;
+                                                <label class="headinglabel">COM</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                </div>
                             </div>
+                        </div>
                     </div>
 
 

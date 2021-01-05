@@ -451,8 +451,8 @@
                                 }
                                 @if (isprint)
                                 {
-                                    @*<a href="@Url.Action("AWBPrint", "Consignment", new { id = item.InScanID })"><i class="fa fa-print"></i></a>*@
-                                    <a href="#" title="Label Printing" onclick="ShowLabelPrinting('@item.InScanID')"><i class="fa fa-print"></i></a>
+                                    <a href="@Url.Action("AWBPrint", "Consignment", new { id = item.InScanID })"><i class="fa fa-print"></i></a>
+                                    @*<a href="#" title="Label Printing" onclick="ShowLabelPrinting('@item.InScanID')"><i class="fa fa-print"></i></a>*@
                                 }
                             </td>
                         </tr>

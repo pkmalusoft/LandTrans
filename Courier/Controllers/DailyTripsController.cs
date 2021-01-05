@@ -393,7 +393,7 @@ namespace LTMSV2.Controllers
                            from subpet in gj.DefaultIfEmpty()
                            where c.DriverName.ToLower().Contains(term.Trim().ToLower())
                            orderby c.DriverName
-                           select new { DriverID = c.DriverID, DriverName = c.DriverName, VehicleId = c.VehicleID, RegNo = subpet.RegistrationNo ?? string.Empty }).ToList();
+                           select new { DriverID = c.DriverID, DriverName = c.DriverName +"-" + subpet.RegistrationNo ?? string.Empty  , VehicleId = c.VehicleID, RegNo = subpet.RegistrationNo ?? string.Empty }).ToList();
                          
                 return Json(lst, JsonRequestBehavior.AllowGet);
             }
@@ -404,7 +404,7 @@ namespace LTMSV2.Controllers
                            join v in db.VehicleMasters on c.VehicleID equals v.VehicleID into gj
                            from subpet in gj.DefaultIfEmpty()                           
                            orderby c.DriverName
-                           select new { DriverID = c.DriverID, DriverName = c.DriverName, VehicleId = c.VehicleID, RegNo = subpet.RegistrationNo ?? string.Empty }).ToList();
+                           select new { DriverID = c.DriverID, DriverName = c.DriverName + "-" + subpet.RegistrationNo ?? string.Empty, VehicleId = c.VehicleID, RegNo = subpet.RegistrationNo ?? string.Empty }).ToList();
                 return Json(lst, JsonRequestBehavior.AllowGet);
             }
         }

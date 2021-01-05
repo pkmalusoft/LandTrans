@@ -627,7 +627,7 @@
                 @Html.DropDownListFor(model => model.AgentID, new SelectList(@ViewBag.Agents, "AgentID", "Name"), "Select", new { @class = "form-control", @required = "true" })
                 @Html.ValidationMessageFor(model => model.AgentID, "", new { @class = "text-danger" })
             </div>
-            <div class="col-xs-12 col-sm-3">
+            <div class="col-xs-12 col-sm-3 hide">
                 <label class="required headinglabel">Manifest</label>
                 <select id="movementid" name="SelectedValues" multiple="multiple" class="form-control">
                     <option value=""></option>

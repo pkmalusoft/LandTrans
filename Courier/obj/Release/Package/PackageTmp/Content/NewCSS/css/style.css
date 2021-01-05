@@ -610,6 +610,7 @@ a {
         position: relative;
         margin: 0;
         padding: 0;
+        cursor: pointer;
         border-bottom: 1px solid #212a36;
     }
 
@@ -5730,6 +5731,29 @@ body .tblbackground{
 	align-items:center;
     padding-top:37px!important;
 }
+.searchdiv {
+    background-color: #fff;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 750px;
+    padding: 20px;
+    margin-top: 50px;
+    border-radius: 10px;
+    box-shadow: 0 9px 23px rgba(0, 0, 0, 0.09), 0 5px 5px rgba(0, 0, 0, 0.06) !important;
+}
+.sm-width{
+    max-width: 550px;
+}
+.pageTabs{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    justify-content: space-around!important;
+}
+
+
+
+
+
 .checkboxdesign.verticalcheckbox{
     padding-top: 0!important;
 }
@@ -5819,6 +5843,18 @@ hr{
     width: 25px;
     height: 25px;
 }
+.justify-center{
+    justify-content:center;
+}
+.innerCheckbox{
+    display: inline-block;
+    border: 1px solid #ccc;
+    padding: 6px 10px;
+    border-radius: 5px;
+}
+.col-2-5{
+    width: 20%;
+}
 input{
 	outline:0!Important;
 }
@@ -5868,11 +5904,15 @@ p.indexbtnpadding{
     background:#35b8eb;
  }
 
-.fa-times{
-    color: #dd4b39;
+.fa-times,body .red{
+    color: #dd4b39!important;
 }
 .fa-pencil{
     color:#35b8eb!important;
+}
+.pageTabs .headinglabel{
+    color: #1a8fbe!important;
+    font-size: 18px!important;
 }
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px){
 	.content-header + .row .d-flex .col-md-1{
@@ -5901,7 +5941,7 @@ p.indexbtnpadding{
 .small_btn{
     min-width: 40px!important;
     width:40px!important;
-    margin-top:21px;
+    margin-top:24px;
     border-radius:5px!important;
 }
 .divider{

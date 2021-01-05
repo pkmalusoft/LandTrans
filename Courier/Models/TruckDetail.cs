@@ -72,10 +72,10 @@ namespace LTMSV2.Models
         public Nullable<int> ParcelTypeId { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CostUpdateMaster> CostUpdateMasters { get; set; }
         public virtual CurrencyMaster CurrencyMaster { get; set; }
         public virtual CurrencyMaster CurrencyMaster1 { get; set; }
         public virtual RouteMaster RouteMaster { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CostUpdateMaster> CostUpdateMasters { get; set; }
     }
 }

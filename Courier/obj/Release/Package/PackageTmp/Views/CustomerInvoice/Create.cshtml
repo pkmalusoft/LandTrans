@@ -117,9 +117,9 @@
                 <div class="col-md-2">
                     @Html.HiddenFor(model => model.CustomerInvoiceID)
                     @Html.HiddenFor(model => model.CustomerID)
-                    @Html.HiddenFor(model => model.ChargeableWT)
+                    @*@Html.HiddenFor(model => model.ChargeableWT)
                     @Html.HiddenFor(model => model.AdminAmt)
-                    @Html.HiddenFor(model => model.FuelAmt)
+                    @Html.HiddenFor(model => model.FuelAmt)*@
                     @Html.HiddenFor(model => model.InvoiceTotal)
 
                     <label class="headinglabel required "> Invoice Date</label>
@@ -132,7 +132,7 @@
                     @Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @required = "true" })
                     @Html.ValidationMessageFor(model => model.CustomerID)
                 </div>*@
-                <div class="col-md-2 w-6">
+                @*<div class="col-md-2 w-6">
                     <label class="headinglabel">Tax %</label>
                     @Html.TextBoxFor(model => model.CustomerInvoiceTax, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
                     @Html.ValidationMessageFor(model => model.CustomerInvoiceTax)
@@ -154,7 +154,7 @@
                     <label class="headinglabel">Other Charge</label>
                     @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
                     @Html.ValidationMessageFor(model => model.OtherCharge)
-                </div>
+                </div>*@
                 <div class="col-md-3 align_self">
                     <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })

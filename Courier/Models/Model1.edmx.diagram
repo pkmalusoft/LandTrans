@@ -407,12 +407,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_VehicleMaster_VehicleType" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__EmployeeM__Depot__5A45429A" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RouteMaster" Width="1.5" PointX="42.375" PointY="0.875" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CostUpdateDetail" Width="1.5" PointX="49.125" PointY="55.25" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CostUpdateMaster" Width="1.5" PointX="46.875" PointY="70" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_BranchMaster" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__CostUpdat__Maste__7310F064" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_CostUpdateMaster" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_RevenueCostMaster" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" Width="1.5" PointX="25.375" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNote" Width="1.5" PointX="27.375" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TruckDetailOtherCharge" Width="1.5" PointX="28.375" PointY="25.75" />
@@ -421,7 +415,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TruckDetail" Width="1.5" PointX="45.625" PointY="40.125" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" />
@@ -429,11 +422,18 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__5B3966D3" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" Width="1.5" PointX="32.375" PointY="42.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoice" Width="1.5" PointX="15.75" PointY="110.25" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" Width="1.5" PointX="18" PointY="110.625" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.InScanMaster" Width="1.5" PointX="32.375" PointY="42.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CostUpdateDetail" Width="1.5" PointX="50.125" PointY="52" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CostUpdateMaster" Width="1.5" PointX="47.875" PointY="63.125" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_BranchMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__CostUpdat__Maste__057A84B9" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_CostUpdateMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_RevenueCostMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

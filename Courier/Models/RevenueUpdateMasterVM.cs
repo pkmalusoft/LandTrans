@@ -22,6 +22,7 @@ namespace LTMSV2.Models
         public decimal ExchangeRate { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }
+        public int CurrencyId { get; set; }
         public string DebitAccountName { get; set; }
         public string CreditAccountName { get; set; }
         public string CustomerName { get; set; }

@@ -168,6 +168,8 @@ namespace LTMSV2.Models
         public string LastModifiedDate { get; set; }
         public bool PrintLabel { get; set; }
         public string TypeofLoad { get; set; }
+        public bool COM { get; set; }
+        public string CargoDescription { get; set; }
         public List<OtherChargeDetailVM> otherchargesVM { get; set; }
         
 

@@ -169,7 +169,7 @@ namespace LTMSV2.DAL
                     obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
                     obj.AcHeadDebitId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadDebitId"].ToString());
                     obj.AcHeadCreditId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadCreditId"].ToString());
-                    obj.PaymentType = ds.Tables[0].Rows[i]["PaymentType"].ToString();
+                    //obj. = ds.Tables[0].Rows[i]["PaymentType"].ToString();
                     obj.DebitAccountName = ds.Tables[0].Rows[i]["DebitAccountHead"].ToString();
                     obj.CreditAccountName = ds.Tables[0].Rows[i]["CreditAccountHead"].ToString();
                     obj.Currency = ds.Tables[0].Rows[i]["CurrencyName"].ToString();

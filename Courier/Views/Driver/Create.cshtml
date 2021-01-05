@@ -216,6 +216,11 @@
                     @Html.TextBoxFor(model => model.PassportExpDate, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.PassportExpDate)
                 </div>
+                 <div class="col-md-3">
+                    <label class="headinglabel required">Nationality</label>
+                    @Html.TextBoxFor(model => model.Nationality, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Nationality)
+                </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Visa No.</label>
                     @Html.TextBoxFor(model => model.VisaNo, new { @class = "form-control" })
@@ -226,11 +231,7 @@
                     @Html.TextBoxFor(model => model.VisaExpDate, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.VisaExpDate)
                 </div>
-                <div class="col-md-3 ">
-                    <label class="headinglabel required">Vehicle RegNo.</label>
-                    @Html.DropDownListFor(model => model.VehicleID, new SelectList(@ViewBag.Vehicles, "VehicleID", "RegistrationNo"), "Select", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.VehicleID)
-                </div>
+                
                 <div class="col-md-3">
                     <label class="headinglabel required">Sponsor Name</label>
                     @Html.TextBoxFor(model => model.SponsorName, new { @class = "form-control txttarget" })

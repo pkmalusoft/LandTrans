@@ -398,8 +398,11 @@ namespace LTMSV2.Controllers
 
                     if (u.RoleID != a.RoleID)
                         u.RoleID = a.RoleID;
-
-                    db.Entry(x).State = EntityState.Modified;
+                    if (u.Password ==null)
+                    {
+                        u.Password = "12345";
+                    }
+                    db.Entry(u).State = EntityState.Modified;
                     db.SaveChanges();
                 }
             }

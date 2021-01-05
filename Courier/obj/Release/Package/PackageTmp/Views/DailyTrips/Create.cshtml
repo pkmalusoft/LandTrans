@@ -80,8 +80,8 @@
     <section class="content">
 
 
-    	<div class="row no-margin">
-        <div class="col-md-12 form-group bg-info d-flex" style="min-height:50px; justify-content: space-around ">
+        <div class="row no-margin">
+        <div class="col-md-12 form-group bg-info pageTabs d-flex" style="min-height:50px; justify-content: space-around ">
             <div class="field checkboxdesign verticalcheckbox">
                 <label class="headinglabel"><input type="radio" id="chkHired" checked name="Vtype" onchange="setVehicleType()" value="H" />Hired Vehicle</label>
             </div>
@@ -184,13 +184,15 @@
                         @Html.HiddenFor(model => model.RentAcHeadID)
 
                     </div>
-                    <div class="col-md-2 form-group">
-                        <label class="headinglabel">Other Charge Amount</label>
+                    <div class="col-md-3 form-group">
+                        <div class="flex justify-between">
+                            <label class="headinglabel">Other Charge Amount</label>
+                            <div class="">
+                            @*<label class="headinglabel">Add Other Charge</label>*@
+                            <a href="javascript:void(0)" class="Allocate" title="Add Other Charge"><i class="fa fa-bars"></i></a>
+                            </div>
+                        </div>
                         @Html.TextBoxFor(model => model.OtherCharges, new { @class = "form-control text-right", @onchange = "setNumberDecimal(this)", @readonly = "readonly" })
-                    </div>
-                    <div class="col-md-1">
-                        @*<label class="headinglabel">Add Other Charge</label>*@
-                        <a href="javascript:void(0)" class="Allocate" title="Add Other Charge"><i class="fa fa-bars"></i></a>
                     </div>
                     @*<div class="col-md-3 form-group">
             <label class="headinglabel required">Currency</label>
@@ -205,7 +207,7 @@
                         @Html.TextAreaFor(model => model.TDRemarks, new { @class = "form-control" })
                     </div>
                     <div class="col-md-3 form-group">
-                        <div class="checkboxdesign " >
+                        <div class="checkboxdesign justify-center" >
                             <input type="checkbox" id="chkPaymentDetail" onclick="checkpayment()" /> &nbsp
                             <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Driver Payment</label>
                         </div>
@@ -213,7 +215,7 @@
                 </div>
                 <div id="divpayment" class="hide">
                     <div class="row no-margin">
-                        <div class="col-md-12">
+                        <div class="col-md-12 sub_title_block">
                             <div class="flexTitle">
                                 <h3 style="color: white">Payment Details</h3>
 

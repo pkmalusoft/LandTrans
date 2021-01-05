@@ -92,6 +92,7 @@ namespace LTMSV2.Controllers
                 vm.ID = 0;
                 vm.DetailVM = new List<RevenueUpdateDetailVM>();
                 vm.EntryDate = DateTime.Now;
+                vm.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                 var emp = db.EmployeeMasters.Where(cc => cc.UserID == userId).FirstOrDefault();
                 if (emp != null)
                 {
@@ -108,6 +109,7 @@ namespace LTMSV2.Controllers
                 vm.EmployeeID = v.EmployeeID;
                 vm.InScanID = v.InScanID;
                 vm.BranchID = v.BranchID;
+                vm.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                 vm.AcFinancialYearID = v.AcFinancialYearID;
                 ViewBag.EditMode = "true";
             }
@@ -239,6 +241,8 @@ namespace LTMSV2.Controllers
         public JsonResult GetConsignmentDetail(int id)
         {
             var inscan = db.InScanMasters.Find(id);
+            int paymentModeid =Convert.ToInt32(inscan.PaymentModeId);
+            string InvoiceTo = inscan.InvoiceTo;
 
             var cust = (from c in db.CustomerMasters where c.CustomerName == inscan.Consignor select c).FirstOrDefault();
             var receiver = (from c in db.CustomerMasters where c.CustomerName == inscan.Consignee select c).FirstOrDefault();
@@ -246,6 +250,7 @@ namespace LTMSV2.Controllers
             string consignorname = "";
             int consigneeid = 0;
             string consigneename = "";
+            
             if (cust != null)
             {
                 consignorid = cust.CustomerID;
@@ -257,7 +262,7 @@ namespace LTMSV2.Controllers
                 consigneename = receiver.CustomerName;
             }
 
-            return Json(new { ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename }, JsonRequestBehavior.AllowGet);
+            return Json(new {PaymentModeId=paymentModeid,InvoiceTo=InvoiceTo, ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename }, JsonRequestBehavior.AllowGet);
 
         }
 

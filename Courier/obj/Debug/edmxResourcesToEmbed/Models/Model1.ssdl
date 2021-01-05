@@ -15,11 +15,11 @@
     </Key>
     <Property Name="AcBankDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcJournalID" Type="int" />
-    <Property Name="BankName" Type="nvarchar" MaxLength="100" />
-    <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="BankName" Type="varchar" MaxLength="100" />
+    <Property Name="ChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="ChequeDate" Type="datetime" />
-    <Property Name="PartyName" Type="nvarchar" MaxLength="50" />
-    <Property Name="StatusTrans" Type="nvarchar" MaxLength="1" />
+    <Property Name="PartyName" Type="varchar" MaxLength="50" />
+    <Property Name="StatusTrans" Type="varchar" MaxLength="1" />
     <Property Name="StatusReconciled" Type="bit" />
     <Property Name="ValueDate" Type="datetime" />
   </EntityType>
@@ -28,7 +28,7 @@
       <PropertyRef Name="AcCategoryID" />
     </Key>
     <Property Name="AcCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AcCategory" Type="nvarchar" MaxLength="100" />
+    <Property Name="AcCategory" Type="varchar" MaxLength="100" />
     <Property Name="CategoryOrder" Type="int" />
   </EntityType>
   <EntityType Name="AcCompany">
@@ -36,30 +36,30 @@
       <PropertyRef Name="AcCompanyID" />
     </Key>
     <Property Name="AcCompanyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AcCompany" Type="nvarchar" MaxLength="125" />
+    <Property Name="AcCompany" Type="varchar" MaxLength="125" />
     <Property Name="ParentID" Type="int" />
-    <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address3" Type="nvarchar" MaxLength="50" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-    <Property Name="EMail" Type="nvarchar" MaxLength="50" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Address3" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="EMail" Type="varchar" MaxLength="50" />
     <Property Name="UserID" Type="int" />
     <Property Name="CountryID" Type="int" />
     <Property Name="CityID" Type="int" />
     <Property Name="LocationID" Type="int" />
-    <Property Name="KeyPerson" Type="nvarchar" MaxLength="100" />
+    <Property Name="KeyPerson" Type="varchar" MaxLength="100" />
     <Property Name="DesignationID" Type="int" />
-    <Property Name="PhoneNo1" Type="nvarchar" MaxLength="50" />
-    <Property Name="PhoneNo2" Type="nvarchar" MaxLength="50" />
-    <Property Name="PhoneNo3" Type="nvarchar" MaxLength="50" />
-    <Property Name="PhoneNo4" Type="nvarchar" MaxLength="50" />
-    <Property Name="MobileNo1" Type="nvarchar" MaxLength="50" />
-    <Property Name="MobileNo2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Website" Type="nvarchar" MaxLength="100" />
-    <Property Name="CompanyPrefix" Type="nvarchar" MaxLength="10" />
+    <Property Name="PhoneNo1" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNo2" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNo3" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNo4" Type="varchar" MaxLength="50" />
+    <Property Name="MobileNo1" Type="varchar" MaxLength="50" />
+    <Property Name="MobileNo2" Type="varchar" MaxLength="50" />
+    <Property Name="Website" Type="varchar" MaxLength="100" />
+    <Property Name="CompanyPrefix" Type="varchar" MaxLength="10" />
     <Property Name="CurrencyID" Type="int" />
     <Property Name="IsAWBAutoGenrated" Type="bit" />
-    <Property Name="AWBFormat" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBFormat" Type="varchar" MaxLength="50" />
     <Property Name="StateID" Type="int" />
     <Property Name="IncrementBy" Type="int" />
     <Property Name="CountryName" Type="varchar" MaxLength="500" />
@@ -69,7 +69,7 @@
     <Property Name="InvoiceFormat" Type="varchar" MaxLength="10" />
     <Property Name="CompanyLogo" Type="image" />
     <Property Name="LogoFileName" Type="varchar" MaxLength="100" />
-    <Property Name="Logo" Type="nvarchar(max)" />
+    <Property Name="Logo" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="AccountHeadControl">
     <Key>
@@ -86,7 +86,7 @@
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="AcFYearFrom" Type="datetime" />
     <Property Name="AcFYearTo" Type="datetime" />
-    <Property Name="ReferenceName" Type="nvarchar" MaxLength="10" />
+    <Property Name="ReferenceName" Type="varchar" MaxLength="10" />
     <Property Name="StatusClose" Type="bit" />
     <Property Name="UserID" Type="int" />
     <Property Name="BranchID" Type="int" />
@@ -98,16 +98,16 @@
     </Key>
     <Property Name="AcGroupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="AcGroup" Type="nvarchar" MaxLength="50" />
-    <Property Name="AcType" Type="nvarchar" MaxLength="2" />
-    <Property Name="AcClass" Type="nvarchar" MaxLength="2" />
+    <Property Name="AcGroup" Type="varchar" MaxLength="50" />
+    <Property Name="AcType" Type="varchar" MaxLength="2" />
+    <Property Name="AcClass" Type="varchar" MaxLength="2" />
     <Property Name="ParentID" Type="int" />
     <Property Name="GroupOrder" Type="int" />
     <Property Name="StaticEdit" Type="smallint" />
     <Property Name="StatusHide" Type="bit" />
     <Property Name="UserID" Type="int" />
     <Property Name="AcCategoryID" Type="int" />
-    <Property Name="GroupCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="GroupCode" Type="varchar" MaxLength="50" />
     <Property Name="AcBranchID" Type="int" />
     <Property Name="AcTypeId" Type="int" />
   </EntityType>
@@ -116,8 +116,8 @@
       <PropertyRef Name="AcHeadID" />
     </Key>
     <Property Name="AcHeadID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AcHeadKey" Type="nvarchar" MaxLength="10" />
-    <Property Name="AcHead" Type="nvarchar" MaxLength="50" />
+    <Property Name="AcHeadKey" Type="varchar" MaxLength="10" />
+    <Property Name="AcHead" Type="varchar" MaxLength="50" />
     <Property Name="AcGroupID" Type="int" />
     <Property Name="ParentID" Type="int" />
     <Property Name="HeadOrder" Type="int" />
@@ -163,7 +163,7 @@
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Pagecontrol" Type="int" />
     <Property Name="AccountControlHead" Type="int" />
-    <Property Name="AccountName" Type="nvarchar(max)" />
+    <Property Name="AccountName" Type="varchar(max)" />
     <Property Name="AccountHeadID" Type="int" />
     <Property Name="AccountNature" Type="bit" />
     <Property Name="Remarks" Type="int" />
@@ -196,20 +196,20 @@
       <PropertyRef Name="AcJournalID" />
     </Key>
     <Property Name="AcJournalID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="VoucherNo" Type="nvarchar" MaxLength="20" />
+    <Property Name="VoucherNo" Type="varchar" MaxLength="20" />
     <Property Name="TransDate" Type="datetime" />
     <Property Name="AcFinancialYearID" Type="int" />
-    <Property Name="VoucherType" Type="nvarchar" MaxLength="3" />
+    <Property Name="VoucherType" Type="varchar" MaxLength="3" />
     <Property Name="TransType" Type="smallint" />
     <Property Name="StatusDelete" Type="bit" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="UserID" Type="int" />
     <Property Name="ShiftID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="Reference" Type="nvarchar" MaxLength="100" />
+    <Property Name="Reference" Type="varchar" MaxLength="100" />
     <Property Name="PaymentType" Type="int" />
     <Property Name="Lock" Type="bit" />
-    <Property Name="TransactionNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="TransactionNo" Type="varchar" MaxLength="100" />
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="BranchID" Type="int" />
   </EntityType>
@@ -228,11 +228,11 @@
     </Key>
     <Property Name="AcMemoBankDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcMemoJournalID" Type="int" />
-    <Property Name="BankName" Type="nvarchar" MaxLength="100" />
-    <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="BankName" Type="varchar" MaxLength="100" />
+    <Property Name="ChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="ChequeDate" Type="datetime" />
-    <Property Name="PartyName" Type="nvarchar" MaxLength="50" />
-    <Property Name="StatusTrans" Type="nvarchar" MaxLength="1" />
+    <Property Name="PartyName" Type="varchar" MaxLength="50" />
+    <Property Name="StatusTrans" Type="varchar" MaxLength="1" />
   </EntityType>
   <EntityType Name="AcMemoJournalDetail">
     <Key>
@@ -243,7 +243,7 @@
     <Property Name="AcHeadID" Type="int" />
     <Property Name="AnalysisHeadID" Type="int" />
     <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="BranchID" Type="int" />
     <Property Name="PartyID" Type="int" />
     <Property Name="PartyType" Type="nchar" MaxLength="1" />
@@ -254,12 +254,12 @@
     </Key>
     <Property Name="AcMemoJournalID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcJournalID" Type="int" />
-    <Property Name="VoucherNo" Type="nvarchar" MaxLength="20" />
+    <Property Name="VoucherNo" Type="varchar" MaxLength="20" />
     <Property Name="TransDate" Type="datetime" />
     <Property Name="AcFinancialYearID" Type="int" />
-    <Property Name="VoucherType" Type="nvarchar" MaxLength="2" />
+    <Property Name="VoucherType" Type="varchar" MaxLength="2" />
     <Property Name="StatusDelete" Type="bit" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="UserID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
   </EntityType>
@@ -279,7 +279,7 @@
     <Property Name="SupplierID" Type="int" />
     <Property Name="AssetMasterID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="InvRemarks" Type="nvarchar" MaxLength="500" />
+    <Property Name="InvRemarks" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="AcOPInvoiceDetails">
     <Key>
@@ -287,7 +287,7 @@
     </Key>
     <Property Name="AcOPInvoiceDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcOPInvoiceMasterID" Type="int" />
-    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="InvoiceNo" Type="varchar" MaxLength="50" />
     <Property Name="InvoiceDate" Type="datetime" />
     <Property Name="LastTransDate" Type="datetime" />
     <Property Name="Amount" Type="money" />
@@ -303,18 +303,18 @@
     <Property Name="AcHeadID" Type="int" />
     <Property Name="AcFinancialYearID" Type="int" />
     <Property Name="OPDate" Type="datetime" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
-    <Property Name="StatusSDSC" Type="nvarchar" MaxLength="2" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
+    <Property Name="StatusSDSC" Type="varchar" MaxLength="2" />
     <Property Name="PartyID" Type="int" />
     <Property Name="BranchID" Type="int" />
-    <Property Name="StatusSC" Type="nvarchar" MaxLength="1" />
+    <Property Name="StatusSC" Type="varchar" MaxLength="1" />
   </EntityType>
   <EntityType Name="AcType">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AccountType" Type="nvarchar" MaxLength="100" />
+    <Property Name="AccountType" Type="varchar" MaxLength="100" />
     <Property Name="AcCategoryId" Type="int" />
     <Property Name="BranchId" Type="int" />
   </EntityType>
@@ -324,17 +324,17 @@
     </Key>
     <Property Name="AgentID" Type="int" Nullable="false" />
     <Property Name="AcCompanyID" Type="int" Nullable="false" />
-    <Property Name="AgentCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="Name" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReferenceCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address3" Type="nvarchar" MaxLength="50" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-    <Property Name="Fax" Type="nvarchar" MaxLength="50" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" />
-    <Property Name="WebSite" Type="nvarchar" MaxLength="50" />
+    <Property Name="AgentCode" Type="varchar" MaxLength="50" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="ReferenceCode" Type="varchar" MaxLength="50" />
+    <Property Name="ContactPerson" Type="varchar" MaxLength="50" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Address3" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="Fax" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="WebSite" Type="varchar" MaxLength="50" />
     <Property Name="CurrencyID" Type="int" />
     <Property Name="StatusActive" Type="bit" Nullable="false" />
     <Property Name="CreditLimit" Type="money" />
@@ -342,8 +342,8 @@
     <Property Name="StatusWalkIn" Type="bit" />
     <Property Name="BranchID" Type="int" />
     <Property Name="ZoneCategoryID" Type="int" />
-    <Property Name="Username" Type="nvarchar" MaxLength="50" />
-    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="Username" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="CountryName" Type="varchar" MaxLength="500" />
     <Property Name="CityName" Type="varchar" MaxLength="500" />
@@ -356,15 +356,15 @@
       <PropertyRef Name="AnalysisGroupID" />
     </Key>
     <Property Name="AnalysisGroupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AnalysisGroup" Type="nvarchar" MaxLength="50" />
+    <Property Name="AnalysisGroup" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="AnalysisHead">
     <Key>
       <PropertyRef Name="AnalysisHeadID" />
     </Key>
     <Property Name="AnalysisHeadID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AnalysisCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="AnalysisHead" Type="nvarchar" MaxLength="50" />
+    <Property Name="AnalysisCode" Type="varchar" MaxLength="50" />
+    <Property Name="AnalysisHead" Type="varchar" MaxLength="50" />
     <Property Name="AnalysisGroupID" Type="int" />
     <Property Name="BranchID" Type="int" />
   </EntityType>
@@ -374,7 +374,7 @@
     </Key>
     <Property Name="AreaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="LocationID" Type="int" />
-    <Property Name="AreaName" Type="nvarchar" MaxLength="100" />
+    <Property Name="AreaName" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="aspnet_Applications">
     <Key>
@@ -391,14 +391,14 @@
     </Key>
     <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
     <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="Password" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="128" Nullable="false" />
     <Property Name="PasswordFormat" Type="int" Nullable="false" />
-    <Property Name="PasswordSalt" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="MobilePIN" Type="nvarchar" MaxLength="16" />
-    <Property Name="Email" Type="nvarchar" MaxLength="256" />
-    <Property Name="LoweredEmail" Type="nvarchar" MaxLength="256" />
-    <Property Name="PasswordQuestion" Type="nvarchar" MaxLength="256" />
-    <Property Name="PasswordAnswer" Type="nvarchar" MaxLength="128" />
+    <Property Name="PasswordSalt" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="MobilePIN" Type="varchar" MaxLength="16" />
+    <Property Name="Email" Type="varchar" MaxLength="256" />
+    <Property Name="LoweredEmail" Type="varchar" MaxLength="256" />
+    <Property Name="PasswordQuestion" Type="varchar" MaxLength="256" />
+    <Property Name="PasswordAnswer" Type="varchar" MaxLength="128" />
     <Property Name="IsApproved" Type="bit" Nullable="false" />
     <Property Name="IsLockedOut" Type="bit" Nullable="false" />
     <Property Name="CreateDate" Type="datetime" Nullable="false" />
@@ -417,8 +417,8 @@
     </Key>
     <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
     <Property Name="PathId" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="Path" Type="nvarchar" MaxLength="256" Nullable="false" />
-    <Property Name="LoweredPath" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="Path" Type="varchar" MaxLength="256" Nullable="false" />
+    <Property Name="LoweredPath" Type="varchar" MaxLength="256" Nullable="false" />
   </EntityType>
   <EntityType Name="aspnet_PersonalizationAllUsers">
     <Key>
@@ -454,17 +454,17 @@
     </Key>
     <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
     <Property Name="RoleId" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="RoleName" Type="nvarchar" MaxLength="256" Nullable="false" />
-    <Property Name="LoweredRoleName" Type="nvarchar" MaxLength="256" Nullable="false" />
-    <Property Name="Description" Type="nvarchar" MaxLength="256" />
+    <Property Name="RoleName" Type="varchar" MaxLength="256" Nullable="false" />
+    <Property Name="LoweredRoleName" Type="varchar" MaxLength="256" Nullable="false" />
+    <Property Name="Description" Type="varchar" MaxLength="256" />
   </EntityType>
   <EntityType Name="aspnet_SchemaVersions">
     <Key>
       <PropertyRef Name="Feature" />
       <PropertyRef Name="CompatibleSchemaVersion" />
     </Key>
-    <Property Name="Feature" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="CompatibleSchemaVersion" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Feature" Type="varchar" MaxLength="128" Nullable="false" />
+    <Property Name="CompatibleSchemaVersion" Type="varchar" MaxLength="128" Nullable="false" />
     <Property Name="IsCurrentVersion" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="aspnet_Users">
@@ -494,17 +494,17 @@
     <Property Name="EventId" Type="char" MaxLength="32" Nullable="false" />
     <Property Name="EventTimeUtc" Type="datetime" Nullable="false" />
     <Property Name="EventTime" Type="datetime" Nullable="false" />
-    <Property Name="EventType" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="EventType" Type="varchar" MaxLength="256" Nullable="false" />
     <Property Name="EventSequence" Type="decimal" Precision="19" Scale="0" Nullable="false" />
     <Property Name="EventOccurrence" Type="decimal" Precision="19" Scale="0" Nullable="false" />
     <Property Name="EventCode" Type="int" Nullable="false" />
     <Property Name="EventDetailCode" Type="int" Nullable="false" />
-    <Property Name="Message" Type="nvarchar" MaxLength="1024" />
-    <Property Name="ApplicationPath" Type="nvarchar" MaxLength="256" />
-    <Property Name="ApplicationVirtualPath" Type="nvarchar" MaxLength="256" />
-    <Property Name="MachineName" Type="nvarchar" MaxLength="256" Nullable="false" />
-    <Property Name="RequestUrl" Type="nvarchar" MaxLength="1024" />
-    <Property Name="ExceptionType" Type="nvarchar" MaxLength="256" />
+    <Property Name="Message" Type="varchar" MaxLength="1024" />
+    <Property Name="ApplicationPath" Type="varchar" MaxLength="256" />
+    <Property Name="ApplicationVirtualPath" Type="varchar" MaxLength="256" />
+    <Property Name="MachineName" Type="varchar" MaxLength="256" Nullable="false" />
+    <Property Name="RequestUrl" Type="varchar" MaxLength="1024" />
+    <Property Name="ExceptionType" Type="varchar" MaxLength="256" />
     <Property Name="Details" Type="ntext" />
   </EntityType>
   <EntityType Name="AWBIssue">
@@ -523,19 +523,19 @@
     </Key>
     <Property Name="AWBIssueDetailID" Type="int" Nullable="false" />
     <Property Name="AWBIssueID" Type="int" />
-    <Property Name="AWBNoFrom" Type="nvarchar" MaxLength="50" />
-    <Property Name="AWBNoTo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNoFrom" Type="varchar" MaxLength="50" />
+    <Property Name="AWBNoTo" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="AWBPending">
     <Key>
       <PropertyRef Name="AWBPendingID" />
     </Key>
     <Property Name="AWBPendingID" Type="int" Nullable="false" />
-    <Property Name="AWBNO" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNO" Type="varchar" MaxLength="50" />
     <Property Name="Date" Type="datetime" />
     <Property Name="OriginalAmt" Type="money" />
     <Property Name="RecvdAmt" Type="money" />
-    <Property Name="RefNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="RefNo" Type="varchar" MaxLength="50" />
     <Property Name="Status" Type="char" MaxLength="1" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="InscanID" Type="int" />
@@ -561,12 +561,12 @@
     </Key>
     <Property Name="AWBStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="StatusDescriptionID" Type="int" />
-    <Property Name="AWBNO" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNO" Type="varchar" MaxLength="50" />
     <Property Name="Date" Type="datetime" />
     <Property Name="statusUpdationID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="250" />
+    <Property Name="Remarks" Type="varchar" MaxLength="250" />
     <Property Name="FormID" Type="char" MaxLength="5" />
-    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
     <Property Name="statusUpdate" Type="bit" />
   </EntityType>
   <EntityType Name="AWBStock">
@@ -583,8 +583,8 @@
     </Key>
     <Property Name="AWBStockDetailID" Type="int" Nullable="false" />
     <Property Name="AWBStockID" Type="int" Nullable="false" />
-    <Property Name="AWBNoFrom" Type="nvarchar" MaxLength="50" />
-    <Property Name="AWBNoTo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNoFrom" Type="varchar" MaxLength="50" />
+    <Property Name="AWBNoTo" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="AWBTrackStatus">
     <Key>
@@ -592,12 +592,12 @@
     </Key>
     <Property Name="AWBTrackStatusId" Type="int" Nullable="false" />
     <Property Name="InScanId" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="EntryDate" Type="datetime" Nullable="false" />
     <Property Name="StatusTypeId" Type="int" Nullable="false" />
-    <Property Name="ShipmentStatus" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="ShipmentStatus" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="CourierStatusId" Type="int" Nullable="false" />
-    <Property Name="CourierStatus" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="CourierStatus" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
     <Property Name="ShipmentDetailID" Type="int" />
   </EntityType>
@@ -606,25 +606,25 @@
       <PropertyRef Name="BranchID" />
     </Key>
     <Property Name="BranchID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="BranchName" Type="nvarchar" MaxLength="125" />
-    <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address3" Type="nvarchar" MaxLength="50" />
+    <Property Name="BranchName" Type="varchar" MaxLength="125" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Address3" Type="varchar" MaxLength="50" />
     <Property Name="CountryID" Type="int" />
     <Property Name="CityID" Type="int" />
     <Property Name="LocationID" Type="int" />
-    <Property Name="KeyPerson" Type="nvarchar" MaxLength="100" />
+    <Property Name="KeyPerson" Type="varchar" MaxLength="100" />
     <Property Name="DesignationID" Type="int" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-    <Property Name="PhoneNo1" Type="nvarchar" MaxLength="50" />
-    <Property Name="PhoneNo2" Type="nvarchar" MaxLength="50" />
-    <Property Name="PhoneNo3" Type="nvarchar" MaxLength="50" />
-    <Property Name="PhoneNo4" Type="nvarchar" MaxLength="50" />
-    <Property Name="MobileNo1" Type="nvarchar" MaxLength="50" />
-    <Property Name="MobileNo2" Type="nvarchar" MaxLength="50" />
-    <Property Name="EMail" Type="nvarchar" MaxLength="50" />
-    <Property Name="Website" Type="nvarchar" MaxLength="100" />
-    <Property Name="BranchPrefix" Type="nvarchar" MaxLength="10" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNo1" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNo2" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNo3" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNo4" Type="varchar" MaxLength="50" />
+    <Property Name="MobileNo1" Type="varchar" MaxLength="50" />
+    <Property Name="MobileNo2" Type="varchar" MaxLength="50" />
+    <Property Name="EMail" Type="varchar" MaxLength="50" />
+    <Property Name="Website" Type="varchar" MaxLength="100" />
+    <Property Name="BranchPrefix" Type="varchar" MaxLength="10" />
     <Property Name="CurrencyID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="StatusAssociate" Type="bit" />
@@ -653,52 +653,52 @@
       <PropertyRef Name="CargoDescriptionID" />
     </Key>
     <Property Name="CargoDescriptionID" Type="int" Nullable="false" />
-    <Property Name="CargoDescription" Type="nvarchar" MaxLength="1000" />
+    <Property Name="CargoDescription" Type="varchar" MaxLength="1000" />
   </EntityType>
   <EntityType Name="CargoInScan">
     <Key>
       <PropertyRef Name="CargoInScanID" />
     </Key>
     <Property Name="CargoInScanID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
     <Property Name="InScanDate" Type="datetime" Nullable="false" />
     <Property Name="DepartmentID" Type="int" />
     <Property Name="OriginID" Type="int" />
     <Property Name="CityID" Type="int" />
-    <Property Name="DestinationID" Type="nvarchar" MaxLength="50" />
-    <Property Name="Pieces" Type="nvarchar" MaxLength="50" />
+    <Property Name="DestinationID" Type="varchar" MaxLength="50" />
+    <Property Name="Pieces" Type="varchar" MaxLength="50" />
     <Property Name="StatedWeight" Type="float" />
     <Property Name="CollectedBy" Type="int" />
     <Property Name="ReceivedBy" Type="int" Nullable="false" />
     <Property Name="CourierCharge" Type="money" Nullable="false" />
     <Property Name="ServiceCharge" Type="money" />
     <Property Name="Packing" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
-    <Property Name="StatusPaymentMode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
+    <Property Name="StatusPaymentMode" Type="varchar" MaxLength="50" />
     <Property Name="UserID" Type="int" Nullable="false" />
     <Property Name="ConsignorCityID" Type="int" />
     <Property Name="ConsigneeCityID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="AcJournalID" Type="int" />
     <Property Name="CustomerID" Type="int" />
-    <Property Name="Consignee" Type="nvarchar" MaxLength="2000" />
-    <Property Name="Consignor" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeAddress" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneePhone" Type="nvarchar" MaxLength="100" />
-    <Property Name="ConsignorPhone" Type="nvarchar" MaxLength="100" />
+    <Property Name="Consignee" Type="varchar" MaxLength="2000" />
+    <Property Name="Consignor" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeAddress" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneePhone" Type="varchar" MaxLength="100" />
+    <Property Name="ConsignorPhone" Type="varchar" MaxLength="100" />
     <Property Name="ConsignorCountryID" Type="int" />
     <Property Name="ConsigneeCountryID" Type="int" />
-    <Property Name="ConsigneeAddress1" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress1" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeAddress2" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress2" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeContact" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsignorContact" Type="nvarchar" MaxLength="400" />
-    <Property Name="PassportNo" Type="nvarchar" MaxLength="1000" />
-    <Property Name="Reference" Type="nvarchar" MaxLength="1000" />
-    <Property Name="Description" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ModeOfShipment" Type="nvarchar" MaxLength="10" />
+    <Property Name="ConsigneeAddress1" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress1" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeAddress2" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress2" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeContact" Type="varchar" MaxLength="400" />
+    <Property Name="ConsignorContact" Type="varchar" MaxLength="400" />
+    <Property Name="PassportNo" Type="varchar" MaxLength="1000" />
+    <Property Name="Reference" Type="varchar" MaxLength="1000" />
+    <Property Name="Description" Type="varchar" MaxLength="2000" />
+    <Property Name="ModeOfShipment" Type="varchar" MaxLength="10" />
     <Property Name="ItemID" Type="int" />
     <Property Name="Qty" Type="float" />
     <Property Name="TOTALPieces" Type="int" />
@@ -716,14 +716,14 @@
     <Property Name="CargoDescriptionID" Type="int" />
     <Property Name="Quantity" Type="float" />
     <Property Name="Value" Type="money" />
-    <Property Name="CargoDescription" Type="nvarchar(max)" />
+    <Property Name="CargoDescription" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="Category">
     <Key>
       <PropertyRef Name="CategoryID" />
     </Key>
     <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CategoryName" Type="nvarchar" MaxLength="100" />
+    <Property Name="CategoryName" Type="varchar" MaxLength="100" />
     <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <EntityType Name="CityMaster">
@@ -731,7 +731,7 @@
       <PropertyRef Name="CityID" />
     </Key>
     <Property Name="CityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="varchar" MaxLength="50" />
     <Property Name="CountryID" Type="int" />
     <Property Name="AreaCode" Type="varchar" MaxLength="10" />
     <Property Name="PinCode" Type="varchar" MaxLength="10" />
@@ -745,12 +745,12 @@
     <Property Name="ReceiptID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ReceiptDate" Type="datetime" Nullable="false" />
     <Property Name="AgentID" Type="int" Nullable="false" />
-    <Property Name="ManifestID" Type="nvarchar" MaxLength="500" />
+    <Property Name="ManifestID" Type="varchar" MaxLength="500" />
     <Property Name="AchHeadID" Type="int" Nullable="false" />
-    <Property Name="BankName" Type="nvarchar" MaxLength="100" />
-    <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="BankName" Type="varchar" MaxLength="100" />
+    <Property Name="ChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="ChequeDate" Type="datetime" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="125" />
+    <Property Name="Remarks" Type="varchar" MaxLength="125" />
     <Property Name="AcJournalID" Type="int" />
     <Property Name="Status" Type="bit" />
     <Property Name="Deleted" Type="bit" />
@@ -772,9 +772,9 @@
     <Property Name="ReceiptID" Type="int" Nullable="false" />
     <Property Name="ManifestID" Type="int" Nullable="false" />
     <Property Name="InScanId" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="Consignee" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsigneePhone" Type="nvarchar" MaxLength="400" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Consignee" Type="varchar" MaxLength="400" />
+    <Property Name="ConsigneePhone" Type="varchar" MaxLength="400" />
     <Property Name="CourierCharge" Type="money" Nullable="false" />
     <Property Name="OtherCharge" Type="money" />
     <Property Name="TotalCharge" Type="money" Nullable="false" />
@@ -804,7 +804,7 @@
     <Property Name="RevenueHeadID" Type="int" />
     <Property Name="Cost" Type="money" />
     <Property Name="Revenue" Type="money" />
-    <Property Name="InvoiceHead" Type="nvarchar" MaxLength="500" />
+    <Property Name="InvoiceHead" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Commission">
     <Key>
@@ -823,14 +823,14 @@
       <PropertyRef Name="ContentID" />
     </Key>
     <Property Name="ContentID" Type="int" Nullable="false" />
-    <Property Name="Content" Type="nvarchar" MaxLength="50" />
+    <Property Name="Content" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="CostType">
     <Key>
       <PropertyRef Name="CostTypeID" />
     </Key>
     <Property Name="CostTypeID" Type="int" Nullable="false" />
-    <Property Name="CostType" Type="nvarchar" MaxLength="50" />
+    <Property Name="CostType" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="CostUpdateDetail">
     <Key>
@@ -843,7 +843,6 @@
     <Property Name="IsPerfomaInvoice" Type="bit" Nullable="false" />
     <Property Name="ExpectedAmount" Type="money" />
     <Property Name="InvoiceId" Type="int" />
-    <Property Name="PaymentType" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadDebitId" Type="int" />
     <Property Name="AcHeadCreditId" Type="int" />
     <Property Name="SupplierId" Type="int" />
@@ -866,19 +865,19 @@
       <PropertyRef Name="CountryID" />
     </Key>
     <Property Name="CountryID" Type="int" Nullable="false" />
-    <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+    <Property Name="CountryName" Type="varchar" MaxLength="50" />
     <Property Name="StatusCountry" Type="char" MaxLength="1" />
     <Property Name="StatusBaseCountry" Type="char" MaxLength="2" />
-    <Property Name="CountryCode" Type="nvarchar" MaxLength="5" />
-    <Property Name="TelephoneCode" Type="nvarchar" MaxLength="10" />
-    <Property Name="IATACode" Type="nvarchar" MaxLength="50" />
+    <Property Name="CountryCode" Type="varchar" MaxLength="5" />
+    <Property Name="TelephoneCode" Type="varchar" MaxLength="10" />
+    <Property Name="IATACode" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="CourierDescription">
     <Key>
       <PropertyRef Name="CourierDescriptionID" />
     </Key>
     <Property Name="CourierDescriptionID" Type="int" Nullable="false" />
-    <Property Name="CourierDescription" Type="nvarchar" MaxLength="50" />
+    <Property Name="CourierDescription" Type="varchar" MaxLength="50" />
     <Property Name="DepartmentID" Type="int" />
     <Property Name="StatusDefault" Type="bit" Nullable="false" />
     <Property Name="Weight" Type="float" />
@@ -888,7 +887,7 @@
       <PropertyRef Name="MovementID" />
     </Key>
     <Property Name="MovementID" Type="int" Nullable="false" />
-    <Property Name="MovementType" Type="nvarchar" MaxLength="50" />
+    <Property Name="MovementType" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="CourierSchedule">
     <Key>
@@ -906,8 +905,8 @@
       <PropertyRef Name="CourierServiceID" />
     </Key>
     <Property Name="CourierServiceID" Type="int" Nullable="false" />
-    <Property Name="CourierService" Type="nvarchar" MaxLength="50" />
-    <Property Name="CourierServiceCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="CourierService" Type="varchar" MaxLength="50" />
+    <Property Name="CourierServiceCode" Type="varchar" MaxLength="50" />
     <Property Name="CourierDescriptionID" Type="int" Nullable="false" />
     <Property Name="InScanType" Type="char" MaxLength="2" />
     <Property Name="StatusDefaultD" Type="bit" Nullable="false" />
@@ -925,9 +924,9 @@
       <PropertyRef Name="CourierStatusID" />
     </Key>
     <Property Name="CourierStatusID" Type="int" Nullable="false" />
-    <Property Name="CourierStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="CourierStatus" Type="varchar" MaxLength="50" />
     <Property Name="StatusCourier" Type="char" MaxLength="50" />
-    <Property Name="StatusType" Type="nvarchar" MaxLength="50" />
+    <Property Name="StatusType" Type="varchar" MaxLength="50" />
     <Property Name="StatusTypeID" Type="int" />
   </EntityType>
   <EntityType Name="CreditNote">
@@ -942,7 +941,7 @@
     <Property Name="AcJournalID" Type="int" />
     <Property Name="FYearID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="InvoiceType" Type="nvarchar" MaxLength="5" />
+    <Property Name="InvoiceType" Type="varchar" MaxLength="5" />
     <Property Name="RecPayID" Type="int" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="CustomerID" Type="int" />
@@ -955,19 +954,19 @@
     </Key>
     <Property Name="CreditNoteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CreditNoteDetailID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
     <Property Name="Amount" Type="money" Nullable="false" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="CurrencyMaster">
     <Key>
       <PropertyRef Name="CurrencyID" />
     </Key>
     <Property Name="CurrencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CurrencyName" Type="nvarchar" MaxLength="50" />
-    <Property Name="Symbol" Type="nvarchar" MaxLength="50" />
+    <Property Name="CurrencyName" Type="varchar" MaxLength="50" />
+    <Property Name="Symbol" Type="varchar" MaxLength="50" />
     <Property Name="NoOfDecimals" Type="smallint" />
-    <Property Name="MonetaryUnit" Type="nvarchar" MaxLength="50" />
+    <Property Name="MonetaryUnit" Type="varchar" MaxLength="50" />
     <Property Name="CountryID" Type="int" />
     <Property Name="StatusBaseCurrency" Type="bit" />
     <Property Name="ExchangeRate" Type="money" />
@@ -990,8 +989,8 @@
       <PropertyRef Name="EnquiryID" />
     </Key>
     <Property Name="EnquiryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="EnquiryNo" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="EnquiryNo" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
     <Property Name="EnquiryDate" Type="datetime" Nullable="false" />
     <Property Name="ConsignerCountryId" Type="int" />
     <Property Name="ConsignerCityId" Type="int" />
@@ -1003,36 +1002,36 @@
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="ConsigneeCountryID" Type="int" />
     <Property Name="CustomerID" Type="int" />
-    <Property Name="Consignee" Type="nvarchar" MaxLength="200" />
-    <Property Name="Consignor" Type="nvarchar" MaxLength="200" />
-    <Property Name="ConsigneeAddress" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsignorAddress" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsigneePhone" Type="nvarchar" MaxLength="100" />
-    <Property Name="ConsignorPhone" Type="nvarchar" MaxLength="100" />
+    <Property Name="Consignee" Type="varchar" MaxLength="200" />
+    <Property Name="Consignor" Type="varchar" MaxLength="200" />
+    <Property Name="ConsigneeAddress" Type="varchar" MaxLength="400" />
+    <Property Name="ConsignorAddress" Type="varchar" MaxLength="400" />
+    <Property Name="ConsigneePhone" Type="varchar" MaxLength="100" />
+    <Property Name="ConsignorPhone" Type="varchar" MaxLength="100" />
     <Property Name="EmployeeID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="400" />
+    <Property Name="Remarks" Type="varchar" MaxLength="400" />
     <Property Name="CourierCharge" Type="money" />
     <Property Name="CollectedEmpID" Type="int" />
-    <Property Name="ShipmentType" Type="nvarchar" MaxLength="40" />
-    <Property Name="Vehicle" Type="nvarchar" MaxLength="40" />
+    <Property Name="ShipmentType" Type="varchar" MaxLength="40" />
+    <Property Name="Vehicle" Type="varchar" MaxLength="40" />
     <Property Name="ReadyTime" Type="datetime" />
     <Property Name="OfficeTimeFrom" Type="datetime" />
     <Property Name="OfficeTimeTo" Type="datetime" />
-    <Property Name="ConsigneeContact" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsignorContact" Type="nvarchar" MaxLength="400" />
+    <Property Name="ConsigneeContact" Type="varchar" MaxLength="400" />
+    <Property Name="ConsignorContact" Type="varchar" MaxLength="400" />
     <Property Name="EnteredByID" Type="int" />
-    <Property Name="UserName" Type="nvarchar" MaxLength="20" />
-    <Property Name="ConsigneeAddress1" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress1" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeAddress2" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress2" Type="nvarchar" MaxLength="2000" />
-    <Property Name="RequestSource" Type="nvarchar" MaxLength="50" />
-    <Property Name="ConsignorLocationName" Type="nvarchar" MaxLength="200" />
-    <Property Name="ConsigneeLocationName" Type="nvarchar" MaxLength="200" />
+    <Property Name="UserName" Type="varchar" MaxLength="20" />
+    <Property Name="ConsigneeAddress1" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress1" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeAddress2" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress2" Type="varchar" MaxLength="2000" />
+    <Property Name="RequestSource" Type="varchar" MaxLength="50" />
+    <Property Name="ConsignorLocationName" Type="varchar" MaxLength="200" />
+    <Property Name="ConsigneeLocationName" Type="varchar" MaxLength="200" />
     <Property Name="IsEnquiry" Type="bit" />
     <Property Name="VehicleID" Type="int" />
-    <Property Name="ParcelType" Type="nvarchar" MaxLength="40" />
-    <Property Name="ProductType" Type="nvarchar" MaxLength="40" />
+    <Property Name="ParcelType" Type="varchar" MaxLength="40" />
+    <Property Name="ProductType" Type="varchar" MaxLength="40" />
     <Property Name="NoOfPieces" Type="int" />
     <Property Name="Length" Type="int" />
     <Property Name="Height" Type="int" />
@@ -1086,20 +1085,20 @@
     </Key>
     <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="CustomerCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="CustomerName" Type="nvarchar" MaxLength="256" />
-    <Property Name="CustomerType" Type="nvarchar" MaxLength="50" />
+    <Property Name="CustomerCode" Type="varchar" MaxLength="50" />
+    <Property Name="CustomerName" Type="varchar" MaxLength="256" />
+    <Property Name="CustomerType" Type="varchar" MaxLength="50" />
     <Property Name="CustomerRateTypeID" Type="int" />
-    <Property Name="ReferenceCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address3" Type="nvarchar" MaxLength="50" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-    <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
-    <Property Name="Fax" Type="nvarchar" MaxLength="50" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" />
-    <Property Name="WebSite" Type="nvarchar" MaxLength="50" />
+    <Property Name="ReferenceCode" Type="varchar" MaxLength="50" />
+    <Property Name="ContactPerson" Type="varchar" MaxLength="50" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Address3" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="Mobile" Type="varchar" MaxLength="50" />
+    <Property Name="Fax" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="WebSite" Type="varchar" MaxLength="50" />
     <Property Name="CountryID" Type="int" />
     <Property Name="CityID" Type="int" />
     <Property Name="LocationID" Type="int" />
@@ -1114,9 +1113,9 @@
     <Property Name="CustomerRateTypeIntID" Type="int" />
     <Property Name="CourierServiceID" Type="int" />
     <Property Name="BranchID" Type="int" />
-    <Property Name="CustomerUsername" Type="nvarchar" MaxLength="50" />
-    <Property Name="Password" Type="nvarchar" MaxLength="50" />
-    <Property Name="VATTRN" Type="nvarchar" MaxLength="50" />
+    <Property Name="CustomerUsername" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="varchar" MaxLength="50" />
+    <Property Name="VATTRN" Type="varchar" MaxLength="50" />
     <Property Name="OfficeOpenTime" Type="time" Precision="7" />
     <Property Name="OfficeCloseTime" Type="time" Precision="7" />
     <Property Name="Referal" Type="varchar" MaxLength="100" />
@@ -1147,7 +1146,7 @@
     <Property Name="NotifyByEmail" Type="bit" Nullable="false" />
     <Property Name="NotifyBySMS" Type="bit" Nullable="false" />
     <Property Name="NotifyByWhatsApp" Type="bit" Nullable="false" />
-    <Property Name="MessageText" Type="nvarchar" MaxLength="1000" />
+    <Property Name="MessageText" Type="varchar" MaxLength="1000" />
     <Property Name="EntryDate" Type="datetime" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
     <Property Name="RecPayID" Type="int" />
@@ -1196,7 +1195,7 @@
       <PropertyRef Name="CustomerRateTypeID" />
     </Key>
     <Property Name="CustomerRateTypeID" Type="int" Nullable="false" />
-    <Property Name="CustomerRateType" Type="nvarchar" MaxLength="50" />
+    <Property Name="CustomerRateType" Type="varchar" MaxLength="50" />
     <Property Name="ZoneCategoryID" Type="int" />
     <Property Name="StatusDefault" Type="bit" />
   </EntityType>
@@ -1247,14 +1246,14 @@
     <Property Name="DebitNoteID" Type="int" Nullable="false" />
     <Property Name="AcHeadID" Type="int" Nullable="false" />
     <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="Department">
     <Key>
       <PropertyRef Name="DepartmentID" />
     </Key>
     <Property Name="DepartmentID" Type="int" Nullable="false" />
-    <Property Name="Department" Type="nvarchar" MaxLength="50" />
+    <Property Name="Department" Type="varchar" MaxLength="50" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="UserID" Type="int" />
     <Property Name="StatusDefaultI" Type="bit" Nullable="false" />
@@ -1266,7 +1265,7 @@
       <PropertyRef Name="DesignationID" />
     </Key>
     <Property Name="DesignationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Designation" Type="nvarchar" MaxLength="50" />
+    <Property Name="Designation" Type="varchar" MaxLength="50" />
     <Property Name="StatusDesignation" Type="char" MaxLength="2" />
   </EntityType>
   <EntityType Name="DocumentSetup">
@@ -1322,7 +1321,7 @@
       <PropertyRef Name="DRRID" />
     </Key>
     <Property Name="DRRID" Type="int" Nullable="false" />
-    <Property Name="DRSNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="DRSNo" Type="varchar" MaxLength="50" />
     <Property Name="DRSDate" Type="datetime" Nullable="false" />
     <Property Name="DRRDate" Type="datetime" />
     <Property Name="DeliveredBy" Type="int" />
@@ -1343,24 +1342,24 @@
     <Property Name="DRRConsignmentID" Type="int" Nullable="false" />
     <Property Name="DRRID" Type="int" Nullable="false" />
     <Property Name="InScanID" Type="int" />
-    <Property Name="AWBNO" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNO" Type="varchar" MaxLength="50" />
     <Property Name="CourierCharge" Type="money" Nullable="false" />
     <Property Name="MaterialCost" Type="money" Nullable="false" />
-    <Property Name="StatusPaymentMode" Type="nvarchar" MaxLength="50" />
+    <Property Name="StatusPaymentMode" Type="varchar" MaxLength="50" />
     <Property Name="CCReceived" Type="money" Nullable="false" />
     <Property Name="CCStatuspaymentType" Type="char" MaxLength="3" />
-    <Property Name="CCBankName" Type="nvarchar" MaxLength="50" />
-    <Property Name="CCChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="CCBankName" Type="varchar" MaxLength="50" />
+    <Property Name="CCChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="CCChequeDate" Type="datetime" />
-    <Property Name="CCRemarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="CCRemarks" Type="varchar" MaxLength="50" />
     <Property Name="MCReceived" Type="money" Nullable="false" />
     <Property Name="MCStatuspaymentType" Type="char" MaxLength="3" />
-    <Property Name="MCBankName" Type="nvarchar" MaxLength="50" />
-    <Property Name="MCChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="MCBankName" Type="varchar" MaxLength="50" />
+    <Property Name="MCChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="MCChequeDate" Type="datetime" />
     <Property Name="OtherAcHeadID" Type="int" />
-    <Property Name="Confirmation" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReceiverName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Confirmation" Type="varchar" MaxLength="50" />
+    <Property Name="ReceiverName" Type="varchar" MaxLength="50" />
     <Property Name="ReceivedTime" Type="datetime" />
     <Property Name="CourierStatusID" Type="int" Nullable="false" />
     <Property Name="StatusConsignment" Type="char" MaxLength="3" />
@@ -1376,7 +1375,7 @@
     <Property Name="RecPayID" Type="int" />
     <Property Name="CustomerID" Type="int" />
     <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="DRRPKPCAD">
     <Key>
@@ -1385,7 +1384,7 @@
     <Property Name="DRRPKPCADID" Type="int" Nullable="false" />
     <Property Name="DRRID" Type="int" />
     <Property Name="InScanID" Type="int" />
-    <Property Name="AWBNO" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNO" Type="varchar" MaxLength="50" />
     <Property Name="Amount" Type="money" />
     <Property Name="StatusPaymentMode" Type="char" MaxLength="3" />
     <Property Name="StatusDRRPKPCAD" Type="char" MaxLength="3" />
@@ -1398,7 +1397,7 @@
     <Property Name="DRRID" Type="int" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
     <Property Name="StatusRecPay" Type="char" MaxLength="3" />
     <Property Name="AcJournalID" Type="int" />
   </EntityType>
@@ -1407,7 +1406,7 @@
       <PropertyRef Name="DRSID" />
     </Key>
     <Property Name="DRSID" Type="int" Nullable="false" />
-    <Property Name="DRSNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="DRSNo" Type="varchar" MaxLength="50" />
     <Property Name="DRSDate" Type="datetime" Nullable="false" />
     <Property Name="DeliveredBy" Type="int" />
     <Property Name="CheckedBy" Type="int" Nullable="false" />
@@ -1416,7 +1415,7 @@
     <Property Name="StatusDRS" Type="char" MaxLength="1" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="StatusInbound" Type="bit" />
-    <Property Name="DrsType" Type="nvarchar" MaxLength="50" />
+    <Property Name="DrsType" Type="varchar" MaxLength="50" />
     <Property Name="BranchID" Type="int" />
     <Property Name="TotalMaterialCost" Type="money" />
   </EntityType>
@@ -1426,23 +1425,23 @@
     </Key>
     <Property Name="DRSDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="DRSID" Type="int" Nullable="false" />
-    <Property Name="AWBNO" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNO" Type="varchar" MaxLength="50" />
     <Property Name="InScanID" Type="int" />
     <Property Name="CourierCharge" Type="money" Nullable="false" />
     <Property Name="MaterialCost" Type="money" />
-    <Property Name="StatusPaymentMode" Type="nvarchar" MaxLength="50" />
+    <Property Name="StatusPaymentMode" Type="varchar" MaxLength="50" />
     <Property Name="CCReceived" Type="money" />
     <Property Name="CCStatuspaymentType" Type="char" MaxLength="2" />
-    <Property Name="CCBankName" Type="nvarchar" MaxLength="50" />
-    <Property Name="CCChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="CCBankName" Type="varchar" MaxLength="50" />
+    <Property Name="CCChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="CCChequeDate" Type="datetime" />
     <Property Name="MCReceived" Type="money" />
     <Property Name="MCStatuspaymentType" Type="char" MaxLength="2" />
-    <Property Name="MCBankName" Type="nvarchar" MaxLength="50" />
-    <Property Name="MCChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="MCBankName" Type="varchar" MaxLength="50" />
+    <Property Name="MCChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="MCChequeDate" Type="datetime" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReceiverName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
+    <Property Name="ReceiverName" Type="varchar" MaxLength="50" />
     <Property Name="ReceivedTime" Type="datetime" />
     <Property Name="CourierStatusID" Type="int" />
     <Property Name="StatusAWB" Type="char" MaxLength="2" />
@@ -1473,9 +1472,9 @@
     </Key>
     <Property Name="DRSReceiptID" Type="int" Nullable="false" />
     <Property Name="DRSReceiptDate" Type="datetime" />
-    <Property Name="DRSNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="DRSNo" Type="varchar" MaxLength="50" />
     <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="VehicleID" Type="int" />
     <Property Name="EmployeeID" Type="int" />
     <Property Name="DepartmentID" Type="int" />
@@ -1490,19 +1489,19 @@
       <PropertyRef Name="EmployeeID" />
     </Key>
     <Property Name="EmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="EmployeeCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="EmployeeName" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address3" Type="nvarchar" MaxLength="50" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-    <Property Name="Fax" Type="nvarchar" MaxLength="50" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeCode" Type="varchar" MaxLength="50" />
+    <Property Name="EmployeeName" Type="varchar" MaxLength="50" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Address3" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="Fax" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
     <Property Name="StatusActive" Type="bit" />
     <Property Name="CountryID" Type="int" />
-    <Property Name="PassportNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="PassportNo" Type="varchar" MaxLength="50" />
     <Property Name="PassportExpiryDate" Type="datetime" />
-    <Property Name="VisaNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="VisaNo" Type="varchar" MaxLength="50" />
     <Property Name="VisaExpiryDate" Type="datetime" />
     <Property Name="JoinDate" Type="datetime" />
     <Property Name="BasicSalary" Type="money" />
@@ -1510,16 +1509,16 @@
     <Property Name="Allowances" Type="money" />
     <Property Name="DesignationID" Type="int" />
     <Property Name="StatusCommission" Type="bit" />
-    <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+    <Property Name="Mobile" Type="varchar" MaxLength="50" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="statusDefault" Type="bit" />
     <Property Name="statusMobileLogin" Type="bit" />
-    <Property Name="Password" Type="nvarchar" MaxLength="100" />
+    <Property Name="Password" Type="varchar" MaxLength="100" />
     <Property Name="BranchID" Type="int" />
-    <Property Name="MobileDeviceID" Type="nvarchar" MaxLength="50" />
-    <Property Name="MobileDevicePwd" Type="nvarchar" MaxLength="50" />
-    <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
-    <Property Name="WebSite" Type="nvarchar" MaxLength="50" />
+    <Property Name="MobileDeviceID" Type="varchar" MaxLength="50" />
+    <Property Name="MobileDevicePwd" Type="varchar" MaxLength="50" />
+    <Property Name="ContactPerson" Type="varchar" MaxLength="50" />
+    <Property Name="WebSite" Type="varchar" MaxLength="50" />
     <Property Name="CityID" Type="int" />
     <Property Name="LocationID" Type="int" />
     <Property Name="CurrencyID" Type="int" />
@@ -1539,17 +1538,17 @@
       <PropertyRef Name="ExpenseID" />
     </Key>
     <Property Name="ExpenseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ExpenseNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ExpenseNo" Type="varchar" MaxLength="50" />
     <Property Name="ExpenseDate" Type="datetime" />
-    <Property Name="PaymentType" Type="nvarchar" MaxLength="50" />
+    <Property Name="PaymentType" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadID" Type="int" />
-    <Property Name="ReferenceNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="ReferenceNo" Type="varchar" MaxLength="100" />
     <Property Name="ReferenceDate" Type="datetime" />
     <Property Name="CurrencyID" Type="int" />
     <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="Remarks" Type="nvarchar(max)" />
+    <Property Name="Remarks" Type="varchar(max)" />
     <Property Name="AcJournalID" Type="int" />
-    <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocumentNo" Type="varchar" MaxLength="50" />
     <Property Name="FyearID" Type="int" />
   </EntityType>
   <EntityType Name="ExpenseDetails">
@@ -1558,7 +1557,7 @@
     </Key>
     <Property Name="ExpenseDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ExpenseID" Type="int" />
-    <Property Name="ExpenseType" Type="nvarchar(max)" />
+    <Property Name="ExpenseType" Type="varchar(max)" />
     <Property Name="Amount" Type="money" />
     <Property Name="Quantity" Type="decimal" Precision="18" Scale="2" />
     <Property Name="ItemUnitID" Type="int" />
@@ -1573,22 +1572,22 @@
     </Key>
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="ManifestNumber" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="ConsignorName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsignorAddress1_Building" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsignorAddress2_Street" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress3_PinCode" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorCityName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsignorCountryName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsignorLocationName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsigneeName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsigneeAddress1_Building" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsigneeAddress2_Street" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeAddress3_PinCode" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeCityName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsigneeCountryName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsigneeLocationName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="OriginAirportCity" Type="nvarchar" MaxLength="1000" />
-    <Property Name="DestinationAirportCity" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ConsignorName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsignorAddress1_Building" Type="varchar" MaxLength="400" />
+    <Property Name="ConsignorAddress2_Street" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress3_PinCode" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorCityName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsignorCountryName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsignorLocationName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsigneeName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsigneeAddress1_Building" Type="varchar" MaxLength="400" />
+    <Property Name="ConsigneeAddress2_Street" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeAddress3_PinCode" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeCityName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsigneeCountryName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsigneeLocationName" Type="varchar" MaxLength="1000" />
+    <Property Name="OriginAirportCity" Type="varchar" MaxLength="1000" />
+    <Property Name="DestinationAirportCity" Type="varchar" MaxLength="1000" />
     <Property Name="FlightDate" Type="datetime" />
     <Property Name="FlightNo" Type="varchar" MaxLength="50" />
     <Property Name="MAWB" Type="varchar" MaxLength="50" />
@@ -1619,8 +1618,8 @@
     <Property Name="Shipper" Type="varchar" MaxLength="500" Nullable="false" />
     <Property Name="Value" Type="money" Nullable="false" />
     <Property Name="Reciver" Type="varchar" MaxLength="500" Nullable="false" />
-    <Property Name="DestinationCountry" Type="nvarchar" MaxLength="1000" />
-    <Property Name="DestinationCity" Type="nvarchar" MaxLength="1000" />
+    <Property Name="DestinationCountry" Type="varchar" MaxLength="1000" />
+    <Property Name="DestinationCity" Type="varchar" MaxLength="1000" />
     <Property Name="BagNo" Type="varchar" MaxLength="500" Nullable="false" />
     <Property Name="CurrencyID" Type="int" Nullable="false" />
     <Property Name="FwdAgentId" Type="int" Nullable="false" />
@@ -1639,10 +1638,10 @@
     <Property Name="FAInvoiceID" Type="int" Nullable="false" />
     <Property Name="FAgentID" Type="int" Nullable="false" />
     <Property Name="FAInvoiceDate" Type="datetime" />
-    <Property Name="FAInvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="FAInvoiceNo" Type="varchar" MaxLength="50" />
     <Property Name="FAInvoiceTax" Type="money" />
     <Property Name="AcJournalID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="FYearID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="FuelSurchargePer" Type="money" />
@@ -1654,7 +1653,7 @@
     <Property Name="FAInvoiceDetailID" Type="int" Nullable="false" />
     <Property Name="FAInvoiceID" Type="int" />
     <Property Name="InScanInternationalID" Type="int" />
-    <Property Name="FAAWBNO" Type="nvarchar" MaxLength="50" />
+    <Property Name="FAAWBNO" Type="varchar" MaxLength="50" />
     <Property Name="ForwardingCharge" Type="money" />
     <Property Name="FInvoiceAmt" Type="money" />
     <Property Name="FuelSurchargePer" Type="money" />
@@ -1668,22 +1667,22 @@
     </Key>
     <Property Name="FAgentID" Type="int" Nullable="false" />
     <Property Name="AcCompanyID" Type="int" Nullable="false" />
-    <Property Name="FAgentName" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReferenceCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-    <Property Name="Fax" Type="nvarchar" MaxLength="50" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" />
-    <Property Name="WebSite" Type="nvarchar" MaxLength="50" />
+    <Property Name="FAgentName" Type="varchar" MaxLength="50" />
+    <Property Name="ReferenceCode" Type="varchar" MaxLength="50" />
+    <Property Name="ContactPerson" Type="varchar" MaxLength="50" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="Fax" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="WebSite" Type="varchar" MaxLength="50" />
     <Property Name="CountryID" Type="int" Nullable="false" />
     <Property Name="CityID" Type="int" Nullable="false" />
     <Property Name="CurrencyID" Type="int" Nullable="false" />
     <Property Name="ZoneCategoryID" Type="int" />
     <Property Name="StatusSigned" Type="bit" Nullable="false" />
     <Property Name="StatusActive" Type="bit" Nullable="false" />
-    <Property Name="FAgentCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="FAgentCode" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="StatusDefault" Type="bit" />
     <Property Name="StateID" Type="int" />
@@ -1718,7 +1717,7 @@
     </Key>
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="FAgentID" Type="int" Nullable="false" />
-    <Property Name="Month" Type="nvarchar" MaxLength="50" />
+    <Property Name="Month" Type="varchar" MaxLength="50" />
     <Property Name="CostRate" Type="float" Nullable="false" />
     <Property Name="SaleRate" Type="float" />
   </EntityType>
@@ -1773,13 +1772,13 @@
       <PropertyRef Name="ImportID" />
     </Key>
     <Property Name="ImportID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
     <Property Name="InScanDate" Type="datetime" Nullable="false" />
     <Property Name="DepartmentID" Type="int" />
     <Property Name="OriginID" Type="int" />
-    <Property Name="DestinationID" Type="nvarchar" MaxLength="50" />
+    <Property Name="DestinationID" Type="varchar" MaxLength="50" />
     <Property Name="CustomerRateTypeID" Type="int" />
-    <Property Name="Pieces" Type="nvarchar" MaxLength="50" />
+    <Property Name="Pieces" Type="varchar" MaxLength="50" />
     <Property Name="StatedWeight" Type="float" />
     <Property Name="CourierDescriptionID" Type="int" />
     <Property Name="CourierServiceID" Type="int" />
@@ -1787,7 +1786,7 @@
     <Property Name="ReceivedBy" Type="int" Nullable="false" />
     <Property Name="CourierCharge" Type="money" Nullable="false" />
     <Property Name="OtherCharge" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
     <Property Name="CourierStatusID" Type="int" />
     <Property Name="StatusPaymentMode" Type="char" MaxLength="3" />
     <Property Name="StatusClose" Type="bit" />
@@ -1805,15 +1804,15 @@
     <Property Name="ImportNo" Type="int" />
     <Property Name="ImportDate" Type="datetime" />
     <Property Name="DeliveryDate" Type="datetime" />
-    <Property Name="ReceiverName" Type="nvarchar" MaxLength="50" />
-    <Property Name="Consignor" Type="nvarchar" MaxLength="2000" />
-    <Property Name="Consignee" Type="nvarchar" MaxLength="2000" />
+    <Property Name="ReceiverName" Type="varchar" MaxLength="50" />
+    <Property Name="Consignor" Type="varchar" MaxLength="2000" />
+    <Property Name="Consignee" Type="varchar" MaxLength="2000" />
     <Property Name="TaxconfigurationID" Type="int" />
     <Property Name="CustomerID" Type="int" />
-    <Property Name="ConsigneeAddress" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneePhone" Type="nvarchar" MaxLength="100" />
-    <Property Name="ConsignorPhone" Type="nvarchar" MaxLength="100" />
+    <Property Name="ConsigneeAddress" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneePhone" Type="varchar" MaxLength="100" />
+    <Property Name="ConsignorPhone" Type="varchar" MaxLength="100" />
     <Property Name="ConsignorCountryID" Type="int" />
     <Property Name="ConsigneeCountryID" Type="int" />
     <Property Name="ConsignorLocationID" Type="int" />
@@ -1821,17 +1820,17 @@
     <Property Name="VerifiedDate" Type="datetime" />
     <Property Name="InscanID" Type="int" />
     <Property Name="IAgentID" Type="int" />
-    <Property Name="FlightNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="MAWBNO" Type="nvarchar" MaxLength="50" />
+    <Property Name="FlightNo" Type="varchar" MaxLength="50" />
+    <Property Name="MAWBNO" Type="varchar" MaxLength="50" />
     <Property Name="TotPackage" Type="int" />
     <Property Name="TotWeight" Type="float" />
-    <Property Name="TotPieces" Type="nvarchar" MaxLength="50" />
+    <Property Name="TotPieces" Type="varchar" MaxLength="50" />
     <Property Name="ClearingCharge" Type="money" />
-    <Property Name="BagNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="BagNo" Type="varchar" MaxLength="50" />
     <Property Name="FuelSurchargePer" Type="money" />
     <Property Name="FagentID" Type="int" />
-    <Property Name="FAWBNO" Type="nvarchar" MaxLength="50" />
-    <Property Name="ContentItem" Type="nvarchar" MaxLength="400" />
+    <Property Name="FAWBNO" Type="varchar" MaxLength="50" />
+    <Property Name="ContentItem" Type="varchar" MaxLength="400" />
     <Property Name="Value" Type="money" />
     <Property Name="StatusInsert" Type="bit" />
   </EntityType>
@@ -1841,16 +1840,16 @@
     </Key>
     <Property Name="IAgentID" Type="int" Nullable="false" />
     <Property Name="AcCompanyID" Type="int" Nullable="false" />
-    <Property Name="IAgentName" Type="nvarchar" MaxLength="50" />
-    <Property Name="IAgentCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReferenceCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address3" Type="nvarchar" MaxLength="50" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-    <Property Name="Fax" Type="nvarchar" MaxLength="50" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" />
-    <Property Name="WebSite" Type="nvarchar" MaxLength="50" />
+    <Property Name="IAgentName" Type="varchar" MaxLength="50" />
+    <Property Name="IAgentCode" Type="varchar" MaxLength="50" />
+    <Property Name="ReferenceCode" Type="varchar" MaxLength="50" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Address3" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="Fax" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="WebSite" Type="varchar" MaxLength="50" />
     <Property Name="CountryID" Type="int" />
     <Property Name="CityID" Type="int" />
     <Property Name="LocationID" Type="int" />
@@ -1863,22 +1862,22 @@
     </Key>
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="ManifestNumber" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="ConsignorName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsignorAddress1_Building" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsignorAddress2_Street" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress3_PinCode" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorCityName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsignorCountryName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsignorLocationName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsigneeName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsigneeAddress1_Building" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsigneeAddress2_Street" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeAddress3_PinCode" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeCityName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsigneeCountryName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="ConsigneeLocationName" Type="nvarchar" MaxLength="1000" />
-    <Property Name="OriginAirportCity" Type="nvarchar" MaxLength="1000" />
-    <Property Name="DestinationAirportCity" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ConsignorName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsignorAddress1_Building" Type="varchar" MaxLength="400" />
+    <Property Name="ConsignorAddress2_Street" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress3_PinCode" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorCityName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsignorCountryName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsignorLocationName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsigneeName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsigneeAddress1_Building" Type="varchar" MaxLength="400" />
+    <Property Name="ConsigneeAddress2_Street" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeAddress3_PinCode" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeCityName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsigneeCountryName" Type="varchar" MaxLength="1000" />
+    <Property Name="ConsigneeLocationName" Type="varchar" MaxLength="1000" />
+    <Property Name="OriginAirportCity" Type="varchar" MaxLength="1000" />
+    <Property Name="DestinationAirportCity" Type="varchar" MaxLength="1000" />
     <Property Name="FlightDate" Type="datetime" />
     <Property Name="FlightNo" Type="varchar" MaxLength="50" />
     <Property Name="MAWB" Type="varchar" MaxLength="50" />
@@ -1909,8 +1908,8 @@
     <Property Name="Shipper" Type="varchar" MaxLength="500" Nullable="false" />
     <Property Name="Value" Type="money" Nullable="false" />
     <Property Name="Reciver" Type="varchar" MaxLength="500" Nullable="false" />
-    <Property Name="DestinationCountry" Type="nvarchar" MaxLength="1000" />
-    <Property Name="DestinationCity" Type="nvarchar" MaxLength="1000" />
+    <Property Name="DestinationCountry" Type="varchar" MaxLength="1000" />
+    <Property Name="DestinationCity" Type="varchar" MaxLength="1000" />
     <Property Name="BagNo" Type="varchar" MaxLength="500" Nullable="false" />
     <Property Name="CurrencyID" Type="int" Nullable="false" />
     <Property Name="ExportShipmentID" Type="int" />
@@ -1923,17 +1922,17 @@
       <PropertyRef Name="InScanID" />
     </Key>
     <Property Name="InScanID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReferenceAWBNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
+    <Property Name="ReferenceAWBNo" Type="varchar" MaxLength="100" />
     <Property Name="InScanDate" Type="datetime" Nullable="false" />
     <Property Name="DepartmentID" Type="int" />
     <Property Name="ConsigneeID" Type="int" />
     <Property Name="ConsignorID" Type="int" />
     <Property Name="OriginID" Type="int" />
     <Property Name="CityID" Type="int" />
-    <Property Name="DestinationID" Type="nvarchar" MaxLength="50" />
+    <Property Name="DestinationID" Type="varchar" MaxLength="50" />
     <Property Name="CustomerRateTypeID" Type="int" />
-    <Property Name="Pieces" Type="nvarchar" MaxLength="50" />
+    <Property Name="Pieces" Type="varchar" MaxLength="50" />
     <Property Name="StatedWeight" Type="float" />
     <Property Name="CourierDescriptionID" Type="int" />
     <Property Name="CourierServiceID" Type="int" />
@@ -1941,7 +1940,7 @@
     <Property Name="ReceivedBy" Type="int" Nullable="false" />
     <Property Name="CourierCharge" Type="money" Nullable="false" />
     <Property Name="OtherCharge" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
     <Property Name="CourierStatusID" Type="int" />
     <Property Name="StatusPaymentMode" Type="char" MaxLength="3" />
     <Property Name="StatusClose" Type="bit" />
@@ -1967,12 +1966,12 @@
     <Property Name="TaxconfigurationID" Type="int" />
     <Property Name="StatusSuspenseEntry" Type="bit" />
     <Property Name="CustomerID" Type="int" />
-    <Property Name="Consignee" Type="nvarchar" MaxLength="2000" />
-    <Property Name="Consignor" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeAddress" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneePhone" Type="nvarchar" MaxLength="100" />
-    <Property Name="ConsignorPhone" Type="nvarchar" MaxLength="100" />
+    <Property Name="Consignee" Type="varchar" MaxLength="2000" />
+    <Property Name="Consignor" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeAddress" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneePhone" Type="varchar" MaxLength="100" />
+    <Property Name="ConsignorPhone" Type="varchar" MaxLength="100" />
     <Property Name="ConsignorCountryID" Type="int" />
     <Property Name="ConsigneeCountryID" Type="int" />
     <Property Name="ConsignorLocationID" Type="int" />
@@ -1980,9 +1979,9 @@
     <Property Name="AcTaxJournalID" Type="int" />
     <Property Name="StatusAWB" Type="char" MaxLength="2" />
     <Property Name="IAgentID" Type="int" />
-    <Property Name="BagNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="BagNo" Type="varchar" MaxLength="50" />
     <Property Name="FuelSurcharge" Type="money" />
-    <Property Name="PalletNo" Type="nvarchar" MaxLength="200" />
+    <Property Name="PalletNo" Type="varchar" MaxLength="200" />
     <Property Name="StatusAWBPending" Type="bit" />
     <Property Name="BalanceAmt" Type="money" />
     <Property Name="StatusPrepaid" Type="bit" />
@@ -1992,32 +1991,32 @@
     <Property Name="ReceivedDate" Type="datetime" />
     <Property Name="ReceivedByID" Type="int" />
     <Property Name="TypeOfGoodID" Type="int" />
-    <Property Name="InvoiceValue" Type="nvarchar" MaxLength="400" />
+    <Property Name="InvoiceValue" Type="varchar" MaxLength="400" />
     <Property Name="PrepaidAwbDetailID" Type="int" />
-    <Property Name="ConsigneeAddress1" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress1" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeAddress2" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress2" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeContact" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsignorContact" Type="nvarchar" MaxLength="400" />
+    <Property Name="ConsigneeAddress1" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress1" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeAddress2" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress2" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeContact" Type="varchar" MaxLength="400" />
+    <Property Name="ConsignorContact" Type="varchar" MaxLength="400" />
     <Property Name="BranchID" Type="int" />
-    <Property Name="CargoDescription" Type="nvarchar" MaxLength="400" />
-    <Property Name="HandlingInstruction" Type="nvarchar" MaxLength="400" />
+    <Property Name="CargoDescription" Type="varchar" MaxLength="400" />
+    <Property Name="HandlingInstruction" Type="varchar" MaxLength="400" />
     <Property Name="ServiceCharge" Type="money" />
     <Property Name="PackingCharge" Type="money" />
     <Property Name="CustomsValue" Type="money" />
     <Property Name="CustomsCollectedBy" Type="int" />
-    <Property Name="ConsigneeLocation" Type="nvarchar" MaxLength="50" />
-    <Property Name="ConsignorLocation" Type="nvarchar" MaxLength="50" />
+    <Property Name="ConsigneeLocation" Type="varchar" MaxLength="50" />
+    <Property Name="ConsignorLocation" Type="varchar" MaxLength="50" />
     <Property Name="IsActive" Type="bit" />
     <Property Name="InvoiceID" Type="int" />
     <Property Name="IsSkyLarkUpdate" Type="bit" />
     <Property Name="HeldBy" Type="int" />
     <Property Name="HeldOn" Type="datetime" />
-    <Property Name="HeldReason" Type="nvarchar" MaxLength="250" />
+    <Property Name="HeldReason" Type="varchar" MaxLength="250" />
     <Property Name="ReleasedBy" Type="int" />
     <Property Name="ReleasedOn" Type="datetime" />
-    <Property Name="ReleasedReason" Type="nvarchar" MaxLength="250" />
+    <Property Name="ReleasedReason" Type="varchar" MaxLength="250" />
     <Property Name="DepotCountryID" Type="int" />
     <Property Name="DepotID" Type="int" />
     <Property Name="AWBNumberMode" Type="bit" />
@@ -2026,30 +2025,30 @@
     <Property Name="AgentDeliveryID" Type="int" />
     <Property Name="AgentDeliveryCharges" Type="money" />
     <Property Name="MaterialCost" Type="money" />
-    <Property Name="DeviceID" Type="nvarchar" MaxLength="50" />
+    <Property Name="DeviceID" Type="varchar" MaxLength="50" />
     <Property Name="CollectedAmount" Type="money" />
     <Property Name="ColAgentInvoiceID" Type="int" />
     <Property Name="DelAgentInvoiceID" Type="int" />
     <Property Name="Tax" Type="money" />
     <Property Name="RevisedRate" Type="money" />
-    <Property Name="MaterialDescription" Type="nvarchar" MaxLength="50" />
-    <Property Name="SpecialInstructions" Type="nvarchar" MaxLength="10" />
+    <Property Name="MaterialDescription" Type="varchar" MaxLength="50" />
+    <Property Name="SpecialInstructions" Type="varchar" MaxLength="10" />
     <Property Name="PickupCharges" Type="money" />
-    <Property Name="OriginLocation" Type="nvarchar" MaxLength="200" />
-    <Property Name="DestinationLocation" Type="nvarchar" MaxLength="200" />
-    <Property Name="CourierType" Type="nvarchar" MaxLength="200" />
-    <Property Name="Destination" Type="nvarchar" MaxLength="200" />
+    <Property Name="OriginLocation" Type="varchar" MaxLength="200" />
+    <Property Name="DestinationLocation" Type="varchar" MaxLength="200" />
+    <Property Name="CourierType" Type="varchar" MaxLength="200" />
+    <Property Name="Destination" Type="varchar" MaxLength="200" />
     <Property Name="CBM" Type="decimal" Precision="18" Scale="0" />
     <Property Name="Weight" Type="decimal" Precision="18" Scale="0" />
     <Property Name="Discount" Type="money" />
     <Property Name="NetTotal" Type="money" />
-    <Property Name="SalesExec" Type="nvarchar" MaxLength="200" />
-    <Property Name="FAgent" Type="nvarchar" MaxLength="200" />
-    <Property Name="FAWBNo" Type="nvarchar" MaxLength="200" />
-    <Property Name="NCND" Type="nvarchar" MaxLength="50" />
-    <Property Name="Department" Type="nvarchar" MaxLength="200" />
-    <Property Name="ReceivedByName" Type="nvarchar" MaxLength="200" />
-    <Property Name="CollectedByName" Type="nvarchar" MaxLength="200" />
+    <Property Name="SalesExec" Type="varchar" MaxLength="200" />
+    <Property Name="FAgent" Type="varchar" MaxLength="200" />
+    <Property Name="FAWBNo" Type="varchar" MaxLength="200" />
+    <Property Name="NCND" Type="varchar" MaxLength="50" />
+    <Property Name="Department" Type="varchar" MaxLength="200" />
+    <Property Name="ReceivedByName" Type="varchar" MaxLength="200" />
+    <Property Name="CollectedByName" Type="varchar" MaxLength="200" />
     <Property Name="ParcelTypeID" Type="int" />
     <Property Name="ProductTypeID" Type="int" />
     <Property Name="ConsignorCountryName" Type="varchar" MaxLength="200" />
@@ -2063,7 +2062,7 @@
     </Key>
     <Property Name="InScanDomesticID" Type="int" Nullable="false" />
     <Property Name="InScanID" Type="int" Nullable="false" />
-    <Property Name="Refference" Type="nvarchar" MaxLength="50" />
+    <Property Name="Refference" Type="varchar" MaxLength="50" />
     <Property Name="NCND" Type="bit" Nullable="false" />
     <Property Name="CashOnly" Type="bit" Nullable="false" />
     <Property Name="CollectCash" Type="bit" Nullable="false" />
@@ -2071,7 +2070,7 @@
     <Property Name="DOCopyBack" Type="bit" Nullable="false" />
     <Property Name="CollectMaterial" Type="bit" Nullable="false" />
     <Property Name="MaterialCost" Type="money" Nullable="false" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="InScanInternational">
     <Key>
@@ -2079,19 +2078,19 @@
     </Key>
     <Property Name="InScanInternationalID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="FAgentID" Type="int" Nullable="false" />
-    <Property Name="ForwardingAWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ForwardingAWBNo" Type="varchar" MaxLength="50" />
     <Property Name="ForwardingDate" Type="datetime" Nullable="false" />
     <Property Name="VerifiedWeight" Type="float" Nullable="false" />
     <Property Name="ForwardingCharge" Type="money" Nullable="false" />
     <Property Name="StatusAssignment" Type="bit" Nullable="false" />
-    <Property Name="Flight" Type="nvarchar" MaxLength="500" />
-    <Property Name="BagNo" Type="nvarchar" MaxLength="500" />
-    <Property Name="RunNo" Type="nvarchar" MaxLength="500" />
-    <Property Name="CDNo" Type="nvarchar" MaxLength="500" />
+    <Property Name="Flight" Type="varchar" MaxLength="500" />
+    <Property Name="BagNo" Type="varchar" MaxLength="500" />
+    <Property Name="RunNo" Type="varchar" MaxLength="500" />
+    <Property Name="CDNo" Type="varchar" MaxLength="500" />
     <Property Name="EmployeeID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="1000" />
-    <Property Name="DocumentNo" Type="nvarchar" MaxLength="40" />
-    <Property Name="MAWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="1000" />
+    <Property Name="DocumentNo" Type="varchar" MaxLength="40" />
+    <Property Name="MAWBNo" Type="varchar" MaxLength="50" />
     <Property Name="MAWBDate" Type="datetime" />
     <Property Name="FlightDate" Type="datetime" />
     <Property Name="InScanID" Type="int" />
@@ -2120,51 +2119,51 @@
       <PropertyRef Name="InScanID" />
     </Key>
     <Property Name="InScanID" Type="int" Nullable="false" />
-    <Property Name="EnquiryNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="EnquiryNo" Type="varchar" MaxLength="50" />
     <Property Name="TransactionDate" Type="datetime" Nullable="false" />
-    <Property Name="ConsignmentNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ConsignmentNo" Type="varchar" MaxLength="50" />
     <Property Name="PickupRequestDate" Type="datetime" />
-    <Property Name="RequestSource" Type="nvarchar" MaxLength="50" />
+    <Property Name="RequestSource" Type="varchar" MaxLength="50" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="BranchID" Type="int" />
     <Property Name="DepotID" Type="int" />
     <Property Name="DeviceID" Type="varchar" MaxLength="50" />
     <Property Name="CustomerID" Type="int" />
-    <Property Name="Consignor" Type="nvarchar" MaxLength="200" />
-    <Property Name="ConsignorContact" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsignorAddress1_Building" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsignorAddress2_Street" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorAddress3_PinCode" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsignorPhone" Type="nvarchar" MaxLength="100" />
+    <Property Name="Consignor" Type="varchar" MaxLength="200" />
+    <Property Name="ConsignorContact" Type="varchar" MaxLength="400" />
+    <Property Name="ConsignorAddress1_Building" Type="varchar" MaxLength="400" />
+    <Property Name="ConsignorAddress2_Street" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorAddress3_PinCode" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsignorPhone" Type="varchar" MaxLength="100" />
     <Property Name="ConsignorCountryName" Type="varchar" MaxLength="200" />
     <Property Name="ConsignorCityName" Type="varchar" MaxLength="200" />
-    <Property Name="ConsignorLocationName" Type="nvarchar" MaxLength="200" />
-    <Property Name="ConsignorFax" Type="nvarchar" MaxLength="200" />
-    <Property Name="Consignee" Type="nvarchar" MaxLength="200" />
-    <Property Name="ConsigneeContact" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsigneeAddress1_Building" Type="nvarchar" MaxLength="400" />
-    <Property Name="ConsigneeAddress2_Street" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneeAddress3_PinCode" Type="nvarchar" MaxLength="2000" />
-    <Property Name="ConsigneePhone" Type="nvarchar" MaxLength="100" />
+    <Property Name="ConsignorLocationName" Type="varchar" MaxLength="200" />
+    <Property Name="ConsignorFax" Type="varchar" MaxLength="200" />
+    <Property Name="Consignee" Type="varchar" MaxLength="200" />
+    <Property Name="ConsigneeContact" Type="varchar" MaxLength="400" />
+    <Property Name="ConsigneeAddress1_Building" Type="varchar" MaxLength="400" />
+    <Property Name="ConsigneeAddress2_Street" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneeAddress3_PinCode" Type="varchar" MaxLength="2000" />
+    <Property Name="ConsigneePhone" Type="varchar" MaxLength="100" />
     <Property Name="ConsigneeCountryName" Type="varchar" MaxLength="200" />
     <Property Name="ConsigneeCityName" Type="varchar" MaxLength="200" />
-    <Property Name="ConsigneeLocationName" Type="nvarchar" MaxLength="200" />
-    <Property Name="ConsigneeFax" Type="nvarchar" MaxLength="200" />
+    <Property Name="ConsigneeLocationName" Type="varchar" MaxLength="200" />
+    <Property Name="ConsigneeFax" Type="varchar" MaxLength="200" />
     <Property Name="AssignedEmployeeID" Type="int" />
-    <Property Name="PickupRemarks" Type="nvarchar" MaxLength="400" />
+    <Property Name="PickupRemarks" Type="varchar" MaxLength="400" />
     <Property Name="PickupReadyTime" Type="datetime" />
     <Property Name="EnteredByID" Type="int" />
-    <Property Name="UserName" Type="nvarchar" MaxLength="20" />
+    <Property Name="UserName" Type="varchar" MaxLength="20" />
     <Property Name="IsEnquiry" Type="bit" />
     <Property Name="CourierStatusID" Type="int" />
     <Property Name="PickedUpEmpID" Type="int" />
     <Property Name="PickedupDate" Type="datetime" />
     <Property Name="ItemID" Type="int" />
     <Property Name="PackageID" Type="int" />
-    <Property Name="Pieces" Type="nvarchar" MaxLength="50" />
+    <Property Name="Pieces" Type="varchar" MaxLength="50" />
     <Property Name="Weight" Type="decimal" Precision="18" Scale="3" />
     <Property Name="Volume" Type="decimal" Precision="18" Scale="3" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
     <Property Name="MovementID" Type="int" />
     <Property Name="StatusCustomsDocument" Type="bit" />
     <Property Name="DespatchDate" Type="datetime" />
@@ -2217,6 +2216,8 @@
     <Property Name="ConsigneeCountryID" Type="int" />
     <Property Name="ConsigneeCityID" Type="int" />
     <Property Name="InvoiceTo" Type="varchar" MaxLength="50" />
+    <Property Name="CargoDescription" Type="varchar" MaxLength="1000" />
+    <Property Name="COM" Type="bit" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
@@ -2234,16 +2235,16 @@
       <PropertyRef Name="InScanID" />
     </Key>
     <Property Name="InScanID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
     <Property Name="InScanDate" Type="datetime" Nullable="false" />
     <Property Name="DepartmentID" Type="int" />
     <Property Name="ConsigneeID" Type="int" />
     <Property Name="ConsignorID" Type="int" />
     <Property Name="OriginID" Type="int" />
     <Property Name="CityID" Type="int" />
-    <Property Name="DestinationID" Type="nvarchar" MaxLength="50" />
+    <Property Name="DestinationID" Type="varchar" MaxLength="50" />
     <Property Name="CustomerRateTypeID" Type="int" />
-    <Property Name="Pieces" Type="nvarchar" MaxLength="50" />
+    <Property Name="Pieces" Type="varchar" MaxLength="50" />
     <Property Name="StatedWeight" Type="float" />
     <Property Name="CourierDescriptionID" Type="int" />
     <Property Name="CourierServiceID" Type="int" />
@@ -2251,7 +2252,7 @@
     <Property Name="ReceivedBy" Type="int" Nullable="false" />
     <Property Name="CourierCharge" Type="money" Nullable="false" />
     <Property Name="OtherCharge" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
     <Property Name="CourierStatusID" Type="int" />
     <Property Name="StatusPaymentMode" Type="char" MaxLength="3" />
     <Property Name="StatusClose" Type="bit" />
@@ -2280,7 +2281,7 @@
       <PropertyRef Name="ItemID" />
     </Key>
     <Property Name="ItemID" Type="int" Nullable="false" />
-    <Property Name="Item" Type="nvarchar" MaxLength="500" />
+    <Property Name="Item" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="ItemMaster">
     <Key>
@@ -2289,26 +2290,26 @@
     <Property Name="ItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ItemName" Type="varchar" MaxLength="100" />
     <Property Name="Description" Type="varchar" MaxLength="512" />
-    <Property Name="HsCode" Type="nvarchar" MaxLength="150" />
+    <Property Name="HsCode" Type="varchar" MaxLength="150" />
   </EntityType>
   <EntityType Name="ItemUnit">
     <Key>
       <PropertyRef Name="ItemUnitID" />
     </Key>
     <Property Name="ItemUnitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UnitName" Type="nvarchar" MaxLength="100" />
+    <Property Name="UnitName" Type="varchar" MaxLength="100" />
     <Property Name="EqualentQty" Type="int" />
-    <Property Name="Remarks" Type="nvarchar(max)" />
+    <Property Name="Remarks" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="JobEnquiry">
     <Key>
       <PropertyRef Name="JobEnquiryID" />
     </Key>
     <Property Name="JobEnquiryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="JobEnquiryNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="JobEnquiryNo" Type="varchar" MaxLength="50" />
     <Property Name="JobEnquiryDate" Type="datetime" />
-    <Property Name="JobName" Type="nvarchar" MaxLength="512" />
-    <Property Name="JobDescription" Type="nvarchar(max)" />
+    <Property Name="JobName" Type="varchar" MaxLength="512" />
+    <Property Name="JobDescription" Type="varchar(max)" />
     <Property Name="StartDate" Type="datetime" />
     <Property Name="EndDate" Type="datetime" />
     <Property Name="ContractValue" Type="decimal" Precision="18" Scale="2" />
@@ -2316,8 +2317,8 @@
     <Property Name="EmployeeID" Type="int" />
     <Property Name="LocationID" Type="int" />
     <Property Name="IsActive" Type="smallint" />
-    <Property Name="Remarks" Type="nvarchar(max)" />
-    <Property Name="JobNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar(max)" />
+    <Property Name="JobNo" Type="varchar" MaxLength="50" />
     <Property Name="JobDate" Type="datetime" />
   </EntityType>
   <EntityType Name="JobEnquiryDetails">
@@ -2333,14 +2334,14 @@
     <Property Name="Cost" Type="decimal" Precision="18" Scale="2" />
     <Property Name="Revenue" Type="decimal" Precision="18" Scale="2" />
     <Property Name="Profit" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Description" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="LocationMaster">
     <Key>
       <PropertyRef Name="LocationID" />
     </Key>
     <Property Name="LocationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Location" Type="nvarchar" MaxLength="50" />
+    <Property Name="Location" Type="varchar" MaxLength="50" />
     <Property Name="CityID" Type="int" />
     <Property Name="IsDefault" Type="bit" />
   </EntityType>
@@ -2350,7 +2351,7 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Month" Type="int" />
-    <Property Name="MonthName" Type="nvarchar" MaxLength="100" />
+    <Property Name="MonthName" Type="varchar" MaxLength="100" />
     <Property Name="CurrentYear" Type="int" />
     <Property Name="IsLock" Type="bit" />
   </EntityType>
@@ -2360,8 +2361,8 @@
     </Key>
     <Property Name="LogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Error" Type="text" />
-    <Property Name="Page" Type="nvarchar(max)" />
-    <Property Name="Event" Type="nvarchar(max)" />
+    <Property Name="Page" Type="varchar(max)" />
+    <Property Name="Event" Type="varchar(max)" />
     <Property Name="CreateDateTime" Type="datetime" />
   </EntityType>
   <EntityType Name="Manifest">
@@ -2369,15 +2370,15 @@
       <PropertyRef Name="ManifestID" />
     </Key>
     <Property Name="ManifestID" Type="int" Nullable="false" />
-    <Property Name="ManifestNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ManifestNo" Type="varchar" MaxLength="50" />
     <Property Name="ManifestDate" Type="datetime" Nullable="false" />
     <Property Name="InScanID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
     <Property Name="ShipperID" Type="int" Nullable="false" />
-    <Property Name="Consignee" Type="nvarchar" MaxLength="50" />
-    <Property Name="Route" Type="nvarchar" MaxLength="50" />
+    <Property Name="Consignee" Type="varchar" MaxLength="50" />
+    <Property Name="Route" Type="varchar" MaxLength="50" />
     <Property Name="ForwardingAgentID" Type="int" Nullable="false" />
-    <Property Name="ForwardingAWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ForwardingAWBNo" Type="varchar" MaxLength="50" />
     <Property Name="StatusUpdated" Type="bit" Nullable="false" />
     <Property Name="AcCompanyID" Type="int" />
   </EntityType>
@@ -2387,7 +2388,7 @@
     </Key>
     <Property Name="MCInvoiceID" Type="int" Nullable="false" />
     <Property Name="McPaymentReceiptID" Type="int" />
-    <Property Name="DocumentNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="DocumentNo" Type="varchar" MaxLength="100" />
     <Property Name="TransDate" Type="datetime" />
   </EntityType>
   <EntityType Name="MCPayment">
@@ -2396,17 +2397,17 @@
     </Key>
     <Property Name="MCPaymentID" Type="int" Nullable="false" />
     <Property Name="MCPaymentDate" Type="datetime" Nullable="false" />
-    <Property Name="MCPaymentNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="MCPaymentNo" Type="varchar" MaxLength="50" />
     <Property Name="DRRConsignmentID" Type="int" Nullable="false" />
     <Property Name="CustomerID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
     <Property Name="MaterialCost" Type="money" />
     <Property Name="MCStatuspaymentType" Type="char" MaxLength="3" />
-    <Property Name="MCBankName" Type="nvarchar" MaxLength="50" />
-    <Property Name="MCChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="MCBankName" Type="varchar" MaxLength="50" />
+    <Property Name="MCChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="MCChequeDate" Type="datetime" />
     <Property Name="EmployeeID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="StatusReturn" Type="char" MaxLength="2" />
     <Property Name="DRSNo" Type="char" MaxLength="10" />
   </EntityType>
@@ -2462,10 +2463,10 @@
       <PropertyRef Name="MessageID" />
     </Key>
     <Property Name="MessageID" Type="int" Nullable="false" />
-    <Property Name="Messages" Type="nvarchar" MaxLength="1500" />
+    <Property Name="Messages" Type="varchar" MaxLength="1500" />
     <Property Name="EmployeeID" Type="int" />
     <Property Name="SendDate" Type="datetime" />
-    <Property Name="Subject" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Subject" Type="varchar" MaxLength="1000" />
     <Property Name="AcCompanyID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="OtherCharge">
@@ -2473,7 +2474,7 @@
       <PropertyRef Name="OtherChargeID" />
     </Key>
     <Property Name="OtherChargeID" Type="int" Nullable="false" />
-    <Property Name="OtherCharge" Type="nvarchar" MaxLength="100" />
+    <Property Name="OtherCharge" Type="varchar" MaxLength="100" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="statusinvoice" Type="bit" />
@@ -2488,11 +2489,11 @@
     </Key>
     <Property Name="OtherChargeInvoiceID" Type="int" Nullable="false" />
     <Property Name="CustomerID" Type="int" />
-    <Property Name="DocumentNo" Type="nvarchar" MaxLength="40" />
+    <Property Name="DocumentNo" Type="varchar" MaxLength="40" />
     <Property Name="Transdate" Type="datetime" />
     <Property Name="Amount" Type="money" />
     <Property Name="AcJournalID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="2000" />
+    <Property Name="Remarks" Type="varchar" MaxLength="2000" />
     <Property Name="FuelPer" Type="money" />
     <Property Name="AdminPer" Type="money" />
     <Property Name="FuelAmt" Type="money" />
@@ -2509,7 +2510,7 @@
     <Property Name="OtherChargeID" Type="int" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="2000" />
+    <Property Name="Remarks" Type="varchar" MaxLength="2000" />
     <Property Name="InscanID" Type="int" />
   </EntityType>
   <EntityType Name="OtherChargesType">
@@ -2518,7 +2519,7 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcHeadID" Type="int" />
-    <Property Name="Name" Type="nvarchar" MaxLength="100" />
+    <Property Name="Name" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="OthereChargesType">
     <Key>
@@ -2526,7 +2527,7 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcHeadID" Type="int" />
-    <Property Name="Name" Type="nvarchar" MaxLength="100" />
+    <Property Name="Name" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="OutstandingInvoiceDetails">
     <Key>
@@ -2534,9 +2535,9 @@
     </Key>
     <Property Name="OutstandingID" Type="int" Nullable="false" />
     <Property Name="InvoiceID" Type="int" />
-    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="InvoiceNo" Type="varchar" MaxLength="50" />
     <Property Name="Status" Type="char" MaxLength="1" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
     <Property Name="StatusInvoice" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="Package">
@@ -2553,14 +2554,14 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PageControlId" Type="int" />
-    <Property Name="FieldName" Type="nvarchar" MaxLength="100" />
+    <Property Name="FieldName" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="PageControlMaster">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ControlName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ControlName" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="Pallet">
     <Key>
@@ -2568,12 +2569,12 @@
     </Key>
     <Property Name="PalletID" Type="int" Nullable="false" />
     <Property Name="InscanID" Type="int" />
-    <Property Name="PalletNo" Type="nvarchar" MaxLength="200" />
+    <Property Name="PalletNo" Type="varchar" MaxLength="200" />
     <Property Name="Date" Type="datetime" />
     <Property Name="Weight" Type="float" />
     <Property Name="EmployeeID" Type="int" />
     <Property Name="DestinationID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="AcCompanyID" Type="int" />
   </EntityType>
   <EntityType Name="ParcelType">
@@ -2582,21 +2583,21 @@
     </Key>
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="ParcelTypeID" Type="int" />
-    <Property Name="ParcelType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ParcelType" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="PaymentsTerms">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" MaxLength="100" />
+    <Property Name="Name" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="PaymentTerms">
     <Key>
       <PropertyRef Name="PaymentTermID" />
     </Key>
     <Property Name="PaymentTermID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="PaymentTerm" Type="nvarchar" MaxLength="100" />
+    <Property Name="PaymentTerm" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="Period">
     <Key>
@@ -2605,7 +2606,7 @@
     <Property Name="PeriodID" Type="int" Nullable="false" />
     <Property Name="PeriodFrom" Type="smalldatetime" />
     <Property Name="PeriodTo" Type="smalldatetime" />
-    <Property Name="PeriodName" Type="nvarchar" MaxLength="50" />
+    <Property Name="PeriodName" Type="varchar" MaxLength="50" />
     <Property Name="PeriodTypeID" Type="int" />
   </EntityType>
   <EntityType Name="PeriodType">
@@ -2613,7 +2614,7 @@
       <PropertyRef Name="PeriodTypeID" />
     </Key>
     <Property Name="PeriodTypeID" Type="int" Nullable="false" />
-    <Property Name="PeriodType" Type="nvarchar" MaxLength="50" />
+    <Property Name="PeriodType" Type="varchar" MaxLength="50" />
     <Property Name="AcCompanyID" Type="int" />
   </EntityType>
   <EntityType Name="PickUpRequestStatus">
@@ -2629,11 +2630,11 @@
     </Key>
     <Property Name="PODID" Type="int" Nullable="false" />
     <Property Name="InScanID" Type="int" Nullable="false" />
-    <Property Name="ReceiverName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ReceiverName" Type="varchar" MaxLength="50" />
     <Property Name="ReceivedTime" Type="datetime" />
     <Property Name="CourierStatusID" Type="int" />
     <Property Name="DRRConsignmentID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="100" />
+    <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="UpdationDate" Type="datetime" />
     <Property Name="IsSkyLarkUpdate" Type="bit" />
   </EntityType>
@@ -2671,7 +2672,7 @@
     <Property Name="AcHeadID" Type="int" />
     <Property Name="Reference" Type="nchar" MaxLength="500" />
     <Property Name="EmployeeID" Type="int" />
-    <Property Name="Documentno" Type="nvarchar" MaxLength="40" />
+    <Property Name="Documentno" Type="varchar" MaxLength="40" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="AcjournalID" Type="int" />
   </EntityType>
@@ -2681,7 +2682,7 @@
     </Key>
     <Property Name="PrepaidAwbDetailID" Type="int" Nullable="false" />
     <Property Name="PrepaidAwbID" Type="int" Nullable="false" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
     <Property Name="CourierCharge" Type="money" />
     <Property Name="InscanID" Type="int" />
     <Property Name="statusUpdate" Type="bit" />
@@ -2691,7 +2692,7 @@
       <PropertyRef Name="PrepaidAWBInvoiceID" />
     </Key>
     <Property Name="PrepaidAWBInvoiceID" Type="int" Nullable="false" />
-    <Property Name="PrepaidAWBInvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="PrepaidAWBInvoiceNo" Type="varchar" MaxLength="50" />
     <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
     <Property Name="CustomerID" Type="int" Nullable="false" />
     <Property Name="AcJournalID" Type="int" />
@@ -2705,9 +2706,9 @@
     <Property Name="PrepaidAWBInvoiceDetailID" Type="int" Nullable="false" />
     <Property Name="PrepaidAWBInvoiceID" Type="int" Nullable="false" />
     <Property Name="IssueDate" Type="datetime" />
-    <Property Name="Destination" Type="nvarchar" MaxLength="50" />
-    <Property Name="AWBNoFrom" Type="nvarchar" MaxLength="50" />
-    <Property Name="AWBNoTo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Destination" Type="varchar" MaxLength="50" />
+    <Property Name="AWBNoFrom" Type="varchar" MaxLength="50" />
+    <Property Name="AWBNoTo" Type="varchar" MaxLength="50" />
     <Property Name="Qty" Type="int" />
     <Property Name="Rate" Type="money" />
     <Property Name="MaxAllowedWeight" Type="float" />
@@ -2718,14 +2719,14 @@
       <PropertyRef Name="ProductCategoryID" />
     </Key>
     <Property Name="ProductCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ProductCategoryName" Type="nvarchar" MaxLength="256" />
+    <Property Name="ProductCategoryName" Type="varchar" MaxLength="256" />
   </EntityType>
   <EntityType Name="ProductItemMaster">
     <Key>
       <PropertyRef Name="ProductItemID" />
     </Key>
     <Property Name="ProductItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ProductItemName" Type="nvarchar" MaxLength="256" />
+    <Property Name="ProductItemName" Type="varchar" MaxLength="256" />
     <Property Name="ProductCategoryID" Type="int" />
     <Property Name="MinimumCharges" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
@@ -2734,8 +2735,8 @@
       <PropertyRef Name="ProductID" />
     </Key>
     <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ProductName" Type="nvarchar" MaxLength="512" />
-    <Property Name="ProductCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProductName" Type="varchar" MaxLength="512" />
+    <Property Name="ProductCode" Type="varchar" MaxLength="50" />
     <Property Name="CategoryID" Type="int" />
     <Property Name="TypeID" Type="int" />
     <Property Name="EndUserPrice" Type="decimal" Precision="18" Scale="2" />
@@ -2761,10 +2762,10 @@
       <PropertyRef Name="PurchaseInvoiceID" />
     </Key>
     <Property Name="PurchaseInvoiceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="PurchaseInvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="PurchaseInvoiceNo" Type="varchar" MaxLength="50" />
     <Property Name="PurchaseInvoiceDate" Type="datetime" />
-    <Property Name="Reference" Type="nvarchar" MaxLength="100" />
-    <Property Name="LPOReference" Type="nvarchar" MaxLength="100" />
+    <Property Name="Reference" Type="varchar" MaxLength="100" />
+    <Property Name="LPOReference" Type="varchar" MaxLength="100" />
     <Property Name="LPODate" Type="datetime" />
     <Property Name="SupplierID" Type="int" />
     <Property Name="EmployeeID" Type="int" />
@@ -2779,12 +2780,12 @@
     <Property Name="StatusDiscountAmt" Type="bit" />
     <Property Name="OtherCharges" Type="decimal" Precision="18" Scale="2" />
     <Property Name="PaymentTermID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar(max)" />
+    <Property Name="Remarks" Type="varchar(max)" />
     <Property Name="FYearID" Type="int" />
     <Property Name="SalesManID" Type="int" />
-    <Property Name="DocumentNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="DocumentNo" Type="varchar" MaxLength="100" />
     <Property Name="DocumentDate" Type="datetime" />
-    <Property Name="PaymentType" Type="nvarchar" MaxLength="10" />
+    <Property Name="PaymentType" Type="varchar" MaxLength="10" />
     <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <EntityType Name="PurchaseInvoiceDetails">
@@ -2797,23 +2798,23 @@
     <Property Name="ItemUnitID" Type="int" />
     <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
     <Property Name="JobID" Type="int" />
-    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Description" Type="varchar(max)" />
     <Property Name="DebitAcHeadID" Type="int" />
-    <Property Name="Details" Type="nvarchar" MaxLength="200" />
+    <Property Name="Details" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="PurchaseOrder">
     <Key>
       <PropertyRef Name="PurchaseOrderID" />
     </Key>
     <Property Name="PurchaseOrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="PurchaseOrderNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="PurchaseOrderNo" Type="varchar" MaxLength="50" />
     <Property Name="PurchaseOrderDate" Type="datetime" />
     <Property Name="SupplierID" Type="int" />
     <Property Name="EmployeeID" Type="int" />
     <Property Name="DeliveryDate" Type="datetime" />
     <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
     <Property Name="StatusDiscountAmt" Type="bit" />
-    <Property Name="Remarks" Type="nvarchar(max)" />
+    <Property Name="Remarks" Type="varchar(max)" />
     <Property Name="FYearID" Type="int" />
   </EntityType>
   <EntityType Name="PurchaseOrderDetails">
@@ -2826,7 +2827,7 @@
     <Property Name="Quantity" Type="int" />
     <Property Name="ItemUnitID" Type="int" />
     <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Description" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="QuickInScanDetail">
     <Key>
@@ -2842,7 +2843,7 @@
       <PropertyRef Name="QuickInscanID" />
     </Key>
     <Property Name="QuickInscanID" Type="int" Nullable="false" />
-    <Property Name="InscanSheetNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="InscanSheetNumber" Type="varchar" MaxLength="100" />
     <Property Name="ReceivedByID" Type="int" />
     <Property Name="CollectedByID" Type="int" />
     <Property Name="QuickInscanDateTime" Type="datetime" Nullable="false" />
@@ -2861,13 +2862,13 @@
       <PropertyRef Name="QuotationID" />
     </Key>
     <Property Name="QuotationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="QuotationNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="QuotationNo" Type="varchar" MaxLength="50" />
     <Property Name="QuotationDate" Type="datetime" />
     <Property Name="CustomerID" Type="int" />
     <Property Name="EmployeeID" Type="int" />
     <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
     <Property Name="StatusDiscountAmt" Type="bit" />
-    <Property Name="Remarks" Type="nvarchar(max)" />
+    <Property Name="Remarks" Type="varchar(max)" />
     <Property Name="BranchID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="QuotationDetails">
@@ -2882,7 +2883,7 @@
     <Property Name="CustomerRateTypeID" Type="int" />
     <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
     <Property Name="JobID" Type="int" />
-    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Description" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="RecPay">
     <Key>
@@ -2890,18 +2891,18 @@
     </Key>
     <Property Name="RecPayID" Type="int" Nullable="false" />
     <Property Name="RecPayDate" Type="datetime" />
-    <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="DocumentNo" Type="varchar" MaxLength="50" />
     <Property Name="CustomerID" Type="int" />
     <Property Name="SupplierID" Type="int" />
     <Property Name="BusinessCentreID" Type="int" />
-    <Property Name="BankName" Type="nvarchar" MaxLength="100" />
-    <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="BankName" Type="varchar" MaxLength="100" />
+    <Property Name="ChequeNo" Type="varchar" MaxLength="50" />
     <Property Name="ChequeDate" Type="datetime" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="125" />
+    <Property Name="Remarks" Type="varchar" MaxLength="125" />
     <Property Name="AcJournalID" Type="int" />
     <Property Name="StatusRec" Type="bit" />
-    <Property Name="StatusEntry" Type="nvarchar" MaxLength="50" />
-    <Property Name="StatusOrigin" Type="nvarchar" MaxLength="50" />
+    <Property Name="StatusEntry" Type="varchar" MaxLength="50" />
+    <Property Name="StatusOrigin" Type="varchar" MaxLength="50" />
     <Property Name="FYearID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="EXRate" Type="money" />
@@ -2917,12 +2918,12 @@
     <Property Name="RecPayID" Type="int" />
     <Property Name="InvoiceID" Type="int" />
     <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="120" />
-    <Property Name="StatusInvoice" Type="nvarchar" MaxLength="1" />
+    <Property Name="Remarks" Type="varchar" MaxLength="120" />
+    <Property Name="StatusInvoice" Type="varchar" MaxLength="1" />
     <Property Name="StatusAdvance" Type="bit" />
     <Property Name="statusReceipt" Type="char" MaxLength="1" />
-    <Property Name="InvDate" Type="nvarchar" MaxLength="100" />
-    <Property Name="InvNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="InvDate" Type="varchar" MaxLength="100" />
+    <Property Name="InvNo" Type="varchar" MaxLength="100" />
     <Property Name="CurrencyID" Type="int" />
     <Property Name="Lock" Type="bit" />
     <Property Name="JobID" Type="int" />
@@ -2944,7 +2945,7 @@
     <Property Name="DRSDetailID" Type="int" Nullable="false" />
     <Property Name="EmployeeID" Type="int" Nullable="false" />
     <Property Name="ReturnTime" Type="datetime" Nullable="false" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="RevenueCostMaster">
     <Key>
@@ -2969,9 +2970,9 @@
       <PropertyRef Name="RevenueTypeID" />
     </Key>
     <Property Name="RevenueTypeID" Type="int" Nullable="false" />
-    <Property Name="RevenueType" Type="nvarchar" MaxLength="50" />
+    <Property Name="RevenueType" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadID" Type="int" />
-    <Property Name="RevenueCode" Type="nvarchar" MaxLength="20" />
+    <Property Name="RevenueCode" Type="varchar" MaxLength="20" />
     <Property Name="RevenueCost" Type="money" />
     <Property Name="MinimumValue" Type="money" />
     <Property Name="TaxPercentage" Type="decimal" Precision="5" Scale="2" />
@@ -2988,13 +2989,14 @@
     <Property Name="ExpectedAmount" Type="money" />
     <Property Name="InvoiceId" Type="int" />
     <Property Name="IsPerfomaCod" Type="bit" />
+    <Property Name="PaymentType" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadDebitId" Type="int" />
     <Property Name="AcHeadCreditId" Type="int" />
     <Property Name="CustomerId" Type="int" />
     <Property Name="CurrencyId" Type="int" />
     <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="3" />
-    <Property Name="InvoiceTo" Type="varchar" MaxLength="50" />
     <Property Name="PaymentModeId" Type="int" />
+    <Property Name="InvoiceTo" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="RevenueUpdateMaster">
     <Key>
@@ -3012,7 +3014,7 @@
       <PropertyRef Name="RoleID" />
     </Key>
     <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RoleName" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="RoleName" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="Type" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="RouteMaster">
@@ -3041,10 +3043,10 @@
       <PropertyRef Name="SalesInvoiceID" />
     </Key>
     <Property Name="SalesInvoiceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="SalesInvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="SalesInvoiceNo" Type="varchar" MaxLength="50" />
     <Property Name="SalesInvoiceDate" Type="datetime" />
-    <Property Name="Reference" Type="nvarchar" MaxLength="100" />
-    <Property Name="LPOReference" Type="nvarchar" MaxLength="100" />
+    <Property Name="Reference" Type="varchar" MaxLength="100" />
+    <Property Name="LPOReference" Type="varchar" MaxLength="100" />
     <Property Name="LPODate" Type="datetime" />
     <Property Name="CustomerID" Type="int" />
     <Property Name="EmployeeID" Type="int" />
@@ -3059,12 +3061,12 @@
     <Property Name="StatusDiscountAmt" Type="bit" />
     <Property Name="OtherCharges" Type="decimal" Precision="18" Scale="2" />
     <Property Name="PaymentTermID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar(max)" />
+    <Property Name="Remarks" Type="varchar(max)" />
     <Property Name="FYearID" Type="int" />
     <Property Name="SalesManID" Type="int" />
-    <Property Name="DocumentNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="DocumentNo" Type="varchar" MaxLength="100" />
     <Property Name="DocumentDate" Type="datetime" />
-    <Property Name="PaymentType" Type="nvarchar" MaxLength="10" />
+    <Property Name="PaymentType" Type="varchar" MaxLength="10" />
     <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <EntityType Name="SalesInvoiceDetails">
@@ -3079,7 +3081,7 @@
     <Property Name="CustomerRateTypeID" Type="int" />
     <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
     <Property Name="JobID" Type="int" />
-    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Description" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="StaffNotes">
     <Key>
@@ -3088,7 +3090,7 @@
     <Property Name="NotesId" Type="int" Nullable="false" />
     <Property Name="InScanId" Type="int" Nullable="false" />
     <Property Name="EmployeeId" Type="int" Nullable="false" />
-    <Property Name="Notes" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Notes" Type="varchar" MaxLength="1000" />
     <Property Name="EntryDate" Type="datetime" Nullable="false" />
     <Property Name="UserId" Type="int" />
     <Property Name="RecPayID" Type="int" />
@@ -3116,7 +3118,7 @@
       <PropertyRef Name="SupplierID" />
     </Key>
     <Property Name="SupplierID" Type="int" Nullable="false" />
-    <Property Name="Supplier" Type="nvarchar" MaxLength="500" />
+    <Property Name="Supplier" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="SupplierInvoice">
     <Key>
@@ -3160,19 +3162,19 @@
       <PropertyRef Name="SupplierID" />
     </Key>
     <Property Name="SupplierID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="SupplierName" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReferenceCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-    <Property Name="Fax" Type="nvarchar" MaxLength="50" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" />
-    <Property Name="WebSite" Type="nvarchar" MaxLength="50" />
+    <Property Name="SupplierName" Type="varchar" MaxLength="50" />
+    <Property Name="ReferenceCode" Type="varchar" MaxLength="50" />
+    <Property Name="ContactPerson" Type="varchar" MaxLength="50" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="Fax" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="WebSite" Type="varchar" MaxLength="50" />
     <Property Name="CurrencyID" Type="int" />
     <Property Name="StatusActive" Type="bit" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="MobileNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="MobileNo" Type="varchar" MaxLength="50" />
     <Property Name="BranchID" Type="int" />
     <Property Name="SupplierTypeID" Type="int" />
     <Property Name="RegistrationNo" Type="varchar" MaxLength="200" />
@@ -3197,16 +3199,16 @@
       <PropertyRef Name="SupplierTypeID" />
     </Key>
     <Property Name="SupplierTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="SupplierType" Type="nvarchar" MaxLength="50" />
+    <Property Name="SupplierType" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <EntityType Name="SystemControlSequence">
     <Key>
       <PropertyRef Name="Name" />
     </Key>
-    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="SeqNo" Type="bigint" Nullable="false" />
-    <Property Name="Format" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Format" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="AutoGenerate" Type="bit" />
   </EntityType>
   <EntityType Name="TaxConfiguration">
@@ -3228,17 +3230,17 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AcCompanyID" Type="int" Nullable="false" />
-    <Property Name="AgentCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="Name" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReferenceCode" Type="nvarchar" MaxLength="50" />
-    <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address1" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address2" Type="nvarchar" MaxLength="50" />
-    <Property Name="Address3" Type="nvarchar" MaxLength="50" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-    <Property Name="Fax" Type="nvarchar" MaxLength="50" />
-    <Property Name="Email" Type="nvarchar" MaxLength="50" />
-    <Property Name="WebSite" Type="nvarchar" MaxLength="50" />
+    <Property Name="AgentCode" Type="varchar" MaxLength="50" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="ReferenceCode" Type="varchar" MaxLength="50" />
+    <Property Name="ContactPerson" Type="varchar" MaxLength="50" />
+    <Property Name="Address1" Type="varchar" MaxLength="50" />
+    <Property Name="Address2" Type="varchar" MaxLength="50" />
+    <Property Name="Address3" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="Fax" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="WebSite" Type="varchar" MaxLength="50" />
     <Property Name="CountryID" Type="int" />
     <Property Name="CityID" Type="int" />
     <Property Name="LocationID" Type="int" />
@@ -3249,8 +3251,8 @@
     <Property Name="StatusWalkIn" Type="bit" />
     <Property Name="BranchID" Type="int" />
     <Property Name="ZoneCategoryID" Type="int" />
-    <Property Name="Username" Type="nvarchar" MaxLength="50" />
-    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="Username" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="CountryName" Type="varchar" MaxLength="500" />
     <Property Name="CityName" Type="varchar" MaxLength="500" />
@@ -3309,7 +3311,7 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="InvoiceNo" Type="varchar" MaxLength="50" />
     <Property Name="AgentID" Type="int" Nullable="false" />
     <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
     <Property Name="InvoiceTax" Type="money" />
@@ -3338,17 +3340,17 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RecPayDate" Type="datetime" />
-    <Property Name="VoucherNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="VoucherNo" Type="varchar" MaxLength="50" />
     <Property Name="AgentID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
     <Property Name="AcJournalID" Type="int" />
-    <Property Name="StatusRec" Type="nvarchar" MaxLength="50" />
-    <Property Name="StatusOrigin" Type="nvarchar" MaxLength="50" />
-    <Property Name="StatusEntry" Type="nvarchar" MaxLength="50" />
+    <Property Name="StatusRec" Type="varchar" MaxLength="50" />
+    <Property Name="StatusOrigin" Type="varchar" MaxLength="50" />
+    <Property Name="StatusEntry" Type="varchar" MaxLength="50" />
     <Property Name="FYearID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
-    <Property Name="ReferenceNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="Type" Type="nvarchar" MaxLength="20" />
+    <Property Name="ReferenceNo" Type="varchar" MaxLength="50" />
+    <Property Name="Type" Type="varchar" MaxLength="20" />
   </EntityType>
   <EntityType Name="tblAgentRecPayDetail">
     <Key>
@@ -3358,20 +3360,20 @@
     <Property Name="AgentRecPayID" Type="int" Nullable="false" />
     <Property Name="InvoiceID" Type="int" />
     <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
     <Property Name="StatusAdvance" Type="bit" />
-    <Property Name="StatusInvoice" Type="nvarchar" MaxLength="50" />
+    <Property Name="StatusInvoice" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tblCustomerAdjustment">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="PaymentType" Type="nvarchar" MaxLength="50" />
+    <Property Name="PaymentType" Type="varchar" MaxLength="50" />
     <Property Name="CustomerID" Type="int" />
-    <Property Name="ReferenceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ReferenceNo" Type="varchar" MaxLength="50" />
     <Property Name="Date" Type="date" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
     <Property Name="AcJournalID" Type="int" />
     <Property Name="FyearID" Type="int" />
   </EntityType>
@@ -3383,8 +3385,8 @@
     <Property Name="CustomerAdjustmentID" Type="int" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="Amount" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="ReferenceNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="ReferenceNo" Type="varchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tblDepot">
     <Key>
@@ -3446,8 +3448,8 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" MaxLength="50" />
-    <Property Name="Code" Type="nvarchar" MaxLength="50" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Code" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tblStock">
     <Key>
@@ -3455,14 +3457,14 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="SupplierID" Type="int" />
-    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="InvoiceNo" Type="varchar" MaxLength="50" />
     <Property Name="PurchaseDate" Type="datetime" />
     <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
     <Property Name="TotalQuantity" Type="int" />
-    <Property Name="FromAWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromAWBNo" Type="varchar" MaxLength="50" />
     <Property Name="Interval" Type="smallint" />
-    <Property Name="ToAWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="ReferenceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ToAWBNo" Type="varchar" MaxLength="50" />
+    <Property Name="ReferenceNo" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tblStockIssue">
     <Key>
@@ -3470,8 +3472,8 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="IssueDate" Type="datetime" />
-    <Property Name="FromAWBNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="ToAWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="FromAWBNo" Type="varchar" MaxLength="50" />
+    <Property Name="ToAWBNo" Type="varchar" MaxLength="50" />
     <Property Name="IssueBy" Type="int" />
     <Property Name="FromAgentID" Type="int" />
     <Property Name="FromDepotID" Type="int" />
@@ -3479,7 +3481,7 @@
     <Property Name="AgentID" Type="int" />
     <Property Name="DepotID" Type="int" />
     <Property Name="CourierID" Type="int" />
-    <Property Name="ReferenceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ReferenceNo" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tblStockIssueDetail">
     <Key>
@@ -3487,7 +3489,7 @@
     </Key>
     <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="StockIssueID" Type="int" />
-    <Property Name="AWBNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="AWBNo" Type="varchar" MaxLength="50" />
     <Property Name="Status" Type="char" MaxLength="10" />
     <Property Name="InscanID" Type="int" />
   </EntityType>
@@ -3496,13 +3498,13 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="PaymentType" Type="nvarchar" MaxLength="50" />
+    <Property Name="PaymentType" Type="varchar" MaxLength="50" />
     <Property Name="SupplierID" Type="int" />
-    <Property Name="ReferenceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="ReferenceNo" Type="varchar" MaxLength="50" />
     <Property Name="Date" Type="date" />
     <Property Name="AcJournalID" Type="int" />
     <Property Name="FyearID" Type="int" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tblSupplierAdjustmentDetail">
     <Key>
@@ -3512,8 +3514,8 @@
     <Property Name="SupplierAdjustmentID" Type="int" />
     <Property Name="AcHeadID" Type="int" />
     <Property Name="Amount" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="ReferenceNo" Type="nvarchar" MaxLength="50" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="ReferenceNo" Type="varchar" MaxLength="50" />
+    <Property Name="Remarks" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tblTaxConfiguration">
     <Key>
@@ -3545,7 +3547,7 @@
     <Property Name="ReceiveDateTime" Type="datetime" />
     <Property Name="ReceivedBy" Type="int" />
     <Property Name="Status" Type="char" MaxLength="10" />
-    <Property Name="Remarks" Type="nvarchar" MaxLength="250" />
+    <Property Name="Remarks" Type="varchar" MaxLength="250" />
     <Property Name="DeliveredBy" Type="int" />
     <Property Name="CollectedBy" Type="int" />
     <Property Name="Vehicle" Type="int" />
@@ -3555,7 +3557,7 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" MaxLength="200" />
+    <Property Name="Name" Type="varchar" MaxLength="200" />
     <Property Name="CountryID" Type="int" />
     <Property Name="IsActive" Type="bit" />
   </EntityType>
@@ -3564,7 +3566,7 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" MaxLength="200" />
+    <Property Name="Name" Type="varchar" MaxLength="200" />
     <Property Name="IsActive" Type="bit" />
   </EntityType>
   <EntityType Name="Transit">
@@ -3584,7 +3586,7 @@
       <PropertyRef Name="TransportModeID" />
     </Key>
     <Property Name="TransportModeID" Type="int" Nullable="false" />
-    <Property Name="Mode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Mode" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="TruckDetail">
     <Key>
@@ -3622,7 +3624,7 @@
     <Property Name="PayeeName" Type="char" MaxLength="50" />
     <Property Name="DriverID" Type="int" />
     <Property Name="CancelDate" Type="datetime" />
-    <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Reason" Type="varchar" MaxLength="1000" />
     <Property Name="DocumentID" Type="int" />
     <Property Name="RentAcHeadID" Type="int" />
     <Property Name="RouteID" Type="int" />
@@ -3633,9 +3635,9 @@
     <Property Name="ChequeDate" Type="datetime" />
     <Property Name="BranchID" Type="int" />
     <Property Name="IsDeleted" Type="bit" />
-    <Property Name="OriginCountry" Type="nvarchar" MaxLength="100" />
+    <Property Name="OriginCountry" Type="varchar" MaxLength="100" />
     <Property Name="ForwardAgentID" Type="int" />
-    <Property Name="OriginCity" Type="nvarchar" MaxLength="100" />
+    <Property Name="OriginCity" Type="varchar" MaxLength="100" />
     <Property Name="SupplierInvoiceId" Type="int" />
     <Property Name="RecPayId" Type="int" />
     <Property Name="ConsignmentNoNote" Type="varchar" MaxLength="100" />
@@ -3657,14 +3659,14 @@
       <PropertyRef Name="TypeOfGoodID" />
     </Key>
     <Property Name="TypeOfGoodID" Type="int" Nullable="false" />
-    <Property Name="TypeOfGood" Type="nvarchar" MaxLength="200" />
+    <Property Name="TypeOfGood" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="UMDesignation">
     <Key>
       <PropertyRef Name="DesignationId" />
     </Key>
     <Property Name="DesignationId" Type="int" Nullable="false" />
-    <Property Name="Designation" Type="nvarchar" MaxLength="50" />
+    <Property Name="Designation" Type="varchar" MaxLength="50" />
     <Property Name="User1" Type="int" />
   </EntityType>
   <EntityType Name="UMForms">
@@ -3673,9 +3675,9 @@
     </Key>
     <Property Name="FID" Type="int" Nullable="false" />
     <Property Name="MID" Type="int" Nullable="false" />
-    <Property Name="FormName" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="ControlName" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="Mnuname" Type="nvarchar" MaxLength="50" />
+    <Property Name="FormName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ControlName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Mnuname" Type="varchar" MaxLength="50" />
     <Property Name="OrderNo" Type="int" />
     <Property Name="statushide" Type="bit" />
   </EntityType>
@@ -3697,7 +3699,7 @@
       <PropertyRef Name="GID" />
     </Key>
     <Property Name="GID" Type="int" Nullable="false" />
-    <Property Name="GroupName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="GroupName" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="Admin" Type="bit" Nullable="false" />
     <Property Name="User1" Type="int" />
   </EntityType>
@@ -3715,8 +3717,8 @@
       <PropertyRef Name="MID" />
     </Key>
     <Property Name="MID" Type="int" Nullable="false" />
-    <Property Name="ModuleName" Type="nvarchar" MaxLength="50" />
-    <Property Name="ControlName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ModuleName" Type="varchar" MaxLength="50" />
+    <Property Name="ControlName" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="Hidestatus" Type="bit" />
     <Property Name="mOrderID" Type="int" />
   </EntityType>
@@ -3725,9 +3727,9 @@
       <PropertyRef Name="UID" />
     </Key>
     <Property Name="UID" Type="int" Nullable="false" />
-    <Property Name="UserName" Type="nvarchar" MaxLength="50" />
-    <Property Name="Password" Type="nvarchar" MaxLength="50" />
-    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="varchar" MaxLength="50" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
     <Property Name="DesignationID" Type="int" />
     <Property Name="GID" Type="int" Nullable="false" />
     <Property Name="Blocked" Type="bit" Nullable="false" />
@@ -3739,7 +3741,7 @@
     <Property Name="EmployeeID" Type="int" />
     <Property Name="CustomerID" Type="int" />
     <Property Name="AgentID" Type="int" />
-    <Property Name="Role" Type="nvarchar" MaxLength="50" />
+    <Property Name="Role" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="UMUserMonitor">
     <Key>
@@ -3749,7 +3751,7 @@
     <Property Name="UID" Type="int" Nullable="false" />
     <Property Name="LoginTime" Type="datetime" />
     <Property Name="LogoutTime" Type="datetime" />
-    <Property Name="MachineName" Type="nvarchar" MaxLength="50" />
+    <Property Name="MachineName" Type="varchar" MaxLength="50" />
     <Property Name="MID" Type="int" />
   </EntityType>
   <EntityType Name="UserInBranch">
@@ -3757,7 +3759,7 @@
       <PropertyRef Name="UserBranchID" />
     </Key>
     <Property Name="UserBranchID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserID" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserID" Type="varchar" MaxLength="50" />
     <Property Name="BranchID" Type="int" />
   </EntityType>
   <EntityType Name="UserRegistration">
@@ -3765,10 +3767,10 @@
       <PropertyRef Name="UserID" />
     </Key>
     <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserName" Type="nvarchar" MaxLength="30" Nullable="false" />
-    <Property Name="Password" Type="nvarchar" MaxLength="20" Nullable="false" />
-    <Property Name="Phone" Type="nvarchar" MaxLength="20" Nullable="false" />
-    <Property Name="EmailId" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Phone" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="EmailId" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="IsActive" Type="bit" />
     <Property Name="RoleID" Type="int" />
   </EntityType>
@@ -3777,7 +3779,7 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserType" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserType" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="VehicleMaintenance">
     <Key>
@@ -3786,7 +3788,7 @@
     <Property Name="MaintenanceID" Type="int" Nullable="false" />
     <Property Name="VehicleID" Type="int" Nullable="false" />
     <Property Name="TransDate" Type="datetime" />
-    <Property Name="Description" Type="nvarchar" MaxLength="300" />
+    <Property Name="Description" Type="varchar" MaxLength="300" />
   </EntityType>
   <EntityType Name="VehicleMaster">
     <Key>
@@ -3814,14 +3816,14 @@
     <Property Name="MakeYear" Type="varchar" MaxLength="10" />
     <Property Name="RegisteredUnder" Type="varchar" MaxLength="100" />
     <Property Name="AcheadId" Type="int" />
-    <Property Name="ContractNo" Type="nvarchar" MaxLength="100" />
+    <Property Name="ContractNo" Type="varchar" MaxLength="100" />
     <Property Name="ContractIssuedDate" Type="datetime" />
     <Property Name="ContractExpDate" Type="datetime" />
     <Property Name="ContractRate" Type="decimal" Precision="18" Scale="2" />
     <Property Name="FreeKM" Type="int" />
     <Property Name="RateExtraKM" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="VehicleOwner" Type="nvarchar" MaxLength="250" />
-    <Property Name="VehicleMaintenance" Type="nvarchar" MaxLength="250" />
+    <Property Name="VehicleOwner" Type="varchar" MaxLength="250" />
+    <Property Name="VehicleMaintenance" Type="varchar" MaxLength="250" />
     <Property Name="SupplierID" Type="int" />
     <Property Name="SupplierTypeID" Type="int" />
     <Property Name="DriverID" Type="int" />
@@ -3838,20 +3840,20 @@
       <PropertyRef Name="WorkCategoryID" />
     </Key>
     <Property Name="WorkCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="WorkCategoryName" Type="nvarchar" MaxLength="512" />
+    <Property Name="WorkCategoryName" Type="varchar" MaxLength="512" />
   </EntityType>
   <EntityType Name="WorkOrderMaster">
     <Key>
       <PropertyRef Name="WOID" />
     </Key>
     <Property Name="WOID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="WONo" Type="nvarchar" MaxLength="50" />
+    <Property Name="WONo" Type="varchar" MaxLength="50" />
     <Property Name="WODate" Type="datetime" />
     <Property Name="CustomerID" Type="int" />
     <Property Name="EmployeeID" Type="int" />
-    <Property Name="Description" Type="nvarchar(max)" />
-    <Property Name="Status" Type="nvarchar" MaxLength="100" />
-    <Property Name="WorkCategoryIDs" Type="nvarchar" MaxLength="512" />
+    <Property Name="Description" Type="varchar(max)" />
+    <Property Name="Status" Type="varchar" MaxLength="100" />
+    <Property Name="WorkCategoryIDs" Type="varchar" MaxLength="512" />
     <Property Name="FollowUpDate" Type="datetime" />
   </EntityType>
   <EntityType Name="ZoneCategory">
@@ -3859,7 +3861,7 @@
       <PropertyRef Name="ZoneCategoryID" />
     </Key>
     <Property Name="ZoneCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ZoneCategory" Type="nvarchar" MaxLength="50" />
+    <Property Name="ZoneCategory" Type="varchar" MaxLength="50" />
     <Property Name="StatusBaseCategory" Type="bit" />
   </EntityType>
   <EntityType Name="ZoneChart">
@@ -3885,11 +3887,11 @@
       <PropertyRef Name="ZoneID" />
     </Key>
     <Property Name="ZoneID" Type="int" Nullable="false" />
-    <Property Name="ZoneName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ZoneName" Type="varchar" MaxLength="50" />
     <Property Name="StatusZone" Type="char" MaxLength="1" />
-    <Property Name="ZoneType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ZoneType" Type="varchar" MaxLength="50" />
   </EntityType>
-  <Association Name="FK__aspnet_Me__Appli__24D2692A">
+  <Association Name="FK__aspnet_Me__Appli__44D5EFBF">
     <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
     <End Role="aspnet_Membership" Type="Self.aspnet_Membership" Multiplicity="*" />
     <ReferentialConstraint>
@@ -3901,7 +3903,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__aspnet_Me__UserI__25C68D63">
+  <Association Name="FK__aspnet_Me__UserI__45CA13F8">
     <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
     <End Role="aspnet_Membership" Type="Self.aspnet_Membership" Multiplicity="0..1" />
     <ReferentialConstraint>
@@ -3913,7 +3915,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__aspnet_Pa__Appli__26BAB19C">
+  <Association Name="FK__aspnet_Pa__Appli__46BE3831">
     <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
     <End Role="aspnet_Paths" Type="Self.aspnet_Paths" Multiplicity="*" />
     <ReferentialConstraint>
@@ -3925,7 +3927,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__aspnet_Pe__PathI__27AED5D5">
+  <Association Name="FK__aspnet_Pe__PathI__47B25C6A">
     <End Role="aspnet_Paths" Type="Self.aspnet_Paths" Multiplicity="1" />
     <End Role="aspnet_PersonalizationAllUsers" Type="Self.aspnet_PersonalizationAllUsers" Multiplicity="0..1" />
     <ReferentialConstraint>
@@ -3937,7 +3939,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__aspnet_Pe__PathI__28A2FA0E">
+  <Association Name="FK__aspnet_Pe__PathI__48A680A3">
     <End Role="aspnet_Paths" Type="Self.aspnet_Paths" Multiplicity="0..1" />
     <End Role="aspnet_PersonalizationPerUser" Type="Self.aspnet_PersonalizationPerUser" Multiplicity="*" />
     <ReferentialConstraint>
@@ -3949,7 +3951,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__aspnet_Pe__UserI__29971E47">
+  <Association Name="FK__aspnet_Pe__UserI__499AA4DC">
     <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="0..1" />
     <End Role="aspnet_PersonalizationPerUser" Type="Self.aspnet_PersonalizationPerUser" Multiplicity="*" />
     <ReferentialConstraint>
@@ -3961,7 +3963,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__aspnet_Pr__UserI__2A8B4280">
+  <Association Name="FK__aspnet_Pr__UserI__4A8EC915">
     <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
     <End Role="aspnet_Profile" Type="Self.aspnet_Profile" Multiplicity="0..1" />
     <ReferentialConstraint>
@@ -3973,7 +3975,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__aspnet_Ro__Appli__2B7F66B9">
+  <Association Name="FK__aspnet_Ro__Appli__4B82ED4E">
     <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
     <End Role="aspnet_Roles" Type="Self.aspnet_Roles" Multiplicity="*" />
     <ReferentialConstraint>
@@ -3985,7 +3987,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__aspnet_Us__Appli__2C738AF2">
+  <Association Name="FK__aspnet_Us__Appli__167A2832">
     <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
     <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="*" />
     <ReferentialConstraint>
@@ -3997,7 +3999,31 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__aspnet_Us__RoleI__2D67AF2B">
+  <Association Name="FK__aspnet_Us__Appli__4C771187">
+    <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
+    <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="aspnet_Applications">
+        <PropertyRef Name="ApplicationId" />
+      </Principal>
+      <Dependent Role="aspnet_Users">
+        <PropertyRef Name="ApplicationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__aspnet_Us__Appli__6F16424E">
+    <End Role="aspnet_Applications" Type="Self.aspnet_Applications" Multiplicity="1" />
+    <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="aspnet_Applications">
+        <PropertyRef Name="ApplicationId" />
+      </Principal>
+      <Dependent Role="aspnet_Users">
+        <PropertyRef Name="ApplicationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__aspnet_Us__RoleI__4D6B35C0">
     <End Role="aspnet_Roles" Type="Self.aspnet_Roles" Multiplicity="1" />
     <End Role="aspnet_UsersInRoles" Type="Self.aspnet_UsersInRoles" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4009,7 +4035,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__aspnet_Us__UserI__2E5BD364">
+  <Association Name="FK__aspnet_Us__UserI__4E5F59F9">
     <End Role="aspnet_Users" Type="Self.aspnet_Users" Multiplicity="1" />
     <End Role="aspnet_UsersInRoles" Type="Self.aspnet_UsersInRoles" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4021,7 +4047,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__CODReceip__Recei__5D8BC399">
+  <Association Name="FK__CODReceip__Recei__5418334F">
     <End Role="CODReceipt" Type="Self.CODReceipt" Multiplicity="1" />
     <End Role="CODReceiptDetail" Type="Self.CODReceiptDetail" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4033,7 +4059,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__CostUpdat__Maste__7310F064">
+  <Association Name="FK__CostUpdat__Maste__057A84B9">
     <End Role="CostUpdateMaster" Type="Self.CostUpdateMaster" Multiplicity="1" />
     <End Role="CostUpdateDetail" Type="Self.CostUpdateDetail" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4045,7 +4071,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__EmployeeM__Depot__5A45429A">
+  <Association Name="FK__EmployeeM__Depot__70B471FD">
     <End Role="tblDepot" Type="Self.tblDepot" Multiplicity="0..1" />
     <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4057,7 +4083,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ExportShi__Emplo__2E46C4CB">
+  <Association Name="FK__ExportShi__Emplo__7A3DDC37">
     <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4069,7 +4095,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ExportShi__Emplo__2F3AE904">
+  <Association Name="FK__ExportShi__Emplo__7B320070">
     <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4081,7 +4107,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ExportShi__Emplo__302F0D3D">
+  <Association Name="FK__ExportShi__Emplo__7C2624A9">
     <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4093,7 +4119,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ExportShi__Emplo__31233176">
+  <Association Name="FK__ExportShi__Emplo__7D1A48E2">
     <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4105,19 +4131,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ExportShi__LastE__321755AF">
-    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
-    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmployeeMaster">
-        <PropertyRef Name="EmployeeID" />
-      </Principal>
-      <Dependent Role="ExportShipment">
-        <PropertyRef Name="LastEditedByLoginID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__ExportShi__LastE__330B79E8">
+  <Association Name="FK__ExportShi__LastE__00EAD9C6">
     <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4129,7 +4143,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ExportShi__LastE__33FF9E21">
+  <Association Name="FK__ExportShi__LastE__7E0E6D1B">
     <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4141,7 +4155,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ExportShi__LastE__34F3C25A">
+  <Association Name="FK__ExportShi__LastE__7F029154">
     <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4153,7 +4167,19 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ImportShi__Expor__38C4533E">
+  <Association Name="FK__ExportShi__LastE__7FF6B58D">
+    <End Role="EmployeeMaster" Type="Self.EmployeeMaster" Multiplicity="0..1" />
+    <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EmployeeMaster">
+        <PropertyRef Name="EmployeeID" />
+      </Principal>
+      <Dependent Role="ExportShipment">
+        <PropertyRef Name="LastEditedByLoginID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ImportShi__Expor__0B686839">
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
     <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetails" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4165,7 +4191,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ImportShi__Expor__39B87777">
+  <Association Name="FK__ImportShi__Expor__0C5C8C72">
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
     <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetails" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4177,7 +4203,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__ImportShi__Expor__3AAC9BB0">
+  <Association Name="FK__ImportShi__Expor__0D50B0AB">
     <End Role="ExportShipment" Type="Self.ExportShipment" Multiplicity="0..1" />
     <End Role="ImportShipmentDetails" Type="Self.ImportShipmentDetails" Multiplicity="*" />
     <ReferentialConstraint>
@@ -4189,7 +4215,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__RevenueUp__Maste__5B3966D3">
+  <Association Name="FK__RevenueUp__Maste__6DA2FB28">
     <End Role="RevenueUpdateMaster" Type="Self.RevenueUpdateMaster" Multiplicity="1" />
     <End Role="RevenueUpdateDetail" Type="Self.RevenueUpdateDetail" Multiplicity="*" />
     <ReferentialConstraint>
@@ -5826,18 +5852,6 @@
       </Principal>
       <Dependent Role="tblCustomerAdjustmentDetail">
         <PropertyRef Name="CustomerAdjustmentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tblDepot_CityMaster">
-    <End Role="CityMaster" Type="Self.CityMaster" Multiplicity="0..1" />
-    <End Role="tblDepot" Type="Self.tblDepot" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CityMaster">
-        <PropertyRef Name="CityID" />
-      </Principal>
-      <Dependent Role="tblDepot">
-        <PropertyRef Name="CityID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -8826,107 +8840,115 @@
     <EntitySet Name="ZoneChart" EntityType="Self.ZoneChart" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ZoneChartDetails" EntityType="Self.ZoneChartDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ZoneMaster" EntityType="Self.ZoneMaster" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK__aspnet_Me__Appli__24D2692A" Association="Self.FK__aspnet_Me__Appli__24D2692A">
+    <AssociationSet Name="FK__aspnet_Me__Appli__44D5EFBF" Association="Self.FK__aspnet_Me__Appli__44D5EFBF">
       <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
       <End Role="aspnet_Membership" EntitySet="aspnet_Membership" />
     </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Me__UserI__25C68D63" Association="Self.FK__aspnet_Me__UserI__25C68D63">
+    <AssociationSet Name="FK__aspnet_Me__UserI__45CA13F8" Association="Self.FK__aspnet_Me__UserI__45CA13F8">
       <End Role="aspnet_Users" EntitySet="aspnet_Users" />
       <End Role="aspnet_Membership" EntitySet="aspnet_Membership" />
     </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Pa__Appli__26BAB19C" Association="Self.FK__aspnet_Pa__Appli__26BAB19C">
+    <AssociationSet Name="FK__aspnet_Pa__Appli__46BE3831" Association="Self.FK__aspnet_Pa__Appli__46BE3831">
       <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
       <End Role="aspnet_Paths" EntitySet="aspnet_Paths" />
     </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Pe__PathI__27AED5D5" Association="Self.FK__aspnet_Pe__PathI__27AED5D5">
+    <AssociationSet Name="FK__aspnet_Pe__PathI__47B25C6A" Association="Self.FK__aspnet_Pe__PathI__47B25C6A">
       <End Role="aspnet_Paths" EntitySet="aspnet_Paths" />
       <End Role="aspnet_PersonalizationAllUsers" EntitySet="aspnet_PersonalizationAllUsers" />
     </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Pe__PathI__28A2FA0E" Association="Self.FK__aspnet_Pe__PathI__28A2FA0E">
+    <AssociationSet Name="FK__aspnet_Pe__PathI__48A680A3" Association="Self.FK__aspnet_Pe__PathI__48A680A3">
       <End Role="aspnet_Paths" EntitySet="aspnet_Paths" />
       <End Role="aspnet_PersonalizationPerUser" EntitySet="aspnet_PersonalizationPerUser" />
     </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Pe__UserI__29971E47" Association="Self.FK__aspnet_Pe__UserI__29971E47">
+    <AssociationSet Name="FK__aspnet_Pe__UserI__499AA4DC" Association="Self.FK__aspnet_Pe__UserI__499AA4DC">
       <End Role="aspnet_Users" EntitySet="aspnet_Users" />
       <End Role="aspnet_PersonalizationPerUser" EntitySet="aspnet_PersonalizationPerUser" />
     </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Pr__UserI__2A8B4280" Association="Self.FK__aspnet_Pr__UserI__2A8B4280">
+    <AssociationSet Name="FK__aspnet_Pr__UserI__4A8EC915" Association="Self.FK__aspnet_Pr__UserI__4A8EC915">
       <End Role="aspnet_Users" EntitySet="aspnet_Users" />
       <End Role="aspnet_Profile" EntitySet="aspnet_Profile" />
     </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Ro__Appli__2B7F66B9" Association="Self.FK__aspnet_Ro__Appli__2B7F66B9">
+    <AssociationSet Name="FK__aspnet_Ro__Appli__4B82ED4E" Association="Self.FK__aspnet_Ro__Appli__4B82ED4E">
       <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
       <End Role="aspnet_Roles" EntitySet="aspnet_Roles" />
     </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Us__Appli__2C738AF2" Association="Self.FK__aspnet_Us__Appli__2C738AF2">
+    <AssociationSet Name="FK__aspnet_Us__Appli__167A2832" Association="Self.FK__aspnet_Us__Appli__167A2832">
       <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
       <End Role="aspnet_Users" EntitySet="aspnet_Users" />
     </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Us__RoleI__2D67AF2B" Association="Self.FK__aspnet_Us__RoleI__2D67AF2B">
+    <AssociationSet Name="FK__aspnet_Us__Appli__4C771187" Association="Self.FK__aspnet_Us__Appli__4C771187">
+      <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
+      <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK__aspnet_Us__Appli__6F16424E" Association="Self.FK__aspnet_Us__Appli__6F16424E">
+      <End Role="aspnet_Applications" EntitySet="aspnet_Applications" />
+      <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK__aspnet_Us__RoleI__4D6B35C0" Association="Self.FK__aspnet_Us__RoleI__4D6B35C0">
       <End Role="aspnet_Roles" EntitySet="aspnet_Roles" />
       <End Role="aspnet_UsersInRoles" EntitySet="aspnet_UsersInRoles" />
     </AssociationSet>
-    <AssociationSet Name="FK__aspnet_Us__UserI__2E5BD364" Association="Self.FK__aspnet_Us__UserI__2E5BD364">
+    <AssociationSet Name="FK__aspnet_Us__UserI__4E5F59F9" Association="Self.FK__aspnet_Us__UserI__4E5F59F9">
       <End Role="aspnet_Users" EntitySet="aspnet_Users" />
       <End Role="aspnet_UsersInRoles" EntitySet="aspnet_UsersInRoles" />
     </AssociationSet>
-    <AssociationSet Name="FK__CODReceip__Recei__5D8BC399" Association="Self.FK__CODReceip__Recei__5D8BC399">
+    <AssociationSet Name="FK__CODReceip__Recei__5418334F" Association="Self.FK__CODReceip__Recei__5418334F">
       <End Role="CODReceipt" EntitySet="CODReceipt" />
       <End Role="CODReceiptDetail" EntitySet="CODReceiptDetail" />
     </AssociationSet>
-    <AssociationSet Name="FK__CostUpdat__Maste__7310F064" Association="Self.FK__CostUpdat__Maste__7310F064">
+    <AssociationSet Name="FK__CostUpdat__Maste__057A84B9" Association="Self.FK__CostUpdat__Maste__057A84B9">
       <End Role="CostUpdateMaster" EntitySet="CostUpdateMaster" />
       <End Role="CostUpdateDetail" EntitySet="CostUpdateDetail" />
     </AssociationSet>
-    <AssociationSet Name="FK__EmployeeM__Depot__5A45429A" Association="Self.FK__EmployeeM__Depot__5A45429A">
+    <AssociationSet Name="FK__EmployeeM__Depot__70B471FD" Association="Self.FK__EmployeeM__Depot__70B471FD">
       <End Role="tblDepot" EntitySet="tblDepot" />
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
     </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__2E46C4CB" Association="Self.FK__ExportShi__Emplo__2E46C4CB">
+    <AssociationSet Name="FK__ExportShi__Emplo__7A3DDC37" Association="Self.FK__ExportShi__Emplo__7A3DDC37">
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
       <End Role="ExportShipment" EntitySet="ExportShipment" />
     </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__2F3AE904" Association="Self.FK__ExportShi__Emplo__2F3AE904">
+    <AssociationSet Name="FK__ExportShi__Emplo__7B320070" Association="Self.FK__ExportShi__Emplo__7B320070">
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
       <End Role="ExportShipment" EntitySet="ExportShipment" />
     </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__302F0D3D" Association="Self.FK__ExportShi__Emplo__302F0D3D">
+    <AssociationSet Name="FK__ExportShi__Emplo__7C2624A9" Association="Self.FK__ExportShi__Emplo__7C2624A9">
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
       <End Role="ExportShipment" EntitySet="ExportShipment" />
     </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__Emplo__31233176" Association="Self.FK__ExportShi__Emplo__31233176">
+    <AssociationSet Name="FK__ExportShi__Emplo__7D1A48E2" Association="Self.FK__ExportShi__Emplo__7D1A48E2">
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
       <End Role="ExportShipment" EntitySet="ExportShipment" />
     </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__321755AF" Association="Self.FK__ExportShi__LastE__321755AF">
+    <AssociationSet Name="FK__ExportShi__LastE__00EAD9C6" Association="Self.FK__ExportShi__LastE__00EAD9C6">
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
       <End Role="ExportShipment" EntitySet="ExportShipment" />
     </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__330B79E8" Association="Self.FK__ExportShi__LastE__330B79E8">
+    <AssociationSet Name="FK__ExportShi__LastE__7E0E6D1B" Association="Self.FK__ExportShi__LastE__7E0E6D1B">
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
       <End Role="ExportShipment" EntitySet="ExportShipment" />
     </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__33FF9E21" Association="Self.FK__ExportShi__LastE__33FF9E21">
+    <AssociationSet Name="FK__ExportShi__LastE__7F029154" Association="Self.FK__ExportShi__LastE__7F029154">
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
       <End Role="ExportShipment" EntitySet="ExportShipment" />
     </AssociationSet>
-    <AssociationSet Name="FK__ExportShi__LastE__34F3C25A" Association="Self.FK__ExportShi__LastE__34F3C25A">
+    <AssociationSet Name="FK__ExportShi__LastE__7FF6B58D" Association="Self.FK__ExportShi__LastE__7FF6B58D">
       <End Role="EmployeeMaster" EntitySet="EmployeeMaster" />
       <End Role="ExportShipment" EntitySet="ExportShipment" />
     </AssociationSet>
-    <AssociationSet Name="FK__ImportShi__Expor__38C4533E" Association="Self.FK__ImportShi__Expor__38C4533E">
+    <AssociationSet Name="FK__ImportShi__Expor__0B686839" Association="Self.FK__ImportShi__Expor__0B686839">
       <End Role="ExportShipment" EntitySet="ExportShipment" />
       <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
     </AssociationSet>
-    <AssociationSet Name="FK__ImportShi__Expor__39B87777" Association="Self.FK__ImportShi__Expor__39B87777">
+    <AssociationSet Name="FK__ImportShi__Expor__0C5C8C72" Association="Self.FK__ImportShi__Expor__0C5C8C72">
       <End Role="ExportShipment" EntitySet="ExportShipment" />
       <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
     </AssociationSet>
-    <AssociationSet Name="FK__ImportShi__Expor__3AAC9BB0" Association="Self.FK__ImportShi__Expor__3AAC9BB0">
+    <AssociationSet Name="FK__ImportShi__Expor__0D50B0AB" Association="Self.FK__ImportShi__Expor__0D50B0AB">
       <End Role="ExportShipment" EntitySet="ExportShipment" />
       <End Role="ImportShipmentDetails" EntitySet="ImportShipmentDetails" />
     </AssociationSet>
-    <AssociationSet Name="FK__RevenueUp__Maste__5B3966D3" Association="Self.FK__RevenueUp__Maste__5B3966D3">
+    <AssociationSet Name="FK__RevenueUp__Maste__6DA2FB28" Association="Self.FK__RevenueUp__Maste__6DA2FB28">
       <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMaster" />
       <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetail" />
     </AssociationSet>
@@ -9461,10 +9483,6 @@
     <AssociationSet Name="FK_tblCustomerAdjustmentDetail_tblCustomerAdjustment" Association="Self.FK_tblCustomerAdjustmentDetail_tblCustomerAdjustment">
       <End Role="tblCustomerAdjustment" EntitySet="tblCustomerAdjustment" />
       <End Role="tblCustomerAdjustmentDetail" EntitySet="tblCustomerAdjustmentDetail" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tblDepot_CityMaster" Association="Self.FK_tblDepot_CityMaster">
-      <End Role="CityMaster" EntitySet="CityMaster" />
-      <End Role="tblDepot" EntitySet="tblDepot" />
     </AssociationSet>
     <AssociationSet Name="FK_tblPurchaseInvoiceOtherCharges_PurchaseInvoice" Association="Self.FK_tblPurchaseInvoiceOtherCharges_PurchaseInvoice">
       <End Role="PurchaseInvoice" EntitySet="PurchaseInvoice" />

@@ -107,8 +107,9 @@ namespace LTMSV2.Controllers
             ViewBag.Document = db.ImpExpDocumentMasters.ToList();
             List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
             //lsttype.Add(new VoucherTypeVM { TypeName = "All" });            
-            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper or Consignee" });            
-            lsttype.Add(new VoucherTypeVM { TypeName = "Only Consignee" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });            
+            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Others" });
             ViewBag.InvoiceTo = lsttype;
             List<OtherChargeDetailVM> otherchargesvm = new List<OtherChargeDetailVM>();
             QuickAWBVM v = new QuickAWBVM();
@@ -123,24 +124,27 @@ namespace LTMSV2.Controllers
                     v.InScanID = 0;
                     v.PaymentModeId = 1;
                     ViewBag.EditMode = "false";
-                   
+                    var parceltype = db.ParcelTypes.Where(cc => cc.ParcelType1 == "Consolidated").FirstOrDefault();
+                    if (parceltype != null)
+                    {
+                    v.ParcelTypeID = parceltype.ID;
+                    }
+                    var movetype = db.CourierMovements.Where(cc => cc.MovementType == "Cross Border").FirstOrDefault();
+                if (movetype != null)
+                {
+                    v.MovementTypeID = movetype.MovementID;
+                        }
+
+                var productype = db.ProductTypes.Where(cc => cc.ProductName == "Regular").FirstOrDefault();
+                if (productype!=null)
+                {
+                    v.ProductTypeID = productype.ProductTypeID;
+                }
+
                    v.otherchargesVM = otherchargesvm;
 
-                var list = db.ItemMasters.ToList();
-                     
-                //OtherChargeDetailVM charge1 = new OtherChargeDetailVM();
-                //charge1.OtherChargeID = 1;
-                //charge1.OtherChargeName = "Customs charge";
-                //charge1.Amount = 100;
-                //othercharngesvm.Add(charge1);
-
-                //charge1 = new OtherChargeDetailVM();
-                //charge1.OtherChargeID = 2;
-                //charge1.OtherChargeName = "Other charge";
-                //charge1.Amount = 200;
-                //othercharngesvm.Add(charge1);
-                //v.otherchargesVM = othercharngesvm;
-
+                var list = db.ItemMasters.ToList();                    
+          
 
             }
                 else
@@ -293,8 +297,25 @@ namespace LTMSV2.Controllers
                     inscan.Volume = v.Volume;
                     inscan.VolumeWeight = v.VolumeWeight;
 
-                    inscan.PaymentModeId = v.PaymentModeId;                    
-                                      
+                    inscan.PaymentModeId = v.PaymentModeId;
+                    inscan.ConsignorCountryName = v.ConsignorCountryName;
+                    inscan.ConsignorCityName = v.ConsignorCityName;
+                    inscan.ConsignorLocationName = v.ConsignorLocationName;
+                    inscan.CustomerShipperSame = v.CustomerandShipperSame;
+                    inscan.ConsignorFax = v.ConsignorFax;
+                    //if (v.CustomerandShipperSame==true)                            
+                    inscan.Consignor = v.shippername;
+
+                    //inscan.ShipperName = v.ShipperName;
+                    inscan.ConsignorAddress1_Building = v.ConsignorAddress1_Building;
+                    inscan.ConsignorAddress2_Street = v.ConsignorAddress2_Street;
+                    inscan.ConsignorAddress3_PinCode = v.ConsignorAddress3_PinCode;
+                    inscan.ConsignorPhone = v.ConsignorPhone;
+                    inscan.ConsignorContact = v.ConsignorContact;
+                    inscan.ConsignorCountryID = v.ConsignorCountryID;
+                    inscan.ConsignorCityID = v.ConsignorCityID;
+                    inscan.ConsignorLocationID = v.ConsignorLocationID;
+
                     inscan.Consignee = v.Consignee;
                     inscan.ConsigneeCountryName = v.ConsigneeCountryName;
                     inscan.ConsigneeCityName = v.ConsigneeCityName;
@@ -322,11 +343,13 @@ namespace LTMSV2.Controllers
                     inscan.Freight = v.Freight;
                     inscan.DocumentSetupID = v.DocumentSetupId;
                     inscan.ExportImportCode = v.ExportImportCode;
-                    inscan.ItemID = v.ItemId;
+                    //inscan.ItemID = v.ItemId;
+                    inscan.CargoDescription = v.CargoDescription;
                     inscan.PackageID = v.PackageId;
                     inscan.CustomsInvoiceValue = v.CustomsInvoiceValue;
                     inscan.IsNCND = v.IsNCND;
                     inscan.SeparateDoc = v.SeparateDoc;
+                    inscan.COM = v.COM;
                     inscan.RouteID = v.RouteID;
                     inscan.DespatchDate = v.DespatchDate;
                     //if (v.CustomCharge !=null )
@@ -353,8 +376,8 @@ namespace LTMSV2.Controllers
 
                     
 
-                    InScanInternationalDeatil isid = new InScanInternationalDeatil();
-                    InScanInternational isi = new InScanInternational();
+                    //InScanInternationalDeatil isid = new InScanInternationalDeatil();
+                    //InScanInternational isi = new InScanInternational();
                     if (v.InScanID == 0)
                     {
 
@@ -377,18 +400,15 @@ namespace LTMSV2.Controllers
                         }
 
                         inscan.IsDeleted = false;
-                        TempData["SuccessMsg"] = "Saved Successfull!";
+                        TempData["SuccessMsg"] = "Saved Successfully!";
                         db.InScanMasters.Add(inscan);
                         db.SaveChanges();
                         AddAWBTrackStatus(inscan.InScanID);
-                      
-                        //if (v.PaymentModeId == 2)
-                        //{ SaveConsignee(v); }
-
-                        isid.InScanID = inscan.InScanID;
-                        isi.InScanID = inscan.InScanID;
-                        isi.InScanInternationalID = 0;
-                        TempData["SuccessMsg"] = customersavemessage  + "\n" + "You have successfully Added Quick AirWay Bill.";
+                     
+                        //isid.InScanID = inscan.InScanID;
+                        //isi.InScanID = inscan.InScanID;
+                        //isi.InScanInternationalID = 0;
+                        //TempData["SuccessMsg"] = customersavemessage  + "\n" + "You have successfully Added Quick AirWay Bill.";
                     }
                     else
                     {
@@ -408,74 +428,24 @@ namespace LTMSV2.Controllers
                             }
                        }
 
-                        isid = db.InScanInternationalDeatils.Where(cc => cc.InScanID == v.InScanID).FirstOrDefault();
-                        isi = db.InScanInternationals.Where(cc => cc.InScanID == v.InScanID).FirstOrDefault();
-                        if (isid==null)
-                        {
-                            isid=new InScanInternationalDeatil();
-                            isid.InScanID = inscan.InScanID;
-                        }
-                        if (isi == null)
-                        {
-                            isi = new InScanInternational();
-                            isi.InScanID = inscan.InScanID;
-                        }
+                        //isid = db.InScanInternationalDeatils.Where(cc => cc.InScanID == v.InScanID).FirstOrDefault();
+                        //isi = db.InScanInternationals.Where(cc => cc.InScanID == v.InScanID).FirstOrDefault();
+                        //if (isid==null)
+                        //{
+                        //    isid=new InScanInternationalDeatil();
+                        //    isid.InScanID = inscan.InScanID;
+                        //}
+                        //if (isi == null)
+                        //{
+                        //    isi = new InScanInternational();
+                        //    isi.InScanID = inscan.InScanID;
+                        //}
 
                         db.Entry(inscan).State = EntityState.Modified;
                         db.SaveChanges();
                         TempData["SuccessMsg"] = "Updated Successfully!";
-                        //if (v.PaymentModeId == 1 || v.PaymentModeId == 2)
-                        //    _dao.AWBAccountsPosting(inscan.InScanID);
-
-                        //SaveConsignee(v);
-                        //TempData["SuccessMsg"] = customersavemessage + "\n" +  "You have successfully updated Airway Bill";
-
-                    }
-
-                    //if (v.InScanID == 0)
-                    //{
-                    //    try
-                    //    {
-                    //        db.InScanInternationalDeatils.Add(isid);
-                    //        db.SaveChanges();
-                    //    }
-                    //    catch(Exception ex1)
-                    //    {
-                    //        string err = ex1.Message;
-                    //    }
-                    //}
-
-                    if (v.FagentID >0)
-                    {
-                        if (v.FagentID != null)
-                        {
-                            isi.FAgentID = v.FagentID;
-                        }
-
-                        if (v.ForwardingCharge != null)
-                        {
-                            isi.ForwardingCharge = Convert.ToDecimal(v.ForwardingCharge);
-                        }
-                        isi.StatusAssignment = false;
-                        isi.ForwardingAWBNo = v.FAWBNo;
-                        isi.ForwardingDate = DateTime.UtcNow;
-
-                        if (isi.InScanInternationalID == 0)
-                        {
-                            db.InScanInternationals.Add(isi);
-                            db.SaveChanges();
-
-                            isid.InscanInternationalID = isi.InScanInternationalID;
-                            db.InScanInternationalDeatils.Add(isid);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-
-                            db.Entry(isi).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                    }
+                }
+                                    
 
                     //Other charge data update into inscanothercharge table
                         if (v.otherchargesVM != null)
@@ -527,7 +497,7 @@ namespace LTMSV2.Controllers
                     //  _dao.AWBAccountsPosting(inscan.InScanID);
 
                     
-                    TempData["ShowLabelPrint"] = "false";
+                    //TempData["ShowLabelPrint"] = "false";
                     //return RedirectToAction("Index");
                     if (v.InScanID == 0)
                     {
@@ -742,7 +712,7 @@ namespace LTMSV2.Controllers
                 inscan.remarks = data.Remarks;
                 if (data.InvoiceTo!=null)
                 inscan.InvoiceTo = data.InvoiceTo;
-                
+            inscan.CargoDescription = data.CargoDescription;
                 int statustypeid = 0;
                  
             if (data.StatusTypeId != null && data.StatusTypeId!=0)
@@ -773,46 +743,7 @@ namespace LTMSV2.Controllers
             }
             
             
-            //if (data.BalanceAmt != null)
-            //{
-            //    inscan.totalCharge = data.BalanceAmt.Value;
-            //}
-            //else
-            //{
-            //    inscan.totalCharge = 0;
-            //}
-
-            //if (data.NetTotal != null)
-            //    inscan.totalCharge = Convert.ToDecimal(data.NetTotal);
-            //else
-            //    inscan.totalCharge = 0;
-
-            //if (data.MaterialCost != null)
-            //{
-            //    inscan.materialcost = data.MaterialCost;
-            //}
-            //else
-            //{
-            //    inscan.materialcost = 0;
-            //}
-          
-
-            //if (data.NetTotal != null)
-            //{
-            //    inscan.totalCharge = data.NetTotal.Value;
-            //}
-            //else
-            //{
-            //    inscan.totalCharge= 0;
-            //}
-            //if (data.CustomsValue!=null)
-            //{
-            //    inscan.CustomCharge =Convert.ToDecimal(data.CustomsValue);
-            //}
-            //else
-            //{
-            //    inscan.CustomCharge = 0;
-            //}
+            
             if (data.Weight != null)
                 {
                     inscan.Weight = data.Weight.Value;
@@ -884,6 +815,14 @@ namespace LTMSV2.Controllers
             else
             {
                 inscan.SeparateDoc =false;
+            }
+            if (data.COM != null)
+            {
+                inscan.COM = data.COM.Value;
+            }
+            else
+            {
+                inscan.COM = false;
             }
             if (data.DocumentSetupID!= null || data.DocumentSetupID!=0)
             {
@@ -1837,7 +1776,7 @@ namespace LTMSV2.Controllers
             {
                 //ViewBag.Enquiry = db.InScanMasters.ToList();
                 v = GetAWBDetail(id);
-                v.AWBTermsConditions = db.GeneralSetups.Where(cc => cc.BranchId == branchid && cc.SetupTypeID == 2).FirstOrDefault().Text1;
+                v.AWBTermsConditions = "";// db.GeneralSetups.Where(cc => cc.BranchId == branchid && cc.SetupTypeID == 2).FirstOrDefault().Text1;
 
                 ViewBag.AWBNo = v.ConsignmentNo;
                 if (v.CourierStatusId == null)

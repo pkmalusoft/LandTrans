@@ -203,6 +203,7 @@ namespace LTMSV2.Controllers
             v.PurchaseDate = data.PurchaseDate.Value;
             if (data.RegExpirydate!=null)
             v.RegExpirydate = data.RegExpirydate.Value;
+            
             v.AcCompanyID =Convert.ToInt32(data.AcCompanyID);
             v.RegistrationNo = data.RegistrationNo;
             v.RegisteredUnder = data.RegisteredUnder;

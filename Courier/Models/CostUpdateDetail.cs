@@ -21,7 +21,6 @@ namespace LTMSV2.Models
         public bool IsPerfomaInvoice { get; set; }
         public Nullable<decimal> ExpectedAmount { get; set; }
         public Nullable<int> InvoiceId { get; set; }
-        public string PaymentType { get; set; }
         public Nullable<int> AcHeadDebitId { get; set; }
         public Nullable<int> AcHeadCreditId { get; set; }
         public Nullable<int> SupplierId { get; set; }

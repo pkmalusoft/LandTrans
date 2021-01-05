@@ -72,7 +72,7 @@
                  @Html.HiddenFor(model=>model.UserID)
                 <label class="required headinglabel">User Name</label>
                
-                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control",@autocomplete=false })
                 @Html.ValidationMessageFor(model => model.UserName)
             </div>
 
@@ -100,7 +100,7 @@
 
             <div class="col-md-3">
                  <label class="required headinglabel">Email</label>
-                @Html.TextBoxFor(model => model.EmailId, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.EmailId, new { @class = "form-control" ,@autocomplete=false})
                 @Html.ValidationMessageFor(model => model.EmailId)
             </div>
 

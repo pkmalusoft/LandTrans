@@ -262,8 +262,6 @@ namespace LTMSV2.Models
         public virtual DbSet<RevenueUpdateMaster> RevenueUpdateMasters { get; set; }
         public virtual DbSet<VehicleMaster> VehicleMasters { get; set; }
         public virtual DbSet<RouteMaster> RouteMasters { get; set; }
-        public virtual DbSet<CostUpdateDetail> CostUpdateDetails { get; set; }
-        public virtual DbSet<CostUpdateMaster> CostUpdateMasters { get; set; }
         public virtual DbSet<DriverMaster> DriverMasters { get; set; }
         public virtual DbSet<DebitNote> DebitNotes { get; set; }
         public virtual DbSet<TruckDetailOtherCharge> TruckDetailOtherCharges { get; set; }
@@ -271,9 +269,11 @@ namespace LTMSV2.Models
         public virtual DbSet<CustomerInvoiceDetail> CustomerInvoiceDetails { get; set; }
         public virtual DbSet<TruckDetail> TruckDetails { get; set; }
         public virtual DbSet<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
-        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
         public virtual DbSet<SupplierInvoice> SupplierInvoices { get; set; }
         public virtual DbSet<SupplierInvoiceDetail> SupplierInvoiceDetails { get; set; }
+        public virtual DbSet<InScanMaster> InScanMasters { get; set; }
+        public virtual DbSet<CostUpdateDetail> CostUpdateDetails { get; set; }
+        public virtual DbSet<CostUpdateMaster> CostUpdateMasters { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)
