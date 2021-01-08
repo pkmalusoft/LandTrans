@@ -14,11 +14,46 @@
         $("select").css({ "border-radius": "5px" });
 
         $("#BusinessType").focus();
+        $("#AcHeadName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/DailyTrips/AcHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                Id: val.AcHeadID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#AcHeadName').val(ui.item.value);
+                $('#AcHeadId').val(ui.item.Id);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#AcHeadName").val(i.item.label);
+                $('#AcHeadId').val(i.item.Id);
+            },
 
+        });
         $("#btnsave").click(function () {
             var dep = $("#BusinessType").val();
 
             if (dep == "") {
+                $("#validations").show();
+                return false;
+            }
+            else if ($('#AcHeadName').val() == '' || $('#AcHeadId').val() == '' || $('#AcHeadId').val() == '0') {
                 $("#validations").show();
                 return false;
             }
@@ -32,7 +67,7 @@
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">Business Type</h1>
+    <h1 class="headingfont">Business Type Master - Create</h1>
 
 </section>
 
@@ -43,28 +78,23 @@
         @Html.ValidationSummary(true)
         <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
         <fieldset>
+            <div class="searchdiv sm-width">
             <div class="row no-margin">
 
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <label class="headinglabel required">Type Name</label>
                     @Html.TextBoxFor(model => model.BusinessType, new { @class = "form-control txttarget" })
                     @Html.ValidationMessageFor(model => model.BusinessType)
 
                 </div>
 
+                <div class="col-md-12 form-group">
+                    <label class="headinglabel required">Account Head(Dr.)</label>
+                    @Html.TextBoxFor(model => model.AcHeadName, new { @class = "form-control" })
+                    @Html.HiddenFor(model => model.AcHeadId)
+                </div>
 
-
-
-
-
-            </div>
-
-
-
-
-
-
-            <div class="row no-margin" style="padding-top:10px">
+                     <div class="row no-margin" >
                 <div class="col-md-12 btn-right">
                     <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
 
@@ -74,6 +104,14 @@
 
                 </div>
             </div>
+
+
+            </div>
+
+        </div>
+
+
+           
 
         </fieldset>
     }

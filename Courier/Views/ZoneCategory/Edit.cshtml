@@ -6,7 +6,7 @@
 }
 
 <section class="content-header">
-    <h1 class="headingfont">Zone Category - Modify</h1>
+    <h1 class="headingfont">Zone Category Master - Modify</h1>
 
 </section>
 
@@ -43,19 +43,17 @@
        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
     <fieldset>
         
-
+      <div class="searchdiv sm-width">
        <div class="row no-margin"> 
                
-      
-
-         <div class="col-md-3">
+         <div class="col-md-12">
              @Html.HiddenFor(model=>model.ZoneCategoryID)
                           <label class="headinglabel required">Zone Category</label>
                  @Html.TextBoxFor(model => model.ZoneCategory, new {@class="form-control txttarget" })
             @Html.ValidationMessageFor(model => model.ZoneCategory)
                      
                  </div>
-               <div class="col-md-3" style="padding-top:15px">
+               <div class="col-md-12 checkboxdesign verticalcheckbox" >
                     @Html.CheckBox("StatusBaseCategory", new { @name = "StatusBaseCategory" }) &nbsp
                     <label class="headinglabel" style="padding:10px">Status Base Category</label>
                     @Html.ValidationMessageFor(model => model.StatusBaseCategory)
@@ -71,6 +69,7 @@
                                
                           
                         </div>
+            </div>
             </div>
     </fieldset>
 }

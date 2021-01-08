@@ -38,7 +38,7 @@
 
 
 <section class="content-header">
-    <h1 class="headingfont">Transit Station</h1>
+    <h1 class="headingfont">Transit Station Master - Create</h1>
 </section>
 
 <section class="content">
@@ -55,9 +55,9 @@
             @Html.EditorFor(model => model.RoleID)
             @Html.ValidationMessageFor(model => model.RoleID)
         </div>*@
-
+        <div class="searchdiv sm-width">
         <div class="row no-margin">
-             <div class="col-md-3">
+             <div class="col-md-12">
             <label class="required headinglabel">Name</label>
        
             @Html.TextBoxFor(model => model.Name, new { @class = "form-control txttarget" })
@@ -65,14 +65,14 @@
              </div>
 
 
-             <div class="col-md-3">
+             <div class="col-md-12">
             <label class="required headinglabel">Country</label>
        
                  @Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Name)
              </div>
 
-             <div class="col-md-3 checkboxdesign" >
+             <div class="col-md-12 checkboxdesign verticalcheckbox" >
                     @Html.CheckBox("IsActive", new { @name = "IsActive" }) &nbsp
                     <label class="headinglabel">IsActive</label>
                     @Html.ValidationMessageFor(model => model.IsActive)
@@ -90,6 +90,7 @@
                    
                                     <a href='@Url.Action("Index", "TransitStation", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
                </div>
+        </div>
         </div>
     </fieldset>
 }

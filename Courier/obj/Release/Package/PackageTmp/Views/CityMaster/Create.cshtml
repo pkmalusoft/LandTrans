@@ -43,7 +43,7 @@
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">City</h1>
+    <h1 class="headingfont">City Master - Create</h1>
 
 </section>
 
@@ -54,32 +54,32 @@
       <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
     <fieldset>
         
+       <div class="searchdiv sm-width">
 
        <div class="row no-margin"> 
                
      
-
-         <div class="col-md-3">
+         <div class="col-md-12">
                           <label class="headinglabel required">City</label>
                  @Html.TextBoxFor(model => model.City,new { @class = "form-control txttarget" })
             @Html.ValidationMessageFor(model => model.City)
                      
                  </div>
 
-              <div class="col-md-3">
+              <div class="col-md-12">
                           <label class="headinglabel required">City Code</label>
                  @Html.TextBoxFor(model => model.CityCode,new { @class = "form-control text-right" })
             @Html.ValidationMessageFor(model => model.CityCode)
                      
                  </div> 
 
-        <div class="col-md-3">
+        <div class="col-md-12">
                           <label class="headinglabel required">Country</label>
-              @Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.country, "CountryID","CountryName"), "Select", new { @class = "form-control" });
+              @Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.country, "CountryID","CountryName"), "Select", new { @class = "form-control" })
      
                  </div>
 
-      <div class="col-md-3 checkboxdesign" style="padding-top:22px">
+      <div class="col-md-12 checkboxdesign verticalcheckbox" >
                           
                  @Html.CheckBoxFor(model => model.IsHub)&nbsp;&nbsp;<label class="headinglabel">Is Hub</label>
             @Html.ValidationMessageFor(model => model.IsHub)
@@ -97,6 +97,7 @@
                           
                         </div>
             </div>
+          </div>
     </fieldset>
 }
 

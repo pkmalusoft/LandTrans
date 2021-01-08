@@ -38,7 +38,7 @@
 
 </script>
 <section class="content-header">
-    <h1 class="headingfont">Business Type</h1>
+    <h1 class="headingfont">Business Type Master</h1>
 
 </section>
 
@@ -47,7 +47,7 @@
     @Html.ActionLink("Create New", "Create",null,new {@class="btn btn-primary btnwidth"})
 </p>
 </div>
-
+<div class="clearfix"></div>
 
 
 
@@ -64,35 +64,32 @@
 <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
 
     <thead>
-    <tr>
-       
-      
-       
-        <th>
-             @Html.Label("Id")
-        </th>
-       
-        <th>
-              @Html.Label("Type")
-        </th>
-        <th>
-            @Html.Label("Action")
-        </th>
-        
-    </tr>
+        <tr>
+
+
+
+            <th>
+                @Html.Label("Type")
+            </th>
+            <th>
+                @Html.Label("Account Head")
+            </th>
+            <th>
+                @Html.Label("Action")
+            </th>
+
+        </tr>
         </thead>
 
     <tfoot>
-    <tr>
-       
-      
-        <th class="right_text">
-             @Html.Label("Id")
-        </th>
+    <tr>      
+        
         <th>
              @Html.Label("Type")
         </th>
-       
+        <th>
+            @Html.Label("AccountHead")
+        </th>
        
         <th style="display:none"></th>
     </tr>
@@ -100,16 +97,13 @@
 
     <tbody>
 @foreach (var item in Model) {
-    <tr>
-      
-        <td class="text-right">
-            @Html.DisplayFor(modelItem=>item.Id)
-        </td>
+    <tr>      
         <td>
             @Html.DisplayFor(modelItem => item.BusinessType)
         </td>
-        
-        
+        <td>
+            @Html.DisplayFor(modelItem => item.AcHeadName)
+        </td>        
         <td>
              <a href="@Url.Action("Edit", new { id = item.Id })"><i class="fa fa-pencil"></i></a> |
             @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
@@ -124,7 +118,7 @@
 
 <script type="text/javascript">
     function Delete(id) {
-        if (confirm("Are you sure, You want to Delete Status Type?")) {
+        if (confirm("Are you sure, You want to Delete Business Type?")) {
             window.location.href = "/BusinessType/DeleteConfirmed/?id=" + ID;
         }
     }

@@ -106,8 +106,9 @@
             },
             minLength: 0,
             autoFocus: false,
-            focus: function (event, ui) {
-                $('#CountryName').val(ui.item.value);
+            focus: function (event, i) {
+                $("#CountryName").val(i.item.label);
+                $("#CountryID").val(i.item.CountryID);    
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -142,8 +143,13 @@
             },
             minLength: 0,
             autoFocus: false,
-            focus: function (event, ui) {
-                $('#LocationName').val(ui.item.value);
+            focus: function (event, i) {
+                $("#LocationName").val(i.item.label);
+                $("#LocationID").val(i.item.LocationID);
+                $("#CountryName").val(i.item.CountryName);
+                $("#CountryID").val(i.item.CountryID);
+                $("#CityName").val(i.item.CityName);
+                $("#CityID").val(i.item.CityID);
             },
             select: function (e, i) {
                 e.preventDefault();
@@ -700,7 +706,7 @@
                     @Html.ValidationMessageFor(model => model.Referal)
                 </div>
                 <div class="col-md-3">
-                    <label class="headinglabel">Business Type</label>
+                    <label class="headinglabel required">Business Type</label>
                     @Html.DropDownListFor(model => model.BusinessTypeId, new SelectList(@ViewBag.businessType, "Id", "BusinessType1"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.BusinessTypeId)
                 </div>

@@ -134,7 +134,7 @@
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">Zone Chart</h1>
+    <h1 class="headingfont">Zone Chart Master - Create</h1>
 
 </section>
 
@@ -146,10 +146,12 @@
        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
     <fieldset>
 
+        <div class="searchdiv sm-width">
+
         <div class="row no-margin">
 
 
-            <div class="col-md-3">
+            <div class="col-md-12">
 
                 @*  @Html.HiddenFor(model => model.countries)*@
 
@@ -159,21 +161,23 @@
 
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-12">
                 <label class="headinglabel required">Zone</label>
                 @Html.HiddenFor(model => model.StatusZone)
                 @Html.DropDownListFor(model => model.ZoneID, new SelectList(@ViewBag.Zones, "ZoneID", "ZoneName"), "Select", new { @class = "form-control" })
 
 
             </div>
+            
+
             @*    @Html.DropDownListFor(model => model.CountryIDs, new SelectList(@ViewBag.Country, "CountryID","CountryName"), "Select", new {multiple="multiple", @class = "form-control" })*@
-            <div class="col-md-3 divcountry">
+            <div class="col-md-12 divcountry">
                 <label class="headinglabel required">Country</label><br />
                 <select id="CountryID" name="country" multiple="multiple">
                     <option value=""></option>
                 </select>
             </div>           
-            <div class="col-md-3 divcity">
+            <div class="col-md-12 divcity">
                 <label class="headinglabel required">City</label><br />
                 <select id="CityID" name="city" multiple="multiple">
                     <option value=""></option> 
@@ -204,7 +208,7 @@
                         </div>
                     </div>
 
-
+        </div>
     </fieldset>
 }
     </section>

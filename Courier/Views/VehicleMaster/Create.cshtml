@@ -171,7 +171,9 @@
         $('#InsuranceExpDate1').datetimepicker({ format: 'DD-MM-YYYY' });
         $('#ContractExpDate').datetimepicker({ format: 'DD-MM-YYYY' });
         $('#ContractIssuedDate').datetimepicker({ format: 'DD-MM-YYYY' });
-        
+        if ($('#RegExpirydate').val() == '01-01-0001') {
+            $('#RegExpirydate').val('');
+        }
         $("#Category").focus();
 
         $("#btnsave").click(function () {

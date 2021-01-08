@@ -37,7 +37,7 @@
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">Customer Rate Type</h1>
+    <h1 class="headingfont">Customer Rate Type Master - Create</h1>
 
 </section>
 <section class="content">
@@ -47,26 +47,22 @@
       <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
     <fieldset>
       
-
-
-
-        
-
+          <div class="searchdiv sm-width">
            <div class="row no-margin"> 
                
-             <div class="col-md-3">
+             <div class="col-md-12">
                           <label class="headinglabel required">Customer Rate Type</label>
                         @Html.TextBoxFor(model => model.CustomerRateType, new { @class = "form-control txttarget" })
                  </div>
       
 
-        <div class="col-md-3">
+        <div class="col-md-12">
                           <label class="headinglabel required">Zone Category</label>
-           @Html.DropDownListFor(model => model.ZoneCategoryID, new SelectList(@ViewBag.zone, "ZoneCategoryID","ZoneCategory1"), "Select", new { @class = "form-control" });
+           @Html.DropDownListFor(model => model.ZoneCategoryID, new SelectList(@ViewBag.zone, "ZoneCategoryID","ZoneCategory1"), "Select", new { @class = "form-control" })
 
           
                  </div>
-                   <div class="col-md-3 checkboxdesign" style="padding-top:20px">
+                   <div class="col-md-12 checkboxdesign verticalcheckbox" style="padding-top:20px">
                         
           @Html.CheckBox("StatusDefault", new {@name="StatusDefault" })&nbsp;  <label class="headinglabel">Set as Default</label>
 
@@ -91,7 +87,7 @@
          </div>
 
 
-
+         </div>
     </fieldset>
 }
 </section>

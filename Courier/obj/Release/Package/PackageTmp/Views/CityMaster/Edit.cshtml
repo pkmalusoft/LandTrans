@@ -42,7 +42,7 @@
     });
 </script>
 <section class="content-header">
-    <h1 class="headingfont">City - Modify</h1>
+    <h1 class="headingfont">City Master - Modify</h1>
 
 </section>
 
@@ -54,10 +54,10 @@
     <fieldset>
         
 
-      
+      <div class="searchdiv sm-width">
        <div class="row no-margin"> 
                
-         <div class="col-md-3">
+         <div class="col-md-12">
                           <label class="headinglabel required">City</label>
              @Html.HiddenFor(model=>model.CityID)
                  @Html.TextBoxFor(model => model.City,new { @class = "form-control txttarget" })
@@ -65,20 +65,20 @@
                      
                  </div>
 
-              <div class="col-md-3">
+              <div class="col-md-12">
                           <label class="headinglabel required ">City Code</label>
                  @Html.TextBoxFor(model => model.CityCode,new { @class = "form-control text-right" })
             @Html.ValidationMessageFor(model => model.CityCode)
                      
                  </div> 
 
-        <div class="col-md-3">
+        <div class="col-md-12">
                           <label class="headinglabel required ">Country</label>
               @Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.country, "CountryID","CountryName"), "Select", new { @class = "form-control text-right" })
      
                  </div>
 
-      <div class="col-md-3 checkboxdesign" style="padding-top:22px">
+      <div class="col-md-3 checkboxdesign verticalcheckbox" >
                          
                  @Html.CheckBoxFor(model => model.IsHub)&nbsp;&nbsp; <label class="headinglabel">Is Hub</label>
             @Html.ValidationMessageFor(model => model.IsHub)
@@ -94,6 +94,7 @@
                           
                         </div>
             </div>
+        </div>
     </fieldset>
 }
 

@@ -9,7 +9,8 @@ namespace LTMSV2.Models
   public class BusinessTypeVM
   {
     public int Id{ get; set; }
-
     public string BusinessType { get; set; }    
+    public int AcHeadId { get; set; }
+    public string AcHeadName { get; set; }
   }
 }

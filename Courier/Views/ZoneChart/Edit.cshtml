@@ -242,7 +242,7 @@
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">Zone Chart</h1>
+    <h1 class="headingfont">Zone Chart Master - Modify</h1>
 
 </section>
 
@@ -255,10 +255,11 @@
        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
     <fieldset>
 
+            <div class="searchdiv sm-width">
            <div class="row no-margin"> 
                
-          
-               <div class="col-md-3">
+            
+               <div class="col-md-12">
 
                @Html.HiddenFor(model => model.ZoneChartID)
                    @Html.HiddenFor(model => model.StatusZone)
@@ -271,7 +272,7 @@
           
                  </div>
 
-        <div class="col-md-3">
+        <div class="col-md-12">
                           <label class="headinglabel required">Zone</label>
             @Html.HiddenFor(model => model.StatusZone)
            @Html.DropDownListFor(model => model.ZoneID, new SelectList(@ViewBag.Zones, "ZoneID","ZoneName"), "Select", new { @class = "form-control" })
@@ -319,7 +320,7 @@
                         </div>
                     </div>
 
-
+                </div>
     </fieldset>
 }
     </section>

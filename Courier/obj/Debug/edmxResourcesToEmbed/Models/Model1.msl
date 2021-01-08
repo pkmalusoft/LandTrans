@@ -630,6 +630,7 @@
     <EntitySetMapping Name="BusinessTypes">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.BusinessType">
         <MappingFragment StoreEntitySet="BusinessType">
+          <ScalarProperty Name="AcheadID" ColumnName="AcheadID" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="BusinessType1" ColumnName="BusinessType" />
         </MappingFragment>
@@ -8857,28 +8858,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="RevenueUpdateDetails">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail">
-        <MappingFragment StoreEntitySet="RevenueUpdateDetail">
-          <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
-          <ScalarProperty Name="PaymentModeId" ColumnName="PaymentModeId" />
-          <ScalarProperty Name="InvoiceTo" ColumnName="InvoiceTo" />
-          <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
-          <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
-          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-          <ScalarProperty Name="AcHeadCreditId" ColumnName="AcHeadCreditId" />
-          <ScalarProperty Name="AcHeadDebitId" ColumnName="AcHeadDebitId" />
-          <ScalarProperty Name="IsPerfomaCod" ColumnName="IsPerfomaCod" />
-          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
-          <ScalarProperty Name="ExpectedAmount" ColumnName="ExpectedAmount" />
-          <ScalarProperty Name="IsPerfomaInvoice" ColumnName="IsPerfomaInvoice" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="RevenueCostMasterID" ColumnName="RevenueCostMasterID" />
-          <ScalarProperty Name="MasterID" ColumnName="MasterID" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="SupplierInvoices">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoice">
         <MappingFragment StoreEntitySet="SupplierInvoice">
@@ -8921,6 +8900,7 @@
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
+          <ScalarProperty Name="RevenueUpdate" ColumnName="RevenueUpdate" />
           <ScalarProperty Name="COM" ColumnName="COM" />
           <ScalarProperty Name="CargoDescription" ColumnName="CargoDescription" />
           <ScalarProperty Name="InvoiceTo" ColumnName="InvoiceTo" />
@@ -9050,6 +9030,27 @@
           <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
           <ScalarProperty Name="BranchID" ColumnName="BranchID" />
           <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RevenueUpdateDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail">
+        <MappingFragment StoreEntitySet="RevenueUpdateDetail">
+          <ScalarProperty Name="InvoiceTo" ColumnName="InvoiceTo" />
+          <ScalarProperty Name="PaymentModeId" ColumnName="PaymentModeId" />
+          <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+          <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="AcHeadCreditId" ColumnName="AcHeadCreditId" />
+          <ScalarProperty Name="AcHeadDebitId" ColumnName="AcHeadDebitId" />
+          <ScalarProperty Name="IsPerfomaCod" ColumnName="IsPerfomaCod" />
+          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+          <ScalarProperty Name="ExpectedAmount" ColumnName="ExpectedAmount" />
+          <ScalarProperty Name="IsPerfomaInvoice" ColumnName="IsPerfomaInvoice" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="RevenueCostMasterID" ColumnName="RevenueCostMasterID" />
+          <ScalarProperty Name="MasterID" ColumnName="MasterID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>

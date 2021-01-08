@@ -1923,37 +1923,37 @@
                             <div class="row no-margin">
                                 <div class="col-md-12">
                                     <label class="headinglabel required">Item</label>
-                                    @Html.TextAreaFor(model => model.CargoDescription, new { @class = "txttarget", @required = "true", @style = "", @placeholder = "Item  Name", @rows = 2, @cols = 95 })
+                                    @Html.TextAreaFor(model => model.CargoDescription, new { @class = "txttarget form-control", @required = "true", @style = "", @placeholder = "Item  Name", @rows = 2})
 
                                 </div>
                             </div>
-                            <div class="row no-margin">
-                                <div class="col-md-12">
-
-                                    <div class="col-md-3">
-                                        <label class="headinglabel required">Package</label>
-                                        @Html.TextBoxFor(model => model.PackageName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Package Name" })
-                                        @Html.HiddenFor(model => model.PackageId)
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="headinglabel required">No. of Package</label>
-                                        @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright", @onkeypress = "return isNumberKey1(event)", @required = "true", @maxlength = 13 })
-                                    </div>
-                                    <div class="col-md-3 text-right">
-                                        <div class="innerCheckbox">
-                                            @Html.HiddenFor(model => model.CBM_Unit)
-                                            <div class="field checkboxdesign verticalcheckbox justify-center">
-                                                <label class="headinglabel"><input type="radio" id="chkCBMInch" name="cbmUnit" />Inch</label>
+                                    <div class="row no-margin">
+                                        <div class="col-md-12">
+                                            
+                                            <div class="col-md-4">
+                                                <label class="headinglabel required">Package</label>
+                                                @Html.TextBoxFor(model => model.PackageName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Package Name" })
+                                                @Html.HiddenFor(model => model.PackageId)
                                             </div>
-                                            <div class="field checkboxdesign justify-center" style="padding-top: 5px!important">
-                                                <label class="headinglabel"><input type="radio" id="chkCBMCM" name="cbmUnit" />CM</label>
+                                            <div class="col-md-4">
+                                                <label class="headinglabel required">No. of Package</label>
+                                                @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright", @onkeypress = "return isNumberKey1(event)", @required = "true", @maxlength = 13 })
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <div class="innerCheckbox">
+                                                    @Html.HiddenFor(model => model.CBM_Unit)
+                                                    <div class="field checkboxdesign verticalcheckbox justify-center">
+                                                        <label class="headinglabel"><input type="radio" id="chkCBMInch" name="cbmUnit" />Inch</label>
+                                                    </div>
+                                                    <div class="field checkboxdesign justify-center" style="padding-top: 5px!important">
+                                                        <label class="headinglabel"><input type="radio" id="chkCBMCM" name="cbmUnit" />CM</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row no-margin">
-                                <div class="col-md-12">
+                                    <div class="row no-margin">
+                                        <div class="col-md-12">
 
                                     <div class="col-md-2">
                                         <label class="headinglabel required">Weight</label>

@@ -9,6 +9,7 @@ using System.Data.Entity;
 
 namespace LTMSV2.Controllers
 {
+    [SessionExpire]
     public class MenuCreationController : Controller
     {
       Entities1 db=new Entities1();

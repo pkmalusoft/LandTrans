@@ -111,6 +111,7 @@ namespace LTMSV2.Controllers
                 vm.BranchID = v.BranchID;
                 vm.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                 vm.AcFinancialYearID = v.AcFinancialYearID;
+                vm.ConsignmentNo = db.InScanMasters.Find(v.InScanID).ConsignmentNo;
                 ViewBag.EditMode = "true";
             }
             //vm.PickupCashHeadId = db.AcHeads.Where(cc => cc.AcHead1 == "Main Cash Account").FirstOrDefault().AcHead1;
@@ -204,7 +205,17 @@ namespace LTMSV2.Controllers
                         }
                     }                
                }
-            TempData["SuccessMsg"] = "Consignment Revenue Updated Successfully!";
+
+            if (vm.ID==0)
+            {
+                //update inscan revenue update status 
+                var inscan = db.InScanMasters.Find(vm.InScanID);
+                inscan.RevenueUpdate = true;
+                db.Entry(inscan).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            TempData["SuccessMsg"] = "Revenue of Cosignment Updated Successfully!";
             return RedirectToAction("Index");
             //ViewBag.Title = "Revenue Update - Create";
             //ViewBag.employee = db.EmployeeMasters.ToList();
@@ -261,8 +272,26 @@ namespace LTMSV2.Controllers
                 consigneeid = receiver.CustomerID;
                 consigneename = receiver.CustomerName;
             }
+            List<RevenueUpdateDetailVM> list = RevenueDAO.GetMandatoryRevenueUpdateDetail(id);
+            
+            return Json(new {PaymentModeId=paymentModeid,InvoiceTo=InvoiceTo, ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename ,revenuedetail=list }, JsonRequestBehavior.AllowGet);
 
-            return Json(new {PaymentModeId=paymentModeid,InvoiceTo=InvoiceTo, ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult GetConsignmentPending(string term)
+        {
+            if (term.Trim() != "")
+            {
+                var list = (from c in db.InScanMasters where c.RevenueUpdate==false && c.ConsignmentNo.Contains(term.Trim()) orderby c.ConsignmentNo select new RevenueUpdateMasterVM { ConsignmentNo = c.ConsignmentNo ,InScanID=c.InScanID }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var list = (from c in db.InScanMasters where c.RevenueUpdate == false orderby c.ConsignmentNo select new RevenueUpdateMasterVM { ConsignmentNo = c.ConsignmentNo, InScanID = c.InScanID }).ToList();
+                
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }         
 
         }
 
@@ -276,13 +305,14 @@ namespace LTMSV2.Controllers
             return Json(new { data=list }, JsonRequestBehavior.AllowGet);
 
         }
+       
         public ActionResult RevenueCost(string term)
         {
             int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             if (!String.IsNullOrEmpty(term))
             {
                 List<RevenueCostMasterVM> list = new List<RevenueCostMasterVM>();
-                list = (from c in db.RevenueCostMasters join a in db.AcHeads on c.RevenueAcHeadID equals a.AcHeadID  where c.RevenueComponent.ToLower().StartsWith(term.ToLower()) orderby c.RevenueComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.RevenueComponent ,RevenueAcHeadID=c.RevenueAcHeadID , RevenueHeadName =a.AcHead1}).ToList();
+                list = (from c in db.RevenueCostMasters join a in db.AcHeads on c.RevenueAcHeadID equals a.AcHeadID  where c.RevenueComponent.ToLower().StartsWith(term.ToLower()) orderby c.RevenueComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.RevenueComponent ,RevenueAcHeadID=c.RevenueAcHeadID , RevenueHeadName =a.AcHead1 ,RevenueRate=c.RevenueRate}).ToList();
 
                 return Json(list, JsonRequestBehavior.AllowGet);
 
@@ -291,7 +321,7 @@ namespace LTMSV2.Controllers
             else
             {
                 List<RevenueCostMasterVM> list = new List<RevenueCostMasterVM>();
-                list = (from c in db.RevenueCostMasters orderby c.RevenueComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.RevenueComponent }).ToList();
+                list = (from c in db.RevenueCostMasters orderby c.RevenueComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.RevenueComponent,RevenueRate=c.RevenueRate }).ToList();
                 return Json(list, JsonRequestBehavior.AllowGet);
             }
         }
@@ -324,7 +354,23 @@ namespace LTMSV2.Controllers
             
             return Json(RevenueDetails, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetCustomerDebitHeadID(int CustomerId)
+        {
+            var customeraccount = (from c in db.CustomerMasters                                  
+                                  join b in db.BusinessTypes on c.BusinessTypeId equals b.Id                                  
+                                  join a in db.AcHeads on b.AcheadID equals a.AcHeadID
+                                  where c.CustomerID==CustomerId
+                                  select new RevenueUpdateDetailVM
+                                  {                                  
+                                      CustomerId = c.CustomerID,
+                                      CustomerName=c.CustomerName,
+                                      AcHeadDebitId =b.AcheadID,
+                                      DebitAccountName =a.AcHead1                                    
 
+                                  }).ToList();
+
+            return Json(customeraccount, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult DeleteConfirmed(int id)
         {
             RevenueUpdateMaster cenquery = db.RevenueUpdateMasters.Where(t => t.ID == id).FirstOrDefault();
@@ -339,7 +385,13 @@ namespace LTMSV2.Controllers
                 db.RevenueUpdateMasters.Remove(cenquery);
                 db.SaveChanges();
 
-                TempData["SuccessMsg"] = "You have successfully Deleted Revenue Update Entry";
+                //update inscan revenue update status 
+                var inscan = db.InScanMasters.Find(cenquery.InScanID);
+                inscan.RevenueUpdate = false;
+                db.Entry(inscan).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                TempData["SuccessMsg"] = "You have successfully Deleted the Revenue of Consignment!";
                 return RedirectToAction("Index");
             }
             else

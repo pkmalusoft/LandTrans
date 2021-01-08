@@ -39,7 +39,7 @@
 
 </script>
 <section class="content-header">
-    <h1 class="headingfont">Driver</h1>
+    <h1 class="headingfont">Driver Master</h1>
 
 </section>
 <div class="col-md-12">
@@ -72,19 +72,16 @@
     <thead>
     <tr>
         <th style="width:10%">
-             @Html.Label("Driver Type")          
+             Driver Type
         </th>
         <th style="width:35%">
           @Html.Label("Driver Name")
         </th>
         <th>
-            @Html.Label("Vechicle RegNo.")
-        </th>
-        <th style="width:15%">
-        @Html.Label("Sponsor Name")
-        </th>      
+           Vechicle Reg No.
+        </th>           
         <th>
-           @Html.Label("Phone No.")
+           Phone No.
         </th>
         <th>
            @Html.Label("Mobile")
@@ -105,18 +102,14 @@
         </th>
         <th>
          @Html.Label("RegNo")
-        </th>
-        <th>
-        @Html.Label("Sponsor Name")
-        </th>      
+        </th>         
         <th >
            @Html.Label("Phone No.")
         </th>
         <th>
            @Html.Label("Mobile")
         </th>
-       
-       
+              
         <th>Action</th>
     </tr>
         </tfoot>
@@ -133,10 +126,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.DriverName)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LicenseNo)
-        </td>
-      
+           
         <td>
             @Html.DisplayFor(modelItem => item.RegNo)
         </td>

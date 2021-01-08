@@ -42,7 +42,7 @@
 
 
 <section class="content-header">
-    <h1 class="headingfont">Country Master</h1>
+    <h1 class="headingfont">Country Master - Create</h1>
 
 </section>
 
@@ -56,9 +56,9 @@
         
          <div class="row no-margin"> 
                
-      
+      <div class="searchdiv sm-width">
 
-        <div class="col-md-3">
+        <div class="col-md-12">
                           <label class="headinglabel required">Country Name</label>
                    @Html.TextBoxFor(model => model.CountryName, new {@class="form-control" })
             @Html.ValidationMessageFor(model => model.CountryName)
@@ -85,7 +85,7 @@
 
            <div class="row no-margin" > 
                
-             <div class="col-md-3">
+             <div class="col-md-12">
                           <label class="headinglabel required">Country Code</label>
                    @Html.TextBoxFor(model => model.CountryCode, new {@class="form-control text-right" })
             @Html.ValidationMessageFor(model => model.CountryCode)
@@ -99,7 +99,7 @@
                      
                  </div>*@
 
-             <div class="col-md-3">
+             <div class="col-md-12">
                           <label class="headinglabel required">IATA Code</label>
                  @Html.TextBoxFor(model => model.IATACode, new {@class="form-control text-right" })
             @Html.ValidationMessageFor(model => model.IATACode)
@@ -118,5 +118,6 @@
                                
                         </div>
             </div>
+          </div>
     </fieldset>
 }

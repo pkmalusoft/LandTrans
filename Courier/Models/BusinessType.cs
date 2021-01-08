@@ -16,5 +16,6 @@ namespace LTMSV2.Models
     {
         public int Id { get; set; }
         public string BusinessType1 { get; set; }
+        public Nullable<int> AcheadID { get; set; }
     }
 }

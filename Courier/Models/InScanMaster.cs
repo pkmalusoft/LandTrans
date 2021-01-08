@@ -114,5 +114,6 @@ namespace LTMSV2.Models
         public string InvoiceTo { get; set; }
         public string CargoDescription { get; set; }
         public Nullable<bool> COM { get; set; }
+        public Nullable<bool> RevenueUpdate { get; set; }
     }
 }

@@ -79,7 +79,7 @@
  </script>
 
 <section class="content-header">
-    <h1 class="headingfont">Currency Modify</h1>
+    <h1 class="headingfont">Currency Master - Modify</h1>
 
 </section>
 
@@ -94,12 +94,12 @@
     <fieldset>
 
 
-
+          <div class="searchdiv">
 
              <div class="row no-margin"> 
                
       
-          <div class="col-md-3">
+          <div class="col-md-6">
               @Html.HiddenFor(model => model.CurrencyID)
                           <label class="headinglabel required">Currency Name</label>
                   @Html.TextBoxFor(model => model.CurrencyName, new {@class="form-control txttarget" })
@@ -107,43 +107,39 @@
                      
                  </div>
 
-            <div class="col-md-3">
+            <div class="col-md-6">
                           <label class="headinglabel required">Symbol</label>
              @Html.TextBoxFor(model => model.Symbol, new {@class="form-control" })
             @Html.ValidationMessageFor(model => model.Symbol)
                  </div>
 
-                    <div class="col-md-3">
+                   
+         </div>
+
+        
+             <div class="row no-margin" > 
+               
+                   <div class="col-md-6">
                           <label class="headinglabel required">No. Of Decimals</label>
                @Html.TextBoxFor(model => model.NoOfDecimals, new {@class="form-control" })
             @Html.ValidationMessageFor(model => model.NoOfDecimals)
                      
                  </div>
-         </div>
 
-
-
-
-
-        
-             <div class="row no-margin" style="padding-top:25px;"> 
-               
-          
-
-                   <div class="col-md-3">
+                   <div class="col-md-6">
                           <label class="headinglabel required">Monetary Unit</label>
          @Html.TextBoxFor(model => model.MonetaryUnit, new {@class="form-control" })
             @Html.ValidationMessageFor(model => model.MonetaryUnit)
         </div>
       
 
-          <div class="col-md-3">
+          <div class="col-md-6">
                           <label class="headinglabel required">Country</label>
         @Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.country, "CountryID","CountryName"), "Select", new { @class = "form-control" })
            @Html.ValidationMessageFor(model => model.CountryID)
         </div>
          
-         <div class="col-md-3 checkboxdesign" style="padding-top:20px">
+         <div class="col-md-6 checkboxdesign" style="padding-top:20px">
                          
              @Html.CheckBox("StatusBaseCurrency", new {@name="StatusBaseCurrency" })&nbsp;&nbsp; <label class="headinglabel">Status Base Currency</label>
             @Html.ValidationMessageFor(model => model.StatusBaseCurrency)
@@ -165,6 +161,7 @@
                                
                         </div>
                     </div>
+                  </div>
     </fieldset>
             
 }

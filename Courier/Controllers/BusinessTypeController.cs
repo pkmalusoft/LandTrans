@@ -9,6 +9,7 @@ using LTMSV2.Models;
 
 namespace LTMSV2.Controllers
 {
+    [SessionExpire]
     public class BusinessTypeController : Controller
     {
          Entities1 db = new Entities1();
@@ -16,9 +17,11 @@ namespace LTMSV2.Controllers
 
         public ActionResult Index()
         {
-            List<BusinessTypeVM> lst = (from c in db.BusinessTypes select new BusinessTypeVM {Id=c.Id, BusinessType = c.BusinessType1 }) .ToList();
-          
-
+            List<BusinessTypeVM> lst = (from c in db.BusinessTypes
+                                        join v in db.AcHeads on c.AcheadID equals v.AcHeadID into gj
+                                        from subpet in gj.DefaultIfEmpty()
+                                        orderby c.BusinessType1
+                                        select new BusinessTypeVM {Id=c.Id, BusinessType = c.BusinessType1 ,AcHeadName= subpet.AcHead1 ?? string.Empty }).ToList();          
            
             return View(lst);
         }
@@ -53,22 +56,7 @@ namespace LTMSV2.Controllers
             {
                 BusinessType obj = new BusinessType();               
                 obj.BusinessType1 = c.BusinessType;
-
-                //if (max == null)
-                //{
-                //    obj.CourierStatusID = 1;
-                //    obj.CourierStatus = c.CourierStatus;
-                  
-                //    obj.StatusTypeID = c.StatusTypeID;
-                //}
-                //else
-                //{
-                //    obj.CourierStatusID = max + 1;
-                //    obj.CourierStatus = c.CourierStatus;
-                
-                //    obj.StatusTypeID = c.StatusTypeID;
-                //}
-
+                obj.AcheadID = c.AcHeadId;               
 
                 db.BusinessTypes.Add(obj);
 
@@ -95,7 +83,16 @@ namespace LTMSV2.Controllers
             }
             else
             {
-                obj.BusinessType = c.BusinessType1;                
+                obj.BusinessType = c.BusinessType1;
+                obj.AcHeadId = Convert.ToInt32(c.AcheadID);
+                if (c.AcheadID!=null)
+                {
+                    var achead = db.AcHeads.Find(c.AcheadID);
+                    if (achead!=null)
+                    {
+                        obj.AcHeadName = achead.AcHead1;
+                    }
+                }
             }
 
             return View(obj);
@@ -111,7 +108,7 @@ namespace LTMSV2.Controllers
             BusinessType obj = new BusinessType();
             obj.Id = c.Id;
             obj.BusinessType1= c.BusinessType;
-                       
+            obj.AcheadID = c.AcHeadId;           
 
             if (ModelState.IsValid)
             {

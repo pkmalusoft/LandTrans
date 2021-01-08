@@ -42,7 +42,7 @@
 
 
 <section class="content-header">
-    <h1 class="headingfont">Transit Station - Modify</h1>
+    <h1 class="headingfont">Transit Station Master - Modify</h1>
 </section>
 
 <section class="content-header">
@@ -52,9 +52,9 @@
      <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
     <fieldset>
         
-
+    <div class="searchdiv sm-width">
      <div class="row no-margin">
-        <div class="col-md-3">
+        <div class="col-md-12">
              @Html.HiddenFor(model=>model.ID)
            <label class="headinglabel required">Name</label>
         
@@ -62,14 +62,14 @@
             @Html.ValidationMessageFor(model => model.Name)
         </div>
 
-           <div class="col-md-3">
+           <div class="col-md-12">
                     <label class="headinglabel required">Country</label>
                     @Html.DropDownListFor(model => model.CountryID, new SelectList(@ViewBag.Country, "CountryID", "CountryName"), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.CountryID)
 
            </div>
           
-          <div class="col-md-3 checkboxdesign" style="padding-top:15px">
+          <div class="col-md-12 checkboxdesign" style="padding-top:15px">
                     @Html.CheckBox("IsActive", new { @name = "IsActive" }) &nbsp
                     <label class="headinglabel" style="padding:10px">IsActive</label>
                     @Html.ValidationMessageFor(model => model.IsActive)
@@ -81,6 +81,7 @@
             <input type="submit" value="Update" class="btn btn-primary btnwidth" id="btnsave" />&nbsp; <a href='@Url.Action("Index", "TransitStation", new { id = 0 })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
        
         </div>
+    </div>
     </div>
     </fieldset>
 }

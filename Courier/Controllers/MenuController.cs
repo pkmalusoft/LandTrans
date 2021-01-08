@@ -9,6 +9,7 @@ using LTMSV2.Models;
 
 namespace LTMSV2.Controllers
 {
+    [SessionExpire]
     public class MenuController : Controller
     {
         private Entities1 db = new Entities1();

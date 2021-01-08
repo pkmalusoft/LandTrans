@@ -243,7 +243,7 @@
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">Branch - Modify</h1>
+    <h1 class="headingfont">Branch Master - Modify</h1>
 
 </section>
 
@@ -261,7 +261,7 @@
        
 
       <div class="col-md-3">
-                          <label class="headinglabel required">Branch Name</label>
+        <label class="headinglabel required">Branch Name</label>
           @Html.HiddenFor(model=>model.BranchID)
           @Html.HiddenFor(model=>model.AcCompanyID)
                  @Html.TextBoxFor(model => model.BranchName, new {@class="form-control txttarget" })
@@ -289,7 +289,7 @@
 
            </div>
 
-     <div class="row no-margin" style="padding-top:10px">
+     <div class="row no-margin" >
 
          <div class="col-md-3">
              <label class="headinglabel required">Location</label>
@@ -323,7 +323,7 @@
          </div>
      </div>
         
-     <div class="row no-margin" style="padding-top:10px">
+     <div class="row no-margin" >
 
 
          <div class="col-md-3">
@@ -355,7 +355,7 @@
          </div>
      </div>
 
-     <div class="row no-margin" style="padding-top:10px">
+     <div class="row no-margin" >
 
          <div class="col-md-3">
              <label class="headinglabel">Website</label>
@@ -384,7 +384,7 @@
          </div>
 
      </div>
-     <div class="row no-margin" style="padding-top:10px">
+     <div class="row no-margin" >
 
 
          <div class="col-md-3 awbno">
@@ -424,7 +424,7 @@
          </div>
 
 
-         <div class="col-md-3 checkboxdesign" style="padding:22px">
+         <div class="col-md-3 checkboxdesign" >
 
 
              @Html.CheckBox("StatusAssociate", new { @name = "StatusAssociate" })
@@ -436,7 +436,7 @@
 
      </div>
 
-        <div class="row no-margin" style="padding-top:10px">
+        <div class="row no-margin" >
                         <div class="col-md-12 btn-right">
                            
                             <input type="submit" value="Update" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />

@@ -56,6 +56,48 @@ namespace LTMSV2.DAL
             return objList;
         }
 
+        public static List<RevenueUpdateDetailVM> GetMandatoryRevenueUpdateDetail(int InScanId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetInScanMandatoryRevenue";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add("@InScanId", SqlDbType.Int);
+            cmd.Parameters["@InScanId"].Value = InScanId;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<RevenueUpdateDetailVM> objList = new List<RevenueUpdateDetailVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    RevenueUpdateDetailVM obj = new RevenueUpdateDetailVM();
+                    obj.ID = 0;
+                    obj.MasterID = 0;
+                    obj.CurrencyId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CurrencyId"].ToString());
+                    obj.ExchangeRate = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["ExchangeRate"].ToString());
+                    obj.RevenueCostMasterID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["RevenueCostMasterID"].ToString());
+                    obj.RevenueCost = ds.Tables[0].Rows[i]["RevenueComponent"].ToString();
+                    obj.CustomerId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerId"].ToString());
+                    obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
+                    obj.AcHeadDebitId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadDebitId"].ToString());
+                    obj.AcHeadCreditId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadCreditId"].ToString());
+                    obj.PaymentModeId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["PaymentModeId"].ToString());
+                    obj.InvoiceTo = ds.Tables[0].Rows[i]["InvoiceTo"].ToString();
+                    obj.DebitAccountName = ds.Tables[0].Rows[i]["DebitAccountHead"].ToString();
+                    obj.CreditAccountName = ds.Tables[0].Rows[i]["CreditAccountHead"].ToString();
+                    obj.Currency = ds.Tables[0].Rows[i]["CurrencyName"].ToString();
+                    obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
+                    obj.PaymentType = ds.Tables[0].Rows[i]["PaymentType"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
         public static List<RevenueUpdateDetailVM> GetRevenueUpdateDetail(int ID)
         {
             SqlCommand cmd = new SqlCommand();

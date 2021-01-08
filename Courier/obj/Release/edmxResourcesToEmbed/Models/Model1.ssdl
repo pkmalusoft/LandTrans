@@ -647,6 +647,7 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="BusinessType" Type="varchar" MaxLength="100" />
+    <Property Name="AcheadID" Type="int" />
   </EntityType>
   <EntityType Name="CargoDescription">
     <Key>
@@ -2218,6 +2219,7 @@
     <Property Name="InvoiceTo" Type="varchar" MaxLength="50" />
     <Property Name="CargoDescription" Type="varchar" MaxLength="1000" />
     <Property Name="COM" Type="bit" />
+    <Property Name="RevenueUpdate" Type="bit" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
@@ -2989,7 +2991,6 @@
     <Property Name="ExpectedAmount" Type="money" />
     <Property Name="InvoiceId" Type="int" />
     <Property Name="IsPerfomaCod" Type="bit" />
-    <Property Name="PaymentType" Type="varchar" MaxLength="50" />
     <Property Name="AcHeadDebitId" Type="int" />
     <Property Name="AcHeadCreditId" Type="int" />
     <Property Name="CustomerId" Type="int" />

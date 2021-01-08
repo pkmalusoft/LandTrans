@@ -200,7 +200,7 @@
     });
 </script>
 <section class="content-header">
-    <h1 class="headingfont">Depot - Modify</h1>
+    <h1 class="headingfont">Depot Master - Modify</h1>
 
 </section>
 
@@ -232,7 +232,7 @@
                         <div class="col-md-6">
                             <label class="headinglabel required">Depot</label>
                         </div>
-                        <div class="col-md-6 checkboxdesign" style="padding-top:5px">
+                        <div class="col-md-6 checkboxdesign verticalcheckbox" >
                             @Html.CheckBox("IsOwn", new { @name = "IsOwn" }) &nbsp;&nbsp;
                             <label class="headinglabel">Is Own</label>
                             @Html.ValidationMessageFor(model => model.IsOwn)

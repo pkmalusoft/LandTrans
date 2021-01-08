@@ -18,7 +18,7 @@ namespace LTMSV2.Controllers
                        from subpet in gj.DefaultIfEmpty()                       
                        orderby c.DriverName
                         //select new { DriverID = c.DriverID, DriverName = c.DriverName, VehicleId = c.VehicleID, }).ToList();
-                   select new DriverVM { DriverID = c.DriverID, DriverName = c.DriverName, LicenseNo = c.LicenseNo, SponsorName = c.SponsorName, PhoneNo1 = c.PhoneNo1 ,PhoneNo2=c.PhoneNo2, RegNo = subpet.RegistrationNo ?? string.Empty }).ToList();
+                   select new DriverVM { DriverType=c.DriverType,  DriverID = c.DriverID, DriverName = c.DriverName, LicenseNo = c.LicenseNo, SponsorName = c.SponsorName, PhoneNo1 = c.PhoneNo1 ,PhoneNo2=c.PhoneNo2, RegNo = subpet.RegistrationNo ?? string.Empty }).ToList();
             return View(lst);
         }
 

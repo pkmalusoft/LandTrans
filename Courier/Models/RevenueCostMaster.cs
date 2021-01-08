@@ -17,8 +17,8 @@ namespace LTMSV2.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public RevenueCostMaster()
         {
-            this.RevenueUpdateDetails = new HashSet<RevenueUpdateDetail>();
             this.CostUpdateDetails = new HashSet<CostUpdateDetail>();
+            this.RevenueUpdateDetails = new HashSet<RevenueUpdateDetail>();
         }
     
         public int RCID { get; set; }
@@ -36,8 +36,8 @@ namespace LTMSV2.Models
         public string RevenueGroup { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CostUpdateDetail> CostUpdateDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
     }
 }

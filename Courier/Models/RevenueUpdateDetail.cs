@@ -27,9 +27,8 @@ namespace LTMSV2.Models
         public Nullable<int> CustomerId { get; set; }
         public Nullable<int> CurrencyId { get; set; }
         public Nullable<decimal> ExchangeRate { get; set; }
-        public string InvoiceTo { get; set; }
         public Nullable<int> PaymentModeId { get; set; }
-        public string PaymentType { get; set; }
+        public string InvoiceTo { get; set; }
     
         public virtual RevenueCostMaster RevenueCostMaster { get; set; }
         public virtual RevenueUpdateMaster RevenueUpdateMaster { get; set; }

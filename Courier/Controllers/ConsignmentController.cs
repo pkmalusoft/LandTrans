@@ -213,28 +213,10 @@ namespace LTMSV2.Controllers
                         inscan.EnteredByID = Convert.ToInt32(Session["UserID"]);
                         inscan.EnquiryNo = null;
                         inscan.IsEnquiry = false;
-                        
+                        inscan.RevenueUpdate = false;
                         //inscan.PickupRequestStatusId = 4;
                         inscan.StatusTypeId = 1;
                         inscan.CourierStatusID = 4;
-                        inscan.ConsignorCountryName = v.ConsignorCountryName;
-                        inscan.ConsignorCityName = v.ConsignorCityName;
-                        inscan.ConsignorLocationName = v.ConsignorLocationName;
-                        inscan.CustomerShipperSame = v.CustomerandShipperSame;
-                        inscan.ConsignorFax = v.ConsignorFax;
-                        //if (v.CustomerandShipperSame==true)                            
-                        inscan.Consignor = v.shippername;
-                        
-                        //inscan.ShipperName = v.ShipperName;
-                        inscan.ConsignorAddress1_Building = v.ConsignorAddress1_Building;
-                        inscan.ConsignorAddress2_Street = v.ConsignorAddress2_Street;
-                        inscan.ConsignorAddress3_PinCode = v.ConsignorAddress3_PinCode;
-                        inscan.ConsignorPhone = v.ConsignorPhone;
-                        inscan.ConsignorContact = v.ConsignorContact;
-                        inscan.ConsignorCountryID = v.ConsignorCountryID;
-                        inscan.ConsignorCityID = v.ConsignorCityID;
-                        inscan.ConsignorLocationID = v.ConsignorLocationID;
-
                         inscan.CreatedBy = userid;
                         DateTime univDateTime = DateTime.Now;
                         DateTime localDateTime = DateTime.SpecifyKind(univDateTime, DateTimeKind.Local);
@@ -242,21 +224,6 @@ namespace LTMSV2.Controllers
                         inscan.LastModifiedBy = userid;
                         inscan.LastModifiedDate = localDateTime;
                         
-
-                        //if (v.PaymentModeId != null)
-                        //{
-                        //    if (v.PaymentModeId == 3)
-                        //    {
-                        //        int _customerid = SaveCustomer(v);
-                        //        customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
-                        //        inscan.CustomerID = _customerid;
-                        //    }
-                        //    else
-                        //    {
-                        //        inscan.CustomerID = v.CustomerID;
-                        //    }
-
-                        //}
                         int _customerid = SaveShipper(v);
                         SaveReceiver(v);
                         customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
@@ -302,8 +269,7 @@ namespace LTMSV2.Controllers
                     inscan.ConsignorCityName = v.ConsignorCityName;
                     inscan.ConsignorLocationName = v.ConsignorLocationName;
                     inscan.CustomerShipperSame = v.CustomerandShipperSame;
-                    inscan.ConsignorFax = v.ConsignorFax;
-                    //if (v.CustomerandShipperSame==true)                            
+                    inscan.ConsignorFax = v.ConsignorFax;                                    
                     inscan.Consignor = v.shippername;
 
                     //inscan.ShipperName = v.ShipperName;
@@ -351,33 +317,11 @@ namespace LTMSV2.Controllers
                     inscan.SeparateDoc = v.SeparateDoc;
                     inscan.COM = v.COM;
                     inscan.RouteID = v.RouteID;
-                    inscan.DespatchDate = v.DespatchDate;
-                    //if (v.CustomCharge !=null )
-                    //{
-                    //    inscan.CustomsValue = Convert.ToInt32(v.CustomCharge);
-                    //}
-
-                    if (v.materialcost != null)
-                    {
-                        inscan.MaterialCost = Convert.ToInt32(v.materialcost);
-                    }
-                    if (v.totalCharge != null)
-                    {
-                        inscan.NetTotal = Convert.ToInt32(v.totalCharge);
-                    }
-
-                    //inscan.InScanDate = DateTime.UtcNow;
-
-
-                    
+                    inscan.DespatchDate = v.DespatchDate;                    
                     inscan.PickedUpEmpID =v.PickedBy;
 
                     inscan.DepotReceivedBy = v.ReceivedBy;
-
-                    
-
-                    //InScanInternationalDeatil isid = new InScanInternationalDeatil();
-                    //InScanInternational isi = new InScanInternational();
+                
                     if (v.InScanID == 0)
                     {
 
@@ -403,12 +347,8 @@ namespace LTMSV2.Controllers
                         TempData["SuccessMsg"] = "Saved Successfully!";
                         db.InScanMasters.Add(inscan);
                         db.SaveChanges();
-                        AddAWBTrackStatus(inscan.InScanID);
-                     
-                        //isid.InScanID = inscan.InScanID;
-                        //isi.InScanID = inscan.InScanID;
-                        //isi.InScanInternationalID = 0;
-                        //TempData["SuccessMsg"] = customersavemessage  + "\n" + "You have successfully Added Quick AirWay Bill.";
+                        AddAWBTrackStatus(inscan.InScanID);                    
+                    
                     }
                     else
                     {
@@ -427,20 +367,7 @@ namespace LTMSV2.Controllers
                                 inscan.CourierStatusID = 5; //received at origin facility
                             }
                        }
-
-                        //isid = db.InScanInternationalDeatils.Where(cc => cc.InScanID == v.InScanID).FirstOrDefault();
-                        //isi = db.InScanInternationals.Where(cc => cc.InScanID == v.InScanID).FirstOrDefault();
-                        //if (isid==null)
-                        //{
-                        //    isid=new InScanInternationalDeatil();
-                        //    isid.InScanID = inscan.InScanID;
-                        //}
-                        //if (isi == null)
-                        //{
-                        //    isi = new InScanInternational();
-                        //    isi.InScanID = inscan.InScanID;
-                        //}
-
+                       
                         db.Entry(inscan).State = EntityState.Modified;
                         db.SaveChanges();
                         TempData["SuccessMsg"] = "Updated Successfully!";

@@ -660,6 +660,7 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="BusinessType1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="AcheadID" Type="Int32" />
   </EntityType>
   <EntityType Name="CargoDescription">
     <Key>
@@ -8680,19 +8681,6 @@
       <End Role="RouteMaster" EntitySet="RouteMasters" />
       <End Role="TruckDetail" EntitySet="TruckDetails" />
     </AssociationSet>
-    <EntitySet Name="RevenueUpdateDetails" EntityType="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" />
-    <AssociationSet Name="FK_RevenueUpdateDetail_RevenueCostMaster" Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster">
-      <End Role="RevenueCostMaster" EntitySet="RevenueCostMasters" />
-      <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK__RevenueUp__Maste__5B3966D3" Association="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__5B3966D3">
-      <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMasters" />
-      <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_RevenueUpdateDetail_RevenueUpdateMaster" Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster">
-      <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMasters" />
-      <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetails" />
-    </AssociationSet>
     <EntitySet Name="SupplierInvoices" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoice" />
     <EntitySet Name="SupplierInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" />
     <AssociationSet Name="FK_SupplierInvoice_SupplierMaster" Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster">
@@ -8725,6 +8713,19 @@
     <AssociationSet Name="FK_CostUpdateMaster_TruckDetail" Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail">
       <End Role="TruckDetail" EntitySet="TruckDetails" />
       <End Role="CostUpdateMaster" EntitySet="CostUpdateMasters" />
+    </AssociationSet>
+    <EntitySet Name="RevenueUpdateDetails" EntityType="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" />
+    <AssociationSet Name="FK_RevenueUpdateDetail_RevenueCostMaster" Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster">
+      <End Role="RevenueCostMaster" EntitySet="RevenueCostMasters" />
+      <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__RevenueUp__Maste__6DA2FB28" Association="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__6DA2FB28">
+      <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMasters" />
+      <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RevenueUpdateDetail_RevenueUpdateMaster" Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster">
+      <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMasters" />
+      <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetails" />
     </AssociationSet>
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
@@ -12792,8 +12793,8 @@
     <Property Name="AcCompanyId" Type="Int32" />
     <Property Name="BranchID" Type="Int32" />
     <Property Name="RevenueGroup" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="RevenueUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" FromRole="RevenueCostMaster" ToRole="RevenueUpdateDetail" />
     <NavigationProperty Name="CostUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_RevenueCostMaster" FromRole="RevenueCostMaster" ToRole="CostUpdateDetail" />
+    <NavigationProperty Name="RevenueUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" FromRole="RevenueCostMaster" ToRole="RevenueUpdateDetail" />
   </EntityType>
   <EntityType Name="PortMaster">
     <Key>
@@ -12815,7 +12816,7 @@
     <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_BranchMaster" FromRole="RevenueUpdateMaster" ToRole="BranchMaster" />
     <NavigationProperty Name="InScan" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_InScan" FromRole="RevenueUpdateMaster" ToRole="InScan" />
     <Property Name="AcFinancialYearID" Type="Int32" />
-    <NavigationProperty Name="RevenueUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__5B3966D3" FromRole="RevenueUpdateMaster" ToRole="RevenueUpdateDetail" />
+    <NavigationProperty Name="RevenueUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__6DA2FB28" FromRole="RevenueUpdateMaster" ToRole="RevenueUpdateDetail" />
     <NavigationProperty Name="RevenueUpdateDetails1" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" FromRole="RevenueUpdateMaster" ToRole="RevenueUpdateDetail" />
   </EntityType>
   <Association Name="FK_RevenueUpdateMaster_BranchMaster">
@@ -13139,68 +13140,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="RevenueUpdateDetail">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="MasterID" Type="Int32" Nullable="false" />
-    <Property Name="RevenueCostMasterID" Type="Int32" Nullable="false" />
-    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-    <Property Name="IsPerfomaInvoice" Type="Boolean" Nullable="false" />
-    <Property Name="ExpectedAmount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="InvoiceId" Type="Int32" />
-    <Property Name="IsPerfomaCod" Type="Boolean" />
-    <Property Name="AcHeadDebitId" Type="Int32" />
-    <Property Name="AcHeadCreditId" Type="Int32" />
-    <Property Name="CustomerId" Type="Int32" />
-    <Property Name="CurrencyId" Type="Int32" />
-    <Property Name="ExchangeRate" Type="Decimal" Precision="18" Scale="3" />
-    <Property Name="InvoiceTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="PaymentModeId" Type="Int32" />
-    <NavigationProperty Name="RevenueCostMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" FromRole="RevenueUpdateDetail" ToRole="RevenueCostMaster" />
-    <NavigationProperty Name="RevenueUpdateMaster" Relationship="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__5B3966D3" FromRole="RevenueUpdateDetail" ToRole="RevenueUpdateMaster" />
-    <NavigationProperty Name="RevenueUpdateMaster1" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" FromRole="RevenueUpdateDetail" ToRole="RevenueUpdateMaster" />
-    <Property Name="PaymentType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <Association Name="FK_RevenueUpdateDetail_RevenueCostMaster">
-    <End Type="DB_9F57C4_couriertest_newModel.RevenueCostMaster" Role="RevenueCostMaster" Multiplicity="1" />
-    <End Type="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" Role="RevenueUpdateDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="RevenueCostMaster">
-        <PropertyRef Name="RCID" />
-      </Principal>
-      <Dependent Role="RevenueUpdateDetail">
-        <PropertyRef Name="RevenueCostMasterID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__RevenueUp__Maste__5B3966D3">
-    <End Type="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster" Role="RevenueUpdateMaster" Multiplicity="1" />
-    <End Type="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" Role="RevenueUpdateDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="RevenueUpdateMaster">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="RevenueUpdateDetail">
-        <PropertyRef Name="MasterID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_RevenueUpdateDetail_RevenueUpdateMaster">
-    <End Type="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster" Role="RevenueUpdateMaster" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" Role="RevenueUpdateDetail" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="RevenueUpdateMaster">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="RevenueUpdateDetail">
-        <PropertyRef Name="MasterID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="SupplierInvoice">
     <Key>
       <PropertyRef Name="SupplierInvoiceID" />
@@ -13369,6 +13308,7 @@
     <Property Name="InvoiceTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CargoDescription" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
     <Property Name="COM" Type="Boolean" />
+    <Property Name="RevenueUpdate" Type="Boolean" />
   </EntityType>
   <EntityType Name="CostUpdateDetail">
     <Key>
@@ -13464,6 +13404,67 @@
       </Principal>
       <Dependent Role="CostUpdateMaster">
         <PropertyRef Name="TruckDetailID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="RevenueUpdateDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MasterID" Type="Int32" Nullable="false" />
+    <Property Name="RevenueCostMasterID" Type="Int32" Nullable="false" />
+    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="IsPerfomaInvoice" Type="Boolean" Nullable="false" />
+    <Property Name="ExpectedAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="InvoiceId" Type="Int32" />
+    <Property Name="IsPerfomaCod" Type="Boolean" />
+    <Property Name="AcHeadDebitId" Type="Int32" />
+    <Property Name="AcHeadCreditId" Type="Int32" />
+    <Property Name="CustomerId" Type="Int32" />
+    <Property Name="CurrencyId" Type="Int32" />
+    <Property Name="ExchangeRate" Type="Decimal" Precision="18" Scale="3" />
+    <Property Name="PaymentModeId" Type="Int32" />
+    <Property Name="InvoiceTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="RevenueCostMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" FromRole="RevenueUpdateDetail" ToRole="RevenueCostMaster" />
+    <NavigationProperty Name="RevenueUpdateMaster" Relationship="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__6DA2FB28" FromRole="RevenueUpdateDetail" ToRole="RevenueUpdateMaster" />
+    <NavigationProperty Name="RevenueUpdateMaster1" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" FromRole="RevenueUpdateDetail" ToRole="RevenueUpdateMaster" />
+  </EntityType>
+  <Association Name="FK_RevenueUpdateDetail_RevenueCostMaster">
+    <End Type="DB_9F57C4_couriertest_newModel.RevenueCostMaster" Role="RevenueCostMaster" Multiplicity="1" />
+    <End Type="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" Role="RevenueUpdateDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RevenueCostMaster">
+        <PropertyRef Name="RCID" />
+      </Principal>
+      <Dependent Role="RevenueUpdateDetail">
+        <PropertyRef Name="RevenueCostMasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__RevenueUp__Maste__6DA2FB28">
+    <End Type="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster" Role="RevenueUpdateMaster" Multiplicity="1" />
+    <End Type="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" Role="RevenueUpdateDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RevenueUpdateMaster">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RevenueUpdateDetail">
+        <PropertyRef Name="MasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RevenueUpdateDetail_RevenueUpdateMaster">
+    <End Type="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster" Role="RevenueUpdateMaster" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" Role="RevenueUpdateDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RevenueUpdateMaster">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RevenueUpdateDetail">
+        <PropertyRef Name="MasterID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

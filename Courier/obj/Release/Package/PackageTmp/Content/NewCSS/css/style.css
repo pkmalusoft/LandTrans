@@ -5697,6 +5697,7 @@ table.text-center, table.text-center td, table.text-center th {
 .paginate_button.previous {
 	margin-right:20px;
 }
+
 .btn-right{
 	padding-top:30px;
 	text-align:right;
@@ -5767,14 +5768,19 @@ body .tblbackground{
 .treeview-menu,.treeview-menu ul{
 	padding-left:0;
 }
-.dataTables_paginate {
+/*.dataTables_paginate {
     display: none;
 }
-
-.dataTables_info {
-    display: none
+*/
+dataTables_paginate > span {
+    display: none;
 }
-
+/*.paginate_button {
+display:none!important;
+}*/
+/*.dataTables_info {
+display: none!important;
+}*/
 .select2-selection{
     height:40px !important;
     
@@ -5941,7 +5947,7 @@ p.indexbtnpadding{
 .small_btn{
     min-width: 40px!important;
     width:40px!important;
-    margin-top:24px;
+    margin-top:21px;
     border-radius:5px!important;
 }
 .divider{

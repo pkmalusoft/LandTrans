@@ -418,10 +418,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" Width="1.5" PointX="42.625" PointY="46.25" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__5B3966D3" />
-        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoice" Width="1.5" PointX="15.75" PointY="110.25" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail" Width="1.5" PointX="18" PointY="110.625" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" />
@@ -434,6 +430,10 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_CostUpdateMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateDetail_RevenueCostMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail" Width="1.5" PointX="42.625" PointY="46.25" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__6DA2FB28" />
+        <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
