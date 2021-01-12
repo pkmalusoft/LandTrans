@@ -95,7 +95,7 @@
 
 
 <section class="content-header">
-    <h1 class="headingfont">Empost Fees Setup</h1>
+    <h1 class="headingfont">Empost Fees Setup Master - Create</h1>
 
 </section>
 
@@ -112,42 +112,42 @@
 
        <div class="row no-margin"> 
         
-              <div class="col-md-3">
+              <div class="col-md-4">
                           <label class="headinglabel required">Effective Date</label>
                  @Html.TextBoxFor(model => model.EffectFromDate,new { @class = "form-control text-right",@autocomplete="off" })
             @Html.ValidationMessageFor(model => model.EffectFromDate)
                      
                  </div> 
 
-         <div class="col-md-3">
+         <div class="col-md-4">
                           <label class="headinglabel required">Courier Mode</label>
                @Html.DropDownListFor(model=>model.MoveMentID,new SelectList(@ViewBag.couriermode,"MovementID","MovementType"),"Select",new{@class="form-control"})
                      
                  </div>
 
-     <div class="col-md-3">
+     <div class="col-md-4">
                           <label class="headinglabel required">Parcel Type</label>
                @Html.DropDownListFor(model=>model.ParcelTypeId,new SelectList(@ViewBag.parceltypes, "ID","ParcelType1"),"Select",new{@class="form-control"})
                      
                  </div>
            </div>
           
-         <div class="row no-margin" style="padding-top:10px"> 
+         <div class="row no-margin" > 
         
-              <div class="col-md-3">
+              <div class="col-md-4">
                           <label class="headinglabel required">Sales Head</label>
               @Html.DropDownListFor(model=>model.SaleHeadID,new SelectList(@ViewBag.achead,"AcHeadID","AcHead1"),"Select",new{@class="form-control"})
                      
                  </div> 
 
-         <div class="col-md-3">
+         <div class="col-md-4">
                           <label class="headinglabel">Minimum Rate</label>
                
                         @Html.TextBoxFor(model => model.MinimumRate,new { @class = "form-control textright" })
             @Html.ValidationMessageFor(model => model.MinimumRate)
                  </div>
 
-     <div class="col-md-3">
+     <div class="col-md-4">
                           <label class="headinglabel required">Tax%</label>
                
                         @Html.TextBoxFor(model => model.TaxPercentage,new { @class = "form-control textright" })

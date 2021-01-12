@@ -80,6 +80,10 @@
     <section class="content">
 
 
+        <div class="errors">
+                <span id="elemError" ></span>
+        </div>
+
         <div class="row no-margin">
         <div class="col-md-12 form-group bg-info pageTabs d-flex" style="min-height:50px; justify-content: space-around ">
             <div class="field checkboxdesign verticalcheckbox">
@@ -126,7 +130,7 @@
 
                     <div class="col-md-3 form-group" id="divdriver">
                         <label class="headinglabel required">Driver</label>
-                        @Html.TextBoxFor(model => model.DriverName, new { @class = "form-control", @required = "true" })
+                        @Html.TextBoxFor(model => model.DriverName, new { @class = "form-control", @required = "true",@placeholder="Select Driver"})
                         @Html.HiddenFor(model => model.DriverID)
 
                     </div>
@@ -494,9 +498,9 @@
         debugger;
         if ($(obj).val() == "") {
             $(obj).val(0);
-          }        
+          }
         $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
-        
+
     }
     function setVehicleType() {
         debugger;
@@ -563,7 +567,13 @@
         var curr_year = d.getFullYear();
 
         var reqdate = curr_date + "-" + curr_month + "-" + curr_year; // + ' ' + d.getHours() + ':' + d.getMinutes();
-        $('#TDDate').val(reqdate);
+         $('#TDDate').datetimepicker({
+            maxDate: '@_maxdate',
+            minDate: '@_mindate', format: 'DD-MM-YYYY'
+        });
+        $('#ChequeDate').datetimepicker({
+            format: 'DD-MM-YYYY'
+        });
         $('#DriverName').focus();
 
         $("#ParcelTypeId").change(function () {
@@ -646,14 +656,23 @@
             if ($('#RentAcHeadID').val() > 0) {
                 $('#RentAcHead').attr('readonly', 'readonly');
             }
+
+            $('#TDDate').val(reqdate);
         }
-        $('#TDDate').datetimepicker({
-            maxDate: '@_maxdate',
-            minDate: '@_mindate', format: 'DD-MM-YYYY'
-        });
-        $('#ChequeDate').datetimepicker({
-            format: 'DD-MM-YYYY'
-        });
+
+
+
+         $("#DriverName").change(function () {
+            if ($("#DriverName").val() != $('#DriverID').attr('label')) {
+                $("#DriverName").val('');
+                $("#DriverName").focus();
+                $('#DriverID').val(0);
+                $("#elemError").html("invalid details, Select driver name properly!");
+            }else{
+                $("#elemError").html(" ");
+            }
+        })
+
 
 
         $("#DriverName").autocomplete({
@@ -682,6 +701,7 @@
             focus: function (event, ui) {
                 $('#DriverName').val(ui.item.value);
                 $('#DriverID').val(ui.item.Id);
+     	  $('#DriverID').attr('label',ui.item.label);
                 if (ui.item.VehicleId != null) {
                     $("#RegNo").val(ui.item.RegNo);
                     $('#VehicleID').val(ui.item.VehicleId);
@@ -691,19 +711,20 @@
                 e.preventDefault();
                 $("#DriverName").val(i.item.label);
                 $('#DriverID').val(i.item.Id);
+                $('#DriverID').attr('label',i.item.label);
                 if (i.item.VehicleId != null) {
                     $("#RegNo").val(i.item.RegNo);
                     $('#VehicleID').val(i.item.VehicleId);
                 }
-            }            
+            }
            //change: function(e, i) {
-               
+
            //    if ($('#VehicleID').val() == 0) {
            //        $("#RegNo").val('');
            //    }
            //     //console.log($("#RegNo").val());
            //     //console.log($('#VehicleID').val());
-                                
+
            // }
 
         });

@@ -56,8 +56,7 @@
             url: '/RevenueUpdate/GetConsignmentDetail',
             datatype: "json",
             data: { id: $('#InScanID').val() },
-            success: function (response) {
-                debugger;
+            success: function (response) {                
                 $('#ConsignorId').val(response.ConsignorId);
                 $('#ConsignorName').val(response.ConsignorName);
                 $('#ConsigneeId').val(response.ConsigneeId);
@@ -79,7 +78,7 @@
                     AWBItems = response.data;
                     //$('#details > tbody > tr').html('');
                     $.each(AWBItems, function (index, item) {
-                        debugger;
+                        
                         var i = $('#details > tbody > tr').length - 1;
                         var paytype = item.PaymentType;
                         var paytypeid = item.PaymentModeId;
@@ -140,9 +139,9 @@
                 $('#ConsigneeName').val(response.ConsigneeName);
                 $('#PaymentType').val(response.PaymentModeId);
                 $('#InvoiceTo').val(response.InvoiceTo);
-                console.log(response);
+                
                 AWBItems = [];
-                if (response.revenuedetail != null) {
+                if (response.revenuedetail != null && response.revenuedetail.length>0) {
                     AWBItems = response.revenuedetail;
 
                     $.each(AWBItems, function (index, item) {
@@ -181,6 +180,10 @@
                         objHtml = objHtml + '</tr>';
                         $("#details").append(objHtml);
                     });
+                }
+                else {
+                    $('#InvoiceTo').trigger('change');
+                    
                 }
             }
         });
@@ -358,10 +361,26 @@
             },
 
         });
+        $('#btnsearch').click(function () {
+            if ($('#ConsignmentNo').val() == '') {
+                $('#elemError').html("Select Consignment No!");
+                $('#ConsignmentNo').focus();
+                return;
+            }
+            else {
+                $('#elemError').html("");
+                getrevenuecost();
+            }
+            
+        })
         $("#ConsignmentNo").change(function () {
             if ($("#ConsignmentNo").val() != $('#InScanID').attr('label')) {
+                $('#spanerr').html("Select Valid ConsignmentNo!");
                 $("#ConsignmentNo").val('');
                 $("#ConsignmentNo").focus();
+            }
+            else {
+                $('#elemError').html("");
             }
         })
         $("#ConsignmentNo").autocomplete({
@@ -388,15 +407,15 @@
             focus: function (event, ui) {
                 $('#ConsignmentNo').val(ui.item.value);
                 $('#InScanID').val(ui.item.Id);
-                $('#InScanID').attr('label', i.item.label);
-                getrevenuecost();
+                $('#InScanID').attr('label', ui.item.label);
+                
             },
             select: function (e, i) {
                 e.preventDefault();
                 $("#ConsignmentNo").val(i.item.label);
                 $('#InScanID').val(i.item.Id);
                 $('#InScanID').attr('label',i.item.label);
-                getrevenuecost();
+              
             },
 
         });
@@ -523,7 +542,11 @@
             var errormessage = "";
             
             if ($('#CurrencyId').val() == "" || $('#CurrencyId').val() == "0") {
-                $('#CurrencyId').val($('#DefaultCurrencyID').val());                                
+                $('#CurrencyId').val($('#DefaultCurrencyID').val());       
+                $('#ExchangeRate').val(1);
+            }
+            if ($('#ExchangeRate').val() == "" || $('#ExchangeRate').val() == 0) {
+                $('#ExchangeRate').val(1);
             }
             $('#spanerr').html();
             if ($("#PaymentType").val() == "") {
@@ -612,19 +635,20 @@
                 console.log(objHtml);
                 $("#details").append(objHtml);
                 $('#RowCount').val("0");
-                $('#PaymentType').val('');
-                $('#CurrencyId').val('');
-                $('#CurrencyId').val(0);
-                $('#ExchangeRate').val(1);
+                //$('#PaymentType').val('');
+                //$('#CurrencyId').val('');
+                //$('#CurrencyId').val(0);
+                //$('#ExchangeRate').val(1);
                 $('#txtRevenueCost').val('');
                 $('#txtRevenueCostId').val(0);
-                $('#Amount').val(0);
-                $('#Customer').val('');
-                $('#CustomerId').val(0);
-                $('#txtDebitHead').val('');
-                $('#txtDebitHeadId').val(0);
+                $('#txtAmount').val(0);
+                //$('#Customer').val('');
+                //$('#CustomerId').val(0);
+                //$('#txtDebitHead').val('');
+                //$('#txtDebitHeadId').val(0);
                 $('#txtCreditHead').val('');
                 $('#txtCreditHeadId').val(0);
+                $('#txtRevenueCost').focus();
             }
             return false;
         });
@@ -633,10 +657,15 @@
         //}
         $('#btnsave').click(function () {
             
-            var lst1 = [];
-            var SelectedInScanId = '';
-            var RemovedAWB = '';
-           
+            var i = $('#details > tbody > tr').length - 1;
+            if (i == 0) {
+                $('#elemError').html("Add Revenue Detail to Save!");
+                return false;
+            }
+            else {
+                $('#elemError').html("");
+                return true;
+            }
 
        
 
@@ -644,6 +673,7 @@
         if ('@ViewBag.EditMode' == "true") {
             DisplayCostItems();
             $('#ConsignmentNo').attr('readonly', 'readonly');
+            $('#btnsearch').attr('disabled', 'disabled');
             $('#EntryDate').attr('readonly', 'readonly');
             $('#EmployeeID').attr('readonly', 'readonly');
             $('#PaymentType').focus();
@@ -662,11 +692,22 @@
 </section>
 
 <section class="content">
+
+
+
     @if (TempData["SuccessMsg"] != null)
     {
         <script type="text/javascript">
                   $(document).ready(function () {
                       $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+        </script>
+    }
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["SuccessMsg"]", "warning");
                  });
         </script>
     }
@@ -678,8 +719,12 @@
         <fieldset>
             <div class="row">
                 <div class="col-md-12 btn-right" style="padding-top:10px;padding-bottom: 25px;">
+
                     <div class="row no-margin btn-right" style="padding-top:10px">
-                        <div class="col-md-12">
+                        <div class="col-md-8 errors" style="text-align:left;padding-top:10px">
+                            <span id="elemError"></span>
+                        </div>
+                        <div class="col-md-4">
                             <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
 
                             <a href='@Url.Action("Index", "RevenueUpdate")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
@@ -696,7 +741,7 @@
                     @Html.HiddenFor(model => model.ConsigneeId, new { })
                     @Html.HiddenFor(model => model.ConsigneeName, new { })
                     @Html.HiddenFor(model => model.PickupCashHeadId, new { })
-                    @Html.HiddenFor(model => model.CurrencyId, new {@id="DefaultCurrencyID" })
+                    @Html.HiddenFor(model => model.CurrencyId, new { @id = "DefaultCurrencyID" })
 
                     @*@Html.HiddenFor(model => model.InScanID, new { })*@
                     <label class="headinglabel required">Entry Date</label>
@@ -707,10 +752,13 @@
                     <label class="headinglabel required">Entered By</label>
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="headinglabel required">Consignment No.</label>
-                    @Html.TextBoxFor(model => model.ConsignmentNo, new { @class = "form-control" ,@autocomplete=false })
+                    @Html.TextBoxFor(model => model.ConsignmentNo, new { @class = "form-control", @autocomplete = false })
                     @Html.HiddenFor(model => model.InScanID)
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-primary" type="button" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                 </div>
             </div>
 
@@ -721,8 +769,8 @@
             <div class="row no-margin">
                 <div class="col-md-12">
                     <span id="spanerr" style="color:red"></span>
-                    </div>
                 </div>
+            </div>
             <div class="row no-margin">
                 <div class="col-md-1">
                     <label class="headinglabel required">Pay Type</label>
@@ -730,7 +778,7 @@
                 </div>
                 <div class="col-md-1">
                     <label class="headinglabel required">Invoice To</label>
-                    @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "Select", new { @class = "form-control", @id = "InvoiceTo" })                    
+                    @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "Select", new { @class = "form-control", @id = "InvoiceTo" })
                 </div>
                 <div class="col-md-1">
                     <label class="headinglabel required">Currency</label>
@@ -739,7 +787,7 @@
                 </div>
 
                 <div class="col-md-2">
-                    <label class="headinglabel label1">Revenue Cost</label>
+                    <label class="headinglabel label1">Revenue</label>
                     <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
                     <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
                 </div>
@@ -767,25 +815,25 @@
                     <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
                 </div>
             </div>
-                <br />
-                <div class="row no-margin" style="padding-top:10px">
-                    <table class="table table-bordered table-responsive" id="details">
-                        <tr>
-                            <td style="width:5%">Payment Mode</td>
-                            <td style="width:5%">Invoice To</td>
-                            <td style="width:5%">Currency</td>
-                            <td style="width:3%">Ex.Rate</td>
-                            <td style="width:10%">Revenue</td>
-                            <td style="width:5%">Amount</td>
-                            <td style="width:5%">Amount(F.C)</td>
-                            <td style="width:10%">Customer</td>
-                            <td style="width:10%">Receivable Account</td>
-                            <td style="width:10%">Revenue Account</td>
-                            <td style="width:5%"></td>
-                        </tr>
-                    </table>
-                </div>
+            <br />
+            <div class="row no-margin" style="padding-top:10px">
+                <table class="table table-bordered table-responsive" id="details">
+                    <tr>
+                        <td style="width:5%">Payment Mode</td>
+                        <td style="width:5%">Invoice To</td>
+                        <td style="width:5%">Currency</td>
+                        <td style="width:3%">Ex.Rate</td>
+                        <td style="width:10%">Revenue</td>
+                        <td style="width:5%">Amount</td>
+                        <td style="width:5%">Amount(F.C)</td>
+                        <td style="width:10%">Customer</td>
+                        <td style="width:10%">Receivable Account</td>
+                        <td style="width:10%">Revenue Account</td>
+                        <td style="width:5%"></td>
+                    </tr>
+                </table>
+            </div>
 
-</fieldset>
+        </fieldset>
     }
 </section>

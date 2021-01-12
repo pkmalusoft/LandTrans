@@ -3053,6 +3053,8 @@
     <Content Include="Models\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="Controllers\EditAcGroup.cshtml" />
+    <Content Include="Controllers\EditAcType.cshtml" />
     <None Include="Reports\AccLedger.xsd" />
     <Content Include="Reports\AccTrialBalance.rpt" />
     <Content Include="Reports\AccTradingAccount.rpt" />

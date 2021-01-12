@@ -1,7 +1,7 @@
 ﻿@model LTMSV2.Models.SupplierInvoiceVM
 
 @{
-    ViewBag.Title = "Create";
+   
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var _decimal = @Session["Decimal"].ToString();
     int i = 0;
@@ -80,7 +80,7 @@
 
         $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
-        $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
         var d = new Date();
         var curr_date = d.getDate();
@@ -92,6 +92,17 @@
         $('#InvoiceDate').val(reqdate);
     });
     $(document).ready(function () {
+        $('#SupplierTypeId').on('change', function () {
+            
+            if ($('#SupplierTypeId').val() == 4) {
+                $('#InvoiceNo').removeAttr('readonly');
+            }
+            else {
+                $('#InvoiceNo').attr('readonly', 'readonly');
+            }
+        });
+        $('#currency').val(@ViewBag.CurrencyId);
+
          if ('@Model.SupplierInvoiceID' > 0) {
              $.ajax({
                 type: "POST",
@@ -120,7 +131,7 @@
                     url: '/SupplierPayment/GetSupplierName',
                     datatype: "json",
                     data: {
-                        term: request.term, SupplierTypeId: $("#vendortype").val()
+                        term: request.term, SupplierTypeId: $("#SupplierTypeId").val()
                     },
                     success: function (data) {
                         response($.map(data, function (val, item) {
@@ -259,11 +270,12 @@
         $("#SupplierName").val('');
         $("#SupplierID").val('');
     }
+  
 </script>
 
 
 <section class="content-header">
-    <h1 class="headingfont">Supplier Invoice -Create</h1>
+    <h1 class="headingfont">@ViewBag.Title</h1>
 </section>
 
 <section class="content">
@@ -281,12 +293,13 @@
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-2">
                     <label class=" required headinglabel">Supplier Type</label>
-                    <select class="form-control" id="vendortype" onchange="ChangeSupplier()">
+                    @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(@ViewBag.Suppliertype, "SupplierTypeID", "SupplierType1"), "Select", new { @class = "form-control" })
+                    @*<select class="form-control" id="vendortype" onchange="ChangeSupplier()">
                         @foreach (var item in ViewBag.SupplierType)
                         {
                             <option value="@item.SupplierTypeID">@item.SupplierType1</option>
                         }
-                    </select>
+                    </select>*@
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required ">Supplier</label>
@@ -297,14 +310,13 @@
                 </div>
 
                 <div class="col-md-2">
-                    <label class="headinglabel required "> Invoice No</label>
+                    <label class="headinglabel required"> Invoice No</label>
                     @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control txttarget", @required = "true", @readonly = "true" })
                     @Html.ValidationMessageFor(model => model.InvoiceNo)
                 </div>
                 <div class="col-md-2">
                     @Html.HiddenFor(model => model.SupplierInvoiceID)
-
-                    <label class="headinglabel required "> Invoice Date</label>
+                    <label class="headinglabel required"> Invoice Date</label>
                     @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right txttarget", @required = "true" })
                     @Html.ValidationMessageFor(model => model.InvoiceDate)
 

@@ -5682,7 +5682,7 @@ table.text-center, table.text-center td, table.text-center th {
 	border:1px solid #ccc;
     margin-bottom: 10px;
 }
-.btn,.paginate_button{
+.btn{
 	height:40px!important;
 	line-height:40px;
 	border-radius:10px;
@@ -5690,12 +5690,36 @@ table.text-center, table.text-center td, table.text-center th {
 	padding:0!important;
 	min-width:125px!important;
 }
+body .dataTables_wrapper .dataTables_paginate .paginate_button{
+    height:30px!important;
+    line-height:30px;
+    border-radius:5px;
+    background-color: transparent!important;
+    border:1px solid #ccc!important;
+    font-size:19px;
+    color:#adadad!important;
+    padding:0 13px!important;
+}
+.dataTables_length select{
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.dataTables_info{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
 .dataTables_length,.dataTables_info
 {
-	margin-bottom:10px;
+	margin-bottom:15px;
 }
-.paginate_button.previous {
-	margin-right:20px;
+.errors span{
+    color: red;
+}
+.paginate_button.previous,.paginate_button.next  {
+    margin-right:10px;
+	margin-left:10px!important;
 }
 
 .btn-right{
@@ -5752,9 +5776,46 @@ body .tblbackground{
 }
 
 
-
-
-
+.paginate_button{
+    display: none!important;
+}
+.paginate_button.previous:before,.paginate_button.next:before{
+    content: "<<";
+    font-size: 20px;
+    width: 200px;
+    height: 200px;
+    color: red;
+    color: #ffffff;
+    background: #4e4c4b;
+    padding: 3px 6px;
+    border-radius: 5px;
+}
+.paginate_button.next:before{
+    content: ">>";
+   
+}
+.paginate_button.first,.paginate_button.last {
+    display: inline-block!important;
+}
+.dataTables_wrapper{
+    position: relative;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous,.dataTables_wrapper .dataTables_paginate .paginate_button.next {
+    background:transparent!important;
+    color: transparent!important;
+    height: 20px!important;
+    line-height: 20px!important;
+    width:30px!important;
+    min-width: unset!important;
+    padding:0!important;
+    border:0!important;
+    display: inline-block!important;
+}
+.dataTables_paginate{
+    position: absolute;
+    top:5px;
+    left:150px;
+}
 .checkboxdesign.verticalcheckbox{
     padding-top: 0!important;
 }
@@ -5830,6 +5891,7 @@ h3{
 .sub_title_block,.break{
     margin-bottom: 10px;
 }
+
 hr{
     margin:0!important;
 }
@@ -5875,6 +5937,9 @@ p.indexbtnpadding{
 	margin-left:55px;
 	
 }
+.errors{
+    margin-bottom: 10px;
+}
 [class*="col"] {
   padding-left:5px;
   padding-right:5px;
@@ -5907,7 +5972,8 @@ p.indexbtnpadding{
 }
 
 .modal-header{
-    background:#35b8eb;
+    background: #35b8eb!important;
+    color: #fff;
  }
 
 .fa-times,body .red{

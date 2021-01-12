@@ -67,8 +67,8 @@ namespace LTMSV2.Controllers
             List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
             lsttype.Add(new VoucherTypeVM { TypeName = "Pickup Cash" });
             lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
-            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });            
-
+            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });
+            int userId = Convert.ToInt32(Session["UserID"].ToString());
             ViewBag.PaymentType = lsttype;
             ViewBag.Currency = db.CurrencyMasters.ToList();
             ViewBag.Trips = db.TruckDetails.ToList();
@@ -78,6 +78,12 @@ namespace LTMSV2.Controllers
                 vm.ID = 0;
                 vm.DetailVM = new List<CostUpdateDetailVM>();
                 vm.EntryDate = DateTime.Now;
+                vm.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
+                var emp = db.EmployeeMasters.Where(cc => cc.UserID == userId).FirstOrDefault();
+                if (emp != null)
+                {
+                    vm.EmployeeID = emp.EmployeeID;
+                }
                 ViewBag.EditMode = "false";
             }
             else

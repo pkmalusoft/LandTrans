@@ -8900,6 +8900,7 @@
     <EntitySetMapping Name="InScanMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
         <MappingFragment StoreEntitySet="InScanMaster">
+          <ScalarProperty Name="FOC" ColumnName="FOC" />
           <ScalarProperty Name="RevenueUpdate" ColumnName="RevenueUpdate" />
           <ScalarProperty Name="COM" ColumnName="COM" />
           <ScalarProperty Name="CargoDescription" ColumnName="CargoDescription" />

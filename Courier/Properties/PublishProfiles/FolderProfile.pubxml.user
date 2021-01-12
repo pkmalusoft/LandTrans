@@ -53,10 +53,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:32</publishTime>
     </File>
     <File Include="bin/LTMSV2.dll">
-      <publishTime>01/08/2021 22:26:06</publishTime>
+      <publishTime>01/12/2021 20:22:50</publishTime>
     </File>
     <File Include="bin/LTMSV2.pdb">
-      <publishTime>01/08/2021 22:26:06</publishTime>
+      <publishTime>01/12/2021 20:22:50</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>09/05/2018 16:10:50</publishTime>
@@ -809,7 +809,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:06</publishTime>
     </File>
     <File Include="Content/NewCSS/css/Home.css">
-      <publishTime>12/22/2020 19:46:06</publishTime>
+      <publishTime>01/12/2021 19:03:25</publishTime>
     </File>
     <File Include="Content/NewCSS/css/skins/skin-blue.css">
       <publishTime>12/22/2020 19:46:06</publishTime>
@@ -818,7 +818,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:06</publishTime>
     </File>
     <File Include="Content/NewCSS/css/style.css">
-      <publishTime>01/06/2021 15:46:15</publishTime>
+      <publishTime>01/12/2021 19:56:52</publishTime>
     </File>
     <File Include="Content/NewCSS/font-awesome.min.css">
       <publishTime>12/22/2020 19:46:06</publishTime>
@@ -3274,6 +3274,12 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Content/Site.css">
       <publishTime>12/22/2020 19:46:06</publishTime>
     </File>
+    <File Include="Controllers/EditAcGroup.cshtml">
+      <publishTime>01/12/2021 19:03:54</publishTime>
+    </File>
+    <File Include="Controllers/EditAcType.cshtml">
+      <publishTime>01/12/2021 19:03:54</publishTime>
+    </File>
     <File Include="favicon.ico">
       <publishTime>12/22/2020 19:46:28</publishTime>
     </File>
@@ -3464,25 +3470,25 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:19</publishTime>
     </File>
     <File Include="Views/Accounts/CreateAcBook.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 15:29:54</publishTime>
     </File>
     <File Include="Views/Accounts/CreateAcCategory.cshtml">
       <publishTime>12/22/2020 19:46:19</publishTime>
     </File>
     <File Include="Views/Accounts/CreateAcGroup.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:28</publishTime>
     </File>
     <File Include="Views/Accounts/CreateAcHead.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 15:29:54</publishTime>
     </File>
     <File Include="Views/Accounts/CreateAcHeadAssign.cshtml">
       <publishTime>12/22/2020 19:46:19</publishTime>
     </File>
     <File Include="Views/Accounts/CreateAcHeadControl.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:28</publishTime>
     </File>
     <File Include="Views/Accounts/CreateAcType.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:29</publishTime>
     </File>
     <File Include="Views/Accounts/CreateExpenseAnalysisGroup.cshtml">
       <publishTime>12/22/2020 19:46:19</publishTime>
@@ -3491,7 +3497,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:19</publishTime>
     </File>
     <File Include="Views/Accounts/CreatePDCTransaction.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:29</publishTime>
     </File>
     <File Include="Views/Accounts/DayBook.cshtml">
       <publishTime>12/24/2020 13:28:48</publishTime>
@@ -3503,10 +3509,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:19</publishTime>
     </File>
     <File Include="Views/Accounts/EditAcGroup.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:30</publishTime>
     </File>
     <File Include="Views/Accounts/EditAcHead.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 15:29:54</publishTime>
     </File>
     <File Include="Views/Accounts/EditAcHeadAssign.cshtml">
       <publishTime>12/22/2020 19:46:19</publishTime>
@@ -3515,7 +3521,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:19</publishTime>
     </File>
     <File Include="Views/Accounts/EditAcType.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:30</publishTime>
     </File>
     <File Include="Views/Accounts/EditExpenseAnalysisGroup.cshtml">
       <publishTime>12/22/2020 19:46:19</publishTime>
@@ -3536,22 +3542,22 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:19</publishTime>
     </File>
     <File Include="Views/Accounts/IndexAcGroup.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:31</publishTime>
     </File>
     <File Include="Views/Accounts/IndexAcHead.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:32</publishTime>
     </File>
     <File Include="Views/Accounts/IndexAcHeadAssign.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:32</publishTime>
     </File>
     <File Include="Views/Accounts/IndexAcType.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:33</publishTime>
     </File>
     <File Include="Views/Accounts/IndexExpenseAnalysisGroup.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:34</publishTime>
     </File>
     <File Include="Views/Accounts/IndexExpenseAnalysisHead.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:34</publishTime>
     </File>
     <File Include="Views/Accounts/IndexOpenningBalance.cshtml">
       <publishTime>12/22/2020 19:46:19</publishTime>
@@ -3560,7 +3566,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:19</publishTime>
     </File>
     <File Include="Views/Accounts/IndexPDCTransaction.cshtml">
-      <publishTime>12/22/2020 19:46:19</publishTime>
+      <publishTime>01/12/2021 19:04:27</publishTime>
     </File>
     <File Include="Views/Accounts/Ledger.cshtml">
       <publishTime>12/22/2020 19:46:19</publishTime>
@@ -3740,7 +3746,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/12/2020 19:52:31</publishTime>
     </File>
     <File Include="Views/Consignment/Create.cshtml">
-      <publishTime>01/08/2021 19:25:16</publishTime>
+      <publishTime>01/12/2021 16:49:22</publishTime>
     </File>
     <File Include="Views/Consignment/CreateL.cshtml">
       <publishTime>12/22/2020 19:46:20</publishTime>
@@ -3782,7 +3788,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:20</publishTime>
     </File>
     <File Include="Views/CostUpdate/Create.cshtml">
-      <publishTime>01/01/2021 16:46:20</publishTime>
+      <publishTime>01/12/2021 17:18:22</publishTime>
     </File>
     <File Include="Views/CostUpdate/Index.cshtml">
       <publishTime>12/26/2020 11:51:45</publishTime>
@@ -3806,16 +3812,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:20</publishTime>
     </File>
     <File Include="Views/CourierStatus/Create.cshtml">
-      <publishTime>12/22/2020 19:46:20</publishTime>
+      <publishTime>01/12/2021 15:09:52</publishTime>
     </File>
     <File Include="Views/CourierStatus/Delete.cshtml">
       <publishTime>12/22/2020 19:46:20</publishTime>
     </File>
     <File Include="Views/CourierStatus/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:20</publishTime>
+      <publishTime>01/12/2021 15:09:53</publishTime>
     </File>
     <File Include="Views/CourierStatus/Index.cshtml">
-      <publishTime>12/22/2020 19:46:20</publishTime>
+      <publishTime>01/12/2021 15:09:53</publishTime>
     </File>
     <File Include="Views/CreditNote/Create.cshtml">
       <publishTime>12/22/2020 19:46:20</publishTime>
@@ -3968,7 +3974,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/28/2020 13:31:03</publishTime>
     </File>
     <File Include="Views/DailyTrips/Create.cshtml">
-      <publishTime>01/05/2021 19:45:21</publishTime>
+      <publishTime>01/12/2021 16:34:57</publishTime>
     </File>
     <File Include="Views/DailyTrips/Index.cshtml">
       <publishTime>12/22/2020 19:46:22</publishTime>
@@ -3995,7 +4001,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:22</publishTime>
     </File>
     <File Include="Views/Department/Create.cshtml">
-      <publishTime>12/22/2020 19:46:22</publishTime>
+      <publishTime>01/12/2021 15:08:11</publishTime>
     </File>
     <File Include="Views/Department/Delete.cshtml">
       <publishTime>12/22/2020 19:46:22</publishTime>
@@ -4004,10 +4010,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:22</publishTime>
     </File>
     <File Include="Views/Department/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:22</publishTime>
+      <publishTime>01/12/2021 15:08:12</publishTime>
     </File>
     <File Include="Views/Department/Index.cshtml">
-      <publishTime>12/22/2020 19:46:22</publishTime>
+      <publishTime>01/12/2021 15:08:11</publishTime>
     </File>
     <File Include="Views/Depot/Create.cshtml">
       <publishTime>01/08/2021 18:52:01</publishTime>
@@ -4073,16 +4079,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:23</publishTime>
     </File>
     <File Include="Views/EmployeeMaster/Create.cshtml">
-      <publishTime>12/30/2020 16:55:39</publishTime>
+      <publishTime>01/12/2021 15:16:11</publishTime>
     </File>
     <File Include="Views/EmployeeMaster/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:23</publishTime>
+      <publishTime>01/12/2021 15:16:10</publishTime>
     </File>
     <File Include="Views/EmployeeMaster/Home.cshtml">
       <publishTime>12/22/2020 19:46:23</publishTime>
     </File>
     <File Include="Views/EmployeeMaster/Index.cshtml">
-      <publishTime>12/22/2020 19:46:23</publishTime>
+      <publishTime>01/12/2021 15:16:11</publishTime>
     </File>
     <File Include="Views/EmployeeMaster/UserProfile.cshtml">
       <publishTime>12/22/2020 19:46:23</publishTime>
@@ -4190,7 +4196,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:23</publishTime>
     </File>
     <File Include="Views/Home/Home.cshtml">
-      <publishTime>12/22/2020 19:46:23</publishTime>
+      <publishTime>01/12/2021 16:13:03</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
       <publishTime>12/22/2020 19:46:23</publishTime>
@@ -4349,13 +4355,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:24</publishTime>
     </File>
     <File Include="Views/MovementType/Create.cshtml">
-      <publishTime>12/22/2020 19:46:24</publishTime>
+      <publishTime>01/12/2021 15:16:40</publishTime>
     </File>
     <File Include="Views/MovementType/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:24</publishTime>
+      <publishTime>01/12/2021 15:16:41</publishTime>
     </File>
     <File Include="Views/MovementType/Index.cshtml">
-      <publishTime>12/22/2020 19:46:24</publishTime>
+      <publishTime>01/12/2021 15:16:41</publishTime>
     </File>
     <File Include="Views/OtherCharge/Create.cshtml">
       <publishTime>12/30/2020 16:56:06</publishTime>
@@ -4385,13 +4391,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/08/2021 18:52:22</publishTime>
     </File>
     <File Include="Views/ParcelType/Create.cshtml">
-      <publishTime>12/22/2020 19:46:24</publishTime>
+      <publishTime>01/12/2021 15:16:53</publishTime>
     </File>
     <File Include="Views/ParcelType/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:24</publishTime>
+      <publishTime>01/12/2021 15:16:53</publishTime>
     </File>
     <File Include="Views/ParcelType/Index.cshtml">
-      <publishTime>12/30/2020 16:56:29</publishTime>
+      <publishTime>01/12/2021 15:16:53</publishTime>
     </File>
     <File Include="Views/PickUpEnquiry/Create.cshtml">
       <publishTime>12/22/2020 19:46:24</publishTime>
@@ -4403,13 +4409,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:24</publishTime>
     </File>
     <File Include="Views/PickUpRequest/Create.cshtml">
-      <publishTime>12/22/2020 19:46:24</publishTime>
+      <publishTime>01/12/2021 15:17:28</publishTime>
     </File>
     <File Include="Views/PickUpRequest/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:24</publishTime>
+      <publishTime>01/12/2021 15:17:29</publishTime>
     </File>
     <File Include="Views/PickUpRequest/Index.cshtml">
-      <publishTime>12/22/2020 19:46:24</publishTime>
+      <publishTime>01/12/2021 15:17:29</publishTime>
     </File>
     <File Include="Views/PickupRequestStatus/Create.cshtml">
       <publishTime>12/22/2020 19:46:24</publishTime>
@@ -4436,13 +4442,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:24</publishTime>
     </File>
     <File Include="Views/ProductType/Create.cshtml">
-      <publishTime>12/30/2020 16:56:44</publishTime>
+      <publishTime>01/12/2021 15:17:40</publishTime>
     </File>
     <File Include="Views/ProductType/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:24</publishTime>
+      <publishTime>01/12/2021 15:17:40</publishTime>
     </File>
     <File Include="Views/ProductType/Index.cshtml">
-      <publishTime>12/30/2020 16:56:43</publishTime>
+      <publishTime>01/12/2021 15:17:41</publishTime>
     </File>
     <File Include="Views/QuickAWB/AWBPrint.cshtml">
       <publishTime>04/12/2020 14:57:08</publishTime>
@@ -4583,7 +4589,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/RevenueUpdate/Create.cshtml">
-      <publishTime>01/06/2021 15:29:40</publishTime>
+      <publishTime>01/12/2021 20:15:42</publishTime>
     </File>
     <File Include="Views/RevenueUpdate/Index.cshtml">
       <publishTime>12/29/2020 20:37:23</publishTime>
@@ -4625,7 +4631,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/ShipmentItem/Create.cshtml">
-      <publishTime>12/22/2020 19:46:25</publishTime>
+      <publishTime>01/12/2021 15:17:54</publishTime>
     </File>
     <File Include="Views/ShipmentItem/Delete.cshtml">
       <publishTime>12/22/2020 19:46:25</publishTime>
@@ -4634,10 +4640,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/ShipmentItem/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:25</publishTime>
+      <publishTime>01/12/2021 15:17:54</publishTime>
     </File>
     <File Include="Views/ShipmentItem/Index.cshtml">
-      <publishTime>12/22/2020 19:46:25</publishTime>
+      <publishTime>01/12/2021 15:17:55</publishTime>
     </File>
     <File Include="Views/State/Create.cshtml">
       <publishTime>12/22/2020 19:46:25</publishTime>
@@ -4655,19 +4661,19 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/StatusType/Create.cshtml">
-      <publishTime>12/22/2020 19:46:25</publishTime>
+      <publishTime>01/12/2021 15:18:26</publishTime>
     </File>
     <File Include="Views/StatusType/Delete.cshtml">
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/StatusType/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:25</publishTime>
+      <publishTime>01/12/2021 15:18:27</publishTime>
     </File>
     <File Include="Views/StatusType/Index.cshtml">
-      <publishTime>12/22/2020 19:46:25</publishTime>
+      <publishTime>01/12/2021 15:18:27</publishTime>
     </File>
     <File Include="Views/Supplier/Create.cshtml">
-      <publishTime>01/02/2021 17:18:39</publishTime>
+      <publishTime>01/12/2021 15:18:38</publishTime>
     </File>
     <File Include="Views/Supplier/CreateSupplierType.cshtml">
       <publishTime>12/22/2020 19:46:25</publishTime>
@@ -4679,19 +4685,19 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/Supplier/Edit.cshtml">
-      <publishTime>01/02/2021 17:18:01</publishTime>
+      <publishTime>01/12/2021 15:18:38</publishTime>
     </File>
     <File Include="Views/Supplier/EditSupplierType.cshtml">
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/Supplier/Index.cshtml">
-      <publishTime>12/30/2020 16:56:55</publishTime>
+      <publishTime>01/12/2021 15:18:39</publishTime>
     </File>
     <File Include="Views/Supplier/SupplierType.cshtml">
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/SupplierInvoice/Create.cshtml">
-      <publishTime>01/01/2021 16:59:31</publishTime>
+      <publishTime>01/12/2021 20:16:09</publishTime>
     </File>
     <File Include="Views/SupplierInvoice/Index.cshtml">
       <publishTime>12/31/2020 10:28:44</publishTime>
@@ -4718,7 +4724,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/31/2020 22:23:01</publishTime>
     </File>
     <File Include="Views/TaxConfiguration/Create.cshtml">
-      <publishTime>12/22/2020 19:46:25</publishTime>
+      <publishTime>01/12/2021 15:18:53</publishTime>
     </File>
     <File Include="Views/TaxConfiguration/Delete.cshtml">
       <publishTime>12/22/2020 19:46:25</publishTime>
@@ -4727,10 +4733,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/TaxConfiguration/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:25</publishTime>
+      <publishTime>01/12/2021 15:18:54</publishTime>
     </File>
     <File Include="Views/TaxConfiguration/Index.cshtml">
-      <publishTime>12/22/2020 19:46:25</publishTime>
+      <publishTime>01/12/2021 15:18:54</publishTime>
     </File>
     <File Include="Views/TaxConfiqration/Create.cshtml">
       <publishTime>12/22/2020 19:46:25</publishTime>
@@ -4772,13 +4778,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:26</publishTime>
     </File>
     <File Include="Views/TransportMode/Create.cshtml">
-      <publishTime>12/22/2020 19:46:26</publishTime>
+      <publishTime>01/12/2021 15:19:10</publishTime>
     </File>
     <File Include="Views/TransportMode/Edit.cshtml">
-      <publishTime>12/22/2020 19:46:26</publishTime>
+      <publishTime>01/12/2021 15:19:10</publishTime>
     </File>
     <File Include="Views/TransportMode/Index.cshtml">
-      <publishTime>12/22/2020 19:46:26</publishTime>
+      <publishTime>01/12/2021 15:19:10</publishTime>
     </File>
     <File Include="Views/TruckAssign/Create.cshtml">
       <publishTime>01/01/2021 16:53:35</publishTime>

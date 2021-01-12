@@ -115,5 +115,6 @@ namespace LTMSV2.Models
         public string CargoDescription { get; set; }
         public Nullable<bool> COM { get; set; }
         public Nullable<bool> RevenueUpdate { get; set; }
+        public Nullable<bool> FOC { get; set; }
     }
 }

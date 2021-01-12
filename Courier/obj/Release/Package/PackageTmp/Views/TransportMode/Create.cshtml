@@ -35,7 +35,7 @@
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">Transport  Mode</h1>
+    <h1 class="headingfont">Transport  Mode Master - Create</h1>
 
 </section>
 
@@ -49,12 +49,12 @@
       <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
     <fieldset>
         
-
+      <div class="searchdiv sm-width">
        <div class="row no-margin"> 
                
      
 
-         <div class="col-md-3">
+         <div class="col-md-12">
                           <label class="headinglabel required">Transport Mode</label>
                  @Html.TextBoxFor(model => model.TransportModeName,new { @class = "form-control txttarget" })
             @Html.ValidationMessageFor(model => model.TransportModeName)
@@ -74,6 +74,8 @@
                           
                         </div>
             </div>
+            </div>
+            
     </fieldset>
 }
 

@@ -49,6 +49,7 @@ namespace LTMSV2.Controllers
                 vm.RevenueMandatory = v.RevenueMandatory;
                 vm.RevenueGroup = v.RevenueGroup;
             }
+            
 
             List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();            
             lsttype.Add(new VoucherTypeVM { TypeName = "Freight" });

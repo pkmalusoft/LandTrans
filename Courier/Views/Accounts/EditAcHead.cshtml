@@ -14,7 +14,7 @@
         background-color: #fff;
         width: 100%;
         margin: 0 auto;
-        max-width: 500px;
+        max-width: 600px;
         padding: 20px;
         margin-top: 50px;
         border-radius: 10px;
@@ -74,7 +74,7 @@
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">Chart Of Accounts</h1>
+    <h1 class="headingfont">Chart Of Accounts - Modify</h1>
 </section>
 
 <section class="content-header">
@@ -83,7 +83,7 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
 
-        <fieldset class="searchdiv sm-width">
+        <fieldset class="searchdiv ">
 
         <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
         <div class="row no-margin">
@@ -127,7 +127,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-md-3 checkboxdesign" style="padding-top: 10px">
+                <div class="col-md-3 checkboxdesign verticalcheckbox" style="padding-top: 10px">
                     @Html.CheckBox("TaxApplicable", new { @name = "TaxApplicable" }) &nbsp
                     <label class="headinglabel">Tax %</label>
                 </div>

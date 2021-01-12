@@ -517,10 +517,13 @@
                     <label class="headinglabel required">Entered By</label>
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="headinglabel required">Truck Detail No.</label>
                     @Html.DropDownListFor(model => model.TruckDetailID, new SelectList(@ViewBag.Trips, "TruckDetailID", "ReceiptNo"), "Select", new { @class = "form-control" })
                     @*@Html.TextBoxFor(model => model.ConsignmentNo, new { @class = "form-control" })*@
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-primary" type="button" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                 </div>
             </div>
 
@@ -541,7 +544,7 @@
                     </div>
 
                     <div class="col-md-2">
-                        <label class="headinglabel label1">Revenue Cost</label>
+                        <label class="headinglabel label1">Cost</label>
                         <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
                         <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
                     </div>

@@ -2220,6 +2220,7 @@
     <Property Name="CargoDescription" Type="varchar" MaxLength="1000" />
     <Property Name="COM" Type="bit" />
     <Property Name="RevenueUpdate" Type="bit" />
+    <Property Name="FOC" Type="bit" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>

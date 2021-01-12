@@ -7,7 +7,7 @@ using LTMSV2.Models;
 using LTMSV2.DAL;
 using Newtonsoft.Json;
 namespace LTMSV2.Controllers
-{
+{ [SessionExpire]
     public class SupplierInvoiceController : Controller
     {
         Entities1 db = new Entities1();
@@ -51,9 +51,10 @@ namespace LTMSV2.Controllers
             ViewBag.SupplierType = db.SupplierTypes.ToList();
             ViewBag.Currency = db.CurrencyMasters.ToList();
             SupplierInvoiceVM _supinvoice = new SupplierInvoiceVM();
-
+            ViewBag.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
             if (id > 0)
             {
+                ViewBag.Title = "Supplier Invoice -Modify";
                 var _invoice = db.SupplierInvoices.Find(id);
                 _supinvoice.SupplierInvoiceID = _invoice.SupplierInvoiceID;
                 _supinvoice.InvoiceDate = _invoice.InvoiceDate;
@@ -61,7 +62,12 @@ namespace LTMSV2.Controllers
                 _supinvoice.SupplierID = _invoice.SupplierID;
                 _supinvoice.Remarks = _invoice.Remarks;
                 var supplier = suppliers.Where(d => d.SupplierID == _invoice.SupplierID).FirstOrDefault();
-                _supinvoice.SupplierName = supplier.SupplierName;
+                if (supplier != null)
+                {
+                    _supinvoice.SupplierName = supplier.SupplierName;
+                    _supinvoice.SupplierTypeId = Convert.ToInt32(supplier.SupplierTypeID);
+                }
+
                 List<SupplierInvoiceDetail> _details = new List<SupplierInvoiceDetail>();
                 _details = (from c in db.SupplierInvoiceDetails
                             where c.SupplierInvoiceID == id
@@ -69,11 +75,12 @@ namespace LTMSV2.Controllers
 
 
                 _supinvoice.SupplierInvoiceDetails = _details;
-
+                
                 Session["SInvoiceListing"] = _details;
             }
             else
             {
+                ViewBag.Title = "Supplier Invoice - Create";
                 var Maxnumber = db.SupplierInvoices.ToList().LastOrDefault();
                 if (Maxnumber == null)
                 {

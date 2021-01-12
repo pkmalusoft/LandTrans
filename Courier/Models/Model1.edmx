@@ -2225,6 +2225,7 @@
           <Property Name="CargoDescription" Type="varchar" MaxLength="1000" />
           <Property Name="COM" Type="bit" />
           <Property Name="RevenueUpdate" Type="bit" />
+          <Property Name="FOC" Type="bit" />
         </EntityType>
         <EntityType Name="InscanOtherCharge">
           <Key>
@@ -22884,6 +22885,7 @@
           <Property Name="CargoDescription" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="COM" Type="Boolean" />
           <Property Name="RevenueUpdate" Type="Boolean" />
+          <Property Name="FOC" Type="Boolean" />
         </EntityType>
         <EntityType Name="CostUpdateDetail">
           <Key>
@@ -31948,6 +31950,7 @@
           <EntitySetMapping Name="InScanMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.InScanMaster">
               <MappingFragment StoreEntitySet="InScanMaster">
+                <ScalarProperty Name="FOC" ColumnName="FOC" />
                 <ScalarProperty Name="RevenueUpdate" ColumnName="RevenueUpdate" />
                 <ScalarProperty Name="COM" ColumnName="COM" />
                 <ScalarProperty Name="CargoDescription" ColumnName="CargoDescription" />

@@ -169,6 +169,7 @@ namespace LTMSV2.Models
         public bool PrintLabel { get; set; }
         public string TypeofLoad { get; set; }
         public bool COM { get; set; }
+        public bool FOC { get; set; }
         public string CargoDescription { get; set; }
         public List<OtherChargeDetailVM> otherchargesVM { get; set; }
         

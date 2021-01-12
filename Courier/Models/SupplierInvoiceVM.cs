@@ -9,6 +9,7 @@ namespace LTMSV2.Models
     {
         public string SupplierName { get; set; }
         public string SupplierType { get; set; }
+        public int SupplierTypeId { get; set; }
         public decimal Amount { get; set; }
     }
     public class SupplierInvoiceDetailVM

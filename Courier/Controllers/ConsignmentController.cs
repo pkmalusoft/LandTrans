@@ -316,6 +316,7 @@ namespace LTMSV2.Controllers
                     inscan.IsNCND = v.IsNCND;
                     inscan.SeparateDoc = v.SeparateDoc;
                     inscan.COM = v.COM;
+                    inscan.FOC = v.FOC;
                     inscan.RouteID = v.RouteID;
                     inscan.DespatchDate = v.DespatchDate;                    
                     inscan.PickedUpEmpID =v.PickedBy;
@@ -751,6 +752,16 @@ namespace LTMSV2.Controllers
             {
                 inscan.COM = false;
             }
+
+            if (data.FOC != null)
+            {
+                inscan.FOC = data.FOC.Value;
+            }
+            else
+            {
+                inscan.FOC = false;
+            }
+
             if (data.DocumentSetupID!= null || data.DocumentSetupID!=0)
             {
                 inscan.DocumentSetupId = data.DocumentSetupID.Value;
@@ -2301,7 +2312,7 @@ namespace LTMSV2.Controllers
         public ActionResult GetRouteTripData(int RouteId,string despatchdate)
         {
             DateTime tdate = Convert.ToDateTime(despatchdate);
-            var itemlist = (from c in db.TruckDetails join v in db.VehicleMasters on c.VehicleID equals v.VehicleID where c.RouteID == RouteId && c.TDDate == tdate.Date select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.RegNo + "-" + c.DriverName }).ToList();            
+            var itemlist = (from c in db.TruckDetails join v in db.VehicleMasters on c.VehicleID equals v.VehicleID where c.IsDeleted==false && c.RouteID == RouteId && c.TDDate == tdate.Date select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.RegNo + "-" + c.DriverName }).ToList();            
             return Json(itemlist, JsonRequestBehavior.AllowGet);
             
         }

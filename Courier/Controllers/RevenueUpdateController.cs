@@ -122,12 +122,48 @@ namespace LTMSV2.Controllers
         [HttpPost]
         public ActionResult Create(RevenueUpdateMasterVM vm)
         {
+            ViewBag.Title = "Revenue Update - Create";
+            int userId = Convert.ToInt32(Session["UserID"].ToString());
+           
+            ViewBag.employee = db.EmployeeMasters.ToList();
+
+            ViewBag.PaymentType = db.tblPaymentModes.ToList();
+            ViewBag.Currency = db.CurrencyMasters.ToList();
+            ViewBag.Consignment = db.InScanMasters.ToList();
+            List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
+            //lsttype.Add(new VoucherTypeVM { TypeName = "All" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });
+            lsttype.Add(new VoucherTypeVM { TypeName = "Consignee" });
+
+            ViewBag.InvoiceTo = lsttype;
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
             RevenueUpdateMaster v = new RevenueUpdateMaster();
-            if (vm.ID == 0)
+            bool duplicatecost = false;
+            for (int i = 0; i < vm.DetailVM.Count; i++)
             {
-                
+                if (vm.DetailVM[i].IsDeleted != true)
+                {
+                    for (int j = i + 1; j < vm.DetailVM.Count; j++)
+                    {
+                        if (vm.DetailVM[i].RevenueCostMasterID == vm.DetailVM[j].RevenueCostMasterID && vm.DetailVM[j].IsDeleted != true)
+                        {
+                            duplicatecost = true;
+                            if (vm.ID > 0)
+                            {
+                                TempData["ErrorMsg"] = "Revenue Component should not be Duplicated!";
+                                Session["CreateRevenueUpdate"] = vm;
+                                ViewBag.Title = "Revenue Update - Modify";
+                            }
+                            return View(vm);
+                        }
+                    }
+                }
+            }
+                if (vm.ID == 0)
+            {
+                ViewBag.Title = "Revenue Update - Create";
+               
                 v.EntryDate = vm.EntryDate;
                 v.EmployeeID = vm.EmployeeID;
                 v.InScanID = vm.InScanID;
@@ -138,6 +174,7 @@ namespace LTMSV2.Controllers
             }
             else
             {
+                ViewBag.Title = "Revenue Update - Modify";
                 v = db.RevenueUpdateMasters.Find(vm.ID);
                 v.EntryDate = vm.EntryDate;
                 v.EmployeeID = vm.EmployeeID;
@@ -214,8 +251,8 @@ namespace LTMSV2.Controllers
                 db.Entry(inscan).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-
-            TempData["SuccessMsg"] = "Revenue of Cosignment Updated Successfully!";
+            Session["CreateRevenueUpdate"] =null;
+            TempData["SuccessMsg"] = "Revenue of Consignment Updated Successfully!";
             return RedirectToAction("Index");
             //ViewBag.Title = "Revenue Update - Create";
             //ViewBag.employee = db.EmployeeMasters.ToList();
@@ -251,6 +288,8 @@ namespace LTMSV2.Controllers
 
         public JsonResult GetConsignmentDetail(int id)
         {
+            RevenueUpdateMasterVM vm = (RevenueUpdateMasterVM)Session["CreateRevenueUpdate"];
+            
             var inscan = db.InScanMasters.Find(id);
             int paymentModeid =Convert.ToInt32(inscan.PaymentModeId);
             string InvoiceTo = inscan.InvoiceTo;
@@ -272,7 +311,16 @@ namespace LTMSV2.Controllers
                 consigneeid = receiver.CustomerID;
                 consigneename = receiver.CustomerName;
             }
-            List<RevenueUpdateDetailVM> list = RevenueDAO.GetMandatoryRevenueUpdateDetail(id);
+            List<RevenueUpdateDetailVM> list = new List<RevenueUpdateDetailVM>();
+            if (vm != null)
+            {
+                list = vm.DetailVM;
+            }
+            else
+            {
+                list = RevenueDAO.GetMandatoryRevenueUpdateDetail(id);
+            }
+            
             
             return Json(new {PaymentModeId=paymentModeid,InvoiceTo=InvoiceTo, ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename ,revenuedetail=list }, JsonRequestBehavior.AllowGet);
 
@@ -309,7 +357,7 @@ namespace LTMSV2.Controllers
         public ActionResult RevenueCost(string term)
         {
             int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            if (!String.IsNullOrEmpty(term))
+             if (!String.IsNullOrEmpty(term.Trim()))
             {
                 List<RevenueCostMasterVM> list = new List<RevenueCostMasterVM>();
                 list = (from c in db.RevenueCostMasters join a in db.AcHeads on c.RevenueAcHeadID equals a.AcHeadID  where c.RevenueComponent.ToLower().StartsWith(term.ToLower()) orderby c.RevenueComponent select new RevenueCostMasterVM { RCID = c.RCID, RevenueComponent = c.RevenueComponent ,RevenueAcHeadID=c.RevenueAcHeadID , RevenueHeadName =a.AcHead1 ,RevenueRate=c.RevenueRate}).ToList();

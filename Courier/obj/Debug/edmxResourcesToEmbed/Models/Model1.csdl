@@ -13309,6 +13309,7 @@
     <Property Name="CargoDescription" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
     <Property Name="COM" Type="Boolean" />
     <Property Name="RevenueUpdate" Type="Boolean" />
+    <Property Name="FOC" Type="Boolean" />
   </EntityType>
   <EntityType Name="CostUpdateDetail">
     <Key>
