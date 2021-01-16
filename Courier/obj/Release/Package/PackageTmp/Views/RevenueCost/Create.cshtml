@@ -42,7 +42,7 @@
         $("#RevenueHeadName").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/Accounts/AccountHead',
+                    url: '/RevenueCost/RevenueAccountHead',
                     datatype: "json",
                     data: {
                         term: request.term
@@ -59,13 +59,19 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function (e, i) {                
+                $("#RevenueHeadName").val(i.item.label);
+                $('#RevenueAcHeadID').val(i.item.AcHeadID);
+
+
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#RevenueHeadName").val(i.item.label);
                 $('#RevenueAcHeadID').val(i.item.AcHeadID);
 
-
+                 
             },
 
         });
@@ -73,7 +79,7 @@
         $("#CostHeadName").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: '/Accounts/AccountHead',
+                    url: '/RevenueCost/CostAccountHead',
                     datatype: "json",
                     data: {
                         term: request.term
@@ -90,7 +96,13 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function (e, i) {                
+                $("#CostHeadName").val(i.item.label);
+                $('#CostAcHeadID').val(i.item.AcHeadID);
+
+
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#CostHeadName").val(i.item.label);

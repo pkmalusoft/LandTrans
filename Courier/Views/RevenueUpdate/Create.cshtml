@@ -488,7 +488,8 @@
                         debugger;
                         console.log(response)
                         var data = response[0];
-                        $('#AcHeadDebitId').val(data.AcHeadDebitId);
+                        $('#txtDebitHeadId').val(data.AcHeadDebitId);
+                        
                         $('#txtDebitHead').val(data.DebitAccountName);
                         if ($('#CurrencyId').val() == "" || $('#CurrencyId').val() == "0") {
                             $('#CurrencyId').val($('#DefaultCurrencyID').val());
@@ -679,6 +680,9 @@
             $('#PaymentType').focus();
         }
         else {
+            if ($('#InScanID').val() != null && $('#InScanID').val() != "" && $('#InScanID').val() != 0) {
+                getrevenuecost();
+            }
             $("#ConsignmentNo").focus();
         }
     });

@@ -69,6 +69,15 @@ namespace LTMSV2.Models
             return (LabelPrintingParam)System.Web.HttpContext.Current.Session["LabelPrintingParam"];
             
         }
+
+        public static OpeningInvoiceSearch GetOpeningInvoiceSearch()
+        {
+            return (OpeningInvoiceSearch)System.Web.HttpContext.Current.Session["OpeningInvoiceSearch"];
+        }
+        public static void SetOpeningInvoiceSearch(OpeningInvoiceSearch reportparam)
+        {
+            System.Web.HttpContext.Current.Session["OpeningInvoiceSearch"] = reportparam;
+        }
         public static void SetCookie(byte[] arr)
         {
             System.Web.HttpContext.Current.Session["sessionVariable"] = arr;

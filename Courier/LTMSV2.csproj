@@ -403,6 +403,11 @@
     <Compile Include="Models\AcHeadSelectForCash_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AcInvoiceOpeningVM.cs" />
+    <Compile Include="Models\AcJournalConsignment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AcJournalConsignmentVM.cs" />
     <Compile Include="Models\AcJournalDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1373,7 +1378,7 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\MovementTypeVM.cs" />
-    <Compile Include="Models\OpennnigBalanceVM.cs" />
+    <Compile Include="Models\OpeningBalanceVM.cs" />
     <Compile Include="Models\OriginSelectAll_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3571,6 +3576,9 @@
     <Content Include="Views\DebitNote\Index.cshtml" />
     <Content Include="Views\DebitNote\List.cshtml" />
     <Content Include="Views\SupplierInvoice\InvoiceList.cshtml" />
+    <Content Include="Views\Accounts\AcOpeningInvoiceSearch.cshtml" />
+    <Content Include="Views\Accounts\AcOpeningInvoice - Copy %282%29.cshtml" />
+    <Content Include="Views\Package\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

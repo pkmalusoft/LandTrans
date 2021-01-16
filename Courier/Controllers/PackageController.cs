@@ -15,32 +15,113 @@ namespace LTMSV2.Controllers
         // GET: Item
         public ActionResult Index()
         {
-            return View();
+            List<PackageVM> list = (from c in db.Packages orderby c.PackageName select new PackageVM { PackageID = c.PackageID, PackageName = c.PackageName, PackageType = c.PackageType }).ToList();
+            return View(list);
         }
 
+
+        public ActionResult Create(int id=0)
+        {
+            PackageVM vm = new PackageVM();
+            if (id>0)
+            {
+                ViewBag.Title = "Package Master - Modify";
+                Package obj = db.Packages.Find(id);
+                vm.PackageID = obj.PackageID;
+                vm.PackageName = obj.PackageName;
+                vm.PackageType = obj.PackageType;
+            }
+            else
+            {
+                ViewBag.Title = "Package Master - Create";
+                vm.PackageID = 0;
+                vm.PackageName="";
+                vm.PackageType = "";
+
+            }
+            return View(vm);
+        }
 
         [HttpPost]
-        public JsonResult ManageInsertPackages(tblPackages o)
+        public ActionResult Create(PackageVM model)
         {
-            var list = new tblPackages().ManageInsertPackages(o);
-            return Json(list, JsonRequestBehavior.AllowGet);
+            Package obj = new Package();
+            if (model.PackageID == 0)
+            {
+                obj.PackageName = model.PackageName;
+                obj.PackageType = model.PackageType;
+                db.Packages.Add(obj);
+                db.SaveChanges();
+                TempData["SuccessMsg"] = "You have successfully added Package";
+            }
+            else
+            {
+                obj = db.Packages.Find(model.PackageID);
+                obj.PackageName = model.PackageName;
+                obj.PackageType = model.PackageType;
+                db.Entry(obj).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                TempData["SuccessMsg"] = "You have successfully Updated Package";
+            }
+                                   
+            return RedirectToAction("Index");
+
+
+        }
+        [HttpGet]
+        public JsonResult GetPackageType(string term)
+        {
+            if (term.Trim() != "")
+            {
+                var list = (from c in db.Packages where c.PackageType.Contains(term.Trim()) orderby c.PackageType select new PackageVM { PackageType = c.PackageType }).Distinct().ToList();
+               return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var list = (from c in db.Packages orderby c.PackageType select new PackageVM { PackageType = c.PackageType }).Distinct().ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
         }
 
-
-        [HttpPost]
-        public JsonResult ManageUpdatePackages(tblPackages o)
+        public ActionResult DeleteConfirmed(int id)
         {
-            var list = new tblPackages().ManageUpdatePackages(o);
-            return Json(list, JsonRequestBehavior.AllowGet);
+            try
+            {
+                Package move = db.Packages.Find(id);
+                db.Packages.Remove(move);
+                db.SaveChanges();
+                TempData["SuccessMsg"] = "You have successfully Deleted Package.";
+                return RedirectToAction("Index");
+            }
+            catch(Exception ex)
+            {
+                TempData["SuccessMsg"] = ex.Message;
+                return RedirectToAction("Index");
+            }
+            
         }
+        //[HttpPost]
+        //public JsonResult ManageInsertPackages(tblPackages o)
+        //{
+        //    var list = new tblPackages().ManageInsertPackages(o);
+        //    return Json(list, JsonRequestBehavior.AllowGet);
+        //}
 
 
-        [HttpPost]
-        public JsonResult ManageDeletePackages(tblPackages o)
-        {
-            var list = new tblPackages().ManageDeletePackages(o);
-            return Json(list, JsonRequestBehavior.AllowGet);
-        }
+        //[HttpPost]
+        //public JsonResult ManageUpdatePackages(tblPackages o)
+        //{
+        //    var list = new tblPackages().ManageUpdatePackages(o);
+        //    return Json(list, JsonRequestBehavior.AllowGet);
+        //}
+
+
+        //[HttpPost]
+        //public JsonResult ManageDeletePackages(tblPackages o)
+        //{
+        //    var list = new tblPackages().ManageDeletePackages(o);
+        //    return Json(list, JsonRequestBehavior.AllowGet);
+        //}
 
 
         [HttpPost]

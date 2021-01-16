@@ -312,6 +312,7 @@
     <NavigationProperty Name="AcFinancialYear" Relationship="Self.FK_AcOpeningMaster_AcFinancialYear" FromRole="AcOpeningMaster" ToRole="AcFinancialYear" />
     <NavigationProperty Name="AcHead" Relationship="Self.FK_AcOpeningMaster_AcHead" FromRole="AcOpeningMaster" ToRole="AcHead" />
     <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" FromRole="AcOpeningMaster" ToRole="BranchMaster" />
+    <Property Name="AcJournalId" Type="Int32" />
   </EntityType>
   <EntityType Name="AcOPInvoiceDetail">
     <Key>
@@ -338,7 +339,7 @@
     <Property Name="OPDate" Type="DateTime" Precision="3" />
     <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="StatusSDSC" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-    <Property Name="PartyID" Type="Int32" />
+    <Property Name="PartyID" Type="Int32" Nullable="false" />
     <Property Name="BranchID" Type="Int32" />
     <Property Name="StatusSC" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="AcFinancialYear" Relationship="Self.FK_AcOPInvoiceMaster_AcFinancialYear" FromRole="AcOPInvoiceMaster" ToRole="AcFinancialYear" />
@@ -8727,6 +8728,7 @@
       <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMasters" />
       <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetails" />
     </AssociationSet>
+    <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12505,6 +12507,8 @@
     <NavigationProperty Name="RevenueUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_BranchMaster" FromRole="BranchMaster" ToRole="RevenueUpdateMaster" />
     <NavigationProperty Name="TruckDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" FromRole="BranchMaster" ToRole="TruckDetail" />
     <NavigationProperty Name="CostUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_BranchMaster" FromRole="BranchMaster" ToRole="CostUpdateMaster" />
+    <Property Name="ReceivedBy" Type="Int32" />
+    <Property Name="CollectedBy" Type="Int32" />
   </EntityType>
   <Association Name="FK_AcGroup_BranchMaster">
     <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
@@ -13469,4 +13473,13 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="AcJournalConsignment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="AcJournalDetailID" Type="Int32" />
+    <Property Name="InScanID" Type="Int32" />
+  </EntityType>
 </Schema>

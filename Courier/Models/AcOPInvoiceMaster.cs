@@ -26,7 +26,7 @@ namespace LTMSV2.Models
         public Nullable<System.DateTime> OPDate { get; set; }
         public string Remarks { get; set; }
         public string StatusSDSC { get; set; }
-        public Nullable<int> PartyID { get; set; }
+        public int PartyID { get; set; }
         public Nullable<int> BranchID { get; set; }
         public string StatusSC { get; set; }
     

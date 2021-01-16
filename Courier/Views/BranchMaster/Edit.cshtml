@@ -384,7 +384,7 @@
          </div>
 
      </div>
-     <div class="row no-margin" >
+     <div class="row no-margin">
 
 
          <div class="col-md-3 awbno">
@@ -424,7 +424,7 @@
          </div>
 
 
-         <div class="col-md-3 checkboxdesign" >
+         <div class="col-md-3 checkboxdesign">
 
 
              @Html.CheckBox("StatusAssociate", new { @name = "StatusAssociate" })
@@ -432,6 +432,15 @@
              <label class="headinglabel">Status Associate</label>
          </div>
 
+         <div class="col-md-3">
+             <label class="headinglabel">Default Picked By</label>
+             @Html.DropDownListFor(model => model.CollectedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+         </div>
+
+         <div class="col-md-3">
+             <label class="headinglabel">Default Received By</label>
+             @Html.DropDownListFor(model => model.ReceivedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+         </div>
 
 
      </div>

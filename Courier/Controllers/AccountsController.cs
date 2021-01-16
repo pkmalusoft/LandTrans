@@ -1036,13 +1036,13 @@ new AcGroupModel()
             },
             "ID", "Name", 1);
             ViewBag.crdr = list;
-            List<OpennnigBalanceVM> ob = new List<OpennnigBalanceVM>();
+            List<OpeningBalanceVM> ob = new List<OpeningBalanceVM>();
             var data = db.AcOpeningMasterSelectAll(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentCompanyID"].ToString())).ToList();
 
 
             foreach (var item in data)
             {
-                OpennnigBalanceVM b = new OpennnigBalanceVM();
+                OpeningBalanceVM b = new OpeningBalanceVM();
                 b.AcHeadID = item.AcHeadID.Value;
                 b.AcHead = item.AcHead;
                 b.AcFinancialYearID = item.AcFinancialYearID.Value;
@@ -1072,7 +1072,7 @@ new AcGroupModel()
 
 
         [HttpPost]
-        public ActionResult IndexOpenningBalance(List<OpennnigBalanceVM> lst)
+        public ActionResult IndexOpenningBalance(List<OpeningBalanceVM> lst)
         {
 
 
@@ -3783,16 +3783,95 @@ new AcGroupModel()
                 inputStream.CopyTo(outputFileStream);
             }
         }
+
+
+        #region "InvoiceOpening"
+        public ActionResult AcOpeningInvoiceSearch()
+        {
+
+            OpeningInvoiceSearch datePicker = SessionDataModel.GetOpeningInvoiceSearch();
+
+            if (datePicker == null)
+            {
+                datePicker = new OpeningInvoiceSearch();
+                datePicker.OpeningDate = Convert.ToDateTime(Session["FyearFrom"]).ToString("dd-MM-yyyy");
+                datePicker.InvoiceType = "C";
+                datePicker.Remarks = "";
+                datePicker.Debit = 0;
+                datePicker.Credit = 0;
+            }
+            if (datePicker != null)
+            {
+
+            }
+
+            SessionDataModel.SetOpeningInvoiceSearch(datePicker);
+            return View(datePicker);
+
+        }
+
+        [HttpPost]
+        public ActionResult AcOpeningInvoiceSearch([Bind(Include = "InvoiceType,PartyId,PartyName")] OpeningInvoiceSearch picker)
+        {
+            OpeningInvoiceSearch model = SessionDataModel.GetOpeningInvoiceSearch();
+            model.PartyId = picker.PartyId;
+            model.InvoiceType = picker.InvoiceType;
+            model.PartyName = picker.PartyName;
+            model.Remarks = picker.Remarks;
+            model.Debit = 100;
+            model.Credit = 220;
+            ViewBag.Token = model;
+            SessionDataModel.SetOpeningInvoiceSearch(model);
+            return RedirectToAction("AcOpeningInvoice", "Accounts");
+            //return PartialView("InvoiceSearch",model);
+        }
+
         public ActionResult AcOpeningInvoice()
         {
-            var Model = new OpennnigBalanceVM();
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            OpeningInvoiceSearch model = SessionDataModel.GetOpeningInvoiceSearch();
+            var Model = new OpeningBalanceVM();
             int year = DateTime.Now.Year;
             DateTime firstDay = new DateTime(year, 1, 1);
-            ViewBag.Opdate = firstDay.ToString("dd-MM-yyyy");
-            ViewBag.Customers = db.CustomerMasters.ToList();
-            ViewBag.Suppliers = db.SupplierMasters.ToList();
-            ViewBag.Agents = db.ForwardingAgentMasters.ToList();                
-            return View(Model);
+            int partyid = 0;
+            string invoicetype = "C";
+            if (model != null)
+            {
+                partyid = model.PartyId;
+                invoicetype = model.InvoiceType;
+            }
+            var opinvoice = db.AcOPInvoiceMasters.Where(cc => cc.AcFinancialYearID == yearid && cc.PartyID ==partyid && cc.StatusSDSC == invoicetype).FirstOrDefault();
+            AcInvoiceOpeningVM vm = new AcInvoiceOpeningVM();
+            List<AcInvoiceOpeningDetailVM> detailvm= new List<AcInvoiceOpeningDetailVM>();
+            if (opinvoice != null)
+            {
+                vm.AcOPInvoiceMasterID = opinvoice.AcOPInvoiceMasterID;
+                vm.AcFinancialYearID = opinvoice.AcFinancialYearID;
+                vm.PartyID = opinvoice.PartyID;
+                vm.Remarks = opinvoice.Remarks;
+                vm.StatusSDSC = opinvoice.StatusSDSC;
+                var opinvoicedetail = (from c in db.AcOPInvoiceDetails
+                                       where c.AcOPInvoiceMasterID == vm.AcOPInvoiceMasterID
+                                       select new AcInvoiceOpeningDetailVM { AcOPInvoiceDetailID = c.AcOPInvoiceDetailID, InvoiceNo = c.InvoiceNo, InvoiceDate = c.InvoiceDate, LastTransDate = c.LastTransDate, Amount = c.Amount }).ToList();
+                vm.Debit = opinvoicedetail.Where(cc=>cc.Amount>0).Sum(i => i.Amount).Value;
+                vm.Credit =-1 * opinvoicedetail.Where(cc => cc.Amount < 0).Sum(i => i.Amount).Value;
+                vm.InvoiceDetailVM = opinvoicedetail;
+           }
+            else
+            {
+                vm.AcOPInvoiceMasterID = 0;
+                vm.AcFinancialYearID = yearid;
+                vm.PartyID = partyid;
+                vm.Remarks = "";
+                vm.InvoiceDetailVM = detailvm;
+                vm.StatusSDSC = invoicetype;
+            }
+            if (invoicetype=="C")
+                ViewBag.Title = "Customer Invoice Opening";
+            else
+               ViewBag.Title = "Supplier Invoice Opening";
+
+            return View(vm);
         }
 
         public JsonResult GetAcOpeningBalanceDetails(string Type,int PartyId)
@@ -3819,7 +3898,92 @@ new AcGroupModel()
             invoice.LastTransDate = Convert.ToDateTime(LastTransdate);
             invoice.Amount = Convert.ToDecimal(Amount);
             invoice.StatusClose = Drcr==1?true:false;
-            return Json(new {  InvoiceDetails = invoice }, JsonRequestBehavior.AllowGet);
+            return Json(new {  InvoiceDetails = invoice }, JsonRequestBehavior.AllowGet);       
+        }
+        [HttpPost]
+        public JsonResult SaveOpeningInvoice(AcInvoiceOpeningVM model)
+        {
+            try
+            {
+                int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+                int branchid = Convert.ToInt32(Session["CurrentBranchID"]);
+                AcOPInvoiceMaster invoice = new AcOPInvoiceMaster();
+                if (model.AcOPInvoiceMasterID > 0) // new entry
+                {
+                   invoice = db.AcOPInvoiceMasters.Find(model.AcOPInvoiceMasterID);
+                }
+              
+                    invoice.Remarks = model.Remarks;
+                    invoice.PartyID = model.PartyID;
+                    invoice.AcFinancialYearID = yearid;
+                if (model.StatusSDSC == "C")
+                { invoice.AcHeadID = 52; }
+                else
+                { invoice.AcHeadID = 337; }
+                
+                    invoice.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+                    invoice.StatusSDSC = model.StatusSDSC;
+
+                if (model.AcOPInvoiceMasterID == 0) // new entry
+                {
+                    db.AcOPInvoiceMasters.Add(invoice);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    db.Entry(invoice).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                var IDetails = model.InvoiceDetailVM;
+                foreach (var item in IDetails)
+                {
+                    var InvoiceDetail = new AcOPInvoiceDetail();
+                    if (item.AcOPInvoiceDetailID >0)
+                    {
+                        InvoiceDetail = db.AcOPInvoiceDetails.Find(item.AcOPInvoiceDetailID);
+                        if (item.IsDeleted ==true)
+                        {
+                            db.AcOPInvoiceDetails.Remove(InvoiceDetail);
+                            db.SaveChanges();
+                            continue;
+                        }
+                          
+                    }
+                    else if (item.AcOPInvoiceDetailID==0 && item.IsDeleted==false)
+                    {
+                        InvoiceDetail.AcOPInvoiceMasterID = invoice.AcOPInvoiceMasterID;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    
+                    InvoiceDetail.InvoiceDate = item.InvoiceDate;
+                    InvoiceDetail.LastTransDate = item.LastTransDate;
+                    InvoiceDetail.Amount = item.Amount;
+                    InvoiceDetail.StatusClose = item.StatusClose;
+                    InvoiceDetail.InvoiceNo = item.InvoiceNo;
+                    if (item.AcOPInvoiceDetailID == 0)
+                    {
+                        db.AcOPInvoiceDetails.Add(InvoiceDetail);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        db.Entry(InvoiceDetail).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }                    
+
+                }
+                AccountsDAO.InvoiceOpeningPosting(invoice.AcOPInvoiceMasterID, yearid, branchid);
+                return Json(new { status = "ok", message = "Opening Invoice updated Successfully!" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { status = "failed", message = e.Message.ToString() }, JsonRequestBehavior.AllowGet);
+
+            }
         }
         public JsonResult SaveOpInvoice(string Type,int PartyId,string Remarks,string Details)
         {
@@ -3869,6 +4033,9 @@ new AcGroupModel()
 
             }
         }
+
+        #endregion
+        #region "Account Opening"
         public ActionResult AcOpeningMaster()
         {
             var AcFinancialYearID = Convert.ToInt32(Session["fyearid"]);
@@ -3880,12 +4047,13 @@ new AcGroupModel()
             var OpeningMaster = (from d in db.AcOpeningMasters where d.AcFinancialYearID== AcFinancialYearID select d).ToList();
             return View(OpeningMaster);
         }
-        public JsonResult SubmitAcOpeningMaster(int Id,int AcHeadId,decimal? Amount,string AccNature)
+
+        public JsonResult SubmitAcOpeningMasterold(int Id, int AcHeadId, decimal? Amount, string AccNature)
         {
             try
             {
                 var AcFinancialYearID = Convert.ToInt32(Session["fyearid"]);
-                var isexist = (from d in db.AcOpeningMasters where d.AcOpeningID!=Id && d.AcFinancialYearID== AcFinancialYearID && d.AcHeadID == AcHeadId select d).FirstOrDefault();
+                var isexist = (from d in db.AcOpeningMasters where d.AcOpeningID != Id && d.AcFinancialYearID == AcFinancialYearID && d.AcHeadID == AcHeadId select d).FirstOrDefault();
                 if (isexist == null)
                 {
                     var data = (from d in db.AcOpeningMasters where d.AcOpeningID == Id select d).FirstOrDefault();
@@ -3903,7 +4071,7 @@ new AcGroupModel()
                     data.OPDate = firstDay;
                     if (AccNature == "Dr")
                     {
-                        data.Amount = Amount ;
+                        data.Amount = Amount;
                     }
                     else
                     {
@@ -3919,29 +4087,94 @@ new AcGroupModel()
                 }
                 else
                 {
-                    return Json(new { success = false, message ="Opening Amount already added to this Chart of Account!" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = false, message = "Opening Amount already added to this Chart of Account!" }, JsonRequestBehavior.AllowGet);
 
                 }
             }
-            catch (Exception e){
+            catch (Exception e)
+            {
                 return Json(new { success = false, message = e.Message.ToString() }, JsonRequestBehavior.AllowGet);
             }
 
         }
-        public JsonResult GetOpeningMasterById(int Id)
+        
+        [HttpPost]
+        public JsonResult SubmitAcOpeningMaster(List<AcOpeningMasterVm> list)
+       
         {
-            var acopeingmastervm = new AcOpeningMasterVm();
-            var data = (from d in db.AcOpeningMasters where d.AcOpeningID == Id select d).FirstOrDefault();
-            var Achead = (from d in db.AcHeads where d.AcHeadID == data.AcHeadID select d).FirstOrDefault();
+            try
+            {
+                var AcFinancialYearID = Convert.ToInt32(Session["fyearid"]);
+                var BranchId = Convert.ToInt32(Session["CurrentBranchID"]);
+                int Id = 0;
+                int AcHeadId = 0;
+                decimal Amount = 0;
+                string AccNature;
+                bool deleted = false;
+                foreach (var item in list)
+                {
+                    Id = item.AcOpeningID;
+                    AcHeadId = item.AcHeadID;
+                    Amount = item.Amount;
+                    AccNature = item.AcNature;
+                    deleted = item.IsDeleted;
 
-            acopeingmastervm.AcHeadID = data.AcHeadID;
-            acopeingmastervm.AcHead = Achead.AcHead1;
-            acopeingmastervm.AcOpeningID = data.AcOpeningID;
-            acopeingmastervm.Amount = data.Amount;
+                    AcOpeningMaster data = new AcOpeningMaster();
+                    if (Id>0)
+                    {
+                        data = db.AcOpeningMasters.Find(item.AcOpeningID);
+                        if (deleted==true)
+                        {
+                            db.AcOpeningMasters.Remove(data);
+                            db.SaveChanges();
+                            continue;
+                        }
+                    }
 
-            return Json(new { data= acopeingmastervm }, JsonRequestBehavior.AllowGet);
+                    if (Id==0 && deleted==true)
+                    {
+                        continue;
+                    }
+
+                    var isexist = (from d in db.AcOpeningMasters where d.AcOpeningID != Id && d.AcFinancialYearID == AcFinancialYearID && d.AcHeadID == AcHeadId select d).FirstOrDefault();
+                    if (isexist == null)
+                    {                       
+                     
+                        data.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"]);
+                        data.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+                        data.AcFinancialYearID = Convert.ToInt32(Session["fyearid"]);
+                        data.AcHeadID = AcHeadId;
+                        var CurrentStartYear = Convert.ToDateTime(Session["FyearFrom"]);
+                        var Year = CurrentStartYear.Year;
+                        DateTime firstDay = new DateTime(Year, 1, 1);
+                        data.OPDate = firstDay;
+                        if (AccNature == "Dr")
+                        {
+                            data.Amount = Amount;
+                        }
+                        else
+                        {
+                            data.Amount = Amount * -1;
+                        }
+                        data.UserID = Convert.ToInt32(Session["UserID"]);
+                        if (Id == 0)
+                        {
+                            db.AcOpeningMasters.Add(data);
+                        }
+                        db.SaveChanges();                        
+                    }                    
+                }
+
+                AccountsDAO.AccountOpeningPosting(AcFinancialYearID, BranchId);
+
+            }
+            catch (Exception e){
+                return Json(new { success = false, message = e.Message.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { success = true, message = "Saved Successfully!" }, JsonRequestBehavior.AllowGet);
         }
-
+    
+        //not used
         public ActionResult DeleteAcOpeningMaster(int Id)
         {
             var data = (from d in db.AcOpeningMasters where d.AcOpeningID == Id select d).FirstOrDefault();
@@ -3951,10 +4184,12 @@ new AcGroupModel()
             return RedirectToAction("AcOpeningMaster");
 
         }
+    #endregion
         [HttpGet]
         public JsonResult GetSupplierName(string term, string SupplierTypeId)
         {
             var supplierType = new SupplierType();
+            
             if(SupplierTypeId=="H")
             {
                 supplierType = (from d in db.SupplierTypes where d.SupplierType1 == "Hired Drivers" select d).FirstOrDefault();
@@ -3969,29 +4204,72 @@ new AcGroupModel()
                 supplierType = (from d in db.SupplierTypes where d.SupplierType1 == "Sundry Suppliers" select d).FirstOrDefault();
 
             }
-            if(supplierType==null)
-            {
-                supplierType = new SupplierType();
-            }
-            var customerlist = (from c1 in db.SupplierMasters
-                                where c1.SupplierName.ToLower().Contains(term.ToLower()) && c1.SupplierTypeID == supplierType.SupplierTypeID
-                                orderby c1.SupplierName ascending
-                                select new { SupplierID = c1.SupplierID, SupplierName = c1.SupplierName }).ToList();
-
-            return Json(customerlist, JsonRequestBehavior.AllowGet);
-
-        }
-        [HttpGet]
-        public JsonResult GetCustomerName(string term)
-        {
             
-            var customerlist = (from c1 in db.CustomerMasters
-                                where c1.CustomerName.ToLower().Contains(term.ToLower()) 
-                                orderby c1.CustomerName ascending
-                                select new { customerId = c1.CustomerID, CustomerName = c1.CustomerName }).ToList();
+            if (SupplierTypeId == "C") //customer
+            {
+                if (term.Trim() != "")
+                {
+                    var customerlist = (from c1 in db.CustomerMasters
+                                        where c1.CustomerType == "CR" && c1.CustomerName.ToLower().Contains(term.ToLower())
+                                        orderby c1.CustomerName ascending
+                                        select new { SupplierID = c1.CustomerID, SupplierName = c1.CustomerName }).ToList();
 
-            return Json(customerlist, JsonRequestBehavior.AllowGet);
+                    return Json(customerlist, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var customerlist = (from c1 in db.CustomerMasters
+                                        where c1.CustomerType == "CR" 
+                                        orderby c1.CustomerName ascending
+                                        select new { SupplierID = c1.CustomerID, SupplierName = c1.CustomerName }).ToList();
 
+                    return Json(customerlist, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else //supplier list
+            {
+                if (term.Trim() != "")
+                {
+                    var customerlist = (from c1 in db.SupplierMasters
+                                        where c1.SupplierName.ToLower().Contains(term.ToLower()) && c1.SupplierTypeID == supplierType.SupplierTypeID
+                                        orderby c1.SupplierName ascending
+                                        select new { SupplierID = c1.SupplierID, SupplierName = c1.SupplierName }).ToList();
+                    return Json(customerlist, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var customerlist = (from c1 in db.SupplierMasters
+                                        where c1.SupplierTypeID == supplierType.SupplierTypeID
+                                        orderby c1.SupplierName ascending
+                                        select new { SupplierID = c1.SupplierID, SupplierName = c1.SupplierName }).ToList();
+                    return Json(customerlist, JsonRequestBehavior.AllowGet);
+                }
+            }            
+
+        }       
+
+        public JsonResult GetConsignment(string term)
+        {
+            if (term.Trim() != "")
+            {
+                var list = (from c1 in db.TruckDetails
+                            join c in db.InScanMasters on c1.TruckDetailID equals c.TruckDetailId
+                            where c1.ReceiptNo == term
+                            orderby c.ConsignmentNo ascending
+                            select new AcJournalConsignmentVM { TruckDetailID = c1.TruckDetailID, InScanID = c.InScanID, ConsignmentNo = c.ConsignmentNo, ConsignmentDate = c.TransactionDate }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var list = (from c in db.InScanMasters 
+                            where c.IsDeleted==false
+                            orderby c.ConsignmentNo ascending
+                            select new AcJournalConsignmentVM { TruckDetailID = 0, InScanID = c.InScanID, ConsignmentNo = c.ConsignmentNo, ConsignmentDate = c.TransactionDate }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+
+            }
+
+            
         }
     }
 
@@ -4036,9 +4314,11 @@ public class AcOpeningMasterVm
 {
     public int AcOpeningID { get; set; }
 
-    public Nullable<int> AcHeadID { get; set; }
-    public Nullable<decimal> Amount { get; set; }
+    public int AcHeadID { get; set; }
+    public decimal Amount { get; set; }
     public string AcHead { get; set; }
+    public string AcNature { get; set; }
+    public bool IsDeleted { get; set; }
 }
 public class DeleteFileAttribute : ActionFilterAttribute
 {

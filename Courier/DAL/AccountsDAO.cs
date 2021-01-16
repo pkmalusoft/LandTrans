@@ -582,9 +582,130 @@ namespace LTMSV2.DAL
             return objList;
         }
 
+        public static List<AcHeadSelectAllVM> GetAcHeadSelectAllByCategory(int BranchID,string Category)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "AcHeadSelectAllByCategory";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@BranchID", SqlDbType.Int);
+            cmd.Parameters["@BranchID"].Value = BranchID;
+
+            cmd.Parameters.Add("@Category", SqlDbType.VarChar);
+            cmd.Parameters["@Category"].Value = Category;
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<AcHeadSelectAllVM> objList = new List<AcHeadSelectAllVM>();
+            AcHeadSelectAllVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new AcHeadSelectAllVM();
+                    obj.AcHeadID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadID"].ToString());
+                    obj.AcHeadKey = ds.Tables[0].Rows[i]["AcHeadKey"].ToString();
+                    obj.AcHead = ds.Tables[0].Rows[i]["AcHead"].ToString();
+                    obj.AcGroupID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcGroupID"].ToString());
+                    obj.ParentID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ParentID"].ToString());
+                    obj.HeadOrder = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["HeadOrder"].ToString());
+                    if (ds.Tables[0].Rows[i]["StatusHide"] == DBNull.Value)
+                    {
+                        obj.StatusHide = false;
+                    }
+                    else
+                    {
+                        obj.StatusHide = Convert.ToBoolean(ds.Tables[0].Rows[i]["StatusHide"].ToString());
+                    }
+                    obj.UserID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["UserID"].ToString());
+                    obj.Prefix = ds.Tables[0].Rows[i]["Prefix"].ToString();
+                    obj.AcGroup = ds.Tables[0].Rows[i]["AcGroup"].ToString();
+                    obj.AccountType = ds.Tables[0].Rows[i]["AccountType"].ToString();
+                    if (ds.Tables[0].Rows[i]["TaxApplicable"] == DBNull.Value)
+                    {
+                        obj.TaxApplicable = false;
+
+                    }
+                    else
+                    {
+                        obj.TaxApplicable = Convert.ToBoolean(ds.Tables[0].Rows[i]["TaxApplicable"].ToString());
+                        if (obj.TaxApplicable == true)
+                        {
+                            obj.TaxPercent = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["TaxPercent"].ToString());
+                        }
+                        else
+                        {
+                            obj.TaxPercent = 0;
+                        }
+
+                    }
 
 
-        
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
+        //Account Master Opening Posting
+        public  static string AccountOpeningPosting(int fyearid,int branchid)
+        {
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_AcOpeningMasterPosting " + fyearid.ToString() + "," + branchid;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "OK";
+
+        }
+
+        //InvoiceOpeningPosting
+        public static string InvoiceOpeningPosting(int MasterId, int fyearid, int branchid)
+        {
+            try
+            {
+                //string json = "";
+                string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(strConnString))
+                {
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.CommandText = "SP_AcInvoiceOpeningPosting " + MasterId + "," +  fyearid.ToString() + "," + branchid;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Connection = con;
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "OK";
+
+        }
     }
 }
     

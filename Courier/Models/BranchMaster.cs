@@ -66,6 +66,8 @@ namespace LTMSV2.Models
         public string CODReceiptFormat { get; set; }
         public Nullable<int> VATAccountId { get; set; }
         public string ConsignmentFormat { get; set; }
+        public Nullable<int> ReceivedBy { get; set; }
+        public Nullable<int> CollectedBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AcGroup> AcGroups { get; set; }

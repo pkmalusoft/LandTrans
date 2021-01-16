@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using LTMSV2.DAL;
 using LTMSV2.Models;
 
 namespace LTMSV2.Controllers
@@ -121,6 +122,43 @@ namespace LTMSV2.Controllers
             {
 
                 return RedirectToAction("Index");
+            }
+        }
+
+        public ActionResult RevenueAccountHead(string term)
+        {
+            int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            if (!String.IsNullOrEmpty(term.Trim()))
+            {
+                List<AcHeadSelectAllVM> AccountHeadList = new List<AcHeadSelectAllVM>();
+                AccountHeadList = AccountsDAO.GetAcHeadSelectAllByCategory(branchID,"INCOME").Where(c => c.AcHead.ToLower().Contains(term.ToLower())).OrderBy(x => x.AcHead).ToList(); ;
+                
+                return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
+                
+            }
+            else
+            {
+                List<AcHeadSelectAllVM> AccountHeadList = new List<AcHeadSelectAllVM>();
+                AccountHeadList = AccountsDAO.GetAcHeadSelectAllByCategory(branchID,"INCOME");                
+                return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult CostAccountHead(string term)
+        {
+            int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            if (!String.IsNullOrEmpty(term.Trim()))
+            {
+                List<AcHeadSelectAllVM> AccountHeadList = new List<AcHeadSelectAllVM>();
+                AccountHeadList = AccountsDAO.GetAcHeadSelectAllByCategory(branchID,"EXPENSE").Where(c => c.AcHead.ToLower().Contains(term.ToLower())).OrderBy(x => x.AcHead).ToList(); ;
+                return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
+                
+            }
+            else
+            {
+                List<AcHeadSelectAllVM> AccountHeadList = new List<AcHeadSelectAllVM>();
+                AccountHeadList = AccountsDAO.GetAcHeadSelectAllByCategory(branchID,"EXPENSE");                
+                return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
             }
         }
     }

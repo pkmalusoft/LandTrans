@@ -3,29 +3,45 @@
     ViewBag.Title = "Cash and Bank Book";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
 }
+<link href="/Content/Multiselect/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="/Content/Multiselect/bootstrap-multiselect.js"></script>
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-
+<style>
+    .consignmulti + .btn-group button, #Consignment + .btn-group, #CityID + .btn-group button, #CityID + .btn-group {
+        display: block;
+        width: 100%;
+    }
+    #Consignment + .btn-group button, #Consignment + .btn-group, #CityID + .btn-group button, #CityID + .btn-group {
+        display: block;
+        width: 100%;
+    }
+</style>
 <style>
     #details tr {
         height: 32px;
     }
-    #details td input{
-        background:transparent;
-        border-color:transparent;
+
+    #details td input {
+        background: transparent;
+        border-color: transparent;
     }
-    #details td input:focus{
-        border-color:#07a7e3;
-    } 
-        #details tr:first-of-type,#ExpAllocationTable tr:first-of-type {
-            background: #35b8eb;
-            color: #fff;
+
+        #details td input:focus {
+            border-color: #07a7e3;
         }
+
+    #details tr:first-of-type, #ExpAllocationTable tr:first-of-type {
+        background: #35b8eb;
+        color: #fff;
+    }
+
     #DeleteNewRow {
         color: #dd4b39;
     }
+
     .headinglabel {
         font-family: Calibri;
         font-size: 16px;
@@ -88,12 +104,68 @@
 </style>
 <script type="text/javascript">
     var accounturl = '/Accounts/GetHeadsForCash';
+    var consignments=[];
+    function GetConsignmentData() {
+
+        $.ajax({
+            type: "Get",
+            url: '/Accounts/GetConsignment/',
+            data: { 'term': '' },
+            success: function (data) {
+                consignments = data;                              
+            }
+        });
+
+    }
+    function GetConsignment() {
+
+            $.ajax({
+                type: "Get",
+                url: '/Accounts/GetConsignment/',
+                data: { 'term':'' },
+                success: function (data) {
+                    //$('#AllocationTable').html('');
+                    //$('#AllocationTable tr:gt(0)').remove();
+                    //$('#hdnItemCount').val(data.length);
+
+                    $('#Consignment').empty();
+
+                    $.each(data, function (index, value) {
+                        $('#Consignment').append('<option value="' + value.InscanID + '">' + value.ConsignmentNo + '</option>');
+                    });
+
+                    $('#Consignment').multiselect({
+                        enableClickableOptGroups: true,
+                        enableCollapsibleOptGroups: true,
+                        enableFiltering: true,
+                        enableCaseInsensitiveFiltering: true,
+                        includeSelectAllOption: true
+                    });
+
+                    //for (var i = 0; i < data.length; i++) {
+
+
+                    //$('#AllocationTable').append('<tr>' +
+                    //    '<td>' + data[i].AWBNo + '<input type="hidden" name="AWBAllocation[' + i + '].CustomerInvoiceDetailID" value="' + data[i].CustomerInvoiceDetailID + '" /> <input type = "hidden" name = "AWBAllocation[' + i + '].ID" value ="' + data[i].ID + '" />  </td>' +
+                    //    '<td>' + date + '</td>' +
+                    //    '<td class="text-right">' + parseFloat(data[i].ConsignmentNo).toFixed(2) + '</td>' +
+                    //    '<td class="text-right">' + parseFloat(recamt).toFixed(2) + '</td>' +
+                    //    '<td class="text-right">' + parseFloat(data[i].PendingAmount).toFixed(2) + '</td>' +
+                    //    '<td class="text-right"> <input type="text" onBlur="chkAWBAmt(this)" name="AWBAllocation[' + i + '].AllocatedAmount" class="amt txtNum text-right AmountReceived" id="txt_' + data[i].CustomerInvoiceId + '_' + data[i].CustomerInvoiceDetailID + '" detailid="' + data[i].CustomerInvoiceDetailID + '" value="' + parseFloat(data[i].AllocatedAmount).toFixed(2) + '" />' +
+                    //    '<tr>');
+                    //}
+
+                }
+            });
+
+    }
     $(document).ready(function () {
             var startdate = '@Session["FyearFrom"].ToString()';
         var enddate = '@Session["FyearTo"].ToString()';
         var sd = new Date(startdate);
         var ed = new Date(enddate);
-        
+        GetConsignment();
+        GetConsignmentData();
         var v = $("#paytype option:selected").val();
         if (v == "1") {
             accounturl = '/Accounts/GetHeadsForCash';
@@ -457,6 +529,10 @@
         });
 
 
+
+
+
+
         $("#btnAdd").click(function () {
             debugger;
             if ($("#SelectedReceivedFrom").val() == "" || $("#SelectedReceivedFrom").val() == "0" || $("#ReceivedFrom").val() == "") {
@@ -464,83 +540,87 @@
                 $("#ReceivedFrom").focus();
                 return false;
             }
-              else  if ($("#ReceivedFrom option:selected").val() == "") {
-                    alert("Please Select Head");
-                    $("#ReceivedFrom").focus();
-                    return false;
-                }
-                else if ($("#amount").val() == "") {
-                    alert("Please Enter The Amount");
-                    $("#amount").focus();
-                    return false;
-                }
-                else if (parseInt($("#amount").val()) == 0) {
-                    alert("Please Enter The Amount");
-                    $("#amount").focus();
-                    return false;
+            else if ($("#ReceivedFrom option:selected").val() == "") {
+                alert("Please Select Head");
+                $("#ReceivedFrom").focus();
+                return false;
+            }
+            else if ($("#amount").val() == "") {
+                alert("Please Enter The Amount");
+                $("#amount").focus();
+                return false;
+            }
+            else if (parseInt($("#amount").val()) == 0) {
+                alert("Please Enter The Amount");
+                $("#amount").focus();
+                return false;
+            }
+            else {
+                var str = "";
+                var totalamt = 0;
+                debugger;
+                var i = $('#details > tbody > tr').length - 1;
+
+                var s = 'name="AcExpAllocationVM';
+                var ExpTableHtml = $('#ExpAllocationTable').clone().attr("id", i + "_ExpAllocationTable").css('display', 'none').addClass('CostAllocationDetail').wrap('<p>').parent().html();
+                ExpTableHtml = ExpTableHtml.replace(/name="AcExpAllocationVM/g, 'name="AcJDetailVM[' + i + '].AcExpAllocationVM');
+                var amounttaxcheck = '';
+                var amounttaxcheck = '';
+                if ($("#AmountIncludingTax").is(':checked')) {
+                    amounttaxcheck = '<input type="checkbox" id="ChkAmountIncludingTax_' + i + '" value="true" checked  name="AcJDetailVM[' + i + '].AmountIncludingTax" />';
                 }
                 else {
-                    var str = "";
-                    var totalamt = 0;
-                    debugger;
-                    var i = $('#details > tbody > tr').length - 1;
-                    
-                    var s = 'name="AcExpAllocationVM';
-                    var ExpTableHtml = $('#ExpAllocationTable').clone().attr("id", i + "_ExpAllocationTable").css('display', 'none').addClass('CostAllocationDetail').wrap('<p>').parent().html();
-                    ExpTableHtml = ExpTableHtml.replace(/name="AcExpAllocationVM/g, 'name="AcJDetailVM[' + i + '].AcExpAllocationVM');
-                var amounttaxcheck = '';
-                 var amounttaxcheck = '';
-                if ($("#AmountIncludingTax").is(':checked')) {
-                                    amounttaxcheck = '<input type="checkbox" id="ChkAmountIncludingTax_' + i + '" value="true" checked  name="AcJDetailVM[' + i + '].AmountIncludingTax" />';
-                                }
-                                else {
-                                    amounttaxcheck = '<input type="checkbox" id="ChkAmountIncludingTax_' + i + '" value="false"  name="AcJDetailVM[' + i + '].AmountIncludingTax" />';
-                                }
+                    amounttaxcheck = '<input type="checkbox" id="ChkAmountIncludingTax_' + i + '" value="false"  name="AcJDetailVM[' + i + '].AmountIncludingTax" />';
+                }
 
-                var objHtml = '<tr>' + '<td style="padding-left:10px"><input type = "hidden" name="AcJDetailVM[' + i + '].IsDeleted" class="hdndeleted" /><input type="hidden" class=JAcHead id="JAcHead_' + i + '" value=' + $("#SelectedReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="text" class="clsreceivedfrom" id="ReceivedFrom_' + i + '" value="' + $("#ReceivedFrom").val() + '" name="AcJDetailVM[' + i + '].AcHead"></td><td style="padding-left:10px">' + amounttaxcheck + '<input type="hidden" value=' + $("#AmountIncludingTax").is(':checked') + ' name="AcJDetailVM[' + i + '].AmountIncludingTax"></td><td class=textright style="padding-right:10px"><input id="JAcAmount_' + i + '" type="text" class="JAcAmt text-right txtNum" value=' + $("#amount").val() + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcTaxPercent_' + i + '" class="JAcAmt text-right txtNum" value=' + $("#TaxPercent").val() + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class="textright" style="padding-right:10px"><input type="text" class="JAcAmt text-right txtNum" readonly="readonly" id="JAcTaxAmount_' + i + '" value=' + $("#TaxAmount").val() + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px"><input type=text id="JAcSupplierName_' + i + '"' + $("#SupplierName").val() + '/><input type="hidden"  id="JAcSupplierId_' + i + '" value=' + $("#SupplierID").val() + ' name="AcJDetailVM[' + i + '].SupplierID" /></td>' + '<td style="padding-left:10px"><input type="text"  value="' + $("#remark1").val() +'"  name="AcJDetailVM[' + i + '].Rem"></td>';
-                    objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
-                    objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
-                    objHtml = objHtml + '</tr>';
-                    $("#details").append(objHtml);
-                    $('#RowCount').val("0");
-                    $("#ExpAllocationTable").find("tr:gt(0)").remove();
-                    $("#ReceivedFrom").val("");
-                    $("#SelectedReceivedFrom").val("0");
+                var ConsignmentHTML = '<td><select class="consignmulti" id="Consignment_' + i + '" name="AcJDetailVM[' + i + '].SelectedValues" multiple="multiple"><option value = "" ></option></select></td>';
+
+                var objHtml = '<tr>' + '<td style="padding-left:10px"><input type = "hidden" name="AcJDetailVM[' + i + '].IsDeleted" class="hdndeleted" /><input type="hidden" class=JAcHead id="JAcHead_' + i + '" value=' + $("#SelectedReceivedFrom").val() + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="text" class="clsreceivedfrom" id="ReceivedFrom_' + i + '" value="' + $("#ReceivedFrom").val() + '" name="AcJDetailVM[' + i + '].AcHead"></td><td style="padding-left:10px">' + amounttaxcheck + '<input type="hidden" value=' + $("#AmountIncludingTax").is(':checked') + ' name="AcJDetailVM[' + i + '].AmountIncludingTax"></td><td class=textright style="padding-right:10px"><input id="JAcAmount_' + i + '" type="text" class="JAcAmt text-right txtNum" value=' + $("#amount").val() + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcTaxPercent_' + i + '" class="JAcAmt text-right txtNum" value=' + $("#TaxPercent").val() + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class="textright" style="padding-right:10px"><input type="text" class="JAcAmt text-right txtNum" readonly="readonly" id="JAcTaxAmount_' + i + '" value=' + $("#TaxAmount").val() + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px"><input type=text id="JAcSupplierName_' + i + '"' + $("#SupplierName").val() + '/><input type="hidden"  id="JAcSupplierId_' + i + '" value=' + $("#SupplierID").val() + ' name="AcJDetailVM[' + i + '].SupplierID" /></td>';
+                //'<td style="padding-left:10px"><input type="text"  value="' + $("#remark1").val() + '"  name="AcJDetailVM[' + i + '].Rem"></td>';
+                objHtml = objHtml + ConsignmentHTML;
+                objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
+                objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
+                objHtml = objHtml + '</tr>';
+                $("#details").append(objHtml);
+                $('#RowCount').val("0");
+                $("#ExpAllocationTable").find("tr:gt(0)").remove();
+                $("#ReceivedFrom").val("");
+                $("#SelectedReceivedFrom").val("0");
                 $("#amount").val('');
                 $("#TaxPercent").val("");
                 $("#TaxAmount").val("");
                 $('#SupplierID').val(0);
                 $('#SupplierName').val('');
-                    $("#remark1").val('');
-                    $("#ReceivedFrom_" + i).autocomplete({
-                        source: function (request, response) {
-                            $.ajax({
-                                url: '/Accounts/AccountHead',
-                                datatype: "json",
-                                data: {
-                                    term: request.term
-                                },
-                                success: function (data) {
-                                    response($.map(data, function (val, item) {
-                                        return {
-                                            label: val.AcHead,
-                                            value: val.AcHead,
-                                            AcHeadID: val.AcHeadID,
-                                            TaxPercent:val.TaxPercent
-                                        }
-                                    }))
-                                }
-                            })
-                        }, minLength: 1,
-                        select: function (e, a) {
-                            e.preventDefault();
-                            $("#ReceivedFrom_" + i).val(a.item.label);
-                            $("#JAcHead_" + i).val(a.item.AcHeadID);
-                            $("#TaxPercent_" + i).val(a.item.TaxPercent);
+                $("#remark1").val('');
+                $("#ReceivedFrom_" + i).autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '/Accounts/AccountHead',
+                            datatype: "json",
+                            data: {
+                                term: request.term
+                            },
+                            success: function (data) {
+                                response($.map(data, function (val, item) {
+                                    return {
+                                        label: val.AcHead,
+                                        value: val.AcHead,
+                                        AcHeadID: val.AcHeadID,
+                                        TaxPercent: val.TaxPercent
+                                    }
+                                }))
+                            }
+                        })
+                    }, minLength: 1,
+                    select: function (e, a) {
+                        e.preventDefault();
+                        $("#ReceivedFrom_" + i).val(a.item.label);
+                        $("#JAcHead_" + i).val(a.item.AcHeadID);
+                        $("#TaxPercent_" + i).val(a.item.TaxPercent);
 
-                        }
+                    }
 
-                    });
+                });
 
                 $("#JAcSupplierName_" + i).autocomplete({
                     source: function (request, response) {
@@ -562,103 +642,114 @@
                         })
                     },
                     minLength: 1,
-                    autoFocus:false,
+                    autoFocus: false,
                     focus: function (event, ui) {
                         $("#JAcSupplierName_" + i).val(ui.item.label);
                         $("#JAcSupplierId_" + i).val(ui.item.SupplierID);
                     },
                     select: function (e, i) {
                         e.preventDefault();
-                        $("#JAcSupplierName_" +i).val(i.item.label);                        
+                        $("#JAcSupplierName_" + i).val(i.item.label);
                         $("#JAcSupplierId_" + i).val(i.item.SupplierID);
 
                     },
 
                 });
 
-                    $("#ChkAmountIncludingTax_" + i).click(function () {
+                $("#ChkAmountIncludingTax_" + i).click(function () {
 
-                        if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
-                                         $("#ChkAmountIncludingTax_" + i).val(true);
-                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" +i).val() > 0) {
-                                            var amount = parseFloat($("#JAcAmount_" +i).val());
-                                                var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
-                                            var taxamount = amount - (amount / (1 + taxpercent));
-                                                $("#JAcTaxAmount_"+i).val(taxamount.toFixed(2));
-                                            }
-                                            else {
-                                                $("#JAcTaxAmount_"+i).val(0);
-                                             }
-                                        }
+                    if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
+                        $("#ChkAmountIncludingTax_" + i).val(true);
+                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                            var amount = parseFloat($("#JAcAmount_" + i).val());
+                            var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
+                            var taxamount = amount - (amount / (1 + taxpercent));
+                            $("#JAcTaxAmount_" + i).val(taxamount.toFixed(2));
+                        }
                         else {
-                            $("#ChkAmountIncludingTax_" + i).val(false);
-                                          if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
-                                              var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
-                                              parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
-                                          }
-                                          else {
-                                              $("#JAcTaxAmount_" + i).val(0);
-                                          }
-                                        }
+                            $("#JAcTaxAmount_" + i).val(0);
+                        }
+                    }
+                    else {
+                        $("#ChkAmountIncludingTax_" + i).val(false);
+                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                            var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
+                            parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
+                        }
+                        else {
+                            $("#JAcTaxAmount_" + i).val(0);
+                        }
+                    }
 
 
-                                });
+                });
 
-                                 $("#JAcAmount_" + i).change(function () {
+                $("#JAcAmount_" + i).change(function () {
 
-                                      if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
-                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" +i).val() > 0) {
-                                            var amount = parseFloat($("#JAcAmount_" +i).val());
-                                                var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
-                                            var taxamount = amount - (amount / (1 + taxpercent));
-                                                $("#JAcTaxAmount_"+i).val(taxamount.toFixed(2));
-                                            }
-                                            else {
-                                                $("#JAcTaxAmount_"+i).val(0);
-                                             }
-                                        }
-                                        else {
-                                          if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
-                                              var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
-                                              parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
-                                          }
-                                          else {
-                                              $("#JAcTaxAmount_" + i).val(0);
-                                          }
-                                        }
-                                   });
+                    if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
+                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                            var amount = parseFloat($("#JAcAmount_" + i).val());
+                            var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
+                            var taxamount = amount - (amount / (1 + taxpercent));
+                            $("#JAcTaxAmount_" + i).val(taxamount.toFixed(2));
+                        }
+                        else {
+                            $("#JAcTaxAmount_" + i).val(0);
+                        }
+                    }
+                    else {
+                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                            var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
+                            parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
+                        }
+                        else {
+                            $("#JAcTaxAmount_" + i).val(0);
+                        }
+                    }
+                });
 
-                                $("#JAcTaxPercent_" + i).change(function () {
-                                     if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
-                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" +i).val() > 0) {
-                                            var amount = parseFloat($("#JAcAmount_" +i).val());
-                                                var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
-                                            var taxamount = amount - (amount / (1 + taxpercent));
-                                                $("#JAcTaxAmount_"+i).val(taxamount.toFixed(2));
-                                            }
-                                            else {
-                                                $("#JAcTaxAmount_"+i).val(0);
-                                             }
-                                        }
-                                        else {
-                                          if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
-                                              var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
-                                              parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
-                                          }
-                                          else {
-                                              $("#JAcTaxAmount_" + i).val(0);
-                                          }
-                                        }
-                                });
-                }
-                //$("#details").find('tr:not(:first-child)').each(function (i, el) {
-                //    Amount = $tds.eq(2).find().text();
-                //           totalamt = parseInt(totalamt) + parseInt(Amount);
-                //       });
-                //$("#TotalAmt").val(totalamt);
-                //$("#lblamt").text(totalamt);
+                $("#JAcTaxPercent_" + i).change(function () {
+                    if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
+                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                            var amount = parseFloat($("#JAcAmount_" + i).val());
+                            var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
+                            var taxamount = amount - (amount / (1 + taxpercent));
+                            $("#JAcTaxAmount_" + i).val(taxamount.toFixed(2));
+                        }
+                        else {
+                            $("#JAcTaxAmount_" + i).val(0);
+                        }
+                    }
+                    else {
+                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                            var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
+                            parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
+                        }
+                        else {
+                            $("#JAcTaxAmount_" + i).val(0);
+                        }
+                    }
+                });
+
+
+
+                $('#Consignment_' + i).empty();
+
+                $.each(consignments, function (index, value) {
+                    $('#Consignment_' + i).append('<option value="' + value.InscanID + '">' + value.ConsignmentNo + '</option>');
+                });
+
+                $('#Consignment_' + i).multiselect({
+                    enableClickableOptGroups: true,
+                    enableCollapsibleOptGroups: true,
+                    enableFiltering: true,
+                    enableCaseInsensitiveFiltering: true,
+                    includeSelectAllOption: true
+                });
+
                 return false;
-            });
+            }
+        });
 
         $(".Allocate").on("click", function () {
             $('#popup').show();
@@ -733,7 +824,7 @@
             });
 
         $("#btnUpdate").click(function () {
-            
+
                 var ind = $("#currindex").val();
                 var amt = $("#amount").val();
                 $("#details").find("tr:eq('" + ind + "')").find("td:eq(1)").empty();
@@ -765,7 +856,7 @@
                             success: function (data) {
                                 ExpenseAllocationData = data;
                                 var incountval = 0;
-                                  var i = $('#details tr').length - innerTblcount;
+                                var i = $('#details tr').length - innerTblcount;
                                 var s = 'name="AcExpAllocationVM';
                                 var ExpTableHtml = '<table id="' + value.AcJournalDetID + '_ExpAllocationTable" class="table table-bordered table-responsive CostAllocationDetail" style="display:none;"><tr><td>Analysis Head</td><td>Amount</td><td>Delete</td></tr>';
                                 $.each(data, function (i, v) {
@@ -781,9 +872,9 @@
                                     xcountval = xcountval + 1;
                                 });
                                 innerTblcount = innerTblcount + 1;
-                                
+
                                 ExpTableHtml = ExpTableHtml + '</table>';
-                              //  $('#ExpAllocationTable').append(ExpTableHtml);
+                                //  $('#ExpAllocationTable').append(ExpTableHtml);
                                 ExpTableHtml = ExpTableHtml.replace(/name="AcExpAllocationVM/g, 'name="AcJDetailVM[' + i + '].AcExpAllocationVM');
                                 var amounttaxcheck = '';
                                 if (value.AmountIncludingTax) {
@@ -792,15 +883,18 @@
                                 else {
                                     amounttaxcheck = '<input type="checkbox" id="ChkAmountIncludingTax_' + i + '" value="false"  name="AcJDetailVM[' + i + '].AmountIncludingTax"  />';
                                 }
+                                var ConsignmentHTML = '<td><select class="consignmulti" id="Consignment_' + i + '" name="AcJDetailVM[' + i + '].SelectedValues" multiple="multiple"><option value = "" ></option></select></td>';
                                 //'<input type="hidden" value=' + value.AmountIncludingTax + ' name="AcJDetailVM[' + i + '].AmountIncludingTax">
-                                var objHtml = '<tr>' + '<td style="padding-left:10px"><input type ="hidden" name="AcJDetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead id="JAcHead_' + i + '" value=' + value.AcHeadID + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="text" class="clsreceivedfrom" id="ReceivedFrom_' + i + '" value=" ' + value.AcHead + '" name="AcJDetailVM[' + i + '].AcHead"></td>' + '<td style="padding-left:10px">' + amounttaxcheck + '</td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcAmount_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.Amt).toFixed(2) + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcTaxPercent_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.TaxPercent).toFixed(2) + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class=textright style="padding-right:10px"><input type="text" readonly="readonly"  id="JAcTaxAmount_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.TaxAmount).toFixed(2) + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px"><input type=text id="JAcSupplierName_' + i + '" value="' + value.SupplierName + '" /><input type="hidden"  id="JAcSupplierId_' + i + '" value=' +  value.SupplierID + ' name="AcJDetailVM[' + i + '].SupplierID" /></td>' + '<td style="padding-left:10px"><input type="text" value="' + value.Rem + '" name="AcJDetailVM[' + i + '].Rem"></td>';
+                                var objHtml = '<tr>' + '<td style="padding-left:10px"><input type ="hidden" name="AcJDetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead id="JAcHead_' + i + '" value=' + value.AcHeadID + ' name="AcJDetailVM[' + i + '].AcHeadID"><input type="text" class="clsreceivedfrom" id="ReceivedFrom_' + i + '" value=" ' + value.AcHead + '" name="AcJDetailVM[' + i + '].AcHead"></td>' + '<td style="padding-left:10px">' + amounttaxcheck + '</td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcAmount_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.Amt).toFixed(2) + ' name="AcJDetailVM[' + i + '].Amt"></td>' + '<td class=textright style="padding-right:10px"><input type="text" id="JAcTaxPercent_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.TaxPercent).toFixed(2) + ' name="AcJDetailVM[' + i + '].TaxPercent"></td>' + '<td class=textright style="padding-right:10px"><input type="text" readonly="readonly"  id="JAcTaxAmount_' + i + '" class="JAcAmt text-right txtNum" value=' + parseFloat(value.TaxAmount).toFixed(2) + ' name="AcJDetailVM[' + i + '].TaxAmount"></td>' + '<td style="padding-left:10px"><input type=text id="JAcSupplierName_' + i + '" value="' + value.SupplierName + '" /><input type="hidden"  id="JAcSupplierId_' + i + '" value=' + value.SupplierID + ' name="AcJDetailVM[' + i + '].SupplierID" /></td>';
+                                //'<td style="padding-left:10px"><input type="text" value="' + value.Rem + '" name="AcJDetailVM[' + i + '].Rem"></td>';
+                                objHtml = objHtml + ConsignmentHTML;
                                 objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
                                 objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a><input type="hidden" class="AcJournalDetID" name="AcJDetailVM[' + i + '].AcJournalDetID" value=' + value.AcJournalDetID + ' /></td>';
                                 objHtml = objHtml + '</tr>';
                                 $("#details").append(objHtml);
 
 
-                                $("#ReceivedFrom_"+i).autocomplete({
+                                $("#ReceivedFrom_" + i).autocomplete({
                                     source: function (request, response) {
                                         $.ajax({
                                             url: '/Accounts/AccountHead',
@@ -814,7 +908,7 @@
                                                         label: val.AcHead,
                                                         value: val.AcHead,
                                                         AcHeadID: val.AcHeadID,
-                                                        TaxPercent:val.TaxPercent
+                                                        TaxPercent: val.TaxPercent
                                                     }
                                                 }))
                                             }
@@ -862,82 +956,102 @@
 
                                     },
                                 });
-                                
+
                                 //ChkAmountIncludingTax_2
                                 $("#ChkAmountIncludingTax_" + i).click(function () {
 
                                     if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
                                         $("#ChkAmountIncludingTax_" + i).val(true);
-                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" +i).val() > 0) {
-                                            var amount = parseFloat($("#JAcAmount_" +i).val());
-                                                var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
+                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                                            var amount = parseFloat($("#JAcAmount_" + i).val());
+                                            var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
                                             var taxamount = amount - (amount / (1 + taxpercent));
-                                                $("#JAcTaxAmount_"+i).val(taxamount.toFixed(2));
-                                            }
-                                            else {
-                                                $("#JAcTaxAmount_"+i).val(0);
-                                             }
+                                            $("#JAcTaxAmount_" + i).val(taxamount.toFixed(2));
                                         }
+                                        else {
+                                            $("#JAcTaxAmount_" + i).val(0);
+                                        }
+                                    }
                                     else {
                                         $("#ChkAmountIncludingTax_" + i).val(false);
-                                          if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
-                                              var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
-                                              parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
-                                          }
-                                          else {
-                                              $("#JAcTaxAmount_" + i).val(0);
-                                          }
+                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                                            var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
+                                            parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
                                         }
+                                        else {
+                                            $("#JAcTaxAmount_" + i).val(0);
+                                        }
+                                    }
 
 
                                 });
 
-                                 $("#JAcAmount_" + i).change(function () {
+                                $("#JAcAmount_" + i).change(function () {
 
-                                      if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
-                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" +i).val() > 0) {
-                                            var amount = parseFloat($("#JAcAmount_" +i).val());
-                                                var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
+                                    if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
+                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                                            var amount = parseFloat($("#JAcAmount_" + i).val());
+                                            var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
                                             var taxamount = amount - (amount / (1 + taxpercent));
-                                                $("#JAcTaxAmount_"+i).val(taxamount.toFixed(2));
-                                            }
-                                            else {
-                                                $("#JAcTaxAmount_"+i).val(0);
-                                             }
+                                            $("#JAcTaxAmount_" + i).val(taxamount.toFixed(2));
                                         }
                                         else {
-                                          if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
-                                              var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
-                                              parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
-                                          }
-                                          else {
-                                              $("#JAcTaxAmount_" + i).val(0);
-                                          }
+                                            $("#JAcTaxAmount_" + i).val(0);
                                         }
-                                   });
+                                    }
+                                    else {
+                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                                            var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
+                                            parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
+                                        }
+                                        else {
+                                            $("#JAcTaxAmount_" + i).val(0);
+                                        }
+                                    }
+                                });
 
                                 $("#JAcTaxPercent_" + i).change(function () {
-                                     if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
-                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" +i).val() > 0) {
-                                            var amount = parseFloat($("#JAcAmount_" +i).val());
-                                                var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
+                                    if ($("#ChkAmountIncludingTax_" + i).is(':checked')) {
+                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                                            var amount = parseFloat($("#JAcAmount_" + i).val());
+                                            var taxpercent = parseFloat($("#JAcTaxPercent_" + i).val()) / 100.00;
                                             var taxamount = amount - (amount / (1 + taxpercent));
-                                                $("#JAcTaxAmount_"+i).val(taxamount.toFixed(2));
-                                            }
-                                            else {
-                                                $("#JAcTaxAmount_"+i).val(0);
-                                             }
+                                            $("#JAcTaxAmount_" + i).val(taxamount.toFixed(2));
                                         }
                                         else {
-                                          if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
-                                              var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
-                                              parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
-                                          }
-                                          else {
-                                              $("#JAcTaxAmount_" + i).val(0);
-                                          }
+                                            $("#JAcTaxAmount_" + i).val(0);
                                         }
+                                    }
+                                    else {
+                                        if ($("#JAcTaxPercent_" + i).val() > 0 && $("#JAcAmount_" + i).val() > 0) {
+                                            var tamount = ($("#JAcAmount_" + i).val() * $("#JAcTaxPercent_" + i).val()) / 100.00;
+                                            parseFloat($("#JAcTaxAmount_" + i).val(tamount)).toFixed();
+                                        }
+                                        else {
+                                            $("#JAcTaxAmount_" + i).val(0);
+                                        }
+                                    }
                                 });
+                                $('#Consignment_' + i).empty();
+
+                                $.each(consignments, function (index, value) {
+                                    $('#Consignment_' + i).append('<option value="' + value.InscanID + '">' + value.ConsignmentNo + '</option>');
+                                });
+
+                                $('#Consignment_' + i).multiselect({
+                                    enableClickableOptGroups: true,
+                                    enableCollapsibleOptGroups: true,
+                                    enableFiltering: true,
+                                    enableCaseInsensitiveFiltering: true,
+                                    includeSelectAllOption: true
+                                });
+
+                                $('#Consignment_' + i).change(function () {
+
+                                
+                                });
+                            
+
                             },
                             error: function (XMLHttpRequest, textStatus, errorThrown) {
                               //  alert("Status: " + textStatus); alert("Error: " + errorThrown);
@@ -1191,7 +1305,9 @@
                 <div class="col-md-4">
                     <label class="headinglabel">Cash/Bank Accounts</label>
                     @Html.TextBoxFor(model => model.AcHead, new { @id = "AcHead", @class = "form-control", autocomplete = "off" })
-                    @Html.HiddenFor(model => model.SelectedAcHead, new  {@*Value = "0"*@id = "SelectedAcHead" })
+                    @Html.HiddenFor(model => model.SelectedAcHead, new
+                    {@*Value = "0"*@id = "SelectedAcHead"
+                })
                 </div>
 
 
@@ -1236,67 +1352,72 @@
 
         <fieldset>
             <h4 style="color:#07a7e3;padding-top:10px">Add Details</h4><hr style="margin-bottom:0px" />
-                                                                       <div class="row no-margin">
-                                                                           <div class="col-md-2">
-                                                                               <label class="headinglabel label1">Received From</label>
-                                                                               @Html.TextBoxFor(model => model.ReceivedFrom, new { @id = "ReceivedFrom", @class = "form-control", autocomplete = "off" })
-                                                                               @Html.HiddenFor(model => model.SelectedReceivedFrom, new { Value = "0", id = "SelectedReceivedFrom" })
-                                                                           </div>
-                                                                           <div class="col-md-2">
-                                                                               <label class="headinglabel">Amount</label>
-                                                                               <div class="checkboxdesign text-right" style="float:right">
-                                                                                   @Html.CheckBox("AmountIncludingTax", new { @name = "AmountIncludingTax" }) &nbsp
-                                                                                   <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Including Tax</label>
-                                                                               </div>
-                                                                               @Html.TextBoxFor(model => model.amount, new { @class = "form-control textright txtNum" })
-                                                                               @Html.ValidationMessageFor(model => model.amount)
-                                                                           </div>
-                                                                           <div class="col-md-1">
-                                                                               <label class="headinglabel">Tax %</label>
-                                                                               @Html.TextBoxFor(model => model.TaxPercent, new { @class = "form-control textright txtNum" })
-                                                                               @Html.ValidationMessageFor(model => model.TaxPercent)
-                                                                           </div>
-                                                                           <div class="col-md-1">
-                                                                               <label class="headinglabel">Tax Amount</label>
-                                                                               @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control textright txtNum", @readonly = "readonly" })
-                                                                               @Html.ValidationMessageFor(model => model.TaxAmount)
-                                                                           </div>
-                                                                           <div class="col-md-2">
-                                                                               <label class="headinglabel">Supplier</label>
-                                                                               <input type="text" id="SupplierName" name="SupplierName" class="form-control" autocomplete="off" />
-                                                                               @Html.HiddenFor(model => model.SupplierId, new { Value = "0", id = "SupplierID" })
-                                                                           </div>
-                                                                           <div class="col-md-2">
-                                                                               <label class="headinglabel">Remark</label>
-                                                                               @Html.TextAreaFor(model => model.remark1, new { @class = "form-control" })
-                                                                               @Html.ValidationMessageFor(model => model.remark1)
-                                                                           </div>
-
-                                                                           <div class="col-md-2">
-                                                                               <label class="headinglabel">Exp. Allocation</label>
-                                                                               <a href="javascript:void(0)" class="Allocate"><i class="fa fa-bars"></i></a>
-                                                                           </div>
-                                                                           <div class="col-md-2">
-                                                                               <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data"  onclick="ClearData()">-</button>&nbsp;&nbsp;
-                                                                               <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
-                                                                           </div>
-                                                                           @*<div class="col-md-12 butdivs">
-            <br />
-            <button type="button" class="btn btn-primary btnwidth" id="btnAdd">Add</button>
-            <input type="button" class="btn btn-primary" value="Update" id="btnUpdate" style="display:none;">
-        </div>*@
-                                                                       </div>
+            <div class="row no-margin">
+                <div class="col-md-2">
+                    <label class="headinglabel label1">Received From</label>
+                    @Html.TextBoxFor(model => model.ReceivedFrom, new { @id = "ReceivedFrom", @class = "form-control", autocomplete = "off" })
+                    @Html.HiddenFor(model => model.SelectedReceivedFrom, new { Value = "0", id = "SelectedReceivedFrom" })
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel">Amount</label>
+                    <div class="checkboxdesign text-right" style="float:right">
+                        @Html.CheckBox("AmountIncludingTax", new { @name = "AmountIncludingTax" }) &nbsp
+                        <label class="headinglabel" style="font-weight:bold;color:#07a7e3!important">Including Tax</label>
+                    </div>
+                    @Html.TextBoxFor(model => model.amount, new { @class = "form-control textright txtNum" })
+                    @Html.ValidationMessageFor(model => model.amount)
+                </div>
+                <div class="col-md-1">
+                    <label class="headinglabel">Tax %</label>
+                    @Html.TextBoxFor(model => model.TaxPercent, new { @class = "form-control textright txtNum" })
+                    @Html.ValidationMessageFor(model => model.TaxPercent)
+                </div>
+                <div class="col-md-1">
+                    <label class="headinglabel">Tax Amount</label>
+                    @Html.TextBoxFor(model => model.TaxAmount, new { @class = "form-control textright txtNum", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.TaxAmount)
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel">Supplier</label>
+                    <input type="text" id="SupplierName" name="SupplierName" class="form-control" autocomplete="off" />
+                    @Html.HiddenFor(model => model.SupplierId, new { Value = "0", id = "SupplierID" })
+                </div>
+                <div class="col-md-2 hide">
+                    <label class="headinglabel">Remark</label>
+                    @Html.TextAreaFor(model => model.remark1, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.remark1)
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Consignment</label><br />
+                    <select id="Consignment" name="country" multiple="multiple">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="headinglabel">Exp. Allocation</label>
+                    <a href="javascript:void(0)" class="Allocate"><i class="fa fa-bars"></i></a>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data" onclick="ClearData()">-</button>&nbsp;&nbsp;
+                    <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
+                </div>
+                @*<div class="col-md-12 butdivs">
+                        <br />
+                        <button type="button" class="btn btn-primary btnwidth" id="btnAdd">Add</button>
+                        <input type="button" class="btn btn-primary" value="Update" id="btnUpdate" style="display:none;">
+                    </div>*@
+            </div>
             <br />
 
             <div class="row no-margin" style="padding-top:10px">
-                <table class="table table-bordered table-responsive" id="details" >
+                <table class="table table-bordered table-responsive" id="details">
                     <tr>
                         <td style="width:25%">AcHead</td>
                         <td style="width:2%">Tax.Incl</td>
                         <td style="width:10%">Amount</td>
                         <td style="width:5%">Tax%</td>
                         <td style="width:5%">Tax Amt.</td>
-                        <td style="width:10%" >Supplier </td>
+                        <td style="width:10%">Supplier </td>
                         <td style="width:15%">Remark/Ref.</td>
                         <td style="width:15%">Exp. Allocation</td>
                         <td style="width:1%">Delete</td>

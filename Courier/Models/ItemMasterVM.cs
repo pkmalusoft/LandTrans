@@ -19,7 +19,8 @@ namespace LTMSV2.Models
     }
     public class PackageVM 
     {
-        public string PackageID { get; set; }
+        public int PackageID { get; set; }
+        public string PackageType { get; set; }
         public string PackageName { get; set; }
     }
 

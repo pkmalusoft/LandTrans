@@ -1120,7 +1120,7 @@ namespace LTMSV2.NAL
 
     public class tblPackages
     {
-        public string PackageID { get; set; }
+        public int PackageID { get; set; }
         public string PackageType { get; set; }
         public string PackageDescription { get; set; }
 
@@ -1157,69 +1157,69 @@ namespace LTMSV2.NAL
             }
         }
 
-        public string ManageUpdatePackages(tblPackages o)
-        {
-            string Res = "Error";
-            try
-            {
-                Dictionary<string, string> input = new Dictionary<string, string>();
-                Dictionary<string, string> output = new Dictionary<string, string>();
+        //public string ManageUpdatePackages(tblPackages o)
+        //{
+        //    string Res = "Error";
+        //    try
+        //    {
+        //        Dictionary<string, string> input = new Dictionary<string, string>();
+        //        Dictionary<string, string> output = new Dictionary<string, string>();
 
-                input.Add("PackageID", o.PackageID);
-                input.Add("PackageType", o.PackageType ?? "");
-                input.Add("PackageDescription", o.PackageDescription ?? "");
-               /// output.Add("Result", "");
+        //        input.Add("PackageID", o.PackageID);
+        //        input.Add("PackageType", o.PackageType ?? "");
+        //        input.Add("PackageDescription", o.PackageDescription ?? "");
+        //       /// output.Add("Result", "");
 
-                Dictionary<string, string> res = ngFun.ExecuteSQL("[dbo].[UpdatePackages]", input, output, true);
-                int LastID = 0;
-                //bool isdone = int.TryParse(res["Result"], out LastID);
-                //if (isdone)
-                //{
-                //    Res = res["Result"];
-                //}
-                //else
-                //{
-                //    Res = res["Result"];
-                //}
-                return o.PackageID;
-            }
-            catch (Exception p)
-            {
-                return p.Message;
-            }
-        }
+        //        Dictionary<string, string> res = ngFun.ExecuteSQL("[dbo].[UpdatePackages]", input, output, true);
+        //        int LastID = 0;
+        //        //bool isdone = int.TryParse(res["Result"], out LastID);
+        //        //if (isdone)
+        //        //{
+        //        //    Res = res["Result"];
+        //        //}
+        //        //else
+        //        //{
+        //        //    Res = res["Result"];
+        //        //}
+        //        return o.PackageID;
+        //    }
+        //    catch (Exception p)
+        //    {
+        //        return p.Message;
+        //    }
+        //}
 
-        public string ManageDeletePackages(tblPackages o)
-        {
-            string Res = "Error";
-            try
-            {
-                Dictionary<string, string> input = new Dictionary<string, string>();
-                Dictionary<string, string> output = new Dictionary<string, string>();
+        //public string ManageDeletePackages(tblPackages o)
+        //{
+        //    string Res = "Error";
+        //    try
+        //    {
+        //        Dictionary<string, string> input = new Dictionary<string, string>();
+        //        Dictionary<string, string> output = new Dictionary<string, string>();
 
-                input.Add("@PackageIDs", o.PackageID);
-                //input.Add("PackageType", o.PackageType ?? "");
-                //input.Add("PackageDescription", o.PackageDescription ?? "");
-                //output.Add("Result", "");
+        //        input.Add("@PackageIDs", o.PackageID);
+        //        //input.Add("PackageType", o.PackageType ?? "");
+        //        //input.Add("PackageDescription", o.PackageDescription ?? "");
+        //        //output.Add("Result", "");
 
-                Dictionary<string, string> res = ngFun.ExecuteSQL("[dbo].[DeletePackages]", input, output, true);
-                //int LastID = 0;
-                //bool isdone = int.TryParse(res["Result"], out LastID);
-                //if (isdone)
-                //{
-                //    Res = res["Result"];
-                //}
-                //else
-                //{
-                //    Res = res["Result"];
-                //}
-                return o.PackageID;
-            }
-            catch (Exception p)
-            {
-                return p.Message;
-            }
-        }
+        //        Dictionary<string, string> res = ngFun.ExecuteSQL("[dbo].[DeletePackages]", input, output, true);
+        //        //int LastID = 0;
+        //        //bool isdone = int.TryParse(res["Result"], out LastID);
+        //        //if (isdone)
+        //        //{
+        //        //    Res = res["Result"];
+        //        //}
+        //        //else
+        //        //{
+        //        //    Res = res["Result"];
+        //        //}
+        //        return o.PackageID;
+        //    }
+        //    catch (Exception p)
+        //    {
+        //        return p.Message;
+        //    }
+        //}
 
         public List<tblPackages> GetPackages(tblPackages o)
         {
@@ -1237,7 +1237,7 @@ namespace LTMSV2.NAL
                     while (sdr.Read())
                     {
                         tblPackages j = new tblPackages();
-                        j.PackageID = sdr["PackageID"].ToString();
+                        j.PackageID = Convert.ToInt32(sdr["PackageID"].ToString());
                         j.PackageType = sdr["PackageType"].ToString();
                         j.PackageDescription = sdr["PackageName"].ToString();
                         Result.Add(j);

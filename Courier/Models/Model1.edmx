@@ -174,6 +174,15 @@
           <Property Name="Remarks" Type="int" />
           <Property Name="CheckSum" Type="bit" />
         </EntityType>
+        <EntityType Name="AcJournalConsignment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AcJournalID" Type="int" />
+          <Property Name="AcJournalDetailID" Type="int" />
+          <Property Name="InScanID" Type="int" />
+        </EntityType>
         <EntityType Name="AcJournalDetail">
           <Key>
             <PropertyRef Name="AcJournalDetailID" />
@@ -285,6 +294,7 @@
           <Property Name="AssetMasterID" Type="int" />
           <Property Name="AcCompanyID" Type="int" />
           <Property Name="InvRemarks" Type="varchar" MaxLength="500" />
+          <Property Name="AcJournalId" Type="int" />
         </EntityType>
         <EntityType Name="AcOPInvoiceDetails">
           <Key>
@@ -310,7 +320,7 @@
           <Property Name="OPDate" Type="datetime" />
           <Property Name="Remarks" Type="varchar" MaxLength="100" />
           <Property Name="StatusSDSC" Type="varchar" MaxLength="2" />
-          <Property Name="PartyID" Type="int" />
+          <Property Name="PartyID" Type="int" Nullable="false" />
           <Property Name="BranchID" Type="int" />
           <Property Name="StatusSC" Type="varchar" MaxLength="1" />
         </EntityType>
@@ -645,6 +655,8 @@
           <Property Name="CODReceiptFormat" Type="varchar" MaxLength="10" />
           <Property Name="VATAccountId" Type="int" />
           <Property Name="ConsignmentFormat" Type="varchar" MaxLength="20" />
+          <Property Name="ReceivedBy" Type="int" />
+          <Property Name="CollectedBy" Type="int" />
         </EntityType>
         <EntityType Name="BusinessType">
           <Key>
@@ -8609,6 +8621,7 @@
           <EntitySet Name="AcHead" EntityType="Self.AcHead" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AcHeadAssign" EntityType="Self.AcHeadAssign" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AcHeadControl" EntityType="Self.AcHeadControl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AcJournalConsignment" EntityType="Self.AcJournalConsignment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AcJournalDetail" EntityType="Self.AcJournalDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AcJournalMaster" EntityType="Self.AcJournalMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AcMemoAnalysisHeadAllocation" EntityType="Self.AcMemoAnalysisHeadAllocation" Schema="dbo" store:Type="Tables" />
@@ -9888,6 +9901,7 @@
           <NavigationProperty Name="AcFinancialYear" Relationship="Self.FK_AcOpeningMaster_AcFinancialYear" FromRole="AcOpeningMaster" ToRole="AcFinancialYear" />
           <NavigationProperty Name="AcHead" Relationship="Self.FK_AcOpeningMaster_AcHead" FromRole="AcOpeningMaster" ToRole="AcHead" />
           <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" FromRole="AcOpeningMaster" ToRole="BranchMaster" />
+          <Property Name="AcJournalId" Type="Int32" />
         </EntityType>
         <EntityType Name="AcOPInvoiceDetail">
           <Key>
@@ -9914,7 +9928,7 @@
           <Property Name="OPDate" Type="DateTime" Precision="3" />
           <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="StatusSDSC" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="PartyID" Type="Int32" />
+          <Property Name="PartyID" Type="Int32" Nullable="false" />
           <Property Name="BranchID" Type="Int32" />
           <Property Name="StatusSC" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AcFinancialYear" Relationship="Self.FK_AcOPInvoiceMaster_AcFinancialYear" FromRole="AcOPInvoiceMaster" ToRole="AcFinancialYear" />
@@ -18303,6 +18317,7 @@
             <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMasters" />
             <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetails" />
           </AssociationSet>
+          <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -22081,6 +22096,8 @@
           <NavigationProperty Name="RevenueUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateMaster_BranchMaster" FromRole="BranchMaster" ToRole="RevenueUpdateMaster" />
           <NavigationProperty Name="TruckDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_BranchMaster" FromRole="BranchMaster" ToRole="TruckDetail" />
           <NavigationProperty Name="CostUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_BranchMaster" FromRole="BranchMaster" ToRole="CostUpdateMaster" />
+          <Property Name="ReceivedBy" Type="Int32" />
+          <Property Name="CollectedBy" Type="Int32" />
         </EntityType>
         <Association Name="FK_AcGroup_BranchMaster">
           <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
@@ -23045,6 +23062,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AcJournalConsignment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="AcJournalDetailID" Type="Int32" />
+          <Property Name="InScanID" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23325,6 +23351,7 @@
           <EntitySetMapping Name="AcOpeningMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOpeningMaster">
               <MappingFragment StoreEntitySet="AcOpeningMaster">
+                <ScalarProperty Name="AcJournalId" ColumnName="AcJournalId" />
                 <ScalarProperty Name="AcOpeningID" ColumnName="AcOpeningID" />
                 <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
                 <ScalarProperty Name="OPDate" ColumnName="OPDate" />
@@ -31554,6 +31581,8 @@
           <EntitySetMapping Name="BranchMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.BranchMaster">
               <MappingFragment StoreEntitySet="BranchMaster">
+                <ScalarProperty Name="CollectedBy" ColumnName="CollectedBy" />
+                <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
                 <ScalarProperty Name="ConsignmentFormat" ColumnName="ConsignmentFormat" />
                 <ScalarProperty Name="VATAccountId" ColumnName="VATAccountId" />
                 <ScalarProperty Name="CODReceiptFormat" ColumnName="CODReceiptFormat" />
@@ -32102,6 +32131,16 @@
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="RevenueCostMasterID" ColumnName="RevenueCostMasterID" />
                 <ScalarProperty Name="MasterID" ColumnName="MasterID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AcJournalConsignments">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalConsignment">
+              <MappingFragment StoreEntitySet="AcJournalConsignment">
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

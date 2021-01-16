@@ -28,6 +28,8 @@ namespace LTMSV2.Models
         public int SupplierID { get; set; }
         public string SupplierName { get; set; }
 
+        public int[] SelectedValues { get; set; }
+        public string Consignments { get; set; }
         public List<AcExpenseAllocationVM> AcExpAllocationVM { get; set; }
     }
 }

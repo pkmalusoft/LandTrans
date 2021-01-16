@@ -274,6 +274,7 @@ namespace LTMSV2.Models
         public virtual DbSet<CostUpdateDetail> CostUpdateDetails { get; set; }
         public virtual DbSet<CostUpdateMaster> CostUpdateMasters { get; set; }
         public virtual DbSet<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
+        public virtual DbSet<AcJournalConsignment> AcJournalConsignments { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

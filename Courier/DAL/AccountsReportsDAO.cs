@@ -118,11 +118,13 @@ namespace LTMSV2.DAL
             string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
             SqlConnection sqlConn = new SqlConnection(strConnString);
             SqlCommand comd;
+            string paramdate= reportparam.ToDate.ToString("MM/dd/yyyy");
+            paramdate = paramdate.Replace('-', '/');
             comd = new SqlCommand();
             comd.Connection = sqlConn;
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "SP_AccTrailBalance";
-            comd.Parameters.AddWithValue("@AsOnDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@AsOnDate", paramdate);
             comd.Parameters.AddWithValue("@BranchId", branchid);
             comd.Parameters.AddWithValue("@YearId", yearid);
 

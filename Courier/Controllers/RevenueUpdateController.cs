@@ -149,12 +149,11 @@ namespace LTMSV2.Controllers
                         if (vm.DetailVM[i].RevenueCostMasterID == vm.DetailVM[j].RevenueCostMasterID && vm.DetailVM[j].IsDeleted != true)
                         {
                             duplicatecost = true;
-                            if (vm.ID > 0)
-                            {
+                            
                                 TempData["ErrorMsg"] = "Revenue Component should not be Duplicated!";
                                 Session["CreateRevenueUpdate"] = vm;
                                 ViewBag.Title = "Revenue Update - Modify";
-                            }
+                            
                             return View(vm);
                         }
                     }
@@ -315,13 +314,24 @@ namespace LTMSV2.Controllers
             if (vm != null)
             {
                 list = vm.DetailVM;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].Currency = db.CurrencyMasters.Find(list[i].CurrencyId).CurrencyName;
+                    if (list[i].AcHeadDebitId!=null)
+                    list[i].DebitAccountName = db.AcHeads.Find(list[i].AcHeadDebitId).AcHead1;
+                    if (list[i].AcHeadCreditId != null)
+                    { list[i].CreditAccountName = db.AcHeads.Find(list[i].AcHeadCreditId).AcHead1; }
+                    list[i].CustomerName = db.CustomerMasters.Find(list[i].CustomerId).CustomerName;
+                    if (list[i].RevenueCost!=null)
+                    list[i].RevenueCost = db.RevenueCostMasters.Find(list[i].RevenueCostMasterID).RevenueComponent;
+                }
             }
             else
             {
                 list = RevenueDAO.GetMandatoryRevenueUpdateDetail(id);
             }
-            
-            
+
+            Session["CreateRevenueUpdate"] = null;
             return Json(new {PaymentModeId=paymentModeid,InvoiceTo=InvoiceTo, ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename ,revenuedetail=list }, JsonRequestBehavior.AllowGet);
 
         }

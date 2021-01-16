@@ -79,5 +79,9 @@ namespace LTMSV2.Models
         public decimal VATPercent { get; set; }
         public int AcFinancialYearID { get; set; }
         public int VATAccountId { get; set; }
+
+        public int CollectedBy { get; set; }
+
+        public int ReceivedBy { get; set; }
   }
 }

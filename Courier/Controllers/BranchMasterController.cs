@@ -46,6 +46,7 @@ namespace LTMSV2.Controllers
             ViewBag.years = db.AcFinancialYears.ToList();
             ViewBag.designation = db.Designations.ToList();
             ViewBag.currency = db.CurrencyMasters.ToList();
+            ViewBag.Employee = db.EmployeeMasters.ToList();
             List<AcHeadSelectAll_Result> x = null;
             //x = db.AcHeadSelectAll(AcCompanyID).ToList();
             var x1 = (from c in db.AcHeads join g in db.AcGroups on c.AcGroupID equals g.AcGroupID  select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).OrderBy(c=>c.AcHead).ToList();
@@ -103,6 +104,8 @@ namespace LTMSV2.Controllers
                     a.InvoiceFormat = item.InvoiceFormat;
                     a.AcFinancialYearID = item.AcFinancialYearID;
                     a.VATAccountId = item.VATAccountId;
+                    a.CollectedBy = item.CollectedBy;
+                    a.ReceivedBy = item.ReceivedBy;
                 }
                 else
                 {
@@ -139,6 +142,8 @@ namespace LTMSV2.Controllers
                     a.VATRegistrationNo = item.VATRegistrationNo;
                     a.AcFinancialYearID = item.AcFinancialYearID;
                     a.VATAccountId = item.VATAccountId;
+                    a.CollectedBy = item.CollectedBy;
+                    a.ReceivedBy = item.ReceivedBy;
                 }
 
 
@@ -156,6 +161,7 @@ namespace LTMSV2.Controllers
 
         public ActionResult Edit(int id)
         {
+            ViewBag.Employee = db.EmployeeMasters.ToList();
             ViewBag.years = db.AcFinancialYears.ToList();
             var data = (from c in db.BranchMasters where c.BranchID == id select c).FirstOrDefault();
             BranchVM v = new BranchVM();
@@ -221,6 +227,20 @@ namespace LTMSV2.Controllers
                 }
 
                     v.VATRegistrationNo = data.VATRegistrationNo;
+
+                if (data.CollectedBy== null)
+                { v.CollectedBy = 0; }
+                else
+                {
+                    v.CollectedBy = Convert.ToInt32(data.CollectedBy);
+                }
+
+                if (data.ReceivedBy == null)
+                { v.ReceivedBy = 0; }
+                else
+                {
+                    v.ReceivedBy = Convert.ToInt32(data.ReceivedBy);
+                }
             }
             //ViewBag.CityID = new SelectList(db.CityMasters, "CityID", "City", locationmaster.CityID);
             return View(v);
@@ -277,9 +297,27 @@ namespace LTMSV2.Controllers
                 a.VATAccountId = b.VATAccountId;
             }
 
+            if (b.CollectedBy == 0)
+            {
+                a.CollectedBy = null;
+            }
+            else
+            {
+                a.CollectedBy = b.CollectedBy;
+            }
+
+            if (b.ReceivedBy == 0)
+            {
+                a.ReceivedBy = null;
+            }
+            else
+            {
+                a.ReceivedBy = b.ReceivedBy;
+            }
+
             //if (ModelState.IsValid)
             //{
-                db.Entry(a).State = EntityState.Modified;
+            db.Entry(a).State = EntityState.Modified;
                 db.SaveChanges();
                 TempData["SuccessMsg"] = "You have successfully Updated Branch.";
                 return RedirectToAction("Index");

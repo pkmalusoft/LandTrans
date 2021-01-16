@@ -434,6 +434,7 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__6DA2FB28" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" Width="1.5" PointX="11.375" PointY="37.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

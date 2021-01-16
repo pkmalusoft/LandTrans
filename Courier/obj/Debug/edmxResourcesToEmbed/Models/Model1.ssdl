@@ -169,6 +169,15 @@
     <Property Name="Remarks" Type="int" />
     <Property Name="CheckSum" Type="bit" />
   </EntityType>
+  <EntityType Name="AcJournalConsignment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AcJournalID" Type="int" />
+    <Property Name="AcJournalDetailID" Type="int" />
+    <Property Name="InScanID" Type="int" />
+  </EntityType>
   <EntityType Name="AcJournalDetail">
     <Key>
       <PropertyRef Name="AcJournalDetailID" />
@@ -280,6 +289,7 @@
     <Property Name="AssetMasterID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
     <Property Name="InvRemarks" Type="varchar" MaxLength="500" />
+    <Property Name="AcJournalId" Type="int" />
   </EntityType>
   <EntityType Name="AcOPInvoiceDetails">
     <Key>
@@ -305,7 +315,7 @@
     <Property Name="OPDate" Type="datetime" />
     <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="StatusSDSC" Type="varchar" MaxLength="2" />
-    <Property Name="PartyID" Type="int" />
+    <Property Name="PartyID" Type="int" Nullable="false" />
     <Property Name="BranchID" Type="int" />
     <Property Name="StatusSC" Type="varchar" MaxLength="1" />
   </EntityType>
@@ -640,6 +650,8 @@
     <Property Name="CODReceiptFormat" Type="varchar" MaxLength="10" />
     <Property Name="VATAccountId" Type="int" />
     <Property Name="ConsignmentFormat" Type="varchar" MaxLength="20" />
+    <Property Name="ReceivedBy" Type="int" />
+    <Property Name="CollectedBy" Type="int" />
   </EntityType>
   <EntityType Name="BusinessType">
     <Key>
@@ -8604,6 +8616,7 @@
     <EntitySet Name="AcHead" EntityType="Self.AcHead" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcHeadAssign" EntityType="Self.AcHeadAssign" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcHeadControl" EntityType="Self.AcHeadControl" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AcJournalConsignment" EntityType="Self.AcJournalConsignment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcJournalDetail" EntityType="Self.AcJournalDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcJournalMaster" EntityType="Self.AcJournalMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AcMemoAnalysisHeadAllocation" EntityType="Self.AcMemoAnalysisHeadAllocation" Schema="dbo" store:Type="Tables" />

@@ -249,9 +249,6 @@ namespace LTMSV2.Controllers
             StatusZone s = new StatusZone();
             s.Status = (from c in db.ZoneMasters where c.ZoneID == id select c.StatusZone).FirstOrDefault();
 
-         
-
-
             return Json(s, JsonRequestBehavior.AllowGet);
 
         }

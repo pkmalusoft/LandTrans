@@ -1,0 +1,143 @@
+﻿@model LTMSV2.Models.OpeningInvoiceSearch
+
+@{
+    Layout = null;
+    //var Customers = ViewBag.Customers as IEnumerable<LTMSV2.Models.CustomerMaster>;
+    //var Suppliers = ViewBag.Suppliers as IEnumerable<LTMSV2.Models.SupplierMaster>;
+    //var Agents = ViewBag.Agents as IEnumerable<LTMSV2.Models.ForwardingAgentMaster>;
+}
+<style>
+    .pageTabs {
+        padding-top: 35px!important;     
+    }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var url = '/Accounts/GetSupplierName';
+        
+        $("#PartyName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: url,
+                    datatype: "json",
+                    data: {
+                        term: request.term, SupplierTypeId: $('#InvoiceType').val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.SupplierName,
+                                value: val.SupplierName,
+                                ID: val.SupplierID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (e, i) {                
+                $("#PartyName").val(i.item.label);
+                $('#PartyId').val(i.item.ID);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#PartyName").val(i.item.label);
+                $('#PartyId').val(i.item.ID);
+            },
+        });
+        //$('input[type=radio][name=Type]').val($('#InvoiceType').val());
+        $('input:radio[name=Type][value=' + $('#InvoiceType').val() + ']').prop('checked', true);
+        $('input[type=radio][name=Type]').change(function () {
+            if (this.value == 'C') {
+                $('#PartyName').val('');
+                $('#PartyId').val('0');
+                $('#InvoiceType').val('C');
+            }
+            else if (this.value == 'F') {
+                $('#PartyName').val('');
+                $('#PartyId').val('0');
+                $('#InvoiceType').val('F');
+            }
+            else if (this.value == 'H') {
+                $('#PartyName').val('');
+                $('#PartyId').val('0');
+                $('#InvoiceType').val('H');
+            }
+            else if (this.value == 'S') {  
+                $('#PartyName').val('');
+                $('#PartyId').val('0');
+                $('#InvoiceType').val('S');
+            }
+        });
+               
+     
+
+    
+    });
+   
+    function setThreeNumberDecimal(obj) {
+        $(obj).val(parseFloat($(obj).val()).toFixed(3));
+    }
+</script>
+
+
+<section class="content-header">
+    <h1 class="headingfont">Invoice Opening Balance</h1>
+
+</section>
+<section class="">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["SuccessMsg"]", "success");
+                 });
+        </script>
+    }
+
+    @using (Html.BeginForm("AcOpeningInvoiceSearch", "Accounts", FormMethod.Post, new { @id = "invoiceOpeningsearch" }))
+    {
+        @Html.ValidationSummary(true)
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <fieldset>
+            <div class="row no-margin  form-group">
+                <div class="col-md-6 col-md-6 form-group bg-info pageTabs d-flex">
+                    <div class="field checkboxdesign verticalcheckbox">
+                        <input type="radio" id="Customer" name="Type" value="C" checked="checked">
+                        <label for="Customer" class="headinglabel ">Customers  </label>
+                    </div>
+                    <div class="field checkboxdesign verticalcheckbox">
+                        <input type="radio" id="FwdAgent" name="Type" value="F">
+                        <label for="FwdAgent" class="headinglabel ">Forwarding Agents  </label>
+                    </div>
+                    <div class="field checkboxdesign verticalcheckbox">
+                        <input type="radio" id="HireVehicle" name="Type" value="H">
+                        <label for="HireVehicle" class="headinglabel ">Hired Drivers  </label>
+                    </div>
+                    <div class="field checkboxdesign verticalcheckbox">
+                        <input type="radio" id="Supplier" name="Type" value="S">
+                        <label for="Supplier" class="headinglabel ">Sundry Supplier  </label>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <label class="headinglabel">Opening Date</label>
+                    @Html.TextBoxFor(model => model.OpeningDate, new { @class = "form-control text-right" })
+                    @*<input type="text" class="form-control" value=@LTMSV2.Models.CommanFunctions.GetShortDateFormat(Model.OpeningDate) />*@
+                </div>
+                <div class="col-md-4">
+                    <label class="headinglabel required">Party Name</label>
+                    @Html.TextBoxFor(model => model.PartyName, new { @class = "form-control" })
+                    @Html.HiddenFor(model => model.PartyId)
+                    @Html.HiddenFor(model => model.InvoiceType)
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-primary" type="submit" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                </div>
+            </div>            
+                
+            <hr />
+        </fieldset>
+    }
+</section>

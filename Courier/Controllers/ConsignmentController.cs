@@ -124,6 +124,13 @@ namespace LTMSV2.Controllers
                     v.InScanID = 0;
                     v.PaymentModeId = 1;
                     ViewBag.EditMode = "false";
+                var branch = db.BranchMasters.Find(branchid);
+                if (branch.CollectedBy != null)
+                    v.PickedBy = branch.CollectedBy;
+                if (branch.ReceivedBy!=null)
+                {
+                    v.ReceivedBy = branch.ReceivedBy;
+                }
                     var parceltype = db.ParcelTypes.Where(cc => cc.ParcelType1 == "Consolidated").FirstOrDefault();
                     if (parceltype != null)
                     {

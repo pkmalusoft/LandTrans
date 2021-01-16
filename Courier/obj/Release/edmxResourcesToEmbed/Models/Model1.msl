@@ -275,6 +275,7 @@
     <EntitySetMapping Name="AcOpeningMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOpeningMaster">
         <MappingFragment StoreEntitySet="AcOpeningMaster">
+          <ScalarProperty Name="AcJournalId" ColumnName="AcJournalId" />
           <ScalarProperty Name="AcOpeningID" ColumnName="AcOpeningID" />
           <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
           <ScalarProperty Name="OPDate" ColumnName="OPDate" />
@@ -8504,6 +8505,8 @@
     <EntitySetMapping Name="BranchMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.BranchMaster">
         <MappingFragment StoreEntitySet="BranchMaster">
+          <ScalarProperty Name="CollectedBy" ColumnName="CollectedBy" />
+          <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
           <ScalarProperty Name="ConsignmentFormat" ColumnName="ConsignmentFormat" />
           <ScalarProperty Name="VATAccountId" ColumnName="VATAccountId" />
           <ScalarProperty Name="CODReceiptFormat" ColumnName="CODReceiptFormat" />
@@ -9052,6 +9055,16 @@
           <ScalarProperty Name="Amount" ColumnName="Amount" />
           <ScalarProperty Name="RevenueCostMasterID" ColumnName="RevenueCostMasterID" />
           <ScalarProperty Name="MasterID" ColumnName="MasterID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AcJournalConsignments">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalConsignment">
+        <MappingFragment StoreEntitySet="AcJournalConsignment">
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
