@@ -3084,6 +3084,7 @@
     <Content Include="Reports\TaxRegister.rpt" />
     <Content Include="Reports\LabelPrinting.rpt" />
     <Content Include="Reports\DayBook.rpt" />
+    <Content Include="Reports\CustomerInvoicePrint.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3579,6 +3580,9 @@
     <Content Include="Views\Accounts\AcOpeningInvoiceSearch.cshtml" />
     <Content Include="Views\Accounts\AcOpeningInvoice - Copy %282%29.cshtml" />
     <Content Include="Views\Package\Create.cshtml" />
+    <Content Include="Views\CustomerInvoice\InvoicePrint - Copy.cshtml" />
+    <Content Include="Views\Accounts\CustomerLedger.cshtml" />
+    <Content Include="Views\Accounts\SupplierLedger.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3620,7 +3624,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52057</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:1057/</IISUrl>
+          <IISUrl>http://localhost:1059/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

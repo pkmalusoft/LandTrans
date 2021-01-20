@@ -5499,6 +5499,9 @@ table.text-center, table.text-center td, table.text-center th {
     color: white;
     font-weight: 300;
 }
+.popUpgrid{
+    margin-top: 30px;
+}
 
 
 /* iPads (portrait) ----------- */
@@ -5691,12 +5694,12 @@ table.text-center, table.text-center td, table.text-center th {
 	min-width:125px!important;
 }
 body .dataTables_wrapper .dataTables_paginate .paginate_button{
-    height:30px!important;
-    line-height:30px;
+    height:25px!important;
+    line-height:25px;
     border-radius:5px;
     background-color: transparent!important;
     border:1px solid #ccc!important;
-    font-size:19px;
+    font-size:17px;
     color:#adadad!important;
     padding:0 13px!important;
 }
@@ -5774,16 +5777,24 @@ body .tblbackground{
     padding-bottom: 15px;
     justify-content: space-around!important;
 }
-
-
+.col-md-2-5{
+    width:20%;
+    float: left;
+}   
+.col-md-3-5{
+     float: left;
+     width:32%;
+}
 .paginate_button{
     display: none!important;
 }
 .paginate_button.previous:before,.paginate_button.next:before{
     content: "<<";
-    font-size: 20px;
-    width: 200px;
-    height: 200px;
+    font-size: 14px;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    top:0;
     color: red;
     color: #ffffff;
     background: #4e4c4b;
@@ -5869,6 +5880,17 @@ input:focus,select:focus,textarea:focus,.form-control:focus{
 	text-transform:uppercase;
 	    letter-spacing: 0.2px;
 }
+.align-center{
+    align-items: center;
+}
+.modal-scrollable
+{
+    max-height:250px;
+    overflow-y:auto;
+}
+.nowrap{
+    white-space: nowrap;
+}
 .d-flex{
 	display:flex;
 	justify-content: flex-end;
@@ -5890,6 +5912,17 @@ h3{
 
 .sub_title_block,.break{
     margin-bottom: 10px;
+}
+.multiselect-item .multiselect-clear-filter{
+	min-width: 22px!important;
+	background-color: #35b8eb!important;
+}
+.multiselect-item .multiselect-clear-filter i{
+	color:#fff!important;
+}
+.multiselect-item  .multiselect-search{
+	border: 1px solid #ccc!important;
+	border-radius: 0!important;
 }
 
 hr{
@@ -6018,6 +6051,9 @@ p.indexbtnpadding{
 }
 .divider{
     padding-top:10px;
+}
+.border-right{
+    border-right: 1px solid #ccc;
 }
 .gridBox input{
     background:transparent;

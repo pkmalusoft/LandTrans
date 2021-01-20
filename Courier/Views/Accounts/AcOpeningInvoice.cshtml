@@ -60,10 +60,44 @@
             if (i == (itemcount - 1))
                 {
                 $('#Debit').val(parseFloat(sumdebit).toFixed(3));
+                $('#spantotaldebit').html(parseFloat(sumdebit).toFixed(2));
+                $('#spantotalcredit').html(parseFloat(sumcredit).toFixed(3));
                 $('#Credit').val(parseFloat(sumcredit).toFixed(3));
             }
         }
       
+    }
+
+    function checktotal() {
+        var itemcount = $('#dataTables-example > tbody > tr').length;
+        var rowindex = 1;
+        var i = 0;
+        var sumdebit = 0;
+        var sumcredit = 0;
+        for (i = 0; i < itemcount; i++) {
+            var IsDeleted = $('#hdndel_' + i).val();
+            if (IsDeleted != "true") {                
+                rowindex++;
+
+                var Amount = 0;
+                if (parseFloat($('#txtDebit_' + i).val()) > 0) {
+                    Amount = parseFloat($('#txtDebit_' + i).val());
+                    sumdebit = sumdebit + Amount;
+                }
+                else {
+                    AccNature = "Cr";
+                    Amount = parseFloat($('#txtCredit_' + i).val());
+                    sumcredit = sumcredit + Amount;
+                }
+            }
+            if (i == (itemcount - 1)) {
+                $('#Debit').val(parseFloat(sumdebit).toFixed(3));
+                $('#spantotaldebit').html(parseFloat(sumdebit).toFixed(3));
+                $('#spantotalcredit').html(parseFloat(sumcredit).toFixed(3));
+                $('#Credit').val(parseFloat(sumcredit).toFixed(3));
+            }
+        }
+
     }
     $(document).ready(function () {
             
@@ -72,7 +106,10 @@
         $('#LastTransdate').datetimepicker({ format: 'DD-MM-YYYY' });
 
         $('.date').datetimepicker({ format: 'DD-MM-YYYY' });
-        
+        var sumdebit = $('#Debit').val();
+        var sumcredit = $('#Credit').val();
+        $('#spantotaldebit').html(parseFloat(sumdebit).toFixed(3));
+        $('#spantotalcredit').html(parseFloat(sumcredit).toFixed(3));
         $('#details').on("click", ".DeleteNewRow", function () {
             debugger;
             //$(this).parent().parent().remove();
@@ -105,6 +142,7 @@
                     $('#txtDebit_' + id1).val(0);
                 }
             }
+            checktotal();
         });
 
         $('#btnadd').click(function () {
@@ -268,7 +306,7 @@
     </div>
 </div>*@
 
-<div class="row no-margin" style="padding-top:10px">
+<div class="row no-margin hidden" style="padding-top:10px">
     <div class="col-md-5">
         @Html.HiddenFor(model => model.AcOPInvoiceMasterID, new { @class = "form-control" })
         @Html.HiddenFor(model => model.AcFinancialYearID, new { @class = "form-control" })
@@ -285,17 +323,9 @@
         <label class="headinglabel required">Sum of Credit</label>
         @Html.TextBoxFor(model => model.Credit, new { @class = "form-control text-right ", @readonly = "readonly" })
     </div>
-    <div class="col-md-3 btn-right" style="padding-top:10px;padding-bottom: 25px;">
-        <div class="row no-margin btn-right" style="padding-top:10px">
-            <div class="col-md-12">
-                <input type="button" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
-                <input type="button" value="Cancel" class="btn btn-danger btnwidth" data-toggle="tooltip" title="Click here" id="btncancel" />
-
-            </div>
-        </div>
-    </div>
+    
 </div>
-<section class="content">
+<section class="">
     @if (TempData["SuccessMsg"] != null)
     {
         <script type="text/javascript">
@@ -312,9 +342,17 @@
         <fieldset>
 
             <div class="row no-margin  form-group">
-
-                <div class="col-md-2">
-                    <label class="headinglabel required">Invoice No.</label>
+                <div class="col-md-2 border-right">
+                    <div>
+                         <label class="headinglabel required" style="font-size:18px!Important;color:#35b8eb!important">Total Debit: <span id="spantotaldebit" >@Model.Debit </span> </label>
+                     </div>
+                    <div>
+                        <label class="headinglabel required" style="font-size:18px!Important;color:#ff841a!important"> Total Credit: <span id="spantotalcredit" >@Model.Credit</span> </label>
+                    </div>
+                </div>
+                <div class="col-md-10"  style="padding-left:30px">
+                <div class="col-md-3">
+                    <label class="headinglabel required">Invoice Number</label>
                     <input type="text" id="InvoiceNo" class="form-control" />
 
                 </div>
@@ -324,7 +362,7 @@
 
                 </div>
                 <div class="col-md-2">
-                    <label class="headinglabel required">Last Trans. Date</label>
+                    <label class="headinglabel required">Last Invoice Date</label>
                     <input type="text" id="LastTransdate" class="form-control" />
 
                 </div>
@@ -341,13 +379,13 @@
                     </select>
 
                 </div>
-                <div class="col-md-2" style="padding-top:10px">
+                <div class="col-md-1 text-right" style="padding-top:10px">
                     <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
 
                 </div>
 
             </div>
-
+        </div>
             <div class="row no-margin" style="padding-top:30px">
                 @Html.HiddenFor(mode => mode.AcOPInvoiceMasterID)
                 <div class="col-md-12">

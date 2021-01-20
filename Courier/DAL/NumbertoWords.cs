@@ -19,7 +19,7 @@ namespace LTMSV2.DAL
             try
             {
                 Int64 amount_int = (Int64)amount;
-                Int64 amount_dec = (Int64)Math.Round((amount - (double)(amount_int)) * 100);
+                Int64 amount_dec = (Int64)Math.Round((amount - (double)(amount_int)) * 1000);
                 if (amount_dec == 0)
                 {
                     return Convert(amount_int) + " Only.";

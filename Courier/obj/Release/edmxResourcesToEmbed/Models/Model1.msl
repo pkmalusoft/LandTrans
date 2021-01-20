@@ -272,56 +272,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="AcOpeningMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOpeningMaster">
-        <MappingFragment StoreEntitySet="AcOpeningMaster">
-          <ScalarProperty Name="AcJournalId" ColumnName="AcJournalId" />
-          <ScalarProperty Name="AcOpeningID" ColumnName="AcOpeningID" />
-          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-          <ScalarProperty Name="OPDate" ColumnName="OPDate" />
-          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="PartyID" ColumnName="PartyID" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-          <ScalarProperty Name="StatusImport" ColumnName="StatusImport" />
-          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-          <ScalarProperty Name="AssetMasterID" ColumnName="AssetMasterID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="InvRemarks" ColumnName="InvRemarks" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AcOPInvoiceDetails">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail">
-        <MappingFragment StoreEntitySet="AcOPInvoiceDetails">
-          <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
-          <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
-          <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
-          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-          <ScalarProperty Name="LastTransDate" ColumnName="LastTransDate" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
-          <ScalarProperty Name="AcMemoJournalID" ColumnName="AcMemoJournalID" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AcOPInvoiceMasters">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster">
-        <MappingFragment StoreEntitySet="AcOPInvoiceMaster">
-          <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
-          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-          <ScalarProperty Name="OPDate" ColumnName="OPDate" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="StatusSDSC" ColumnName="StatusSDSC" />
-          <ScalarProperty Name="PartyID" ColumnName="PartyID" />
-          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-          <ScalarProperty Name="StatusSC" ColumnName="StatusSC" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="AcTypes">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcType">
         <MappingFragment StoreEntitySet="AcType">
@@ -8642,6 +8592,8 @@
     <EntitySetMapping Name="RevenueUpdateMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster">
         <MappingFragment StoreEntitySet="RevenueUpdateMaster">
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
           <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
           <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
           <ScalarProperty Name="InScanID" ColumnName="InScanID" />
@@ -9066,6 +9018,56 @@
           <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
           <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AcOpeningMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOpeningMaster">
+        <MappingFragment StoreEntitySet="AcOpeningMaster">
+          <ScalarProperty Name="AcJournalId" ColumnName="AcJournalId" />
+          <ScalarProperty Name="InvRemarks" ColumnName="InvRemarks" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="AssetMasterID" ColumnName="AssetMasterID" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="StatusImport" ColumnName="StatusImport" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="PartyID" ColumnName="PartyID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="OPDate" ColumnName="OPDate" />
+          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+          <ScalarProperty Name="AcOpeningID" ColumnName="AcOpeningID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AcOPInvoiceDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail">
+        <MappingFragment StoreEntitySet="AcOPInvoiceDetails">
+          <ScalarProperty Name="AcMemoJournalID" ColumnName="AcMemoJournalID" />
+          <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="LastTransDate" ColumnName="LastTransDate" />
+          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+          <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+          <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
+          <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AcOPInvoiceMasters">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster">
+        <MappingFragment StoreEntitySet="AcOPInvoiceMaster">
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="StatusSC" ColumnName="StatusSC" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="PartyID" ColumnName="PartyID" />
+          <ScalarProperty Name="StatusSDSC" ColumnName="StatusSDSC" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="OPDate" ColumnName="OPDate" />
+          <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

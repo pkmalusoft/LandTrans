@@ -83,7 +83,7 @@ namespace LTMSV2.Models
         public static string GetShortDateFormat(object iInputDate)
     {
       if (iInputDate != null)
-        return string.Format("{0:dd MMM yyyy}", (object) Convert.ToDateTime(iInputDate));
+        return string.Format("{0:dd-MM-yyyy}", (object) Convert.ToDateTime(iInputDate));
       return "";
     }
         public static string GetShortDateFormat1(object iInputDate)
@@ -203,6 +203,11 @@ namespace LTMSV2.Models
             
         }
     }
+    public class StatusModel
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+        public string ValidDate { get; set; }
+    }
 
-   
 }

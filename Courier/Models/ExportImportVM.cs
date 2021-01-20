@@ -190,5 +190,16 @@ namespace LTMSV2.Models
 
         public string ReportFileName { get; set; }
     }
+    public class CustomerLedgerReportParam
+    {
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public string Output { get; set; } //printer ,pdf,word,excel
+        public string ReportType { get; set; } //sumary details
+        public string ReportFileName { get; set; }
+        public string Filters { get; set; }
 
     }
+}

@@ -92,6 +92,13 @@ namespace LTMSV2.Controllers
                 vm.ID = 0;
                 vm.DetailVM = new List<RevenueUpdateDetailVM>();
                 vm.EntryDate = DateTime.Now;
+                var acc = db.AcHeads.Where(cc => cc.AcHead1 == "Un-invoiced Consignment Note").FirstOrDefault();
+                if (acc!=null)
+                {
+                    vm.DebitAccountName = acc.AcHead1;
+                    vm.DebitAccountId = acc.AcHeadID;
+
+                }
                 vm.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                 var emp = db.EmployeeMasters.Where(cc => cc.UserID == userId).FirstOrDefault();
                 if (emp != null)
@@ -111,6 +118,13 @@ namespace LTMSV2.Controllers
                 vm.BranchID = v.BranchID;
                 vm.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                 vm.AcFinancialYearID = v.AcFinancialYearID;
+                var acc = db.AcHeads.Where(cc => cc.AcHead1 == "Un-invoiced Consignment Note").FirstOrDefault();
+                if (acc != null)
+                {
+                    vm.DebitAccountName = acc.AcHead1;
+                    vm.DebitAccountId = acc.AcHeadID;
+
+                }
                 vm.ConsignmentNo = db.InScanMasters.Find(v.InScanID).ConsignmentNo;
                 ViewBag.EditMode = "true";
             }
@@ -250,6 +264,8 @@ namespace LTMSV2.Controllers
                 db.Entry(inscan).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
+            PickupRequestDAO _dao = new PickupRequestDAO();
+            _dao.GenerateRevenueUpdatePosting(vm.ID);
             Session["CreateRevenueUpdate"] =null;
             TempData["SuccessMsg"] = "Revenue of Consignment Updated Successfully!";
             return RedirectToAction("Index");

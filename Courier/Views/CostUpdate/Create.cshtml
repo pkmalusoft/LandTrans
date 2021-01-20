@@ -485,22 +485,11 @@
     @using (Html.BeginForm())
     {
         @Html.ValidationSummary(true)
-        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+    <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
         <fieldset>
-            <div class="row">
-                <div class="col-md-12 btn-right" style="padding-top:10px;padding-bottom: 25px;">
-                    <div class="row no-margin btn-right" style="padding-top:10px">
-                        <div class="col-md-12">
-                            <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
-
-                            <a href='@Url.Action("Index", "CostUpdate")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
             <div class="row no-margin">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     @Html.HiddenFor(model => model.ID, new { })
                     @Html.HiddenFor(model => model.ConsignorId, new { })
                     @Html.HiddenFor(model => model.ConsignorName, new { })
@@ -509,22 +498,28 @@
                     @Html.HiddenFor(model => model.PickupCashHeadId, new { })
 
                     @*@Html.HiddenFor(model => model.InScanID, new { })*@
-                    <label class="headinglabel required">Entry Date</label>
+                    <label class="headinglabel required">Transaction Date</label>
                     @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.EntryDate)
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 hidden">
                     <label class="headinglabel required">Entered By</label>
                     @Html.DropDownListFor(model => model.EmployeeID, new SelectList(@ViewBag.employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                 </div>
                 <div class="col-md-3">
-                    <label class="headinglabel required">Truck Detail No.</label>
+                    <label class="headinglabel required">Truck Details Number</label>
                     @Html.DropDownListFor(model => model.TruckDetailID, new SelectList(@ViewBag.Trips, "TruckDetailID", "ReceiptNo"), "Select", new { @class = "form-control" })
                     @*@Html.TextBoxFor(model => model.ConsignmentNo, new { @class = "form-control" })*@
                 </div>
                 <div class="col-md-1">
                     <button class="btn btn-primary" type="button" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                 </div>
+                 <div class="col-md-5 btn-right">
+                            <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+
+                            <a href='@Url.Action("Index", "CostUpdate")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+
+                        </div>
             </div>
 
             <div class="col-md-12 sub_title_block">
@@ -537,14 +532,30 @@
                     </div>
                 </div>
                 <div class="row no-margin">                   
-                    <div class="col-md-1">
+                    <div class="col-md-3">
                         <label class="headinglabel required">Currency</label>
                         @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyName", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
                         @Html.HiddenFor(model => model.ExchangeRate)
                     </div>
+                     <div class="col-md-3">
+                        <label class="headinglabel required">Payable Account</label>
+                        <input type="text" class="form-control"/>
+                    </div>
+                      <div class="col-md-3">
+                        <label class="headinglabel required">Cost Account</label>
+                        <input type="text" class="form-control"/>
+                    </div>
+                </div>
 
-                    <div class="col-md-2">
-                        <label class="headinglabel label1">Cost</label>
+                    <div class="row">
+                    
+                    <div class="col-md-4">
+                        <label class="headinglabel">Supplier</label>
+                        <input type="text" id="txtSupplier" class="form-control" autocomplete="off" />
+                        <input type="hidden" id="txtSupplierId" class="form-control" autocomplete="off" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="headinglabel label1">Cost Head</label>
                         <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
                         <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
                     </div>
@@ -552,17 +563,17 @@
                         <label class="headinglabel">Amount</label>
                         <input type="text" id="txtAmount" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" class="form-control text-right" autocomplete="off" />
                     </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel">Supplier</label>
-                        <input type="text" id="txtSupplier" class="form-control" autocomplete="off" />
-                        <input type="hidden" id="txtSupplierId" class="form-control" autocomplete="off" />
+                     <div class="col-md-3">
+                        <label class="headinglabel label1">Consignment Note</label>
+                        <input type="text" class="form-control"  />
                     </div>
-                    <div class="col-md-2">
+
+                    <div class="col-md-2 hidden">
                         <label class="headinglabel">Debit Account</label>
                         <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
                         <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 hidden">
                         <label class="headinglabel">Credit Account</label>
                         <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
                         <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />

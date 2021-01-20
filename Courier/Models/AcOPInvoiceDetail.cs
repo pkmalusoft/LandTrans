@@ -22,7 +22,6 @@ namespace LTMSV2.Models
         public Nullable<decimal> Amount { get; set; }
         public Nullable<bool> StatusClose { get; set; }
         public Nullable<int> AcMemoJournalID { get; set; }
-        public Nullable<int> AcJournalID { get; set; }
     
         public virtual AcOPInvoiceMaster AcOPInvoiceMaster { get; set; }
     }

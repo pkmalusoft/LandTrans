@@ -159,6 +159,7 @@ namespace LTMSV2.Controllers
         {
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
             DatePicker datePicker = SessionDataModel.GetTableVariable();
             ViewBag.Token = datePicker;
             ViewBag.Movement = db.CourierMovements.ToList();
@@ -187,7 +188,7 @@ namespace LTMSV2.Controllers
                 { 
                 if (datePicker.CustomerId != null)
                 _custinvoice.CustomerID = Convert.ToInt32(datePicker.CustomerId);
-
+                _details = RevenueDAO.GenerateInvoice(datePicker.FromDate, datePicker.ToDate, Convert.ToInt32(datePicker.CustomerId), yearid,0);
 
                 //if (datePicker.CustomerId != null)
                 //{
@@ -225,8 +226,9 @@ namespace LTMSV2.Controllers
                 //                    AWBChecked = true
                 //                }).ToList().Where(tt => tt.MovementId != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId.Value)).ToList();
                 //}
-                //int _index = 0;
-                //_custinvoice.InvoiceTotal = 0;
+                
+                int _index = 0;
+                _custinvoice.InvoiceTotal = 0;
                 //_custinvoice.ChargeableWT = 0;
                 //_custinvoice.CustomerInvoiceTax = 0;
                 //_custinvoice.OtherCharge = 0;
@@ -235,14 +237,12 @@ namespace LTMSV2.Controllers
                 //_custinvoice.FuelPer = 0;
                 //_custinvoice.FuelAmt = 0;
 
-                
-                //foreach (var item in _details)
-                //{
-                //    _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
-                //    _custinvoice.TotalCharges = _custinvoice.TotalCharges + _details[_index].TotalCharges;
-
-                //    _index++;
-                //}
+                foreach (var item in _details)
+                {
+                    _details[_index].AWBChecked = true;
+                    _custinvoice.TotalCharges = _custinvoice.TotalCharges + _details[_index].TotalCharges;
+                    _index++;
+                }
 
                 _custinvoice.InvoiceTotal = _custinvoice.TotalCharges;
                 //_custinvoice.InvoiceTotal = Convert.ToDecimal(customerinvoice.TotalCharges) + Convert.ToDecimal(customerinvoice.ChargeableWT) + customerinvoice.AdminAmt + customerinvoice.FuelAmt + customerinvoice.OtherCharge;
@@ -325,6 +325,10 @@ namespace LTMSV2.Controllers
                             db.Entry(_inscan).State = EntityState.Modified;
                             db.SaveChanges();
 
+                            RevenueUpdateMaster _revenueupdate = db.RevenueUpdateMasters.Where(cc => cc.InScanID == e_details.InScanID).FirstOrDefault();
+                            _revenueupdate.InvoiceId = _custinvoice.CustomerInvoiceID;
+                            db.Entry(_revenueupdate).State = EntityState.Modified;
+                            db.SaveChanges();
 
                         }
 
@@ -363,7 +367,9 @@ namespace LTMSV2.Controllers
             //_custinvoice.ChargeableWT = _invoice.ChargeableWT;
             _custinvoice.InvoiceTotal= _invoice.InvoiceTotal;
                        
-            //List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
+            List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
+            _details = RevenueDAO.GenerateInvoice(DateTime.Now, DateTime.Now, _invoice.CustomerID,0,_invoice.CustomerInvoiceID);
+
             //_details = (from c in db.CustomerInvoiceDetails
             //            join ins in db.InScanMasters on  c.InscanID equals ins.InScanID
             //            where c.CustomerInvoiceID == id
@@ -372,17 +378,18 @@ namespace LTMSV2.Controllers
             //                StatusPaymentMode = c.StatusPaymentMode, InscanID = c.InscanID ,AWBChecked=true }).ToList();
 
             int _index = 0;
-         
-            //foreach (var item in _details)
-            //{
-            //    _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
-            //    _custinvoice.TotalCharges += _details[_index].TotalCharges;
-            //    _index++;
-            //}
-            
-            //_custinvoice.CustomerInvoiceDetailsVM = _details;
 
-//            Session["InvoiceListing"] = _details;
+            foreach (var item in _details)
+            {
+                _details[_index].AWBChecked = true;
+                //_details[_index].TotalCharges = Convert.ToDecimal(_details[_index].CourierCharge) + Convert.ToDecimal(_details[_index].CustomCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+                _custinvoice.TotalCharges += _details[_index].TotalCharges;
+                _index++;
+            }
+
+            _custinvoice.CustomerInvoiceDetailsVM = _details;
+
+             Session["InvoiceListing"] = _details;
             return View(_custinvoice);
 
         }
@@ -524,8 +531,7 @@ namespace LTMSV2.Controllers
             //}
 
             customerInvoice.CustomerInvoiceDetailsVM = _details;
-
-            Session["InvoiceListing"] = _details;
+            //Session["InvoiceListing"] = _details;
 
             return PartialView("InvoiceList", customerInvoice);
 
@@ -602,13 +608,7 @@ namespace LTMSV2.Controllers
             _custinvoice.CustomerInvoiceNo = _invoice.CustomerInvoiceNo;
             _custinvoice.CustomerID = _invoice.CustomerID;
             _custinvoice.CustomerName = db.CustomerMasters.Find(_invoice.CustomerID).CustomerName;
-            //_custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
-            //_custinvoice.FuelPer = _invoice.FuelPer;
-            //_custinvoice.FuelAmt = _invoice.FuelAmt;
-            //_custinvoice.AdminPer = _invoice.AdminPer;
-            //_custinvoice.AdminAmt = _invoice.AdminAmt;
-            //_custinvoice.OtherCharge = _invoice.OtherCharge;
-            //_custinvoice.ChargeableWT = _invoice.ChargeableWT;
+         
             _custinvoice.InvoiceTotal = _invoice.InvoiceTotal;
             
             string monetaryunit = Session["MonetaryUnit"].ToString();
@@ -617,29 +617,14 @@ namespace LTMSV2.Controllers
             var comp = db.AcCompanies.Find(companyid);
             _custinvoice.CurrencyName = db.CurrencyMasters.Find(comp.CurrencyID).Symbol;
             List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
-            //_details = (from c in db.CustomerInvoiceDetails
-            //            join ins in db.InScanMasters on c.InscanID equals ins.InScanID
-            //            where c.CustomerInvoiceID == id
-            //            select new CustomerInvoiceDetailVM
-            //            {
-            //                CustomerInvoiceDetailID = c.CustomerInvoiceDetailID,
-            //                CustomerInvoiceID = c.CustomerInvoiceID,
-            //                AWBNo = c.AWBNo,
-            //                AWBDateTime = ins.TransactionDate,
-            //                CustomCharge = c.CustomCharge,
-            //                CourierCharge = c.CourierCharge,
-            //                OtherCharge = c.OtherCharge,
-            //                ConsigneeCountryName = ins.ConsigneeCountryName,
-            //                ConsigneeName = ins.Consignee,
-            //                //StatusPaymentMode = c.StatusPaymentMode,
-            //                InscanID = c.InscanID,
-            //                AWBChecked = true
-            //            }).ToList();
+            _details = RevenueDAO.GenerateInvoice(DateTime.Now, DateTime.Now, _invoice.CustomerID, 0, _invoice.CustomerInvoiceID);
 
             int _index = 0;
+
             foreach (var item in _details)
             {
-                _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].FreightCharge) + Convert.ToDecimal(_details[_index].CustomsCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+                _details[_index].AWBChecked = true;
+
                 _custinvoice.TotalCharges += _details[_index].TotalCharges;
                 _index++;
             }
@@ -650,8 +635,15 @@ namespace LTMSV2.Controllers
             return View(_custinvoice);
 
         }
-
         public ActionResult InvoicePrint(int id)
+        {
+            ViewBag.ReportName = "Invoice Printing";
+            LabelPrintingParam picker = SessionDataModel.GetLabelPrintParam();
+            string monetaryunit = Session["MonetaryUnit"].ToString();
+            AccountsReportsDAO.CustomerInvoiceReport(id, monetaryunit);
+            return View();
+        }
+        public ActionResult InvoicePrintold(int id)
         {
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
@@ -670,14 +662,8 @@ namespace LTMSV2.Controllers
             _custinvoice.CustomerCountryName = _cust.CountryName;
             _custinvoice.CustomerCityName = _cust.CityName;
             _custinvoice.CustomerPhoneNo = _cust.Phone;
-
-            //_custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
-            //_custinvoice.FuelPer = _invoice.FuelPer;
-            //_custinvoice.FuelAmt = _invoice.FuelAmt;
-            //_custinvoice.AdminPer = _invoice.AdminPer;
-            //_custinvoice.AdminAmt = _invoice.AdminAmt;
-            //_custinvoice.OtherCharge = _invoice.OtherCharge;
-            //_custinvoice.ChargeableWT = _invoice.ChargeableWT;
+            _custinvoice.CustomerCode = _cust.CustomerCode;
+            _custinvoice.CustomerTRNNo = _cust.VATTRN;
             _custinvoice.InvoiceTotal = _invoice.InvoiceTotal;
             //_custinvoice.invoiceFooter = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "Invoicefooter" select c.Text1).FirstOrDefault();
             _custinvoice.generalSetup = (from c in db.GeneralSetups join d in db.GeneralSetupTypes on c.SetupID equals d.ID where d.TypeName == "InvoiceFooter" && c.BranchId==branchid select c).FirstOrDefault();
@@ -696,43 +682,19 @@ namespace LTMSV2.Controllers
             _custinvoice.InvoiceTotalInWords = NumberToWords.ConvertAmount(Convert.ToDouble(_custinvoice.InvoiceTotal), monetaryunit);
 
             List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
-            //_details = (from c in db.CustomerInvoiceDetails
-            //            join ins in db.InScanMasters on c.InscanID equals ins.InScanID
-            //            where c.CustomerInvoiceID == id
-            //            select new CustomerInvoiceDetailVM
-            //            {
-            //                CustomerInvoiceDetailID = c.CustomerInvoiceDetailID,
-            //                CustomerInvoiceID = c.CustomerInvoiceID,
-            //                Origin =ins.ConsignorCountryName,
-            //                ConsignmentNo = c.AWBNo,
-            //                AWBDateTime = ins.TransactionDate,
-            //                Weight =ins.Weight,
-            //                Pieces =ins.Pieces,                            
-            //                CustomsCharge = c.CustomCharge,
-            //                FreightCharge = c.CourierCharge,
-            //                OtherCharge = c.OtherCharge,
-            //                ConsigneeCountryName = ins.ConsigneeCountryName,
-            //                ConsigneeName = ins.Consignee,
-            //                //StatusPaymentMode = c.StatusPaymentMode,
-            //                MovementId=ins.MovementID,
-            //                ParcelTypeId=ins.ParcelTypeId,
-            //                InscanID = c.InscanID,
-            //                AWBChecked = true
-            //            }).ToList();
-
+            _details = RevenueDAO.GenerateInvoice(DateTime.Now, DateTime.Now, _invoice.CustomerID, 0, _invoice.CustomerInvoiceID);
+            
             int _index = 0;
+
             foreach (var item in _details)
             {
-                if (_index == 0)
-                {
-                    _custinvoice.CourierMovement = db.CourierMovements.Find(item.MovementId).MovementType;
-                    _custinvoice.ParcelType = db.ParcelTypes.Find(item.ParcelTypeId).ParcelType1;
-                }
-
-                _details[_index].TotalCharges = Convert.ToDecimal(_details[_index].FreightCharge) + Convert.ToDecimal(_details[_index].CustomsCharge) + Convert.ToDecimal(_details[_index].OtherCharge);
+                _details[_index].AWBChecked = true;
+                
                 _custinvoice.TotalCharges += _details[_index].TotalCharges;
                 _index++;
             }
+
+            _custinvoice.CustomerInvoiceDetailsVM = _details;
 
             _custinvoice.CustomerInvoiceDetailsVM = _details;
 

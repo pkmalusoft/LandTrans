@@ -69,7 +69,15 @@ namespace LTMSV2.Models
             return (LabelPrintingParam)System.Web.HttpContext.Current.Session["LabelPrintingParam"];
             
         }
+        public static CustomerLedgerReportParam GetCustomerLedgerReportParam()
+        {
+            return (CustomerLedgerReportParam)System.Web.HttpContext.Current.Session["CustomerLedgerReportParam"];
+        }
 
+        public static void SetCustomerLedgerParam(CustomerLedgerReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["CustomerLedgerReportParam"] = reportparam;
+        }
         public static OpeningInvoiceSearch GetOpeningInvoiceSearch()
         {
             return (OpeningInvoiceSearch)System.Web.HttpContext.Current.Session["OpeningInvoiceSearch"];

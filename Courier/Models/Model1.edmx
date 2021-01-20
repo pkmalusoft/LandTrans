@@ -308,7 +308,6 @@
           <Property Name="Amount" Type="money" />
           <Property Name="StatusClose" Type="bit" />
           <Property Name="AcMemoJournalID" Type="int" />
-          <Property Name="AcJournalID" Type="int" />
         </EntityType>
         <EntityType Name="AcOPInvoiceMaster">
           <Key>
@@ -320,9 +319,10 @@
           <Property Name="OPDate" Type="datetime" />
           <Property Name="Remarks" Type="varchar" MaxLength="100" />
           <Property Name="StatusSDSC" Type="varchar" MaxLength="2" />
-          <Property Name="PartyID" Type="int" Nullable="false" />
+          <Property Name="PartyID" Type="int" />
           <Property Name="BranchID" Type="int" />
           <Property Name="StatusSC" Type="varchar" MaxLength="1" />
+          <Property Name="AcJournalID" Type="int" />
         </EntityType>
         <EntityType Name="AcType">
           <Key>
@@ -3027,6 +3027,8 @@
           <Property Name="InScanID" Type="int" Nullable="false" />
           <Property Name="EmployeeID" Type="int" />
           <Property Name="AcFinancialYearID" Type="int" />
+          <Property Name="InvoiceId" Type="int" />
+          <Property Name="AcJournalID" Type="int" />
         </EntityType>
         <EntityType Name="RoleMaster">
           <Key>
@@ -9689,11 +9691,11 @@
           <Property Name="UserID" Type="Int32" />
           <Property Name="BranchID" Type="Int32" />
           <Property Name="CurrentFinancialYear" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AcOpeningMasters" Relationship="Self.FK_AcOpeningMaster_AcFinancialYear" FromRole="AcFinancialYear" ToRole="AcOpeningMaster" />
-          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="Self.FK_AcOPInvoiceMaster_AcFinancialYear" FromRole="AcFinancialYear" ToRole="AcOPInvoiceMaster" />
           <NavigationProperty Name="PurchaseInvoices" Relationship="Self.FK_PurchaseInvoice_AcFinancialYear" FromRole="AcFinancialYear" ToRole="PurchaseInvoice" />
           <NavigationProperty Name="SalesInvoices" Relationship="Self.FK_SalesInvoice_AcFinancialYear" FromRole="AcFinancialYear" ToRole="SalesInvoice" />
           <NavigationProperty Name="tblSupplierAdjustments" Relationship="Self.FK_tblSupplierAdjustment_AcFinancialYear" FromRole="AcFinancialYear" ToRole="tblSupplierAdjustment" />
+          <NavigationProperty Name="AcOpeningMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcFinancialYear" FromRole="AcFinancialYear" ToRole="AcOpeningMaster" />
+          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcFinancialYear" FromRole="AcFinancialYear" ToRole="AcOPInvoiceMaster" />
         </EntityType>
         <EntityType Name="AcGroup">
           <Key>
@@ -9736,11 +9738,11 @@
           <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="TaxApplicable" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AcGroup" Relationship="Self.FK_AcHead_AcGroup" FromRole="AcHead" ToRole="AcGroup" />
-          <NavigationProperty Name="AcOpeningMasters" Relationship="Self.FK_AcOpeningMaster_AcHead" FromRole="AcHead" ToRole="AcOpeningMaster" />
-          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="Self.FK_AcOPInvoiceMaster_AcHead" FromRole="AcHead" ToRole="AcOPInvoiceMaster" />
           <NavigationProperty Name="Categories" Relationship="Self.FK_Category_AcHead" FromRole="AcHead" ToRole="Category" />
           <NavigationProperty Name="Expenses" Relationship="Self.FK_Expense_AcHead" FromRole="AcHead" ToRole="Expense" />
           <NavigationProperty Name="ExpenseDetails" Relationship="Self.FK_ExpenseDetails_AcHead" FromRole="AcHead" ToRole="ExpenseDetails" />
+          <NavigationProperty Name="AcOpeningMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcHead" FromRole="AcHead" ToRole="AcOpeningMaster" />
+          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcHead" FromRole="AcHead" ToRole="AcOPInvoiceMaster" />
         </EntityType>
         <EntityType Name="AcHeadAssign">
           <Key>
@@ -9880,61 +9882,6 @@
           <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="UserID" Type="Int32" />
           <Property Name="AcCompanyID" Type="Int32" />
-        </EntityType>
-        <EntityType Name="AcOpeningMaster">
-          <Key>
-            <PropertyRef Name="AcOpeningID" />
-          </Key>
-          <Property Name="AcOpeningID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AcFinancialYearID" Type="Int32" />
-          <Property Name="OPDate" Type="DateTime" Precision="3" />
-          <Property Name="AcHeadID" Type="Int32" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="UserID" Type="Int32" />
-          <Property Name="PartyID" Type="Int32" />
-          <Property Name="BranchID" Type="Int32" />
-          <Property Name="StatusImport" Type="Boolean" />
-          <Property Name="SupplierID" Type="Int32" />
-          <Property Name="AssetMasterID" Type="Int32" />
-          <Property Name="AcCompanyID" Type="Int32" />
-          <Property Name="InvRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="AcFinancialYear" Relationship="Self.FK_AcOpeningMaster_AcFinancialYear" FromRole="AcOpeningMaster" ToRole="AcFinancialYear" />
-          <NavigationProperty Name="AcHead" Relationship="Self.FK_AcOpeningMaster_AcHead" FromRole="AcOpeningMaster" ToRole="AcHead" />
-          <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" FromRole="AcOpeningMaster" ToRole="BranchMaster" />
-          <Property Name="AcJournalId" Type="Int32" />
-        </EntityType>
-        <EntityType Name="AcOPInvoiceDetail">
-          <Key>
-            <PropertyRef Name="AcOPInvoiceDetailID" />
-          </Key>
-          <Property Name="AcOPInvoiceDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AcOPInvoiceMasterID" Type="Int32" />
-          <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
-          <Property Name="LastTransDate" Type="DateTime" Precision="3" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="StatusClose" Type="Boolean" />
-          <Property Name="AcMemoJournalID" Type="Int32" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <NavigationProperty Name="AcOPInvoiceMaster" Relationship="Self.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceDetails" ToRole="AcOPInvoiceMaster" />
-        </EntityType>
-        <EntityType Name="AcOPInvoiceMaster">
-          <Key>
-            <PropertyRef Name="AcOPInvoiceMasterID" />
-          </Key>
-          <Property Name="AcOPInvoiceMasterID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AcHeadID" Type="Int32" />
-          <Property Name="AcFinancialYearID" Type="Int32" />
-          <Property Name="OPDate" Type="DateTime" Precision="3" />
-          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="StatusSDSC" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="PartyID" Type="Int32" Nullable="false" />
-          <Property Name="BranchID" Type="Int32" />
-          <Property Name="StatusSC" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="AcFinancialYear" Relationship="Self.FK_AcOPInvoiceMaster_AcFinancialYear" FromRole="AcOPInvoiceMaster" ToRole="AcFinancialYear" />
-          <NavigationProperty Name="AcHead" Relationship="Self.FK_AcOPInvoiceMaster_AcHead" FromRole="AcOPInvoiceMaster" ToRole="AcHead" />
-          <NavigationProperty Name="AcOPInvoiceDetails" Relationship="Self.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceMaster" ToRole="AcOPInvoiceDetails" />
-          <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster" FromRole="AcOPInvoiceMaster" ToRole="BranchMaster" />
         </EntityType>
         <EntityType Name="AcType">
           <Key>
@@ -13193,30 +13140,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AcOpeningMaster_AcFinancialYear">
-          <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
-          <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcFinancialYear">
-              <PropertyRef Name="AcFinancialYearID" />
-            </Principal>
-            <Dependent Role="AcOpeningMaster">
-              <PropertyRef Name="AcFinancialYearID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOPInvoiceMaster_AcFinancialYear">
-          <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
-          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcFinancialYear">
-              <PropertyRef Name="AcFinancialYearID" />
-            </Principal>
-            <Dependent Role="AcOPInvoiceMaster">
-              <PropertyRef Name="AcFinancialYearID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PurchaseInvoice_AcFinancialYear">
           <End Role="AcFinancialYear" Type="Self.AcFinancialYear" Multiplicity="0..1" />
           <End Role="PurchaseInvoice" Type="Self.PurchaseInvoice" Multiplicity="*" />
@@ -13262,30 +13185,6 @@
             </Principal>
             <Dependent Role="AcHead">
               <PropertyRef Name="AcGroupID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOpeningMaster_AcHead">
-          <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
-          <End Role="AcOpeningMaster" Type="Self.AcOpeningMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcHead">
-              <PropertyRef Name="AcHeadID" />
-            </Principal>
-            <Dependent Role="AcOpeningMaster">
-              <PropertyRef Name="AcHeadID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOPInvoiceMaster_AcHead">
-          <End Role="AcHead" Type="Self.AcHead" Multiplicity="0..1" />
-          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcHead">
-              <PropertyRef Name="AcHeadID" />
-            </Principal>
-            <Dependent Role="AcOPInvoiceMaster">
-              <PropertyRef Name="AcHeadID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -13386,18 +13285,6 @@
             </Principal>
             <Dependent Role="tblSupplierAdjustment">
               <PropertyRef Name="AcJournalID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
-          <End Role="AcOPInvoiceMaster" Type="Self.AcOPInvoiceMaster" Multiplicity="0..1" />
-          <End Role="AcOPInvoiceDetails" Type="Self.AcOPInvoiceDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AcOPInvoiceMaster">
-              <PropertyRef Name="AcOPInvoiceMasterID" />
-            </Principal>
-            <Dependent Role="AcOPInvoiceDetails">
-              <PropertyRef Name="AcOPInvoiceMasterID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -14851,9 +14738,6 @@
           <EntitySet Name="AcMemoBankDetails" EntityType="Self.AcMemoBankDetail" />
           <EntitySet Name="AcMemoJournalDetails" EntityType="Self.AcMemoJournalDetail" />
           <EntitySet Name="AcMemoJournalMasters" EntityType="Self.AcMemoJournalMaster" />
-          <EntitySet Name="AcOpeningMasters" EntityType="Self.AcOpeningMaster" />
-          <EntitySet Name="AcOPInvoiceDetails" EntityType="Self.AcOPInvoiceDetail" />
-          <EntitySet Name="AcOPInvoiceMasters" EntityType="Self.AcOPInvoiceMaster" />
           <EntitySet Name="AcTypes" EntityType="Self.AcType" />
           <EntitySet Name="AgentMasters" EntityType="Self.AgentMaster" />
           <EntitySet Name="AnalysisGroups" EntityType="Self.AnalysisGroup" />
@@ -15071,14 +14955,6 @@
             <End Role="LocationMaster" EntitySet="LocationMasters" />
             <End Role="AcCompany" EntitySet="AcCompanies" />
           </AssociationSet>
-          <AssociationSet Name="FK_AcOpeningMaster_AcFinancialYear" Association="Self.FK_AcOpeningMaster_AcFinancialYear">
-            <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
-            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOPInvoiceMaster_AcFinancialYear" Association="Self.FK_AcOPInvoiceMaster_AcFinancialYear">
-            <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
-            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
-          </AssociationSet>
           <AssociationSet Name="FK_PurchaseInvoice_AcFinancialYear" Association="Self.FK_PurchaseInvoice_AcFinancialYear">
             <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
             <End Role="PurchaseInvoice" EntitySet="PurchaseInvoices" />
@@ -15094,14 +14970,6 @@
           <AssociationSet Name="FK_AcHead_AcGroup" Association="Self.FK_AcHead_AcGroup">
             <End Role="AcGroup" EntitySet="AcGroups" />
             <End Role="AcHead" EntitySet="AcHeads" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOpeningMaster_AcHead" Association="Self.FK_AcOpeningMaster_AcHead">
-            <End Role="AcHead" EntitySet="AcHeads" />
-            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOPInvoiceMaster_AcHead" Association="Self.FK_AcOPInvoiceMaster_AcHead">
-            <End Role="AcHead" EntitySet="AcHeads" />
-            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
           </AssociationSet>
           <AssociationSet Name="FK_Category_AcHead" Association="Self.FK_Category_AcHead">
             <End Role="AcHead" EntitySet="AcHeads" />
@@ -15134,10 +15002,6 @@
           <AssociationSet Name="FK_tblSupplierAdjustment_AcJournalMaster" Association="Self.FK_tblSupplierAdjustment_AcJournalMaster">
             <End Role="AcJournalMaster" EntitySet="AcJournalMasters" />
             <End Role="tblSupplierAdjustment" EntitySet="tblSupplierAdjustments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster" Association="Self.FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
-            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
-            <End Role="AcOPInvoiceDetails" EntitySet="AcOPInvoiceDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_AnalysisHead_AnalysisGroup" Association="Self.FK_AnalysisHead_AnalysisGroup">
             <End Role="AnalysisGroup" EntitySet="AnalysisGroups" />
@@ -18154,14 +18018,6 @@
             <End Role="BranchMaster" EntitySet="BranchMasters" />
             <End Role="AcGroup" EntitySet="AcGroups" />
           </AssociationSet>
-          <AssociationSet Name="FK_AcOpeningMaster_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster">
-            <End Role="BranchMaster" EntitySet="BranchMasters" />
-            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AcOPInvoiceMaster_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster">
-            <End Role="BranchMaster" EntitySet="BranchMasters" />
-            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
-          </AssociationSet>
           <AssociationSet Name="FK_AnalysisHead_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_AnalysisHead_BranchMaster">
             <End Role="BranchMaster" EntitySet="BranchMasters" />
             <End Role="AnalysisHead" EntitySet="AnalysisHeads" />
@@ -18318,6 +18174,37 @@
             <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetails" />
           </AssociationSet>
           <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
+          <EntitySet Name="AcOpeningMasters" EntityType="DB_9F57C4_couriertest_newModel.AcOpeningMaster" />
+          <EntitySet Name="AcOPInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail" />
+          <EntitySet Name="AcOPInvoiceMasters" EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" />
+          <AssociationSet Name="FK_AcOpeningMaster_AcFinancialYear" Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcFinancialYear">
+            <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
+            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceMaster_AcFinancialYear" Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcFinancialYear">
+            <End Role="AcFinancialYear" EntitySet="AcFinancialYears" />
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOpeningMaster_AcHead" Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcHead">
+            <End Role="AcHead" EntitySet="AcHeads" />
+            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceMaster_AcHead" Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcHead">
+            <End Role="AcHead" EntitySet="AcHeads" />
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOpeningMaster_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster">
+            <End Role="BranchMaster" EntitySet="BranchMasters" />
+            <End Role="AcOpeningMaster" EntitySet="AcOpeningMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster" Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
+            <End Role="AcOPInvoiceDetail" EntitySet="AcOPInvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AcOPInvoiceMaster_BranchMaster" Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster">
+            <End Role="BranchMaster" EntitySet="BranchMasters" />
+            <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -22081,8 +21968,6 @@
           <Property Name="VATAccountId" Type="Int32" />
           <Property Name="ConsignmentFormat" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AcGroups" Relationship="DB_9F57C4_couriertest_newModel.FK_AcGroup_BranchMaster" FromRole="BranchMaster" ToRole="AcGroup" />
-          <NavigationProperty Name="AcOpeningMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" FromRole="BranchMaster" ToRole="AcOpeningMaster" />
-          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster" FromRole="BranchMaster" ToRole="AcOPInvoiceMaster" />
           <NavigationProperty Name="AnalysisHeads" Relationship="DB_9F57C4_couriertest_newModel.FK_AnalysisHead_BranchMaster" FromRole="BranchMaster" ToRole="AnalysisHead" />
           <NavigationProperty Name="CurrencyMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_BranchMaster_CurrencyMaster" FromRole="BranchMaster" ToRole="CurrencyMaster" />
           <NavigationProperty Name="Designation" Relationship="DB_9F57C4_couriertest_newModel.FK_BranchMaster_Designation" FromRole="BranchMaster" ToRole="Designation" />
@@ -22098,6 +21983,8 @@
           <NavigationProperty Name="CostUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_BranchMaster" FromRole="BranchMaster" ToRole="CostUpdateMaster" />
           <Property Name="ReceivedBy" Type="Int32" />
           <Property Name="CollectedBy" Type="Int32" />
+          <NavigationProperty Name="AcOpeningMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" FromRole="BranchMaster" ToRole="AcOpeningMaster" />
+          <NavigationProperty Name="AcOPInvoiceMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster" FromRole="BranchMaster" ToRole="AcOPInvoiceMaster" />
         </EntityType>
         <Association Name="FK_AcGroup_BranchMaster">
           <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
@@ -22108,30 +21995,6 @@
             </Principal>
             <Dependent Role="AcGroup">
               <PropertyRef Name="AcCompanyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOpeningMaster_BranchMaster">
-          <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
-          <End Type="DB_9F57C4_couriertest_newModel.AcOpeningMaster" Role="AcOpeningMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BranchMaster">
-              <PropertyRef Name="BranchID" />
-            </Principal>
-            <Dependent Role="AcOpeningMaster">
-              <PropertyRef Name="BranchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AcOPInvoiceMaster_BranchMaster">
-          <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
-          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Role="AcOPInvoiceMaster" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BranchMaster">
-              <PropertyRef Name="BranchID" />
-            </Principal>
-            <Dependent Role="AcOPInvoiceMaster">
-              <PropertyRef Name="BranchID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -22411,6 +22274,8 @@
           <Property Name="AcFinancialYearID" Type="Int32" />
           <NavigationProperty Name="RevenueUpdateDetails" Relationship="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__6DA2FB28" FromRole="RevenueUpdateMaster" ToRole="RevenueUpdateDetail" />
           <NavigationProperty Name="RevenueUpdateDetails1" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" FromRole="RevenueUpdateMaster" ToRole="RevenueUpdateDetail" />
+          <Property Name="InvoiceId" Type="Int32" />
+          <Property Name="AcJournalID" Type="Int32" />
           </EntityType>
         <Association Name="FK_RevenueUpdateMaster_BranchMaster">
           <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="1" />
@@ -23071,6 +22936,145 @@
           <Property Name="AcJournalDetailID" Type="Int32" />
           <Property Name="InScanID" Type="Int32" />
         </EntityType>
+        <EntityType Name="AcOpeningMaster">
+          <Key>
+            <PropertyRef Name="AcOpeningID" />
+          </Key>
+          <Property Name="AcOpeningID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
+          <Property Name="OPDate" Type="DateTime" Precision="3" />
+          <Property Name="AcHeadID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="PartyID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="StatusImport" Type="Boolean" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="AssetMasterID" Type="Int32" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="InvRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AcJournalId" Type="Int32" />
+          <NavigationProperty Name="AcFinancialYear" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcFinancialYear" FromRole="AcOpeningMaster" ToRole="AcFinancialYear" />
+          <NavigationProperty Name="AcHead" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_AcHead" FromRole="AcOpeningMaster" ToRole="AcHead" />
+          <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" FromRole="AcOpeningMaster" ToRole="BranchMaster" />
+        </EntityType>
+        <EntityType Name="AcOPInvoiceDetail">
+          <Key>
+            <PropertyRef Name="AcOPInvoiceDetailID" />
+          </Key>
+          <Property Name="AcOPInvoiceDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AcOPInvoiceMasterID" Type="Int32" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
+          <Property Name="LastTransDate" Type="DateTime" Precision="3" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="StatusClose" Type="Boolean" />
+          <Property Name="AcMemoJournalID" Type="Int32" />
+          <NavigationProperty Name="AcOPInvoiceMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceDetail" ToRole="AcOPInvoiceMaster" />
+        </EntityType>
+        <EntityType Name="AcOPInvoiceMaster">
+          <Key>
+            <PropertyRef Name="AcOPInvoiceMasterID" />
+          </Key>
+          <Property Name="AcOPInvoiceMasterID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AcHeadID" Type="Int32" />
+          <Property Name="AcFinancialYearID" Type="Int32" />
+          <Property Name="OPDate" Type="DateTime" Precision="3" />
+          <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StatusSDSC" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="PartyID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="StatusSC" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <NavigationProperty Name="AcFinancialYear" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcFinancialYear" FromRole="AcOPInvoiceMaster" ToRole="AcFinancialYear" />
+          <NavigationProperty Name="AcHead" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_AcHead" FromRole="AcOPInvoiceMaster" ToRole="AcHead" />
+          <NavigationProperty Name="AcOPInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceMaster" ToRole="AcOPInvoiceDetail" />
+          <NavigationProperty Name="BranchMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster" FromRole="AcOPInvoiceMaster" ToRole="BranchMaster" />
+        </EntityType>
+        <Association Name="FK_AcOpeningMaster_AcFinancialYear">
+          <End Type="DB_9F57C4_couriertest_newModel.AcFinancialYear" Role="AcFinancialYear" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOpeningMaster" Role="AcOpeningMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcFinancialYear">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Principal>
+            <Dependent Role="AcOpeningMaster">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceMaster_AcFinancialYear">
+          <End Type="DB_9F57C4_couriertest_newModel.AcFinancialYear" Role="AcFinancialYear" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Role="AcOPInvoiceMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcFinancialYear">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceMaster">
+              <PropertyRef Name="AcFinancialYearID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOpeningMaster_AcHead">
+          <End Type="DB_9F57C4_couriertest_newModel.AcHead" Role="AcHead" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOpeningMaster" Role="AcOpeningMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcHead">
+              <PropertyRef Name="AcHeadID" />
+            </Principal>
+            <Dependent Role="AcOpeningMaster">
+              <PropertyRef Name="AcHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceMaster_AcHead">
+          <End Type="DB_9F57C4_couriertest_newModel.AcHead" Role="AcHead" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Role="AcOPInvoiceMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcHead">
+              <PropertyRef Name="AcHeadID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceMaster">
+              <PropertyRef Name="AcHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOpeningMaster_BranchMaster">
+          <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOpeningMaster" Role="AcOpeningMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BranchMaster">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="AcOpeningMaster">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceDetails_AcOPInvoiceMaster">
+          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Role="AcOPInvoiceMaster" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail" Role="AcOPInvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AcOPInvoiceMaster">
+              <PropertyRef Name="AcOPInvoiceMasterID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceDetail">
+              <PropertyRef Name="AcOPInvoiceMasterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AcOPInvoiceMaster_BranchMaster">
+          <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
+          <End Type="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" Role="AcOPInvoiceMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BranchMaster">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="AcOPInvoiceMaster">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23345,56 +23349,6 @@
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AcOpeningMasters">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOpeningMaster">
-              <MappingFragment StoreEntitySet="AcOpeningMaster">
-                <ScalarProperty Name="AcJournalId" ColumnName="AcJournalId" />
-                <ScalarProperty Name="AcOpeningID" ColumnName="AcOpeningID" />
-                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-                <ScalarProperty Name="OPDate" ColumnName="OPDate" />
-                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="PartyID" ColumnName="PartyID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="StatusImport" ColumnName="StatusImport" />
-                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-                <ScalarProperty Name="AssetMasterID" ColumnName="AssetMasterID" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="InvRemarks" ColumnName="InvRemarks" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AcOPInvoiceDetails">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail">
-              <MappingFragment StoreEntitySet="AcOPInvoiceDetails">
-                <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
-                <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
-                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-                <ScalarProperty Name="LastTransDate" ColumnName="LastTransDate" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
-                <ScalarProperty Name="AcMemoJournalID" ColumnName="AcMemoJournalID" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AcOPInvoiceMasters">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster">
-              <MappingFragment StoreEntitySet="AcOPInvoiceMaster">
-                <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
-                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
-                <ScalarProperty Name="OPDate" ColumnName="OPDate" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="StatusSDSC" ColumnName="StatusSDSC" />
-                <ScalarProperty Name="PartyID" ColumnName="PartyID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="StatusSC" ColumnName="StatusSC" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -31718,6 +31672,8 @@
           <EntitySetMapping Name="RevenueUpdateMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster">
               <MappingFragment StoreEntitySet="RevenueUpdateMaster">
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
                 <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="InScanID" ColumnName="InScanID" />
@@ -32142,6 +32098,56 @@
                 <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
                 <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AcOpeningMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOpeningMaster">
+              <MappingFragment StoreEntitySet="AcOpeningMaster">
+                <ScalarProperty Name="AcJournalId" ColumnName="AcJournalId" />
+                <ScalarProperty Name="InvRemarks" ColumnName="InvRemarks" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="AssetMasterID" ColumnName="AssetMasterID" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="StatusImport" ColumnName="StatusImport" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="PartyID" ColumnName="PartyID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="OPDate" ColumnName="OPDate" />
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+                <ScalarProperty Name="AcOpeningID" ColumnName="AcOpeningID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AcOPInvoiceDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail">
+              <MappingFragment StoreEntitySet="AcOPInvoiceDetails">
+                <ScalarProperty Name="AcMemoJournalID" ColumnName="AcMemoJournalID" />
+                <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="LastTransDate" ColumnName="LastTransDate" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
+                <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AcOPInvoiceMasters">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster">
+              <MappingFragment StoreEntitySet="AcOPInvoiceMaster">
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="StatusSC" ColumnName="StatusSC" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="PartyID" ColumnName="PartyID" />
+                <ScalarProperty Name="StatusSDSC" ColumnName="StatusSDSC" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="OPDate" ColumnName="OPDate" />
+                <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

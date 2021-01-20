@@ -286,7 +286,7 @@ namespace LTMSV2.Controllers
                 try
                 {
                   //  obj.UserID = u.UserID;
-                  if (obj.CustomerID>0)
+                  if (c.CustomerID>0)
                 {
                     db.Entry(obj).State = EntityState.Modified;
                     db.SaveChanges();

@@ -146,7 +146,33 @@ namespace LTMSV2.DAL
 
             return iReturn;
         }
+        public static int DeleteAcJournalConsignments(AcJournalDetail ObjectAcJournalDetail)
+        {
+            int iReturn = 0;
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "UPDATE AcJournalConsignment where  AcJournalID=@AcJournalID and AcJournalDetailID = @AcJournalDetailID";
+            cmd.CommandType = CommandType.Text;
 
+            cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
+            cmd.Parameters["@AcJournalDetailID"].Value = ObjectAcJournalDetail.AcJournalDetailID;
+
+            cmd.Parameters.Add("@AcJournalID", SqlDbType.Int);
+            cmd.Parameters["@AcJournalID"].Value = ObjectAcJournalDetail.AcJournalID;                                    
+
+            try
+            {
+                cmd.Connection.Open();
+                iReturn = cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return iReturn;
+        }
         public static int DeleteAcJournalDetail(int AcJournalDetailID)
         {
             int iReturn = 0;
@@ -167,7 +193,24 @@ namespace LTMSV2.DAL
 
             }
 
+            SqlCommand cmd3 = new SqlCommand();
+            cmd3.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd3.CommandText = "DELETE FROM AcJournalConsignment WHERE AcJournalDetailID = @AcJournalDetailID";
+            cmd3.CommandType = CommandType.Text;
 
+            cmd3.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
+            cmd3.Parameters["@AcJournalDetailID"].Value = AcJournalDetailID;
+
+            try
+            {
+                cmd3.Connection.Open();
+                iReturn = cmd3.ExecuteNonQuery();
+                cmd3.Connection.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "DELETE FROM AcJournalDetail WHERE AcJournalDetailID = @AcJournalDetailID";
@@ -706,6 +749,48 @@ namespace LTMSV2.DAL
             return "OK";
 
         }
+
+        public static DateTime CheckParamDate(DateTime EntryDate, int yearid)
+        {
+            DateTime pFromDate = Convert.ToDateTime(EntryDate);
+            StatusModel obj = new StatusModel();
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "SP_CheckDateValiate";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@EntryDate", pFromDate.ToString("MM/dd/yyyy"));
+                cmd.Parameters.AddWithValue("@FYearId", yearid);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    obj.Status = ds.Tables[0].Rows[0][0].ToString();
+                    obj.Message = ds.Tables[0].Rows[0][1].ToString();
+                    obj.ValidDate = Convert.ToDateTime(ds.Tables[0].Rows[0][2].ToString()).ToString("dd-MM-yyyy");
+                }
+            }
+            catch (Exception ex)
+            {
+                obj.Status = "Failed";
+                obj.Message = ex.Message;
+
+            }
+
+            if (obj.Status != "OK")
+            {
+                return Convert.ToDateTime(obj.ValidDate);
+            }
+            else
+            {
+                return EntryDate;
+            }
+        }
+
     }
 }
     

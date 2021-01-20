@@ -4,7 +4,9 @@
     int i = 0;
     var _decimal = @Session["Decimal"].ToString();
 }
-
+<style>
+    .checkboxdesign {padding-top:0px!important;}
+</style>
 @foreach (var item in Model.CustomerInvoiceDetailsVM)
 {
 <tr>
@@ -13,10 +15,10 @@
         @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CustomerInvoiceDetailID, new { @Value = @item.CustomerInvoiceDetailID })
         @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CustomerInvoiceID, new { @Value = @item.CustomerInvoiceID })
         @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].ConsignmentNo, new { @Value = @item.ConsignmentNo })
-        @*@Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].StatusPaymentMode, new { @Value = @item.StatusPaymentMode })
-            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].InscanID, new { @Value = @item.InscanID })
-            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CourierCharge, new { @Value = @item.CourierCharge })
-            @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CustomCharge, new { @Value = @item.CustomCharge })*@
+        @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].InScanID, new { @Value = @item.InScanID })            
+        @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].FreightCharge, new { @Value = @item.FreightCharge })
+        @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].CustomsCharge, new { @Value = @item.CustomsCharge })
+        @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].DocCharge, new { @Value = @item.DocCharge })
         @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].OtherCharge, new { @Value = @item.OtherCharge })
         @Html.HiddenFor(model => model.CustomerInvoiceDetailsVM[i].TotalCharges, new { @Value = @item.TotalCharges })
 
@@ -34,10 +36,10 @@
         @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.AWBDateTime)
     </td>
     <td>
-        @item.ConsigneeName
+        @item.Origin
     </td>
     <td>
-        @item.ConsigneeCountryName
+        @item.ConsigneeName
     </td>
     <td class="text-right">
         @LTMSV2.Models.CommanFunctions.GetFormatNumber(@item.FreightCharge, _decimal)

@@ -303,7 +303,6 @@
     <Property Name="Amount" Type="money" />
     <Property Name="StatusClose" Type="bit" />
     <Property Name="AcMemoJournalID" Type="int" />
-    <Property Name="AcJournalID" Type="int" />
   </EntityType>
   <EntityType Name="AcOPInvoiceMaster">
     <Key>
@@ -315,9 +314,10 @@
     <Property Name="OPDate" Type="datetime" />
     <Property Name="Remarks" Type="varchar" MaxLength="100" />
     <Property Name="StatusSDSC" Type="varchar" MaxLength="2" />
-    <Property Name="PartyID" Type="int" Nullable="false" />
+    <Property Name="PartyID" Type="int" />
     <Property Name="BranchID" Type="int" />
     <Property Name="StatusSC" Type="varchar" MaxLength="1" />
+    <Property Name="AcJournalID" Type="int" />
   </EntityType>
   <EntityType Name="AcType">
     <Key>
@@ -3022,6 +3022,8 @@
     <Property Name="InScanID" Type="int" Nullable="false" />
     <Property Name="EmployeeID" Type="int" />
     <Property Name="AcFinancialYearID" Type="int" />
+    <Property Name="InvoiceId" Type="int" />
+    <Property Name="AcJournalID" Type="int" />
   </EntityType>
   <EntityType Name="RoleMaster">
     <Key>

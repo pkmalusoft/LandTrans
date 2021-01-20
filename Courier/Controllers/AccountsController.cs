@@ -1142,9 +1142,11 @@ new AcGroupModel()
             var paytypes1 = new SelectList(paymentterms, "PaymentTermID", "PaymentTerm1");
             ViewBag.transtypes = transtypes;
             ViewBag.paytypes = paytypes;
+
+            ViewBag.Consignments = (from c in db.InScanMasters where c.IsDeleted == false select new { InScanID = c.InScanID, ConsignmentNo = c.ConsignmentNo }).ToList();
+            ViewBag.Trips = db.TruckDetails.ToList();
             //ViewBag.heads = db.AcHeadSelectForCash(Convert.ToInt32(Session["CurrentCompanyID"].ToString()));
             //ViewBag.headsreceived = db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentCompanyID"].ToString()));
-
 
             ViewBag.heads = db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
             ViewBag.headsreceived = db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
@@ -1345,6 +1347,21 @@ new AcGroupModel()
                     db.SaveChanges();
                     db.Entry(acJournalDetail).State = EntityState.Detached;
 
+                    //adding consignment referece to this entry
+                    if (v.AcJDetailVM[i].InScans!=null && v.AcJDetailVM[i].InScans!="")
+                    {
+                        var inscanlist = v.AcJDetailVM[i].InScans.Split(',');
+                        foreach(var ins in inscanlist)
+                        {
+                            AcJournalConsignment accons = new AcJournalConsignment();
+                            accons.AcJournalID = ajm.AcJournalID;
+                            accons.AcJournalDetailID = acJournalDetail.AcJournalDetailID;
+                            accons.InScanID =Convert.ToInt32(ins);
+                            db.AcJournalConsignments.Add(accons);
+                            db.SaveChanges();
+                        }
+                        
+                    }
                     if (v.AcJDetailVM[i].AcExpAllocationVM != null)
                     {
                         for (int j = 0; j < v.AcJDetailVM[i].AcExpAllocationVM.Count; j++)
@@ -1576,10 +1593,27 @@ new AcGroupModel()
                     if (IdExists > 0)
                     {
                         AccountsDAO.UpdateAcJournalDetail(acJournalDetail);
+                        AccountsDAO.DeleteAcJournalConsignments(acJournalDetail);
                     }
                     else
                     {
                         AccountsDAO.InsertAcJournalDetail(acJournalDetail);
+                    }
+
+                    //adding consignment referece to this entry
+                    if (v.AcJDetailVM[i].InScans != null && v.AcJDetailVM[i].InScans != "")
+                    {
+                        var inscanlist = v.AcJDetailVM[i].InScans.Split(',');
+                        foreach (var ins in inscanlist)
+                        {
+                            AcJournalConsignment accons = new AcJournalConsignment();
+                            accons.AcJournalID = ajm.AcJournalID;
+                            accons.AcJournalDetailID = acJournalDetail.AcJournalDetailID;
+                            accons.InScanID = Convert.ToInt32(ins);
+                            db.AcJournalConsignments.Add(accons);
+                            db.SaveChanges();
+                        }
+
                     }
 
                     if (v.AcJDetailVM[i].AcExpAllocationVM != null)
@@ -1672,6 +1706,7 @@ new AcGroupModel()
                 int iDeleteJournalDetails = 0;
                 int.TryParse(JournalDetails, out iDeleteJournalDetails);
                 AccountsDAO.DeleteAcJournalDetail(iDeleteJournalDetails);
+                
             }
             string DeleteAcAnalysisHeadAllocation = Request["deletedExpAllocations"];
             string[] DeleteAcAnalysisHeadAllocationArr = DeleteAcAnalysisHeadAllocation.Split(',');
@@ -1893,7 +1928,23 @@ new AcGroupModel()
 
             List<AcJournalDetailVM> AcJDetailVM = new List<AcJournalDetailVM>();
             AcJDetailVM = AccountsDAO.AcJournalDetailSelectByAcJournalID(Convert.ToInt32(id), TransType);
-
+            int i = 0;
+            foreach(var item in AcJDetailVM)
+            {
+                AcJDetailVM[i].InScans = "";
+                var consignment= db.AcJournalConsignments.Where(cc => cc.AcJournalDetailID == item.AcJournalDetID).ToList();
+                foreach(var item2 in consignment)
+                {
+                    if (AcJDetailVM[i].InScans=="")
+                    {
+                        AcJDetailVM[i].InScans = item2.InScanID.ToString();
+                    }
+                    else
+                    {
+                        AcJDetailVM[i].InScans = AcJDetailVM[i].InScans + "," +  item2.InScanID.ToString();
+                    }
+                }
+            }
 
             //foreach (var item in acjlist)
             //{
@@ -1931,6 +1982,38 @@ new AcGroupModel()
 
 
             return Json(acjlist, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetTrips(string term)
+        {
+            int AcCompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+        if (term.Trim()!="")
+         { 
+                var list = (from c in db.TruckDetails where c.IsDeleted==false &&  c.ReceiptNo.Contains(term.Trim()) orderby c.ReceiptNo select new TruckDetailVM { ReceiptNo = c.ReceiptNo, TDDate = c.TDDate, TruckDetailID = c.TruckDetailID }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+         }
+            else
+            {
+                var list = (from c in db.TruckDetails where c.IsDeleted==false orderby c.ReceiptNo select new TruckDetailVM { ReceiptNo = c.ReceiptNo, TDDate = c.TDDate, TruckDetailID = c.TruckDetailID }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+
+            }
+        }
+
+        public ActionResult GetConsignment(string term, int tripno)
+        {
+            int AcCompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            if (term.Trim() != "")
+            {
+                var list = (from c in db.InScanMasters where c.IsDeleted == false && c.ConsignmentNo.Contains(term.Trim()) && (c.TruckDetailId == tripno || tripno==0) orderby c.ConsignmentNo select new {InScanID = c.InScanID, TransactionDate = c.TransactionDate, ConsignmentNo = c.ConsignmentNo, TruckDetailID = c.TruckDetailId }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var list = (from c in db.InScanMasters where c.IsDeleted == false && (c.TruckDetailId == tripno || tripno == 0) orderby c.ConsignmentNo select new { InScanID = c.InScanID, TransactionDate= c.TransactionDate, ConsignmentNo=c.ConsignmentNo, TruckDetailID = c.TruckDetailId }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+
+            }
         }
 
         public ActionResult GetHeadsForCash()
@@ -3769,6 +3852,90 @@ new AcGroupModel()
         }
 
         #endregion
+
+        public ActionResult CustomerLedger()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+
+            SessionDataModel.SetCustomerLedgerParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Customer Ledger";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerLedger") && model.ReportType == "Ledger")
+                {
+                    Session["ReportOutput"] = null;
+                }
+                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerLedger(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = "PDF",
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetCustomerLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            if (model.ReportType == "Ledger")
+            {
+                //AccountsReportsDAO.GenerateCustomerLedgerReport();
+                AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
+            }
+            else if (model.ReportType == "OutStanding")
+            {
+                AccountsReportsDAO.GenerateCustomerOutStandingReport();
+            }
+            else if (model.ReportType == "AWBOutStanding")
+            {
+                AccountsReportsDAO.GenerateAWBOutStandingReport();
+            }
+
+            return RedirectToAction("CustomerLedger", "Accounts");
+
+
+        }
         public static void SaveStreamAsFile(string filePath, Stream inputStream, string fileName)
         {
             DirectoryInfo info = new DirectoryInfo(filePath);
@@ -4248,29 +4415,29 @@ new AcGroupModel()
 
         }       
 
-        public JsonResult GetConsignment(string term)
-        {
-            if (term.Trim() != "")
-            {
-                var list = (from c1 in db.TruckDetails
-                            join c in db.InScanMasters on c1.TruckDetailID equals c.TruckDetailId
-                            where c1.ReceiptNo == term
-                            orderby c.ConsignmentNo ascending
-                            select new AcJournalConsignmentVM { TruckDetailID = c1.TruckDetailID, InScanID = c.InScanID, ConsignmentNo = c.ConsignmentNo, ConsignmentDate = c.TransactionDate }).ToList();
-                return Json(list, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                var list = (from c in db.InScanMasters 
-                            where c.IsDeleted==false
-                            orderby c.ConsignmentNo ascending
-                            select new AcJournalConsignmentVM { TruckDetailID = 0, InScanID = c.InScanID, ConsignmentNo = c.ConsignmentNo, ConsignmentDate = c.TransactionDate }).ToList();
-                return Json(list, JsonRequestBehavior.AllowGet);
+        //public JsonResult GetConsignment(string term)
+        //{
+        //    if (term.Trim() != "")
+        //    {
+        //        var list = (from c1 in db.TruckDetails
+        //                    join c in db.InScanMasters on c1.TruckDetailID equals c.TruckDetailId
+        //                    where c1.ReceiptNo == term
+        //                    orderby c.ConsignmentNo ascending
+        //                    select new AcJournalConsignmentVM { TruckDetailID = c1.TruckDetailID, InScanID = c.InScanID, ConsignmentNo = c.ConsignmentNo, ConsignmentDate = c.TransactionDate }).ToList();
+        //        return Json(list, JsonRequestBehavior.AllowGet);
+        //    }
+        //    else
+        //    {
+        //        var list = (from c in db.InScanMasters 
+        //                    where c.IsDeleted==false
+        //                    orderby c.ConsignmentNo ascending
+        //                    select new AcJournalConsignmentVM { TruckDetailID = 0, InScanID = c.InScanID, ConsignmentNo = c.ConsignmentNo, ConsignmentDate = c.TransactionDate }).ToList();
+        //        return Json(list, JsonRequestBehavior.AllowGet);
 
-            }
+        //    }
 
             
-        }
+        //}
     }
 
 

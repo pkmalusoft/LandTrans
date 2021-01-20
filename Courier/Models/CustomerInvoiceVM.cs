@@ -24,7 +24,8 @@ namespace LTMSV2.Models
         public string CourierMovement { get; set; }
         public string LogoFilePath { get; set; }
         public DateTime FromDate { get; set; }
-         
+        public string CustomerCode { get; set; }
+         public string CustomerTRNNo { get; set; }
     public DateTime ToDate { get; set; }
         public int MovementTypeID { get; set; }
         public decimal TotalCharges { get; set; }

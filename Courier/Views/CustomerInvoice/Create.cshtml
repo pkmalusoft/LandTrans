@@ -155,7 +155,7 @@
                     @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
                     @Html.ValidationMessageFor(model => model.OtherCharge)
                 </div>*@
-                <div class="col-md-3 align_self">
+                <div class="col-md-8 btn-right ">
                     <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
                 </div>
@@ -180,12 +180,13 @@
                             SNo.
                             All  <input type="checkbox" style="width:20px;" class="Selectall" id="Selectall" value="0" name="Selectall" />
                         </th>
-                        <th width="12%">AWB No.</th>
-                        <th>AWB Date</th>
-                        <th width="20%">Consignee</th>
-                        <th>Destination Country</th>
-                        <th>Courier Charge</th>
-                        <th>Custom Charge</th>
+                        <th width="12%">Consignment Note</th>
+                        <th>Consignment Date</th>
+                        <th width="20%">Consignor</th>
+                        <th>Consignee</th>
+                        <th>Freight Charge</th>
+                        <th>Doc Charge</th>
+                        <th>Customs Charge</th>
                         <th>Other Charge</th>
                         <th>Total Charge</th>
 
@@ -193,14 +194,14 @@
                         <tbody class="input-table" id="listContainer">
                             @{Html.RenderPartial("InvoiceList", Model);}
 
-                            <tr class="charegRow">
+                            @*<tr class="charegRow">
                                 <td colspan="5"></td>
                                 <td>Total Charge</td>
                                 <td></td>
                                 <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges,_decimal)</label></td>
-                            </tr>
-                            <tr class="charegRow">
+                                <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges, _decimal)</label></td>
+                            </tr>*@
+                            @*<tr class="charegRow">
                                 <td colspan="5"></td>
                                 <td>Admin%</td>
                                 <td class="text-right"> <label class="headinglabel" id="lbladminpercent"></label></td>
@@ -217,9 +218,9 @@
                             <tr class="charegRow">
                                 <td colspan="5"></td>
                                 <td>Tax%</td>
-                                <td class="text-right" > <label class="headinglabel" id="lbltaxpercent"></label></td>
+                                <td class="text-right"> <label class="headinglabel" id="lbltaxpercent"></label></td>
                                 <td></td>
-                                <td class="text-right" > <label class="headinglabel" id="lbltaxamount"></label></td>
+                                <td class="text-right"> <label class="headinglabel" id="lbltaxamount"></label></td>
                             </tr>
                             <tr class="charegRow">
                                 <td colspan="5"></td>
@@ -227,13 +228,13 @@
                                 <td></td>
                                 <td></td>
                                 <td class="text-right"> <label class="headinglabel" id="lblothercharge"></label></td>
-                            </tr>
+                            </tr>*@
                             <tr class="charegRow">
                                 <td colspan="5"></td>
                                 <td><b>Net Invoice Total</b></td>
                                 <td></td>
                                 <td> </td>
-                                <td class="text-right"> <label class="headinglabel" style="font-weight:600" id="lblinvoicetotal">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.InvoiceTotal,_decimal)</label></td>
+                                <td class="text-right"> <label class="headinglabel" style="font-weight:600" id="lblinvoicetotal">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.InvoiceTotal, _decimal)</label></td>
                             </tr>
                         </tbody>
 

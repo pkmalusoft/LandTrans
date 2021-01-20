@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="CustomerInvoiceReport">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="CustomerInvoiceID" type="xs:int" minOccurs="0" />
+              <xs:element name="CustomerInvoiceNo" type="xs:string" minOccurs="0" />
+              <xs:element name="CustomerID" type="xs:int" minOccurs="0" />
+              <xs:element name="InvoiceDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="TaxPercent" type="xs:decimal" minOccurs="0" />
+              <xs:element name="AcJournalID" type="xs:int" minOccurs="0" />
+              <xs:element name="StatusClose" type="xs:boolean" minOccurs="0" />
+              <xs:element name="FYearID" type="xs:int" minOccurs="0" />
+              <xs:element name="AcCompanyID" type="xs:int" minOccurs="0" />
+              <xs:element name="InvoiceTotal" type="xs:decimal" minOccurs="0" />
+              <xs:element name="IsDeleted" type="xs:boolean" minOccurs="0" />
+              <xs:element name="AcFinancialYearID" type="xs:int" minOccurs="0" />
+              <xs:element name="BranchID" type="xs:int" minOccurs="0" />
+              <xs:element name="CustomerInvoiceDetailID" type="xs:int" minOccurs="0" />
+              <xs:element name="CustomerInvoiceID1" type="xs:int" minOccurs="0" />
+              <xs:element name="InScanID" type="xs:int" minOccurs="0" />
+              <xs:element name="ConsignmentNo" type="xs:string" minOccurs="0" />
+              <xs:element name="TaxPercentage" type="xs:int" minOccurs="0" />
+              <xs:element name="FreightCharge" type="xs:decimal" minOccurs="0" />
+              <xs:element name="DocCharge" type="xs:decimal" minOccurs="0" />
+              <xs:element name="CustomsCharge" type="xs:decimal" minOccurs="0" />
+              <xs:element name="OtherCharge" type="xs:decimal" minOccurs="0" />
+              <xs:element name="RecPayStatus" type="xs:int" minOccurs="0" />
+              <xs:element name="RecPayDetailId" type="xs:int" minOccurs="0" />
+              <xs:element name="NetValue" type="xs:decimal" minOccurs="0" />
+              <xs:element name="ConsignmentNo1" type="xs:string" minOccurs="0" />
+              <xs:element name="ConsignmentDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Consignor" type="xs:string" minOccurs="0" />
+              <xs:element name="Consignee" type="xs:string" minOccurs="0" />
+              <xs:element name="ConsignorCountryName" type="xs:string" minOccurs="0" />
+              <xs:element name="ConsigneeCountryName" type="xs:string" minOccurs="0" />
+              <xs:element name="ConsignorLocationName" type="xs:string" minOccurs="0" />
+              <xs:element name="ConsigneeLocationName" type="xs:string" minOccurs="0" />
+              <xs:element name="ConsignorCityName" type="xs:string" minOccurs="0" />
+              <xs:element name="ConsigneeCityName" type="xs:string" minOccurs="0" />
+              <xs:element name="CustomerName" type="xs:string" minOccurs="0" />
+              <xs:element name="CustomerCode" type="xs:string" minOccurs="0" />
+              <xs:element name="Address1" type="xs:string" minOccurs="0" />
+              <xs:element name="Address2" type="xs:string" minOccurs="0" />
+              <xs:element name="Address3" type="xs:string" minOccurs="0" />
+              <xs:element name="CityName" type="xs:string" minOccurs="0" />
+              <xs:element name="LocationName" type="xs:string" minOccurs="0" />
+              <xs:element name="CountryName" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

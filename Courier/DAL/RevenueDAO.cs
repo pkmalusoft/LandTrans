@@ -221,5 +221,48 @@ namespace LTMSV2.DAL
             }
             return objList;
         }
+
+
+        public static List<CustomerInvoiceDetailVM> GenerateInvoice(DateTime FromDate,DateTime ToDate, int CustomerId,int FYearId,int InvoiceId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GenerateInvoice";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@FYearId", CustomerId);
+            cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
+            
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<CustomerInvoiceDetailVM> objList = new List<CustomerInvoiceDetailVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    CustomerInvoiceDetailVM obj = new CustomerInvoiceDetailVM();
+                    obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InScanId"].ToString());
+                    obj.ConsignmentNo = ds.Tables[0].Rows[i]["ConsignmentNo"].ToString();
+                    obj.AWBDateTime =Convert.ToDateTime(ds.Tables[0].Rows[i]["AWBDateTime"].ToString());                    
+                    obj.FreightCharge = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["FreightCharge"].ToString());
+                    obj.DocCharge = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["DocCharge"].ToString());
+                    obj.CustomsCharge = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["CustomsCharge"].ToString());
+                    obj.OtherCharge = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["OtherCharge"].ToString());
+                    obj.TotalCharges = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["TotalCharges"].ToString());
+                    obj.ConsigneeName = ds.Tables[0].Rows[i]["Consignee"].ToString();
+                    obj.ConsigneeCountryName = ds.Tables[0].Rows[i]["ConsigneeCountryName"].ToString();
+                    obj.Origin = ds.Tables[0].Rows[i]["Consignor"].ToString();
+                    obj.ConsigneeName= ds.Tables[0].Rows[i]["Consignee"].ToString();
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+
+        }
     }
 }

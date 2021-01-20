@@ -42,9 +42,6 @@ namespace LTMSV2.Models
         public virtual DbSet<AcMemoBankDetail> AcMemoBankDetails { get; set; }
         public virtual DbSet<AcMemoJournalDetail> AcMemoJournalDetails { get; set; }
         public virtual DbSet<AcMemoJournalMaster> AcMemoJournalMasters { get; set; }
-        public virtual DbSet<AcOpeningMaster> AcOpeningMasters { get; set; }
-        public virtual DbSet<AcOPInvoiceDetail> AcOPInvoiceDetails { get; set; }
-        public virtual DbSet<AcOPInvoiceMaster> AcOPInvoiceMasters { get; set; }
         public virtual DbSet<AcType> AcTypes { get; set; }
         public virtual DbSet<AgentMaster> AgentMasters { get; set; }
         public virtual DbSet<AnalysisGroup> AnalysisGroups { get; set; }
@@ -275,6 +272,9 @@ namespace LTMSV2.Models
         public virtual DbSet<CostUpdateMaster> CostUpdateMasters { get; set; }
         public virtual DbSet<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
         public virtual DbSet<AcJournalConsignment> AcJournalConsignments { get; set; }
+        public virtual DbSet<AcOpeningMaster> AcOpeningMasters { get; set; }
+        public virtual DbSet<AcOPInvoiceDetail> AcOPInvoiceDetails { get; set; }
+        public virtual DbSet<AcOPInvoiceMaster> AcOPInvoiceMasters { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

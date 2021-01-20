@@ -101,30 +101,7 @@
                 @*@Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @disabled = "true" })*@
                 @Html.ValidationMessageFor(model => model.CustomerID)
             </div>
-        </div>
-        <div class="row no-margin" style="padding-top:10px">
-            <div class="col-md-3">
-                <label class="headinglabel"><strong>Tax% : </strong></label>
-                @Html.DisplayFor(model => model.CustomerInvoiceTax, new { @class = "form-control txttarget calfield", @onchange = "setTwoNumberDecimal(this)" })
-                @Html.ValidationMessageFor(model => model.CustomerInvoiceTax)
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel"><strong>Admin % : </strong></label>
-                @Html.DisplayFor(model => model.AdminPer, new { @class = "form-control txttarget calfield ", @onchange = "setTwoNumberDecimal(this)" })
-                @Html.ValidationMessageFor(model => model.AdminPer)
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel"><strong>Fuel SurCharge % : </strong></label>
-                @Html.DisplayFor(model => model.FuelPer, new { @class = "form-control txttarget calfield", @onchange = "setTwoNumberDecimal(this)" })
-                @Html.ValidationMessageFor(model => model.FuelPer)
-            </div>
-            <div class="col-md-3">
-                <label class="headinglabel"><strong>Other Charge : </strong></label>
-                @Html.DisplayFor(model => model.OtherCharge, new { @class = "form-control txttarget calfield", @onchange = "setTwoNumberDecimal(this)" })
-                @Html.ValidationMessageFor(model => model.OtherCharge)
-            </div>
-
-        </div>
+        </div>       
 
 
         <div class="row no-margin" style="padding-top: 10px">
@@ -132,12 +109,13 @@
                 <table class="table table-bordered table-responsive" id="details" style="background-color: white">
                     <thead>
                     <th>SNo.</th>
-                    <th>AWB No</th>
-                    <th>AWB Date</th>
-                    <th>Consingee</th>
-                    <th>Destination Country</th>
-                    <th>Courier Charge</th>
-                    <th>Custom Charge</th>
+                    <th>Consignment Note</th>
+                    <th>Consignment Date</th>
+                    <th>Consignor</th>
+                    <th>Consignee</th>
+                    <th>Freight Charge</th>
+                    <th>Doc Charge</th>
+                    <th>Customs Charge</th>
                     <th>Other Charge</th>
                     <th>Total Charge</th>
 
@@ -150,37 +128,9 @@
                             <td></td>
                             <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges, _decimal)</label></td>
                         </tr>
-                        <tr class="charegRow">
-                            <td colspan="5"></td>
-                            <td>Admin%</td>
-                            <td class="text-right"> <label class="headinglabel" id="lbladminpercent">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminPer, @_decimal)</label></td>
-                            <td></td>
-                            <td class="text-right"><label class="headinglabel" id="lbladminamount">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminAmt, @_decimal)</label></td>
-                        </tr>
-                        <tr class="charegRow">
-                            <td colspan="5"></td>
-                            <td>Fuel SurCharge%</td>
-                            <td class="text-right"><label class="headinglabel" id="lblfuelpercent">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelPer, @_decimal)</label></td>
-                            <td></td>
-                            <td class="text-right"><label class="headinglabel" id="lblfuelamount">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelAmt, @_decimal)</label></td>
-                        </tr>
-                        <tr class="charegRow">
-                            <td colspan="5"></td>
-                            <td>Tax%</td>
-                            <td class="text-right"> <label class="headinglabel" id="lbltaxpercent">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.CustomerInvoiceTax, @_decimal)</label></td>
-                            <td></td>
-                            <td class="text-right"> <label class="headinglabel" id="lbltaxamount">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.ChargeableWT, @_decimal)</label></td>
-                        </tr>
-                        <tr class="charegRow">
-                            <td colspan="5"></td>
-                            <td>Other Charges</td>
-                            <td></td>
-                            <td></td>
-                            <td class="text-right"> <label class="headinglabel" id="lblothercharge">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.OtherCharge, @_decimal)</label></td>
-                        </tr>
+
                         <tr class="charegRow">
                             <td colspan="5">
-
                             </td>
                             <td><b>Net Invoice Total</b></td>
                             <td></td>
@@ -190,7 +140,7 @@
                         <tr>
                             <td colspan="5"></td>
                             <td colspan="4">
-                               <b>@Model.CurrencyName: - (@Model.InvoiceTotalInWords)</b>
+                                <b>@Model.CurrencyName: - (@Model.InvoiceTotalInWords)</b>
                             </td>
                         </tr>
                     </tbody>
@@ -199,7 +149,7 @@
             </div>
         </div>
         <div class="row no-margin hide">
-            <div class="row no-margin d-flex">
+            @*<div class="row no-margin d-flex">
                 <div class="col-md-3">
                     <label class="headinglabel">Total Charge</label>
 
@@ -210,53 +160,8 @@
                 <div class="col-md-3 text-right">
                     <label class="headinglabel" id="lbltotalcharge">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges, _decimal)</label>
                 </div>
-            </div>
-            <div class="row no-margin d-flex">
-                <div class="col-md-3">
-                    <label class="headinglabel">Admin%</label>
+            </div>*@        
 
-                </div>
-                <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lbladminpercent">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminPer, @_decimal)</label>
-                </div>
-                <div class="col-md-3 text-right">
-                    <label class="headinglabel " id="lbladminamount">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.AdminAmt, @_decimal)</label>
-                </div>
-            </div>
-            <div class="row no-margin d-flex">
-                <div class="col-md-3">
-                    <label class="headinglabel">Fuel SurCharge%</label>
-                </div>
-                <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lblfuelpercent">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelPer, @_decimal)</label>
-                </div>
-                <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lblfuelamount">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.FuelAmt, @_decimal)</label>
-                </div>
-            </div>
-
-            <div class="row no-margin d-flex">
-                <div class="col-md-3">
-                    <label class="headinglabel">Tax%</label>
-                </div>
-                <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lbltaxpercent">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.CustomerInvoiceTax, @_decimal)</label>
-                </div>
-                <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lbltaxamount">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.ChargeableWT, @_decimal)</label>
-                </div>
-            </div>
-            <div class="row no-margin d-flex">
-                <div class="col-md-3">
-                    <label class="headinglabel">Other Charges</label>
-                </div>
-                <div class="col-md-3 text-right">
-
-                </div>
-                <div class="col-md-3 text-right">
-                    <label class="headinglabel" id="lblothercharge">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.OtherCharge, @_decimal)</label>
-                </div>
-            </div>
             <div class="row no-margin d-flex">
                 <div class="col-md-3">
                     <label class="headinglabel">Net Invoice Total</label>

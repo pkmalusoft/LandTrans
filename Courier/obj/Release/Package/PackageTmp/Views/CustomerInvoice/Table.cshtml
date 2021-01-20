@@ -16,7 +16,7 @@
             Customer Name
         </th>
         <th>Invoice Amount</th>
-        <th width="5%"></th>
+        <th width="15%"></th>
     </tr>
 </thead>
 <tbody>
@@ -27,21 +27,23 @@
                 @Html.DisplayFor(modelItem => item.CustomerInvoiceNo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.InvoiceDate)
+                @*@Html.DisplayFor(modelItem => item.InvoiceDate)*@
+                @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.InvoiceDate)
             </td>
 
             <td>
                 @Html.DisplayFor(modelItem => item.CustomerName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InvoiceTotal)
+            <td class="text-right" >
+                @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.InvoiceTotal, "3")
+                
 
             </td>
-            <td style="font-size:13px" >
+            <td style="font-size:13px;" >
                 @*<a target="_blank" href="ExportShipmentReport?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>*@
                 <a  class="aprint" target="_blank" href="InvoicePrint?id=@item.CustomerInvoiceID"><i class="fa fa-print"></i></a>
 
-                <a class="aview"  href="Details?id=@item.CustomerInvoiceID"><i class="fa fa-eye"></i></a><br />                
+                <a class="aview"  href="Details?id=@item.CustomerInvoiceID"><i class="fa fa-eye"></i></a>
                 
                 <a  class="aedit" href="Edit?id=@item.CustomerInvoiceID"><i class="fa fa-pencil"></i></a>
                 

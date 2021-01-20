@@ -24,6 +24,7 @@ namespace LTMSV2.Models
         public string Currency { get; set; }
         public int CurrencyId { get; set; }
         public string DebitAccountName { get; set; }
+        public int DebitAccountId { get; set; }
         public string CreditAccountName { get; set; }
         public string CustomerName { get; set; }
         public string RevenueCost { get; set; }

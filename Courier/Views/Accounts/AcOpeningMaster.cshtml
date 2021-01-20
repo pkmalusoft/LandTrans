@@ -296,6 +296,46 @@
             },
 
         });
+        var idtext='txtHead_'
+        $('[id^=' + idtext + ']').each(function (index, item) {
+            $("#txtHead_" + index).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/DailyTrips/AcHead',
+                        datatype: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function (data) {
+                            response($.map(data, function (val, item) {
+                                return {
+                                    label: val.AcHead,
+                                    value: val.AcHead,
+                                    Id: val.AcHeadID,
+                                }
+                            }))
+                        }
+                    })
+                },
+                minLength: -1,
+                autoFocus: false,
+                focus: function (event, ui) {
+                    var id = $(this).attr('id').split('_')[1];
+                    $('#txtHead_' + id).val(ui.item.value);
+                    $("#txtHeadId_" + id).val(ui.item.Id);
+                },
+                select: function (e, i) {
+                    debugger;
+                    e.preventDefault();
+                    console.log($(this).attr('id'));
+                    var id = $(this).attr('id').split('_')[1];
+                    $("#txtHead_" + id).val(i.item.label);
+                    $("#txtHeadId_" + id).val(i.item.Id);
+                },
+
+            });
+
+        });
     });
     function EditOpeningMaster(Id) {
         $.ajax({
