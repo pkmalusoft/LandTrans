@@ -232,7 +232,7 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
             cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
             cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
-            cmd.Parameters.AddWithValue("@FYearId", CustomerId);
+            cmd.Parameters.AddWithValue("@FYearId", FYearId);
             cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
             
             SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -246,6 +246,8 @@ namespace LTMSV2.DAL
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     CustomerInvoiceDetailVM obj = new CustomerInvoiceDetailVM();
+                    obj.CustomerInvoiceDetailID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerInvoiceDetailID"].ToString());
+                    obj.CustomerInvoiceID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerInvoiceID"].ToString());
                     obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InScanId"].ToString());
                     obj.ConsignmentNo = ds.Tables[0].Rows[i]["ConsignmentNo"].ToString();
                     obj.AWBDateTime =Convert.ToDateTime(ds.Tables[0].Rows[i]["AWBDateTime"].ToString());                    

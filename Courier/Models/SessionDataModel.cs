@@ -60,6 +60,15 @@ namespace LTMSV2.Models
             System.Web.HttpContext.Current.Session["TaxReportParam"] = reportparam;
         }
 
+        public static ManifestReportParam GetManifestReportParam()
+        {
+            return (ManifestReportParam)System.Web.HttpContext.Current.Session["ManifestReportParam"];
+        }
+        public static void SetManifestReportParam(ManifestReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["ManifestReportParam"] = reportparam;
+        }
+
         public static void SetLabelPrintParam(LabelPrintingParam reportparam)
         {
             System.Web.HttpContext.Current.Session["LabelPrintingParam"] = reportparam;
@@ -73,10 +82,21 @@ namespace LTMSV2.Models
         {
             return (CustomerLedgerReportParam)System.Web.HttpContext.Current.Session["CustomerLedgerReportParam"];
         }
+              
 
         public static void SetCustomerLedgerParam(CustomerLedgerReportParam reportparam)
         {
             System.Web.HttpContext.Current.Session["CustomerLedgerReportParam"] = reportparam;
+        }
+
+        public static void SetSupplierLedgerParam(SupplierLedgerReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["SupplierLedgerReportParam"] = reportparam;
+        }
+
+        public static SupplierLedgerReportParam GetSupplierLedgerReportParam()
+        {
+            return (SupplierLedgerReportParam)System.Web.HttpContext.Current.Session["SupplierLedgerReportParam"];
         }
         public static OpeningInvoiceSearch GetOpeningInvoiceSearch()
         {

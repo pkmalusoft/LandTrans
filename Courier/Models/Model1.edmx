@@ -1079,6 +1079,7 @@
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
           <Property Name="AcFinancialYearID" Type="int" />
           <Property Name="BranchID" Type="int" />
+          <Property Name="Remarks" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="CustomerInvoiceDetails">
           <Key>
@@ -2929,6 +2930,18 @@
           <Property Name="FMoney" Type="money" />
           <Property Name="UserID" Type="int" />
           <Property Name="IsTradingReceipt" Type="bit" />
+        </EntityType>
+        <EntityType Name="RecPayAllocationDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RecPayID" Type="int" />
+          <Property Name="RecPayDetailID" Type="int" />
+          <Property Name="CustomerInvoiceID" Type="int" />
+          <Property Name="CustomerInvoiceDetailID" Type="int" />
+          <Property Name="InScanID" Type="int" />
+          <Property Name="AllocatedAmount" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="RecPayDetails">
           <Key>
@@ -8788,6 +8801,7 @@
           <EntitySet Name="Quotation" EntityType="Self.Quotation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QuotationDetails" EntityType="Self.QuotationDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RecPay" EntityType="Self.RecPay" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RecPayAllocationDetails" EntityType="Self.RecPayAllocationDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RecPayDetails" EntityType="Self.RecPayDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RequestType" EntityType="Self.RequestType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReturnDetails" EntityType="Self.ReturnDetails" Schema="dbo" store:Type="Tables" />
@@ -18205,6 +18219,7 @@
             <End Role="BranchMaster" EntitySet="BranchMasters" />
             <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
           </AssociationSet>
+          <EntitySet Name="RecPayAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -22457,6 +22472,7 @@
           <Property Name="AcFinancialYearID" Type="Int32" />
           <Property Name="BranchID" Type="Int32" />
           <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoice" ToRole="CustomerInvoiceDetail" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CustomerInvoiceDetail">
           <Key>
@@ -23075,6 +23091,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="RecPayAllocationDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RecPayID" Type="Int32" />
+          <Property Name="RecPayDetailID" Type="Int32" />
+          <Property Name="CustomerInvoiceID" Type="Int32" />
+          <Property Name="CustomerInvoiceDetailID" Type="Int32" />
+          <Property Name="InScanID" Type="Int32" />
+          <Property Name="AllocatedAmount" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -31803,6 +31831,7 @@
           <EntitySetMapping Name="CustomerInvoices">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoice">
               <MappingFragment StoreEntitySet="CustomerInvoice">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
@@ -32148,6 +32177,19 @@
                 <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
                 <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
                 <ScalarProperty Name="AcOPInvoiceMasterID" ColumnName="AcOPInvoiceMasterID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RecPayAllocationDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail">
+              <MappingFragment StoreEntitySet="RecPayAllocationDetails">
+                <ScalarProperty Name="AllocatedAmount" ColumnName="AllocatedAmount" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="CustomerInvoiceDetailID" ColumnName="CustomerInvoiceDetailID" />
+                <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
+                <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
+                <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

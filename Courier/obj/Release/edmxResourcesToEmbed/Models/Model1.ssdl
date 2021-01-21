@@ -1074,6 +1074,7 @@
     <Property Name="IsDeleted" Type="bit" Nullable="false" />
     <Property Name="AcFinancialYearID" Type="int" />
     <Property Name="BranchID" Type="int" />
+    <Property Name="Remarks" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="CustomerInvoiceDetails">
     <Key>

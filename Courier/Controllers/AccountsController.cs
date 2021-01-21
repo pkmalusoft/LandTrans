@@ -3535,153 +3535,7 @@ new AcGroupModel()
             return RedirectToAction("Ledger", "Accounts", new {id=reportid});
 
         }
-        public Stream GenerateReport()
-        {
-            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
-            int userid= Convert.ToInt32(Session["UserID"].ToString());
-            string usertype = Session["UserType"].ToString();
-
-            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
-            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
-            SqlConnection sqlConn = new SqlConnection(strConnString);
-            SqlCommand comd;
-            comd = new SqlCommand();
-            comd.Connection = sqlConn;
-            comd.CommandType = CommandType.StoredProcedure;
-            comd.CommandText = "sp_accledger";
-            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate);
-            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate);
-            comd.Parameters.AddWithValue("@AcHeadId", reportparam.AcHeadId);
-            comd.Parameters.AddWithValue("@BranchId", branchid);
-            comd.Parameters.AddWithValue("@YearId", yearid);
-            //comd.CommandText = "up_GetAllCustomer"; comd.Parameters.Add("@Companyname", SqlDbType.VarChar, 50);
-            //if (TextBox1.Text.Trim() != "")
-            //    comd.Parameters[0].Value = TextBox1.Text;
-            //else
-            //    comd.Parameters[0].Value = DBNull.Value;
-            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
-            sqlAdapter.SelectCommand = comd;
-            DataSet ds = new DataSet();
-            sqlAdapter.Fill(ds, "AccLedger");
-
-            //generate XSD to design report
-            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(Server.MapPath("~/Reports"),"AccLedger.xsd"));
-            //ds.WriteXmlSchema(writer);
-            //writer.Close();           
-
-            ReportDocument rd = new ReportDocument();
-            rd.Load(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.rpt"));
-            
-            rd.SetDataSource(ds);
-
-            
-            string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
-            string companyname = SourceMastersModel.GetReportHeader1(branchid);
-
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
-            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
-            rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reportparam.AcHeadName);
-            string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
-            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
-
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid,usertype) + " on " + DateTime.Now;
-            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
-
-            Response.Buffer = false;
-            Response.ClearContent();
-            Response.ClearHeaders();
-            string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
-            string reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"));
-            
-            //rd.ExportToDisk(ExportFormatType.PortableDocFormat,reportpath );
-            Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
-                  
-            
-            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            stream.Seek(0, SeekOrigin.Begin);
-            return stream;
-            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
-            //SaveStreamAsFile(reportpath, stream, reportname);
-            //reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"),reportname);            
-            //return reportpath;
-        }
-
-        public void GenerateDefaultReport()
-        {
-            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
-            int userid = Convert.ToInt32(Session["UserID"].ToString());
-            string usertype = Session["UserType"].ToString();
-
-            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
-            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
-            SqlConnection sqlConn = new SqlConnection(strConnString);
-            SqlCommand comd;
-            comd = new SqlCommand();
-            comd.Connection = sqlConn;
-            comd.CommandType = CommandType.StoredProcedure;
-            comd.CommandText = "sp_accledger";
-            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate);
-            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate);
-            comd.Parameters.AddWithValue("@AcHeadId", reportparam.AcHeadId);
-            comd.Parameters.AddWithValue("@BranchId", branchid);
-            comd.Parameters.AddWithValue("@YearId", yearid);
-            //comd.CommandText = "up_GetAllCustomer"; comd.Parameters.Add("@Companyname", SqlDbType.VarChar, 50);
-            //if (TextBox1.Text.Trim() != "")
-            //    comd.Parameters[0].Value = TextBox1.Text;
-            //else
-            //    comd.Parameters[0].Value = DBNull.Value;
-            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
-            sqlAdapter.SelectCommand = comd;
-            DataSet ds = new DataSet();
-            sqlAdapter.Fill(ds, "AccLedger");
-
-            //generate XSD to design report
-            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(Server.MapPath("~/Reports"),"AccLedger.xsd"));
-            //ds.WriteXmlSchema(writer);
-            //writer.Close();           
-
-            ReportDocument rd = new ReportDocument();
-            rd.Load(Path.Combine(Server.MapPath("~/Reports"), "DefaultReport.rpt"));
-
-            //rd.SetDataSource(ds);
-
-
-            string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
-            string companyname = SourceMastersModel.GetReportHeader1(branchid);
-
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
-            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
-            rd.ParameterFields["AccountHead"].CurrentValues.AddValue("Default Report");
-            string period = "Reprot Period as on Date "; // + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
-            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
-
-            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
-            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
-
-            Response.Buffer = false;
-            Response.ClearContent();
-            Response.ClearHeaders();
-            //string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
-            string reportname = "DefaultReport.pdf";
-            string reportpath = Path.Combine(Server.MapPath("~/Reports"),reportname);
-
-            rd.ExportToDisk(ExportFormatType.PortableDocFormat,reportpath );
-            //Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
-
-            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            //stream.Seek(0, SeekOrigin.Begin);
-            //return stream;
-            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
-            //SaveStreamAsFile(reportpath, stream, reportname);
-            //reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"),reportname);            
-            //return reportpath;
-        }
+     
 
         public ActionResult ProfitLossReport()
         {
@@ -3728,9 +3582,13 @@ new AcGroupModel()
                 {
                     FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
                     ToDate = CommanFunctions.GetLastDayofMonth().Date,
-                    Output = "PDF"
+                    Output = "PDF",
+                    VoucherTypeId="0"
                 };
             }
+
+
+
             return View(model);
 
         }
@@ -3738,15 +3596,19 @@ new AcGroupModel()
         [ValidateAntiForgeryToken]
         public ActionResult DayBook([Bind(Include = "FromDate,ToDate,Output,Filters,SelectedValues")] AccountsReportParam picker)
         {
-            AccountsReportParam model = new AccountsReportParam
-            {
-                FromDate = picker.FromDate,
-                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
-                Output = picker.Output
-            };
-            model.VoucherTypeId = ""; 
+            AccountsReportParam model =SessionDataModel.GetAccountsParam();
+            if (model == null)
+                model = new AccountsReportParam();
+            
+            model.FromDate = picker.FromDate;
+            model.ToDate = picker.ToDate;
+            model.Output = picker.Output;
+            model.Filters = picker.Filters;
+            model.SelectedValues = picker.SelectedValues;
+            
             if (picker.SelectedValues != null)
             {
+                model.VoucherTypeId = "";
                 foreach (var item in picker.SelectedValues)
                 {
                     if (model.VoucherTypeId == "")
@@ -3760,8 +3622,11 @@ new AcGroupModel()
 
                 }
             }
-            //model.Output = "EXCEL";
-            ViewBag.Token = model;
+            else
+            {
+                model.VoucherTypeId = "0";
+            }
+            
             SessionDataModel.SetAccountsParam(model);
             Response.Buffer = false;
             Response.ClearContent();
@@ -3773,7 +3638,7 @@ new AcGroupModel()
             if (model.Output != "PDF")
                 return RedirectToAction("Download", "Accounts", new { file = "a" });
             else
-                return View();            
+                return View(model);            
 
         }
 
@@ -3875,7 +3740,10 @@ new AcGroupModel()
                 model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
             }
 
-
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
             SessionDataModel.SetCustomerLedgerParam(model);
 
             model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
@@ -3936,6 +3804,335 @@ new AcGroupModel()
 
 
         }
+
+
+        public ActionResult SupplierLedger()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            var supplierMasterTypes = (from d in db.SupplierTypes select d).ToList();
+            ViewBag.SupplierType = supplierMasterTypes;
+            SupplierLedgerReportParam model = SessionDataModel.GetSupplierLedgerReportParam();
+            if (model == null)
+            {
+                model = new SupplierLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    SupplierTypeId=1,
+                    SupplierId = 0,
+                    SupplierName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetSupplierLedgerParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Supplier Ledger";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("SupplierLedger") && model.ReportType == "Ledger")
+                {
+                    Session["ReportOutput"] = null;
+                }
+                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult SupplierLedger(SupplierLedgerReportParam picker)
+        {
+
+            SupplierLedgerReportParam model = new SupplierLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                SupplierId = picker.SupplierId,
+                SupplierName = picker.SupplierName,
+                Output = "PDF",
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetSupplierLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            if (model.ReportType == "Ledger")
+            {
+                //AccountsReportsDAO.GenerateCustomerLedgerReport();
+                AccountsReportsDAO.GenerateSupplierLedgerDetailReport();
+            }
+            else if (model.ReportType == "OutStanding")
+            {
+                AccountsReportsDAO.GenerateCustomerOutStandingReport();
+            }
+            else if (model.ReportType == "AWBOutStanding")
+            {
+                AccountsReportsDAO.GenerateAWBOutStandingReport();
+            }
+
+            return RedirectToAction("SupplierLedger", "Accounts");
+
+
+        }
+
+        public ActionResult ManifestReport()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+
+            ManifestReportParam model = SessionDataModel.GetManifestReportParam();
+            if (model == null)
+            {
+                model = new ManifestReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,                    
+                    Output = "PDF",
+                    TDNo="",
+                    TDID=0
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetManifestReportParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Manifest Report";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("TripManifestReport"))
+                {
+                    Session["ReportOutput"] = null;
+                }                
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult ManifestReport(ManifestReportParam picker)
+        {
+            
+            ManifestReportParam model = new ManifestReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),                
+                Output = "PDF",
+                TDID=picker.TDID,
+                TDNo=picker.TDNo
+            };
+
+            
+            SessionDataModel.SetManifestReportParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            
+            
+            AccountsReportsDAO.GenerateManifestReport();
+
+            return View(model);
+            //return RedirectToAction("ManifestReport", "Accounts");
+
+
+        }
+
+        public ActionResult GetTripData(string fromdate,string todate)
+        {
+            DateTime fdate = Convert.ToDateTime(fromdate);
+            DateTime tdate = Convert.ToDateTime(todate).AddDays(1);
+            
+                var itemlist = (from c in db.TruckDetails
+                                join v in db.VehicleMasters
+              on c.VehicleID equals v.VehicleID
+                                where c.IsDeleted == false
+            && c.TDDate>= fdate
+            && c.TDDate <= tdate
+            select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.ReceiptNo + "-" + c.RegNo }).ToList();
+               return Json(itemlist, JsonRequestBehavior.AllowGet);
+            
+
+        }
+        #region "notinuse"
+        public Stream GenerateReport()
+        {
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(Session["UserID"].ToString());
+            string usertype = Session["UserType"].ToString();
+
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "sp_accledger";
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate);
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate);
+            comd.Parameters.AddWithValue("@AcHeadId", reportparam.AcHeadId);
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            comd.Parameters.AddWithValue("@YearId", yearid);
+            //comd.CommandText = "up_GetAllCustomer"; comd.Parameters.Add("@Companyname", SqlDbType.VarChar, 50);
+            //if (TextBox1.Text.Trim() != "")
+            //    comd.Parameters[0].Value = TextBox1.Text;
+            //else
+            //    comd.Parameters[0].Value = DBNull.Value;
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "AccLedger");
+
+            //generate XSD to design report
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(Server.MapPath("~/Reports"),"AccLedger.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();           
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.rpt"));
+
+            rd.SetDataSource(ds);
+
+
+            string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
+            string companyname = SourceMastersModel.GetReportHeader1(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reportparam.AcHeadName);
+            string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"));
+
+            //rd.ExportToDisk(ExportFormatType.PortableDocFormat,reportpath );
+            Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return stream;
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+            //SaveStreamAsFile(reportpath, stream, reportname);
+            //reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"),reportname);            
+            //return reportpath;
+        }
+
+        public void GenerateDefaultReport()
+        {
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(Session["UserID"].ToString());
+            string usertype = Session["UserType"].ToString();
+
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            SqlConnection sqlConn = new SqlConnection(strConnString);
+            SqlCommand comd;
+            comd = new SqlCommand();
+            comd.Connection = sqlConn;
+            comd.CommandType = CommandType.StoredProcedure;
+            comd.CommandText = "sp_accledger";
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate);
+            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate);
+            comd.Parameters.AddWithValue("@AcHeadId", reportparam.AcHeadId);
+            comd.Parameters.AddWithValue("@BranchId", branchid);
+            comd.Parameters.AddWithValue("@YearId", yearid);
+            //comd.CommandText = "up_GetAllCustomer"; comd.Parameters.Add("@Companyname", SqlDbType.VarChar, 50);
+            //if (TextBox1.Text.Trim() != "")
+            //    comd.Parameters[0].Value = TextBox1.Text;
+            //else
+            //    comd.Parameters[0].Value = DBNull.Value;
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter();
+            sqlAdapter.SelectCommand = comd;
+            DataSet ds = new DataSet();
+            sqlAdapter.Fill(ds, "AccLedger");
+
+            //generate XSD to design report
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(Server.MapPath("~/Reports"),"AccLedger.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();           
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Reports"), "DefaultReport.rpt"));
+
+            //rd.SetDataSource(ds);
+
+
+            string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
+            string companyname = SourceMastersModel.GetReportHeader1(branchid);
+
+            // Assign the params collection to the report viewer
+            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
+            rd.ParameterFields["AccountHead"].CurrentValues.AddValue("Default Report");
+            string period = "Reprot Period as on Date "; // + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
+
+            string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
+            rd.ParameterFields["UserDetail"].CurrentValues.AddValue(userdetail);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            //string reportname = "AccLedger_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            string reportname = "DefaultReport.pdf";
+            string reportpath = Path.Combine(Server.MapPath("~/Reports"), reportname);
+
+            rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+            //Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
+
+            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            //stream.Seek(0, SeekOrigin.Begin);
+            //return stream;
+            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
+            //SaveStreamAsFile(reportpath, stream, reportname);
+            //reportpath = Path.Combine(Server.MapPath("~/ReportsPDF"),reportname);            
+            //return reportpath;
+        }
+        #endregion
         public static void SaveStreamAsFile(string filePath, Stream inputStream, string fileName)
         {
             DirectoryInfo info = new DirectoryInfo(filePath);
@@ -4357,21 +4554,26 @@ new AcGroupModel()
         {
             var supplierType = new SupplierType();
             
-            if(SupplierTypeId=="H")
+            if(SupplierTypeId=="H" || SupplierTypeId=="1")
             {
                 supplierType = (from d in db.SupplierTypes where d.SupplierType1 == "Hired Drivers" select d).FirstOrDefault();
             }
-            else if(SupplierTypeId=="F")
+            else if(SupplierTypeId=="F" || SupplierTypeId=="2")
             {
                 supplierType = (from d in db.SupplierTypes where d.SupplierType1 == "Forwarding Agents" select d).FirstOrDefault();
 
             }
-            else if (SupplierTypeId == "S")
+            else if (SupplierTypeId == "S" || SupplierTypeId=="4")
             {
                 supplierType = (from d in db.SupplierTypes where d.SupplierType1 == "Sundry Suppliers" select d).FirstOrDefault();
 
             }
-            
+            else if (SupplierTypeId == "3")
+            {
+                supplierType = (from d in db.SupplierTypes where d.SupplierType1 == "Contract Drivers" select d).FirstOrDefault();
+
+            }
+
             if (SupplierTypeId == "C") //customer
             {
                 if (term.Trim() != "")

@@ -95,7 +95,22 @@
 
 <section class="content-header" style="margin-bottom:20px">
     <h1 class="headingfont">Customer Invoice</h1>
-
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["SuccessMsg"]", "error");
+                 });
+        </script>
+    }
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <script type="text/javascript">
+                  $(document).ready(function () {
+                      $.notify("@TempData["ErrorMsg"]", "error");
+                 });
+        </script>
+    }
 </section>
 @using (Html.BeginForm())
 {

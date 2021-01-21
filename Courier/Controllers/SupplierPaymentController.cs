@@ -176,13 +176,14 @@ namespace LTMSV2.Controllers
         public JsonResult GetAllCustomer()
         {
             DateTime d = DateTime.Now;
+            int  fyearid = Convert.ToInt32(Session["fyearid"].ToString());
             DateTime fyear = Convert.ToDateTime(Session["FyearFrom"].ToString());
             DateTime mstart = new DateTime(fyear.Year, d.Month, 01);
 
             int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
             DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
 
-            var cust = ReceiptDAO.GetCustomerReceipts().Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
+            var cust = ReceiptDAO.GetCustomerReceipts(fyearid, mstart, mend);// ().Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
             //Context1.SP_GetAllRecieptsDetails().Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
 
             string view = this.RenderPartialView("_GetAllSupplier", cust);

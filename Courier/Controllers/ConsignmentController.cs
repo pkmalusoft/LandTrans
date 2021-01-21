@@ -325,6 +325,7 @@ namespace LTMSV2.Controllers
                     inscan.COM = v.COM;
                     inscan.FOC = v.FOC;
                     inscan.RouteID = v.RouteID;
+                    inscan.TruckDetailId = v.TruckDetailID;
                     inscan.DespatchDate = v.DespatchDate;                    
                     inscan.PickedUpEmpID =v.PickedBy;
 
@@ -2347,42 +2348,28 @@ namespace LTMSV2.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-            InScanMaster a = db.InScanMasters.Find(id);
-            if (a == null)
+            //int k = 0;
+            if (id != 0)
             {
-                return HttpNotFound();
+                DataTable dt = ReceiptDAO.DeleteInscan(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
             }
-            else
-            {
-                a.IsDeleted = true;
-                db.Entry(a).State = EntityState.Modified;
-                db.SaveChanges();
 
-            }
-            //InScanInternational i = (from c in db.InScanInternationals where c.InScanID == id select c).FirstOrDefault();
-            //if (i == null)
-            //{
-            //    return HttpNotFound();
-            //}
-            //else
-            //{
-            //    db.InScanInternationals.Remove(i);
-            //    db.SaveChanges();
-
-            //}
-            //AcJournalDetail ac = db.AcJournalDetails.Find(id);
-            //if (i == null)
-            //{
-            //    return HttpNotFound();
-            //}
-            //else
-            //{
-            //    db.InScanInternationals.Remove(i);
-            //    db.SaveChanges();
-
-            //}
             return RedirectToAction("Index");
+          
         }
-        }
+    }
     }
 

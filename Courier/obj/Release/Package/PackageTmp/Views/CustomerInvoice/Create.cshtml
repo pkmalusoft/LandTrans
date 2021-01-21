@@ -45,7 +45,7 @@
 
 <script type="text/javascript">
     function addCommas(nStr) {
-        debugger;
+        
         nStr += '';
         x = nStr.split('.');
         x1 = x[0];
@@ -57,13 +57,13 @@
     return x1 + x2;
     }
     function setTwoNumberDecimal(obj) {
-        debugger;
+        
 
        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
     }
     
     function setThreeNumberDecimal(obj) {
-        debugger;
+        
 
        $(obj).val(parseFloat($(obj).val()).toFixed(3));
 }
@@ -72,14 +72,14 @@
 
         $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
-        $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
         var d = new Date();
         var curr_date = d.getDate();
         var curr_month = d.getMonth() + 1;
         var curr_year = d.getFullYear();
 
-        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+        var reqdate = curr_date + "-" + curr_month + "-" + curr_year;// + ' ' + d.getHours() + ':' + d.getMinutes();
 
         $('#InvoiceDate').val(reqdate);
     });
@@ -106,55 +106,55 @@
             @Html.ValidationSummary(true)
 
 
-            <div class="row no-margin" style="padding-top:10px">
+        <div class="row no-margin" style="padding-top:10px">
 
 
-                <div class="col-md-2">
-                    <label class="headinglabel required "> Invoice No</label>
-                    @Html.TextBoxFor(model => model.CustomerInvoiceNo, new { @class = "form-control txttarget", @required = "true", @readonly = "true" })
-                    @Html.ValidationMessageFor(model => model.CustomerInvoiceNo)
-                </div>
-                <div class="col-md-2">
-                    @Html.HiddenFor(model => model.CustomerInvoiceID)
-                    @Html.HiddenFor(model => model.CustomerID)
-                    @*@Html.HiddenFor(model => model.ChargeableWT)
-                    @Html.HiddenFor(model => model.AdminAmt)
-                    @Html.HiddenFor(model => model.FuelAmt)*@
-                    @Html.HiddenFor(model => model.InvoiceTotal)
+            <div class="col-md-2">
+                <label class="headinglabel required "> Invoice No</label>
+                @Html.TextBoxFor(model => model.CustomerInvoiceNo, new { @class = "form-control txttarget", @required = "true", @readonly = "true" })
+                @Html.ValidationMessageFor(model => model.CustomerInvoiceNo)
+            </div>
+            <div class="col-md-2">
+                @Html.HiddenFor(model => model.CustomerInvoiceID)
+                @Html.HiddenFor(model => model.CustomerID)
+                @*@Html.HiddenFor(model => model.ChargeableWT)
+            @Html.HiddenFor(model => model.AdminAmt)
+            @Html.HiddenFor(model => model.FuelAmt)*@
+                @Html.HiddenFor(model => model.InvoiceTotal)
 
-                    <label class="headinglabel required "> Invoice Date</label>
-                    @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right txttarget", @required = "true" })
-                    @Html.ValidationMessageFor(model => model.InvoiceDate)
+                <label class="headinglabel required "> Invoice Date</label>
+                @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right txttarget", @required = "true" })
+                @Html.ValidationMessageFor(model => model.InvoiceDate)
 
-                </div>
+            </div>            
                 @*<div class="col-md-3">
-                    <label class="headinglabel required ">Customer</label>
-                    @Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @required = "true" })
-                    @Html.ValidationMessageFor(model => model.CustomerID)
-                </div>*@
+                <label class="headinglabel required ">Customer</label>
+                @Html.DropDownListFor(model => model.CustomerID, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @required = "true" })
+                @Html.ValidationMessageFor(model => model.CustomerID)
+            </div>*@
                 @*<div class="col-md-2 w-6">
-                    <label class="headinglabel">Tax %</label>
-                    @Html.TextBoxFor(model => model.CustomerInvoiceTax, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
-                    @Html.ValidationMessageFor(model => model.CustomerInvoiceTax)
-                </div>
+                <label class="headinglabel">Tax %</label>
+                @Html.TextBoxFor(model => model.CustomerInvoiceTax, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
+                @Html.ValidationMessageFor(model => model.CustomerInvoiceTax)
+            </div>
 
-                <div class="col-md-2 w-6">
-                    <label class="headinglabel">Admin %</label>
+            <div class="col-md-2 w-6">
+                <label class="headinglabel">Admin %</label>
 
-                    @Html.TextBoxFor(model => model.AdminPer, new { @class = "form-control txttarget  text-right calfield ", onchange = "setTwoNumberDecimal(this)" })
-                    @Html.ValidationMessageFor(model => model.AdminPer)
-                </div>
-                <div class="col-md-2 w-12">
-                    <label class="headinglabel">Fuel %</label>
+                @Html.TextBoxFor(model => model.AdminPer, new { @class = "form-control txttarget  text-right calfield ", onchange = "setTwoNumberDecimal(this)" })
+                @Html.ValidationMessageFor(model => model.AdminPer)
+            </div>
+            <div class="col-md-2 w-12">
+                <label class="headinglabel">Fuel %</label>
 
-                    @Html.TextBoxFor(model => model.FuelPer, new { @class = "form-control txttarget text-right calfield", onchange = "setTwoNumberDecimal(this)" })
-                    @Html.ValidationMessageFor(model => model.FuelPer)
-                </div>
-                <div class="col-md-2">
-                    <label class="headinglabel">Other Charge</label>
-                    @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
-                    @Html.ValidationMessageFor(model => model.OtherCharge)
-                </div>*@
+                @Html.TextBoxFor(model => model.FuelPer, new { @class = "form-control txttarget text-right calfield", onchange = "setTwoNumberDecimal(this)" })
+                @Html.ValidationMessageFor(model => model.FuelPer)
+            </div>
+            <div class="col-md-2">
+                <label class="headinglabel">Other Charge</label>
+                @Html.TextBoxFor(model => model.OtherCharge, new { @class = "form-control text-right txttarget calfield", onchange = "setTwoNumberDecimal(this)" })
+                @Html.ValidationMessageFor(model => model.OtherCharge)
+            </div>*@
                 <div class="col-md-8 btn-right ">
                     <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
@@ -162,14 +162,14 @@
             </div>
 
 
-            @*<div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-3">
-                    <input type="button" value="Add" id="btnadd" class="btn btn-primary" />&nbsp;&nbsp;
-                    <input type="button" value="Save & Print" id="savepr" class="btn btn-primary" />
-                    <input type="button" value="Cancel" id="btncancel" class="btn btn-primary" />
-                </div>
+        <div class="row no-margin" style="padding-top:10px">
+            <div class="col-md-12">
+                <label class="headinglabel required ">Remarks</label>
+                @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @required = "true" })
+                @Html.ValidationMessageFor(model => model.Remarks)
 
-            </div>*@
+            </div>
+        </div>
 
             <div class="row no-margin" style="padding-top: 10px">
                 <div class="col-md-12">
@@ -195,40 +195,40 @@
                             @{Html.RenderPartial("InvoiceList", Model);}
 
                             @*<tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Total Charge</td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges, _decimal)</label></td>
-                            </tr>*@
+                            <td colspan="5"></td>
+                            <td>Total Charge</td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"> <label class="headinglabel" id="lbltotalcharge">@LTMSV2.Models.CommanFunctions.GetFormatNumber(@Model.TotalCharges, _decimal)</label></td>
+                        </tr>*@
                             @*<tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Admin%</td>
-                                <td class="text-right"> <label class="headinglabel" id="lbladminpercent"></label></td>
-                                <td></td>
-                                <td class="text-right"><label class="headinglabel" id="lbladminamount"></label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Fuel SurCharge%</td>
-                                <td class="text-right"><label class="headinglabel" id="lblfuelpercent"></label></td>
-                                <td></td>
-                                <td class="text-right"><label class="headinglabel" id="lblfuelamount"></label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Tax%</td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltaxpercent"></label></td>
-                                <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lbltaxamount"></label></td>
-                            </tr>
-                            <tr class="charegRow">
-                                <td colspan="5"></td>
-                                <td>Other Charges</td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right"> <label class="headinglabel" id="lblothercharge"></label></td>
-                            </tr>*@
+                            <td colspan="5"></td>
+                            <td>Admin%</td>
+                            <td class="text-right"> <label class="headinglabel" id="lbladminpercent"></label></td>
+                            <td></td>
+                            <td class="text-right"><label class="headinglabel" id="lbladminamount"></label></td>
+                        </tr>
+                        <tr class="charegRow">
+                            <td colspan="5"></td>
+                            <td>Fuel SurCharge%</td>
+                            <td class="text-right"><label class="headinglabel" id="lblfuelpercent"></label></td>
+                            <td></td>
+                            <td class="text-right"><label class="headinglabel" id="lblfuelamount"></label></td>
+                        </tr>
+                        <tr class="charegRow">
+                            <td colspan="5"></td>
+                            <td>Tax%</td>
+                            <td class="text-right"> <label class="headinglabel" id="lbltaxpercent"></label></td>
+                            <td></td>
+                            <td class="text-right"> <label class="headinglabel" id="lbltaxamount"></label></td>
+                        </tr>
+                        <tr class="charegRow">
+                            <td colspan="5"></td>
+                            <td>Other Charges</td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"> <label class="headinglabel" id="lblothercharge"></label></td>
+                        </tr>*@
                             <tr class="charegRow">
                                 <td colspan="5"></td>
                                 <td><b>Net Invoice Total</b></td>
@@ -309,15 +309,15 @@
 
                     </div>
                     <div class="col-md-3 text-right">
-                        <label class="headinglabel"  id="lblinvoicetotal"></label>
+                        <label class="headinglabel" id="lblinvoicetotal"></label>
                     </div>
 
                 </div>
             </div>
 
 
-        }
-    </fieldset>
+            }
+</fieldset>
 </section>
 
 
@@ -414,7 +414,7 @@
             var tot = $('#lbltotalcharge').html();
             var totval = parseFloat(tot);
             if (totval == 0) {
-                alert('Select AWB Details to Create Invoice!');
+                alert('Select Consignment Details to Create Invoice!');
                 return false;
             }
         });

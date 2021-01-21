@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="TripManifestreport">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TruckDetailID" type="xs:int" minOccurs="0" />
+              <xs:element name="ReceiptNo" type="xs:string" minOccurs="0" />
+              <xs:element name="VehicleID" type="xs:int" minOccurs="0" />
+              <xs:element name="RegNo" type="xs:string" minOccurs="0" />
+              <xs:element name="VehicleType" type="xs:string" minOccurs="0" />
+              <xs:element name="TDDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="OriginName" type="xs:string" minOccurs="0" />
+              <xs:element name="DestinationName" type="xs:string" minOccurs="0" />
+              <xs:element name="DriverName" type="xs:string" minOccurs="0" />
+              <xs:element name="VehicleTypeID" type="xs:int" minOccurs="0" />
+              <xs:element name="Rent" type="xs:decimal" minOccurs="0" />
+              <xs:element name="OtherCharges" type="xs:decimal" minOccurs="0" />
+              <xs:element name="RefTDID" type="xs:int" minOccurs="0" />
+              <xs:element name="AcJournalID" type="xs:int" minOccurs="0" />
+              <xs:element name="CurrencyIDRent" type="xs:int" minOccurs="0" />
+              <xs:element name="CurrencyIDOC" type="xs:int" minOccurs="0" />
+              <xs:element name="StatusPaymentMode" type="xs:string" minOccurs="0" />
+              <xs:element name="PaymentHeadID" type="xs:int" minOccurs="0" />
+              <xs:element name="Amount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="PaymentCurrencyID" type="xs:int" minOccurs="0" />
+              <xs:element name="Remarks" type="xs:string" minOccurs="0" />
+              <xs:element name="AcCompanyID" type="xs:int" minOccurs="0" />
+              <xs:element name="TDcontrolAcHeadID" type="xs:int" minOccurs="0" />
+              <xs:element name="OtherChargesAcHeadID" type="xs:int" minOccurs="0" />
+              <xs:element name="FYearID" type="xs:int" minOccurs="0" />
+              <xs:element name="CurrencyRent" type="xs:decimal" minOccurs="0" />
+              <xs:element name="CurrencyOtherCharges" type="xs:decimal" minOccurs="0" />
+              <xs:element name="CurrencyAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Code" type="xs:string" minOccurs="0" />
+              <xs:element name="PayeeName" type="xs:string" minOccurs="0" />
+              <xs:element name="DriverID" type="xs:int" minOccurs="0" />
+              <xs:element name="CancelDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Reason" type="xs:string" minOccurs="0" />
+              <xs:element name="DocumentID" type="xs:int" minOccurs="0" />
+              <xs:element name="RentAcHeadID" type="xs:int" minOccurs="0" />
+              <xs:element name="RouteID" type="xs:int" minOccurs="0" />
+              <xs:element name="TDRemarks" type="xs:string" minOccurs="0" />
+              <xs:element name="InscanID" type="xs:int" minOccurs="0" />
+              <xs:element name="BankName" type="xs:string" minOccurs="0" />
+              <xs:element name="ChequeNo" type="xs:string" minOccurs="0" />
+              <xs:element name="ChequeDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="BranchID" type="xs:int" minOccurs="0" />
+              <xs:element name="IsDeleted" type="xs:boolean" minOccurs="0" />
+              <xs:element name="OriginCountry" type="xs:string" minOccurs="0" />
+              <xs:element name="ForwardAgentID" type="xs:int" minOccurs="0" />
+              <xs:element name="OriginCity" type="xs:string" minOccurs="0" />
+              <xs:element name="SupplierInvoiceId" type="xs:int" minOccurs="0" />
+              <xs:element name="RecPayId" type="xs:int" minOccurs="0" />
+              <xs:element name="ConsignmentNoNote" type="xs:string" minOccurs="0" />
+              <xs:element name="ParcelTypeId" type="xs:int" minOccurs="0" />
+              <xs:element name="DriverName1" type="xs:string" minOccurs="0" />
+              <xs:element name="RegistrationNo" type="xs:string" minOccurs="0" />
+              <xs:element name="Manifest" type="xs:string" minOccurs="0" />
+              <xs:element name="InScanID1" type="xs:int" minOccurs="0" />
+              <xs:element name="ConsignmentNo" type="xs:string" minOccurs="0" />
+              <xs:element name="ConsignmentDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="consignor" type="xs:string" minOccurs="0" />
+              <xs:element name="Consignee" type="xs:string" minOccurs="0" />
+              <xs:element name="CargoDescription" type="xs:string" minOccurs="0" />
+              <xs:element name="Weight" type="xs:decimal" minOccurs="0" />
+              <xs:element name="VolumeWeight" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Pieces" type="xs:string" minOccurs="0" />
+              <xs:element name="Remarks1" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

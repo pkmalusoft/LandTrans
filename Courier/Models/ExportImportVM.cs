@@ -168,15 +168,30 @@ namespace LTMSV2.Models
         public bool Update { get; set; }
         public bool Delete { get; set; }
         public bool Create { get; set; }
-
-        public string TransactionType{ get; set; }        
+                public string TransactionType{ get; set; }        
         public string Output { get; set; }
         public string ReportType { get; set; } //sumary details
         public string ReportFileName { get; set; }
         public string Filters { get; set; }
         public string SortBy { get; set; }
     }
+    public class ManifestReportParam
+    {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
 
+        public int TDID { get; set; }
+        public string TDNo { get; set; }
+        public bool Update { get; set; }
+        public bool Delete { get; set; }
+        public bool Create { get; set; }
+        public string TransactionType { get; set; }
+        public string Output { get; set; }
+        public string ReportType { get; set; } //sumary details
+        public string ReportFileName { get; set; }
+        public string Filters { get; set; }
+        public string SortBy { get; set; }
+    }
 
     public class LabelPrintingParam
     {
@@ -194,6 +209,20 @@ namespace LTMSV2.Models
     {
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public string Output { get; set; } //printer ,pdf,word,excel
+        public string ReportType { get; set; } //sumary details
+        public string ReportFileName { get; set; }
+        public string Filters { get; set; }
+
+    }
+
+    public class SupplierLedgerReportParam
+    {
+        public int SupplierTypeId { get; set; }
+        public int SupplierId { get; set; }
+        public string SupplierName { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public string Output { get; set; } //printer ,pdf,word,excel

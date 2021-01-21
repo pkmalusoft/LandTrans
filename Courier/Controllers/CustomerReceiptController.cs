@@ -491,36 +491,37 @@ namespace LTMSV2.Controllers
         }
 
 
-        [HttpGet]
-        public ActionResult CustomerRecieptDetails(int ID)
-        {
-            List<ReceiptVM> Reciepts = new List<ReceiptVM>();
+        //[HttpGet]
+        //public ActionResult CustomerRecieptDetails(int ID)
+        //{
+        //    int FyearId = Convert.ToInt32(Session["fyearid"]);
+        //    List<ReceiptVM> Reciepts = new List<ReceiptVM>();
 
-            Reciepts = ReceiptDAO.GetCustomerReceipts(); // RP.GetAllReciepts();
-            //var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
+        //    Reciepts = ReceiptDAO.GetCustomerReceipts(FyearId); // RP.GetAllReciepts();
+        //    //var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
 
-            if (ID > 0)
-            {
-                ViewBag.SuccessMsg = "You have successfully added Customer Reciept.";
-            }
-
-
-            if (ID == 10)
-            {
-                ViewBag.SuccessMsg = "You have successfully deleted Customer Reciept.";
-            }
-
-            if (ID == 20)
-            {
-                ViewBag.SuccessMsg = "You have successfully updated Customer Reciept.";
-            }
+        //    if (ID > 0)
+        //    {
+        //        ViewBag.SuccessMsg = "You have successfully added Customer Reciept.";
+        //    }
 
 
-            Session["ID"] = ID;
+        //    if (ID == 10)
+        //    {
+        //        ViewBag.SuccessMsg = "You have successfully deleted Customer Reciept.";
+        //    }
+
+        //    if (ID == 20)
+        //    {
+        //        ViewBag.SuccessMsg = "You have successfully updated Customer Reciept.";
+        //    }
 
 
-            return View(Reciepts);
-        }
+        //    Session["ID"] = ID;
+
+
+        //    return View(Reciepts);
+        //}
 
         public JsonResult GetInvoiceOfCustomer(string ID)
         {
@@ -559,10 +560,23 @@ namespace LTMSV2.Controllers
             //int k = 0;
             if (id != 0)
             {
-                ReceiptDAO.DeleteCustomerReceipt(id);
+               DataTable dt= ReceiptDAO.DeleteCustomerReceipt(id);
+                if (dt !=null)                     
+                {
+                    if (dt.Rows.Count>0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                            TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+                    
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
             }
-
-            return RedirectToAction("CustomerTradeReceiptDetails", "CustomerReciept", new { ID = 10 });
+            
+            return RedirectToAction("CustomerTradeReceiptDetails", "CustomerReceipt", new { ID = 10 });
 
         }
 
@@ -663,30 +677,31 @@ namespace LTMSV2.Controllers
 
         }
 
-        public JsonResult GetAllCustomer()
-        {
-            DateTime d = DateTime.Now;
-            DateTime fyear = Convert.ToDateTime(Session["FyearFrom"].ToString());
-            DateTime mstart = new DateTime(fyear.Year, d.Month, 01);
+        //public JsonResult GetAllCustomer()
+        //{
+        //    DateTime d = DateTime.Now;
+        //    DateTime fyear = Convert.ToDateTime(Session["FyearFrom"].ToString());
+        //    int FyearId = Convert.ToInt32(Session["fyearid"]);
+        //    DateTime mstart = new DateTime(fyear.Year, d.Month, 01);
 
-            int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
-            DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
+        //    int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
+        //    DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
 
-            var cust = ReceiptDAO.GetCustomerReceipts().Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
-            //Context1.SP_GetAllRecieptsDetails().Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
+        //    var cust = ReceiptDAO.GetCustomerReceipts(FyearId).Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
+        //    //Context1.SP_GetAllRecieptsDetails().Where(x => x.RecPayDate >= mstart && x.RecPayDate <= mend).OrderByDescending(x => x.RecPayDate).ToList();
 
-            string view = this.RenderPartialView("_GetAllCustomer", cust);
+        //    string view = this.RenderPartialView("_GetAllCustomer", cust);
 
-            return new JsonResult
-            {
-                Data = new
-                {
-                    success = true,
-                    view = view
-                },
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
-        }
+        //    return new JsonResult
+        //    {
+        //        Data = new
+        //        {
+        //            success = true,
+        //            view = view
+        //        },
+        //        JsonRequestBehavior = JsonRequestBehavior.AllowGet
+        //    };
+        //}
 
 
 
@@ -762,9 +777,10 @@ namespace LTMSV2.Controllers
             int maxday = DateTime.DaysInMonth(fyear.Year, d.Month);
             DateTime mend = new DateTime(fyear.Year, d.Month, maxday);
 
-            var sdate = DateTime.Parse(fdate);
-            var edate = DateTime.Parse(tdate);
-
+            //var sdate = DateTime.Parse(fdate);
+            //var edate = DateTime.Parse(tdate);
+            var sdate = Convert.ToDateTime(fdate);
+            var edate = Convert.ToDateTime(tdate);
 
             //var data = Context1.RecPays.Where(x => x.RecPayDate >= sdate && x.RecPayDate <= edate && x.CustomerID != null && x.IsTradingReceipt == true && x.FYearID == FYearID).OrderByDescending(x => x.RecPayDate).ToList();
             //var cust = Context1.SP_GetAllRecieptsDetailsByDate(fdate, tdate, FYearID).ToList();
@@ -811,12 +827,31 @@ namespace LTMSV2.Controllers
 
         }
         [HttpGet]
-        public ActionResult CustomerTradeReceiptDetails(int ID)
+        public ActionResult CustomerTradeReceiptDetails(int ID, string FromDate, string ToDate)
         {
+            int FyearId=Convert.ToInt32(Session["fyearid"]);
             List<ReceiptVM> Reciepts = new List<ReceiptVM>();
+            DateTime pFromDate;
+            DateTime pToDate;
+            if (FromDate == null || ToDate == null)
+            {
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date;//.AddDays(-1); // FromDate = DateTime.Now;
+                pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // // ToDate = DateTime.Now;
 
-            Reciepts = ReceiptDAO.GetCustomerReceipts(); // RP.GetAllReciepts();
-            var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
+                pFromDate = AccountsDAO.CheckParamDate(pFromDate, FyearId).Date;
+                pToDate = AccountsDAO.CheckParamDate(pToDate, FyearId).Date.AddDays(1);
+            }
+            else
+            {
+                pFromDate = Convert.ToDateTime(FromDate);//.AddDays(-1);
+                pToDate = Convert.ToDateTime(ToDate).AddDays(1);
+
+            }
+            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
+            Reciepts = ReceiptDAO.GetCustomerReceipts(FyearId,pFromDate,pToDate); // RP.GetAllReciepts();
+
+           // var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
             if (ID > 0)
             {
                 ViewBag.SuccessMsg = "You have successfully added Customer Reciept.";
@@ -842,6 +877,7 @@ namespace LTMSV2.Controllers
         [HttpGet]
         public ActionResult CustomerTradeReceipt(int id)
         {
+            int FyearId = Convert.ToInt32(Session["fyearid"]);
             CustomerRcieptVM cust = new CustomerRcieptVM();
             cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
             if (Session["UserID"] != null)
@@ -850,27 +886,29 @@ namespace LTMSV2.Controllers
 
                 if (id > 0)
                 {
+                    ViewBag.Title = "Customer Receipt - Modify";
                     cust = RP.GetRecPayByRecpayID(id);
 
                     var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
                     var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
-
-                    ViewBag.achead = acheadforcash;
-                    ViewBag.acheadbank = acheadforbank;
-                    //ViewBag.achead = Context1.AcHeadSelectForCash(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
-                    //ViewBag.acheadbank = Context1.AcHeadSelectForBank(Convert.ToInt32(Session["AcCompanyID"].ToString())).ToList();
                     ViewBag.achead = acheadforcash;
                     ViewBag.acheadbank = acheadforbank;
                     cust.recPayDetail = Context1.RecPayDetails.Where(item => item.RecPayID == id).ToList();
+                    cust.AWBAllocation = new List<ReceiptAllocationDetailVM>();
+                    
                     cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
                     foreach (var item in cust.recPayDetail)
                     {
                         if (item.InvoiceID > 0)
                         {
-                            var sInvoiceDetail = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceDetailID == item.InvoiceID select d).FirstOrDefault();
+                            cust.AWBAllocation = ReceiptDAO.GetAWBAllocation(cust.AWBAllocation,Convert.ToInt32(item.InvoiceID),Convert.ToDecimal(item.Amount), cust.RecPayID); //customer invoiceid,amount
+                            var sInvoiceDetail = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.InvoiceID select d ).ToList();
+                            var awbDetail = (from d in Context1.RecPayAllocationDetails where d.CustomerInvoiceID == item.InvoiceID && d.RecPayDetailID == item.RecPayDetailID select d).ToList();
                             if (sInvoiceDetail != null)
                             {
-                                var Sinvoice = (from d in Context1.CustomerInvoices where d.CustomerInvoiceID == sInvoiceDetail.CustomerInvoiceID select d).FirstOrDefault();
+                                var invoicetotal = sInvoiceDetail.Sum(d => d.NetValue); //  sInvoiceDetail.Sum(d=>d.OtherCharge);
+                                var awbtotal = awbDetail.Sum(d => d.AllocatedAmount);
+                                var Sinvoice = (from d in Context1.CustomerInvoices where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
                                 var allrecpay = (from d in Context1.RecPayDetails where d.InvoiceID == item.InvoiceID select d).ToList();
                                 var totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
                                 var totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
@@ -885,22 +923,23 @@ namespace LTMSV2.Controllers
                                 customerinvoice.InvoiceID = Convert.ToInt32(item.InvoiceID);
                                 customerinvoice.SInvoiceNo = Sinvoice.CustomerInvoiceNo;
                                 customerinvoice.strDate = Convert.ToDateTime(item.InvDate).ToString("dd/MM/yyyy");
-                                customerinvoice.AmountToBePaid = Convert.ToDecimal(totamtpaid);
+                                customerinvoice.AmountToBePaid =(Convert.ToDecimal(totamtpaid)- Convert.ToDecimal(totamt)) - Convert.ToDecimal(item.Amount);
                                 customerinvoice.Amount = Convert.ToDecimal(item.Amount) * -1;
-                                customerinvoice.Balance = Convert.ToDecimal(sInvoiceDetail.NetValue - totamt);
+                                customerinvoice.Balance = (Convert.ToDecimal(invoicetotal)- Convert.ToDecimal(totamt)) - Convert.ToDecimal(item.Amount); //  Convert.ToDecimal(sInvoiceDetail.NetValue - totamt);
                                 customerinvoice.RecPayDetailID = item.RecPayDetailID;
-                                customerinvoice.AmountToBeRecieved = Convert.ToDecimal(sInvoiceDetail.NetValue);
+                                customerinvoice.AmountToBeRecieved = Convert.ToDecimal(invoicetotal);// Convert.ToDecimal(totamtpaid)- Convert.ToDecimal(awbtotal); // Convert.ToDecimal(sInvoiceDetail.NetValue);
                                 customerinvoice.RecPayID = Convert.ToInt32(item.RecPayID);
                                 customerinvoice.AdjustmentAmount = Convert.ToDecimal(item.AdjustmentAmount);
                                 cust.CustomerRcieptChildVM.Add(customerinvoice);
                             }
                         }
                     }
-                    
+                    Session["AWBAllocation"] = cust.AWBAllocation;
                     BindMasters_ForEdit(cust);
                 }
                 else
                 {
+                    ViewBag.Title = "Customer Receipt - Create";
                     BindAllMasters(2);
 
                     var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
@@ -908,9 +947,11 @@ namespace LTMSV2.Controllers
 
                     ViewBag.achead = acheadforcash;
                     ViewBag.acheadbank = acheadforbank;
-                    
 
-                    cust.RecPayDate = System.DateTime.UtcNow;
+                    DateTime pFromDate = AccountsDAO.CheckParamDate(DateTime.Now, FyearId).Date;
+                    cust.RecPayDate = pFromDate;
+                    cust.RecPayID = 0;
+                    cust.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                 }
             }
             else
@@ -956,18 +997,20 @@ namespace LTMSV2.Controllers
                 model.EmpName = users.Where(d => d.UserID == item.UserId).FirstOrDefault().UserName;
                 customernotification.Add(model);
             }
+            cust.AWBAllocation = new List<ReceiptAllocationDetailVM>();
             ViewBag.CustomerNotification = customernotification;
             return View(cust);
 
         }
 
         [HttpPost]
-        public JsonResult GetTradeInvoiceOfCustomer(int? ID,decimal? amountreceived)
+        public JsonResult GetTradeInvoiceOfCustomer(int? ID,decimal? amountreceived,int? RecPayId)
         {
 
-            DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
+           DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
             DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
             var AllInvoices = (from d in Context1.CustomerInvoices where d.CustomerID == ID select d).ToList();
+            List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
             var salesinvoice = new List<CustomerTradeReceiptVM>();
             foreach (var item in AllInvoices)
             {
@@ -1028,10 +1071,57 @@ namespace LTMSV2.Controllers
                         }
                     }
                     salesinvoice.Add(Invoice);
+                    if (RecPayId == null)
+                    {
+                        AWBAllocation = ReceiptDAO.GetAWBAllocation(AWBAllocation, Convert.ToInt32(Invoice.SalesInvoiceID), Convert.ToDecimal(Invoice.Amount), 0); //customer invoiceid,amount
+                    }
+                    else
+                    {
+                        AWBAllocation = ReceiptDAO.GetAWBAllocation(AWBAllocation, Convert.ToInt32(Invoice.SalesInvoiceID), Convert.ToDecimal(Invoice.Amount), Convert.ToInt32(RecPayId)); //customer invoiceid,amount
+                    }
                 }
             }
 
+            Session["AWBAllocation"] = AWBAllocation;
             return Json(salesinvoice, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetAWBAllocation(int InvoiceId)
+        {
+            List<ReceiptAllocationDetailVM> AWBAllocationall = new List<ReceiptAllocationDetailVM>();
+            List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
+            AWBAllocationall = (List<ReceiptAllocationDetailVM>)Session["AWBAllocation"];
+            AWBAllocation = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == InvoiceId).ToList();
+            return Json(AWBAllocation,JsonRequestBehavior.AllowGet);
+
+        }     
+
+        [HttpPost]
+        public JsonResult SaveAWBAllocation(List<ReceiptAllocationDetailVM> RecP)
+        {
+            var dd = RecP;
+            List<ReceiptAllocationDetailVM> AWBAllocationall = new List<ReceiptAllocationDetailVM>();
+            List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
+            AWBAllocationall = (List<ReceiptAllocationDetailVM>)Session["AWBAllocation"];
+            foreach(var item in AWBAllocationall)
+            {
+                foreach (var item2 in RecP)
+                {
+                    if (item.CustomerInvoiceDetailID==item2.CustomerInvoiceDetailID)
+                    {
+                        item.AllocatedAmount = item2.AllocatedAmount;                     
+                        break;
+                    }                   
+
+                }
+                AWBAllocation.Add(item);
+            }
+            Session["AWBAllocation"] = AWBAllocation;
+            //AWBAllocation = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == InvoiceId).ToList();
+            //   AWBAllocation = updatelist;
+            return Json(AWBAllocation, JsonRequestBehavior.AllowGet);
+
         }
         [HttpPost]
         public ActionResult CustomerTradeReceipt(CustomerRcieptVM RecP, string Command, string Currency)
@@ -1043,7 +1133,7 @@ namespace LTMSV2.Controllers
             var StaffNotes = (from d in Context1.StaffNotes where d.RecPayID== RecP.RecPayID && d.PageTypeId == 2 orderby d.NotesId descending select d).ToList();
             var branchid = Convert.ToInt32(Session["CurrentBranchID"]);
             var users = (from d in Context1.UserRegistrations select d).ToList();
-
+            List<ReceiptAllocationDetailVM> AWBAllocationall = (List<ReceiptAllocationDetailVM>)Session["AWBAllocation"];
             var staffnotemodel = new List<StaffNoteModel>();
             foreach (var item in StaffNotes)
             {
@@ -1151,6 +1241,43 @@ namespace LTMSV2.Controllers
                             salesinvoicedetails.RecPayDetailId = maxrecpaydetailid + 1;
                             Context1.SaveChanges();
                         }
+
+                        //add awballocation table
+                        //List<ReceiptAllocationDetailVM> AWBAllocationall = (List<ReceiptAllocationDetailVM>)Session["AWBAllocation"];
+                        var allocationdetail = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == item.InvoiceID).ToList();
+                        foreach (var aitem in allocationdetail)
+                        {
+
+                            if (aitem.RecPayDetailID == 0)
+                            {
+                                aitem.RecPayDetailID = 0;
+                                RecPayAllocationDetail allocation = new RecPayAllocationDetail();
+                                allocation.CustomerInvoiceDetailID = aitem.CustomerInvoiceDetailID;
+                                allocation.CustomerInvoiceID = aitem.CustomerInvoiceId;
+                                allocation.RecPayID = RecP.RecPayID;
+                                allocation.InScanID = aitem.InScanID;
+                                allocation.RecPayDetailID = salesinvoicedetails.RecPayDetailId;
+                                allocation.AllocatedAmount = aitem.AllocatedAmount;
+                                Context1.RecPayAllocationDetails.Add(allocation);
+                                Context1.SaveChanges();
+                            }
+                            else
+                            {
+                                RecPayAllocationDetail allocation = Context1.RecPayAllocationDetails.Where(cc => cc.ID == aitem.ID && cc.RecPayDetailID == salesinvoicedetails.RecPayDetailId).FirstOrDefault();
+                                allocation.CustomerInvoiceDetailID = aitem.CustomerInvoiceDetailID;
+                                allocation.CustomerInvoiceID = aitem.CustomerInvoiceId;
+                                allocation.RecPayID = RecP.RecPayID;
+                                allocation.InScanID = aitem.InScanID;
+                                allocation.RecPayDetailID = salesinvoicedetails.RecPayDetailId;
+                                allocation.AllocatedAmount = aitem.AllocatedAmount;
+                                Context1.Entry(allocation).State = EntityState.Modified;
+                                Context1.SaveChanges();
+                            }
+                        }
+
+
+
+
                     }
                     TotalAmount = TotalAmount + Convert.ToDecimal(item.Amount);
                 }
@@ -1199,6 +1326,7 @@ namespace LTMSV2.Controllers
                 recpay.FMoney = Fmoney;
                 recpay.StatusEntry = RecP.StatusEntry;
                 recpay.IsTradingReceipt = true;
+                recpay.Remarks = RecP.Remarks;
                 Context1.Entry(recpay).State = EntityState.Modified;
                 Context1.SaveChanges();
 
@@ -1215,7 +1343,42 @@ namespace LTMSV2.Controllers
                     recpd.StatusInvoice = "C";
                     Context1.Entry(recpd).State = EntityState.Modified;
                     Context1.SaveChanges();
-                    var salesinvoicedetails = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceDetailID == item.InvoiceID select d).FirstOrDefault();
+                    //
+                    
+                    var allocationdetail = AWBAllocationall.Where(cc => cc.CustomerInvoiceId == item.InvoiceID).ToList();
+                    foreach (var aitem in allocationdetail)
+                    {                      
+                     
+                      RecPayAllocationDetail allocation = Context1.RecPayAllocationDetails.Where(cc => cc.RecPayID==RecP.RecPayID &&  cc.CustomerInvoiceDetailID == aitem.CustomerInvoiceDetailID).FirstOrDefault();
+                        if (allocation == null)
+                        {
+                            allocation = new RecPayAllocationDetail();
+                            allocation.CustomerInvoiceDetailID = aitem.CustomerInvoiceDetailID;
+                            allocation.CustomerInvoiceID = aitem.CustomerInvoiceId;
+                            allocation.RecPayID = RecP.RecPayID;
+                            allocation.InScanID = aitem.InScanID;
+                            allocation.RecPayDetailID = aitem.RecPayDetailID;
+                            allocation.AllocatedAmount = aitem.AllocatedAmount;
+                            Context1.RecPayAllocationDetails.Add(allocation);
+                            Context1.SaveChanges();
+                        }
+                        else
+                        {
+                            allocation.CustomerInvoiceDetailID = aitem.CustomerInvoiceDetailID;
+                            allocation.CustomerInvoiceID = aitem.CustomerInvoiceId;
+                            allocation.RecPayID = RecP.RecPayID;
+                            allocation.InScanID = aitem.InScanID;
+                            allocation.RecPayDetailID = recpd.RecPayDetailID;
+                            allocation.AllocatedAmount = aitem.AllocatedAmount;
+
+                            Context1.Entry(allocation).State = EntityState.Modified;
+                            Context1.SaveChanges();
+                        }
+                    }
+
+                //
+
+                    var salesinvoicedetails = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
                     var totamount = (from d in Context1.RecPayDetails where d.InvoiceID == salesinvoicedetails.CustomerInvoiceDetailID select d).ToList();
                     var totsum = totamount.Sum(d => d.Amount) * -1;
                     var totAdsum = totamount.Sum(d => d.AdjustmentAmount);

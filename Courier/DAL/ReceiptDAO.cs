@@ -11,12 +11,15 @@ namespace LTMSV2.DAL
     public class ReceiptDAO
     {
         //CustomerInvoiceDetailForReceipt
-        public static List<ReceiptVM> GetCustomerReceipts()
+        public static List<ReceiptVM> GetCustomerReceipts(int FYearId, DateTime FromDate, DateTime ToDate)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_GetAllRecieptsDetails";
             cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FYearId", FYearId);
 
             //cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
             //cmd.Parameters["@AcJournalDetailID"].Value = AcJournalDetailID;
@@ -25,7 +28,7 @@ namespace LTMSV2.DAL
             da.Fill(ds);
 
             List<ReceiptVM> objList = new List<ReceiptVM>();
-            
+
             if (ds != null && ds.Tables.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -34,7 +37,7 @@ namespace LTMSV2.DAL
                     obj.RecPayID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["RecPayID"].ToString());
                     obj.RecPayDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["RecPayDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
                     obj.DocumentNo = ds.Tables[0].Rows[i]["DocumentNo"].ToString();
-                    obj.PartyName= ds.Tables[0].Rows[i]["PartyName"].ToString();
+                    obj.PartyName = ds.Tables[0].Rows[i]["PartyName"].ToString();
                     obj.PartyName = ds.Tables[0].Rows[i]["PartyName"].ToString();
                     if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
                     {
@@ -44,7 +47,7 @@ namespace LTMSV2.DAL
                     {
                         obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
                     }
-                    obj.Currency= CommanFunctions.ParseDecimal( ds.Tables[0].Rows[i]["Currency"].ToString());
+                    obj.Currency = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Currency"].ToString());
                     objList.Add(obj);
                 }
             }
@@ -57,10 +60,9 @@ namespace LTMSV2.DAL
             cmd.CommandText = "SP_GetAllRecieptsDetailsByDate";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@FromDate", FromDate);
-            cmd.Parameters.AddWithValue("@Todate", ToDate);
+            cmd.Parameters.AddWithValue("@FromDate", Convert.ToDateTime(FromDate).ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@Todate", Convert.ToDateTime(ToDate).ToString("MM/dd/yyyy"));
             cmd.Parameters.AddWithValue("@FyearId", FyearID);
-
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -457,18 +459,121 @@ namespace LTMSV2.DAL
             //Context1.SP_InsertJournalEntryForRecPay(RecpayID, fyaerId);
         }
 
-        public static void DeleteCustomerReceipt(int RecPayID)
+        public static DataTable DeleteCustomerReceipt(int RecPayID)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_DeleteCustomerReciepts";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@RecPayID", RecPayID);
-            cmd.Connection.Open();
-            cmd.ExecuteNonQuery();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
 
 
         }
 
+        public static DataTable DeleteInvoice(int InvoiceId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteCustomerInvoice";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerInvoiceId", InvoiceId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+        public static DataTable DeleteInscan(int InscanId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteInscan";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@InScanId", InscanId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public static List<ReceiptAllocationDetailVM> GetAWBAllocation(List<ReceiptAllocationDetailVM> list, int InvoiceId, decimal Amount, int RecpayId)
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "SP_GetInvoiceAWBAllocation";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
+                cmd.Parameters.AddWithValue("@ReceivedAmount", Amount);
+                cmd.Parameters.AddWithValue("@RecPayId", RecpayId);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        DataRow drrow = ds.Tables[0].Rows[i];
+                        ReceiptAllocationDetailVM item = new ReceiptAllocationDetailVM();
+                        item.ID = Convert.ToInt32(drrow["ID"].ToString());
+                        item.CustomerInvoiceId = Convert.ToInt32(drrow["CustomerInvoiceId"].ToString());
+                        item.CustomerInvoiceDetailID = Convert.ToInt32(drrow["CustomerInvoiceDetailID"].ToString());
+                        item.InScanID = Convert.ToInt32(drrow["InScanId"].ToString());
+                        item.RecPayID = Convert.ToInt32(drrow["RecPayID"].ToString());
+                        item.RecPayDetailID = Convert.ToInt32(drrow["RecPayDetailID"].ToString());
+                        item.CustomerInvoiceDetailID = Convert.ToInt32(drrow["CustomerInvoiceDetailID"].ToString());
+                        item.AWBNo = drrow["AWBNo"].ToString();
+                        item.AWBDate = Convert.ToDateTime(drrow["AWBDate"].ToString()).ToString("dd-MM-yyyy");
+                        item.TotalAmount = Convert.ToDecimal(drrow["TotalAmount"].ToString());
+                        item.ReceivedAmount = Convert.ToDecimal(drrow["ReceivedAmount"].ToString());
+                        item.PendingAmount = Convert.ToDecimal(drrow["PendingAmount"].ToString());
+                        item.AllocatedAmount = Convert.ToDecimal(drrow["AllocatedAmount"].ToString());
+                        item.Allocated = Convert.ToBoolean(drrow["Allocated"].ToString());
+
+                        list.Add(item);
+
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return list;
+            }
+
+            return list;
+        }
     }
 }

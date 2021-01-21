@@ -8614,6 +8614,7 @@
       <End Role="BranchMaster" EntitySet="BranchMasters" />
       <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
     </AssociationSet>
+    <EntitySet Name="RecPayAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12866,6 +12867,7 @@
     <Property Name="AcFinancialYearID" Type="Int32" />
     <Property Name="BranchID" Type="Int32" />
     <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoice" ToRole="CustomerInvoiceDetail" />
+    <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="CustomerInvoiceDetail">
     <Key>
@@ -13484,4 +13486,16 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="RecPayAllocationDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RecPayID" Type="Int32" />
+    <Property Name="RecPayDetailID" Type="Int32" />
+    <Property Name="CustomerInvoiceID" Type="Int32" />
+    <Property Name="CustomerInvoiceDetailID" Type="Int32" />
+    <Property Name="InScanID" Type="Int32" />
+    <Property Name="AllocatedAmount" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
 </Schema>

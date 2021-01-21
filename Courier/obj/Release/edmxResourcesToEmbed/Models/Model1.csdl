@@ -12866,6 +12866,7 @@
     <Property Name="AcFinancialYearID" Type="Int32" />
     <Property Name="BranchID" Type="Int32" />
     <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoice" ToRole="CustomerInvoiceDetail" />
+    <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="CustomerInvoiceDetail">
     <Key>

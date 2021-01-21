@@ -435,6 +435,7 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOpeningMaster_BranchMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceMaster_BranchMaster" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail" Width="1.5" PointX="42.375" PointY="4.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

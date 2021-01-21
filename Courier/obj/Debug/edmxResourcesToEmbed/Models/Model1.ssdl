@@ -1074,6 +1074,7 @@
     <Property Name="IsDeleted" Type="bit" Nullable="false" />
     <Property Name="AcFinancialYearID" Type="int" />
     <Property Name="BranchID" Type="int" />
+    <Property Name="Remarks" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="CustomerInvoiceDetails">
     <Key>
@@ -2924,6 +2925,18 @@
     <Property Name="FMoney" Type="money" />
     <Property Name="UserID" Type="int" />
     <Property Name="IsTradingReceipt" Type="bit" />
+  </EntityType>
+  <EntityType Name="RecPayAllocationDetails">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RecPayID" Type="int" />
+    <Property Name="RecPayDetailID" Type="int" />
+    <Property Name="CustomerInvoiceID" Type="int" />
+    <Property Name="CustomerInvoiceDetailID" Type="int" />
+    <Property Name="InScanID" Type="int" />
+    <Property Name="AllocatedAmount" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="RecPayDetails">
     <Key>
@@ -8783,6 +8796,7 @@
     <EntitySet Name="Quotation" EntityType="Self.Quotation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="QuotationDetails" EntityType="Self.QuotationDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RecPay" EntityType="Self.RecPay" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RecPayAllocationDetails" EntityType="Self.RecPayAllocationDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RecPayDetails" EntityType="Self.RecPayDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RequestType" EntityType="Self.RequestType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ReturnDetails" EntityType="Self.ReturnDetails" Schema="dbo" store:Type="Tables" />

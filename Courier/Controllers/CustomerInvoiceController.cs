@@ -290,6 +290,7 @@ namespace LTMSV2.Controllers
                 _custinvoice.AcFinancialYearID = yearid;
                 _custinvoice.AcCompanyID = companyId;
                 _custinvoice.BranchID = branchid;
+                _custinvoice.Remarks = model.Remarks;
 
                 db.CustomerInvoices.Add(_custinvoice);
                 db.SaveChanges();
@@ -357,26 +358,13 @@ namespace LTMSV2.Controllers
             _custinvoice.CustomerInvoiceID = _invoice.CustomerInvoiceID;
             _custinvoice.InvoiceDate = _invoice.InvoiceDate;            
             _custinvoice.CustomerInvoiceNo = _invoice.CustomerInvoiceNo;
-            _custinvoice.CustomerID = _invoice.CustomerID;
-            //_custinvoice.CustomerInvoiceTax = _invoice.CustomerInvoiceTax;
-            //_custinvoice.FuelPer = _invoice.FuelPer;
-            //_custinvoice.FuelAmt = _invoice.FuelAmt;
-            //_custinvoice.AdminPer = _invoice.AdminPer;
-            //_custinvoice.AdminAmt = _invoice.AdminAmt;
-            //_custinvoice.OtherCharge = _invoice.OtherCharge;
-            //_custinvoice.ChargeableWT = _invoice.ChargeableWT;
+            _custinvoice.CustomerID = _invoice.CustomerID;            
             _custinvoice.InvoiceTotal= _invoice.InvoiceTotal;
-                       
+            _custinvoice.Remarks = _invoice.Remarks;
             List<CustomerInvoiceDetailVM> _details = new List<CustomerInvoiceDetailVM>();
             _details = RevenueDAO.GenerateInvoice(DateTime.Now, DateTime.Now, _invoice.CustomerID,0,_invoice.CustomerInvoiceID);
 
-            //_details = (from c in db.CustomerInvoiceDetails
-            //            join ins in db.InScanMasters on  c.InscanID equals ins.InScanID
-            //            where c.CustomerInvoiceID == id
-            //            select new CustomerInvoiceDetailVM { CustomerInvoiceDetailID = c.CustomerInvoiceDetailID, CustomerInvoiceID = c.CustomerInvoiceID, AWBNo = c.AWBNo,AWBDateTime=ins.TransactionDate, CustomCharge=c.CustomCharge,
-            //                CourierCharge = c.CourierCharge, OtherCharge = c.OtherCharge, ConsigneeCountryName=ins.ConsigneeCountryName,ConsigneeName=ins.Consignee,
-            //                StatusPaymentMode = c.StatusPaymentMode, InscanID = c.InscanID ,AWBChecked=true }).ToList();
-
+            
             int _index = 0;
 
             foreach (var item in _details)
@@ -407,6 +395,7 @@ namespace LTMSV2.Controllers
                 _custinvoice.InvoiceDate = model.InvoiceDate;                
                 _custinvoice.TaxPercent = model.TaxPercent;                
                 _custinvoice.InvoiceTotal = model.InvoiceTotal;
+                _custinvoice.Remarks = model.Remarks;
                 db.Entry(_custinvoice).State = EntityState.Modified;
                 db.SaveChanges();
 
@@ -440,9 +429,13 @@ namespace LTMSV2.Controllers
                             db.Entry(_inscan).State = EntityState.Modified;
                             db.SaveChanges();
 
+                            RevenueUpdateMaster _revenueupdate = db.RevenueUpdateMasters.Where(cc => cc.InScanID == e_details.InScanID).FirstOrDefault();
+                            _revenueupdate.InvoiceId = _custinvoice.CustomerInvoiceID;
+                            db.Entry(_revenueupdate).State = EntityState.Modified;
+                            db.SaveChanges();
 
                         }
-                        else  if (e_details.CustomerInvoiceDetailID == 0 && e_details.AWBChecked)
+                        else  if (e_details.CustomerInvoiceDetailID == 0 && e_details.AWBChecked==false)
                         {
                             //CustomerInvoiceDetail _detail = new CustomerInvoiceDetail();
                             //_detail = db.CustomerInvoiceDetails.Find(e_details.CustomerInvoiceID);                            
@@ -458,10 +451,10 @@ namespace LTMSV2.Controllers
                             //db.Entry(_inscan).State = System.Data.EntityState.Modified;
                             //db.SaveChanges();
                         }
-                        else if (e_details.CustomerInvoiceDetailID == 0 && e_details.AWBChecked==false)
+                        else if (e_details.CustomerInvoiceDetailID > 0 && e_details.AWBChecked==false)
                         {
                             CustomerInvoiceDetail _detail = new CustomerInvoiceDetail();
-                            _detail = db.CustomerInvoiceDetails.Find(e_details.CustomerInvoiceID);
+                            _detail = db.CustomerInvoiceDetails.Find(e_details.CustomerInvoiceDetailID);
                             db.CustomerInvoiceDetails.Remove(_detail);
                             db.SaveChanges();
                             ////inscan invoice modified
@@ -469,9 +462,18 @@ namespace LTMSV2.Controllers
                             _inscan.InvoiceID = null;
                             db.Entry(_inscan).State = EntityState.Modified;
                             db.SaveChanges();
+
+                            RevenueUpdateMaster _revenueupdate = db.RevenueUpdateMasters.Where(cc => cc.InScanID == e_details.InScanID).FirstOrDefault();
+                            _revenueupdate.InvoiceId = null;
+                            db.Entry(_revenueupdate).State = EntityState.Modified;
+                            db.SaveChanges();
                         }
                     }
                 }
+                //Accounts Posting
+                PickupRequestDAO _dao = new PickupRequestDAO();
+                _dao.GenerateInvoicePosting(_custinvoice.CustomerInvoiceID);
+
                 TempData["SuccessMsg"] = "You have successfully Updated the Customer Invoice";
                 return RedirectToAction("Index");
             }
@@ -572,28 +574,49 @@ namespace LTMSV2.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-            CustomerInvoice a = db.CustomerInvoices.Find(id);
-            if (a == null)  
+            //int k = 0;
+            if (id != 0)
             {
-                return HttpNotFound();
-            }
-            else
-            {
-                var _inscans = db.InScanMasters.Where(cc => cc.InvoiceID == id).ToList();
-                foreach(InScanMaster _inscan in _inscans)
+                DataTable dt = ReceiptDAO.DeleteInvoice(id);
+                if (dt != null)
                 {
-                    _inscan.InvoiceID = null;
-                    db.Entry(_inscan).State = EntityState.Modified;
-                    db.SaveChanges();
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
                 }
-                a.IsDeleted = true;
-                db.Entry(a).State = EntityState.Modified;
-                db.SaveChanges();
-                TempData["SuccessMsg"] = "You have successfully deleted Pickup Request.";
-
-
-                return RedirectToAction("Index");
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
             }
+
+            return RedirectToAction("Index");
+
+            //CustomerInvoice a = db.CustomerInvoices.Find(id);
+            //if (a == null)  
+            //{
+            //    return HttpNotFound();
+            //}
+            //else
+            //{
+            //    var _inscans = db.InScanMasters.Where(cc => cc.InvoiceID == id).ToList();
+            //    foreach(InScanMaster _inscan in _inscans)
+            //    {
+            //        _inscan.InvoiceID = null;
+            //        db.Entry(_inscan).State = EntityState.Modified;
+            //        db.SaveChanges();
+            //    }
+            //    a.IsDeleted = true;
+            //    db.Entry(a).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //    TempData["SuccessMsg"] = "You have successfully deleted Pickup Request.";
+
+
+            //    return RedirectToAction("Index");
+            //}
         }
         public ActionResult Details(int id)        
         {
