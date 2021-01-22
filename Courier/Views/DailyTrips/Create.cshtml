@@ -372,7 +372,20 @@
 </body>
 </html>
 <script type="text/javascript">
-                                $(document).ready(function () {
+    function GetMaxTDNo() {
+        //GetTDMAxNo
+
+        $.ajax({
+            type: "Get",
+            url: "/DailyTrips/GetTDMAxNo",
+            datatype: "Json",
+            data: { 'vehicletype': $('#VehicleType').val() },
+            success: function (response) {        
+                $('#ReceiptNo').val(response.TDNo);                
+            }
+        });
+ }
+                         $(document).ready(function () {
                                     $(".Allocate").on("click", function () {
 
                                         $('#popup').modal('show');
@@ -523,32 +536,34 @@
             }
             return;
         }
-
-        if ($("#chkHired").is(':checked')) {
-            $('#VehicleType').val('H');
-            $('#divdriver').removeClass('hide');
-            $('#divfwd').addClass('hide');
-            //$("#chkOwn").removeAttr('checked');
-            //$("#chkContract").removeAttr('checked');
-            //$("#chkForward").removeAttr('checked');
-        }
-        else if ($("#chkOwn").is(':checked')) {
-            $('#VehicleType').val('O');
-            $('#divfwd').addClass('hide');
-            $('#divdriver').removeClass('hide');
-        }
-        else if ($("#chkContract").is(':checked')) {
-            $('#VehicleType').val('C');
-            $('#divfwd').addClass('hide');
-            $('#divdriver').removeClass('hide');
-        }
-        else if ($("#chkForward").is(':checked')) {
-            $('#VehicleType').val('F');
-            $('#divfwd').removeClass('hide');
-            $('#divdriver').addClass('hide');
-            //$("#chkHired").removeAttr('checked');
-            //$("#chkOwn").removeAttr('checked');
-            //$("#chkContract").removeAttr('checked');
+        else {
+            if ($("#chkHired").is(':checked')) {
+                $('#VehicleType').val('H');
+                $('#divdriver').removeClass('hide');
+                $('#divfwd').addClass('hide');
+                //$("#chkOwn").removeAttr('checked');
+                //$("#chkContract").removeAttr('checked');
+                //$("#chkForward").removeAttr('checked');
+            }
+            else if ($("#chkOwn").is(':checked')) {
+                $('#VehicleType').val('O');
+                $('#divfwd').addClass('hide');
+                $('#divdriver').removeClass('hide');
+            }
+            else if ($("#chkContract").is(':checked')) {
+                $('#VehicleType').val('C');
+                $('#divfwd').addClass('hide');
+                $('#divdriver').removeClass('hide');
+            }
+            else if ($("#chkForward").is(':checked')) {
+                $('#VehicleType').val('F');
+                $('#divfwd').removeClass('hide');
+                $('#divdriver').addClass('hide');
+                //$("#chkHired").removeAttr('checked');
+                //$("#chkOwn").removeAttr('checked');
+                //$("#chkContract").removeAttr('checked');
+            }
+            GetMaxTDNo();
         }
     }
     function checkpayment() {

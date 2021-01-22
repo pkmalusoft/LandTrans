@@ -80,7 +80,6 @@
             <th>Receipt Number</th>
             <th style="width: 25%">Vendor</th>
             <th>Amount</th>
-            <th>Currency</th>
             <th style="width:120px;">Action</th>
         </tr>
     </thead>
@@ -112,7 +111,9 @@
                     @*@customers.Where(d => d.CustomerID == item.CustomerID).FirstOrDefault().CustomerName*@
                     @Html.DisplayFor(modelItem => item.PartyName)
                 </td>
-                <td class="tdtarget " style="text-align:right!important">@Html.DisplayFor(modelItem => item.Amount)</td>
+                <td class="tdtarget " style="text-align:right!important">                
+                @LTMSV2.Models.CommanFunctions.GetDecimalFormat(item.Amount,"3")
+                </td>
 
                 <td>
 

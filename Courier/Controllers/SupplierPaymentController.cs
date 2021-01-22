@@ -294,7 +294,7 @@ namespace LTMSV2.Controllers
                                 PartyName = s.SupplierName
                             }).ToList();
             Reciepts.ForEach(x => x.Amount = (from s in Context1.RecPayDetails where s.RecPayID == x.RecPayID where s.Amount > 0 select s).ToList().Sum(a => a.Amount));
-            var data = (from t in Reciepts where (t.RecPayDate >= sdate && t.RecPayDate <= edate) select t).ToList();
+            var data = (from t in Reciepts where (t.RecPayDate >= sdate && t.RecPayDate <= edate) select t).OrderByDescending(cc=>cc.RecPayDate).ToList();
             var result = data.GroupBy(p => p.RecPayID).Select(grp => grp.FirstOrDefault());
 
             string view = this.RenderPartialView("_GetAllTradeSupplierByDate", result);
@@ -357,6 +357,7 @@ namespace LTMSV2.Controllers
             Reciepts = (from r in Context1.RecPays
                         join d in Context1.RecPayDetails on r.RecPayID equals d.RecPayID
                         join s in Context1.SupplierMasters on r.SupplierID equals s.SupplierID
+                        orderby r.RecPayDate descending
                         select new ReceiptVM {
                             RecPayDate=r.RecPayDate,
                             DocumentNo=r.DocumentNo,
@@ -451,7 +452,7 @@ namespace LTMSV2.Controllers
                 else
                 {
                     BindAllMasters(2);
-
+                    cust.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                     var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
                     var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
 
@@ -459,7 +460,7 @@ namespace LTMSV2.Controllers
                     ViewBag.acheadbank = acheadforbank;
                     ViewBag.SupplierType = Context1.SupplierTypes.ToList();
 
-
+                    cust.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                     cust.RecPayDate = System.DateTime.UtcNow;
                 }
             }

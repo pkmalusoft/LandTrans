@@ -166,7 +166,7 @@ namespace LTMSV2.DAL
             return MaxPickUpNo;
 
         }
-        public string GetTDSReceiptNo(int Companyid, int BranchId)
+        public string GetTDSReceiptNo(int Companyid, int BranchId,string VehicleType,int Fyearid)
         {
             DataTable dt = new DataTable();
             string MaxPickUpNo = "";
@@ -185,6 +185,9 @@ namespace LTMSV2.DAL
 
                         cmd.Parameters.AddWithValue("@CompanyId", Companyid);
                         cmd.Parameters.AddWithValue("@BranchId", BranchId);
+                        cmd.Parameters.AddWithValue("@VehicleType",VehicleType);
+                        cmd.Parameters.AddWithValue("@FYearId", Fyearid);
+                        
                         con.Open();
                         SqlDataAdapter SqlDA = new SqlDataAdapter(cmd);
                         SqlDA.Fill(dt);

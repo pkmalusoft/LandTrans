@@ -113,7 +113,9 @@
                         @*@customers.Where(d => d.CustomerID == item.CustomerID).FirstOrDefault().CustomerName*@
                         @Html.DisplayFor(modelItem => item.PartyName)
                     </td>
-                    <td class="tdtarget " style="text-align:right!important">@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td class="tdtarget " style="text-align:right!important">                        
+                        @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount, "3")
+                    </td>
                     <td class="tdtarget">@Html.DisplayFor(modelItem => item.Remarks)</td>
 
                     <td>

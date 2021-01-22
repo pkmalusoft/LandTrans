@@ -35,7 +35,7 @@ namespace LTMSV2.Controllers
 
             var lst = (from c in db.SupplierInvoices
                        join d in db.SupplierInvoiceDetails on c.SupplierInvoiceID equals d.SupplierInvoiceID
-                       join s in db.SupplierMasters on c.SupplierID equals s.SupplierID
+                       join s in db.SupplierMasters on c.SupplierID equals s.SupplierID orderby c.InvoiceDate descending
                        select new SupplierInvoiceVM {SupplierInvoiceID=c.SupplierInvoiceID, InvoiceNo = c.InvoiceNo, InvoiceDate = c.InvoiceDate, SupplierName = s.SupplierName, Amount = 0,SupplierType=s.SupplierType.SupplierType1 }).ToList();
             lst.ForEach(d => d.Amount = (from s in db.SupplierInvoiceDetails where s.SupplierInvoiceID == d.SupplierInvoiceID select s).ToList().Sum(a => a.Rate));
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");

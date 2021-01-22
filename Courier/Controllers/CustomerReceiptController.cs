@@ -923,11 +923,12 @@ namespace LTMSV2.Controllers
                                 customerinvoice.InvoiceID = Convert.ToInt32(item.InvoiceID);
                                 customerinvoice.SInvoiceNo = Sinvoice.CustomerInvoiceNo;
                                 customerinvoice.strDate = Convert.ToDateTime(item.InvDate).ToString("dd/MM/yyyy");
-                                customerinvoice.AmountToBePaid =(Convert.ToDecimal(totamtpaid)- Convert.ToDecimal(totamt)) - Convert.ToDecimal(item.Amount);
+                                customerinvoice.AmountToBeRecieved = Convert.ToDecimal(invoicetotal) - Convert.ToDecimal(totamt) - Convert.ToDecimal(item.Amount);
+                                customerinvoice.AmountToBePaid = Convert.ToDecimal(invoicetotal) - customerinvoice.AmountToBeRecieved;
                                 customerinvoice.Amount = Convert.ToDecimal(item.Amount) * -1;
                                 customerinvoice.Balance = (Convert.ToDecimal(invoicetotal)- Convert.ToDecimal(totamt)) - Convert.ToDecimal(item.Amount); //  Convert.ToDecimal(sInvoiceDetail.NetValue - totamt);
                                 customerinvoice.RecPayDetailID = item.RecPayDetailID;
-                                customerinvoice.AmountToBeRecieved = Convert.ToDecimal(invoicetotal);// Convert.ToDecimal(totamtpaid)- Convert.ToDecimal(awbtotal); // Convert.ToDecimal(sInvoiceDetail.NetValue);
+                                
                                 customerinvoice.RecPayID = Convert.ToInt32(item.RecPayID);
                                 customerinvoice.AdjustmentAmount = Convert.ToDecimal(item.AdjustmentAmount);
                                 cust.CustomerRcieptChildVM.Add(customerinvoice);
@@ -1011,7 +1012,7 @@ namespace LTMSV2.Controllers
             DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
             var AllInvoices = (from d in Context1.CustomerInvoices where d.CustomerID == ID select d).ToList();
             List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
-            var salesinvoice = new List<CustomerTradeReceiptVM>();
+            var salesinvoice = new List<CustomerTradeReceiptVM>();            
             foreach (var item in AllInvoices)
             {
                 //var invoicedeails = (from d in Context1.SalesInvoiceDetails where d.SalesInvoiceID == item.SalesInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();

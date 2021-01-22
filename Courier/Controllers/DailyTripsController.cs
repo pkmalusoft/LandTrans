@@ -91,9 +91,10 @@ namespace LTMSV2.Controllers
         }
         public ActionResult Create(int Id)
         {
-            ViewBag.Branch = db.BranchMasters.ToList();
+            int FYearId = Convert.ToInt32(Session["fyearid"].ToString());
+            //ViewBag.Branch = db.BranchMasters.ToList();
             ViewBag.Routes = db.RouteMasters.ToList();
-            ViewBag.Locations = db.LocationMasters.ToList();
+            //ViewBag.Locations = db.LocationMasters.ToList();
             ViewBag.Currency = db.CurrencyMasters.ToList();
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
@@ -135,7 +136,7 @@ namespace LTMSV2.Controllers
                 }
                 var ReceiptNo = "TDS-" + MaxId;
                 PickupRequestDAO _dao = new PickupRequestDAO();
-                vm1.ReceiptNo = _dao.GetTDSReceiptNo(companyId,branchid);
+                vm1.ReceiptNo = _dao.GetTDSReceiptNo(companyId,branchid,"H",FYearId);
                 vm1.VehicleType = "H";
                 vm1.CurrencyIDRent = Convert.ToInt32(Session["CurrencyId"].ToString());
                 vm1.PaymentCurrencyID = Convert.ToInt32(Session["CurrencyId"].ToString());
@@ -239,7 +240,7 @@ namespace LTMSV2.Controllers
                         MaxId = Truck.TruckDetailID + 1;
                     }                                        
                  
-                    TruckDetail.ReceiptNo = _dao.GetTDSReceiptNo(companyId, branchid);
+                    TruckDetail.ReceiptNo = _dao.GetTDSReceiptNo(companyId, branchid,data.VehicleType,FYearId);
                 }
 
                 TruckDetail.VehicleID = Convert.ToInt32(data.VehicleID);
@@ -530,6 +531,24 @@ namespace LTMSV2.Controllers
             }
            
             return RedirectToAction("Index");
+        }
+
+        public JsonResult GetTDMAxNo(string vehicletype)
+        {
+            try
+            {
+                int FYearId = Convert.ToInt32(Session["fyearid"].ToString());
+                ViewBag.Currency = db.CurrencyMasters.ToList();
+                int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                int companyId = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                PickupRequestDAO _dao = new PickupRequestDAO();
+                var maxno = _dao.GetTDSReceiptNo(companyId, branchid, vehicletype, FYearId);
+                return Json(new { status="ok", TDNo = maxno }, JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status="failed",TDNo = 0 }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

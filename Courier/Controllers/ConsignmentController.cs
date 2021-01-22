@@ -2356,8 +2356,15 @@ namespace LTMSV2.Controllers
                 {
                     if (dt.Rows.Count > 0)
                     {
-                        //if (dt.Rows[0][0] == "OK")
-                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                        if (dt.Rows[0][0].ToString() == "OK")
+                        {
+                            TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                        }
+                        else
+                        {
+                            TempData["ErrorMsg"] = dt.Rows[0][1].ToString();
+
+                        }
                     }
 
                 }

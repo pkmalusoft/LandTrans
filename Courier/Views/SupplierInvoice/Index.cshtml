@@ -23,8 +23,14 @@
         });
 
 
-        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
-
+        var table = $('#dataTables-example').DataTable({
+            "aaSorting": [],
+            //"dom": '<"top"i>rt<"top"flp><"clear">',
+            //dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+            //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            //"pagingType": "simple"
+        });
+        table.draw();
         table.columns().every(function () {
             var that = this;
 

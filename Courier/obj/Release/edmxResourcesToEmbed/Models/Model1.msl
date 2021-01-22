@@ -9072,5 +9072,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="RecPayAllocationDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail">
+        <MappingFragment StoreEntitySet="RecPayAllocationDetails">
+          <ScalarProperty Name="AllocatedAmount" ColumnName="AllocatedAmount" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="CustomerInvoiceDetailID" ColumnName="CustomerInvoiceDetailID" />
+          <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
+          <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
+          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>
