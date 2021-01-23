@@ -15,8 +15,11 @@
     }
     .datefilters{
         border:1px solid #ccc;
-        padding: 20px 10px;
+        padding: 5px 10px;
         border-radius: 5px;
+    }
+    .checkboxdesign {
+        padding-top: 22px !important;
     }
 </style>
 <script>
@@ -41,8 +44,8 @@
                 $('#movementid').empty();
 
                 $.each(data, function (index, value) {
-
-                    var o_st = $("#MovementId").val().split(",");
+                    debugger;
+                    var o_st = $("#ParcelTypeId").val().split(",");
                     var flag = 0;
                     for (var j = 0; j < o_st.length; j++) {
 
@@ -169,7 +172,7 @@
 
     
     <div class="col-md-4">
-        @Html.HiddenFor(model => model.MovementId)
+        @Html.HiddenFor(model => model.ParcelTypeId)
         @Html.HiddenFor(model => model.SortBy)
         @Html.HiddenFor(model => model.ReportType)
         <label class="headinglabel">Load Type</label> <br />
@@ -181,10 +184,7 @@
    
     </div>
     <div class="row no-margin " style="padding-top:10px">
-    <div class="col-md-4">
-        <label class="headinglabel required">Invoice To</label>
-        @Html.DropDownListFor(model => model.InvoicedTo, new SelectList(@ViewBag.InvoiceTo, "TypeName", "TypeName"), "All", new { @class = "form-control" })
-    </div>
+  
     <div class="col-md-4">
         <label class="headinglabel">Payment Mode</label>
         @Html.DropDownListFor(model => model.PaymentModeId, new SelectList(@ViewBag.PaymentMode, "ID", "PaymentModeText"), "All", new { @class = "form-control" })
@@ -193,12 +193,9 @@
     <div class="col-md-4">
         <label class="headinglabel  required">Group By</label>
         @Html.DropDownList("GroupBy", new List<SelectListItem>
-        {
-            //new SelectListItem{ Text="Select",Value = "" },            
-            new SelectListItem{ Text="Invoice To", Value = "InvoiceTo" },
+        {               
             new SelectListItem{ Text="Load Type", Value = "ParcelType" },
-            new SelectListItem{ Text="PaymentMode", Value = "PaymentMode" },
-            new SelectListItem{ Text="Courier Type", Value = "Summary" },
+            new SelectListItem{ Text="PaymentMode", Value = "PaymentMode" }           
 
          }, "Select", new { @class = "form-control", @value = "" })
     </div>    

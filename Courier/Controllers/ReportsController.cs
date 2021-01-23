@@ -130,7 +130,7 @@ namespace LTMSV2.Controllers
                 reportparam.ToDate = pToDate;
                 reportparam.ParcelTypeId ="1,2";
                 reportparam.PaymentModeId= 0;
-                reportparam.MovementId = "1,2,3,4";
+                //reportparam.MovementId = "1,2,3,4";
                 reportparam.Output = "PDF";
                 reportparam.SortBy = "Date Wise";
                 reportparam.ReportType = "Date";
@@ -185,7 +185,7 @@ namespace LTMSV2.Controllers
             {
                 foreach (var item in picker.SelectedValues)
                 {
-                    if (model.ParcelTypeId == "")
+                    if (model.ParcelTypeId == "" || model.ParcelTypeId==null)
                     {
                         model.ParcelTypeId = item.ToString();
                     }

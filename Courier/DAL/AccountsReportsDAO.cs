@@ -501,14 +501,14 @@ namespace LTMSV2.DAL
                 comd.Parameters.AddWithValue("@PaymentModeId", reportparam.PaymentModeId);
             }
             
-            if (reportparam.InvoicedTo == null)
-            {
-                comd.Parameters.AddWithValue("@InvoiceTo", "");
-            }
-            else
-            {
-                comd.Parameters.AddWithValue("@InvoicedTo", reportparam.InvoicedTo);
-            }
+            //if (reportparam.InvoicedTo == null)
+            //{
+            //    comd.Parameters.AddWithValue("@InvoiceTo", "");
+            //}
+            //else
+            //{
+            //    comd.Parameters.AddWithValue("@InvoicedTo", reportparam.InvoicedTo);
+            //}
             comd.Parameters.AddWithValue("@ParcelTypeId", reportparam.ParcelTypeId);
 
             comd.Parameters.AddWithValue("@SortBy", reportparam.SortBy);
@@ -523,22 +523,26 @@ namespace LTMSV2.DAL
             //ds.WriteXmlSchema(writer);
             //writer.Close();
 
+            string reportname = "ConsignmentRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+            if (reportparam.ReportType == "Date")
+            {
+
+                reportname = "ConsignmentRegister.rpt";  
+            }
+            else if (reportparam.ReportType == "ParcelType")
+            {
+                reportname = "ConsignmentRegister_LoadType.rpt";
+                
+            }
+            else if (reportparam.ReportType == "PaymentMode")
+            {
+                reportname = "ConsignmentRegister_Payment.rpt";
+                
+            }
+
             ReportDocument rd = new ReportDocument();
-            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "ConsignmentRegister.rpt"));
-
-            //if (reportparam.ReportType == "Date")
-            //{
-
-            
-            //}
-            //else if (reportparam.ReportType == "Movement")
-            //{
-            //    rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_MovementWise.rpt"));
-            //}
-            //else if (reportparam.ReportType == "PaymentMode")
-            //{
-            //    rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_Payment.rpt"));
-            //}
+            rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), reportname));
+            rd.SetDataSource(ds);
             //else if (reportparam.ReportType == "ParcelType")
             //{
             //    rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_ParcelType.rpt"));
@@ -548,7 +552,7 @@ namespace LTMSV2.DAL
             //    rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBRegister_Summary.rpt"));
             //}
 
-            rd.SetDataSource(ds);
+
 
             //Set Paramerter Field Values -General
             #region "param"
@@ -574,39 +578,37 @@ namespace LTMSV2.DAL
             //Response.Buffer = false;
             //Response.ClearContent();
             //Response.ClearHeaders();
-            
-            string reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
-            string reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
+
+            string reportname1 = "";
+            string reportpath1 = "";
             if (reportparam.Output == "PDF")
             {
-                reportparam.ReportFileName = reportname;
-                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath);
+                reportname1 = "ConsignmentRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".pdf";
+                reportparam.ReportFileName = reportname1;
+                reportpath1 = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname1);
+                rd.ExportToDisk(ExportFormatType.PortableDocFormat, reportpath1);
             }
             else if (reportparam.Output == "EXCEL")
             {
 
-                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
-                reportparam.ReportFileName = reportname;
-                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
-                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath);
+                reportname1 = "ConsignmentRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".xlsx";
+                reportparam.ReportFileName = reportname1;
+                reportpath1 = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname1);
+                rd.ExportToDisk(ExportFormatType.ExcelWorkbook, reportpath1);
             }
             else if (reportparam.Output == "WORD")
             {
-                reportname = "AWBRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
+               // reportname = "ConsignmentRegister_" + DateTime.Now.ToString("ddMMyyHHmm") + ".doc";
                 reportparam.ReportFileName = reportname;
-                reportpath = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname);
-                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath);
+                reportpath1 = Path.Combine(HostingEnvironment.MapPath("~/ReportsPDF"), reportname1);
+                rd.ExportToDisk(ExportFormatType.WordForWindows, reportpath1);
             }
             rd.Close();
             rd.Dispose();
-            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname;
-            return reportpath;
+            HttpContext.Current.Session["ReportOutput"] = "~/ReportsPDF/" + reportname1;
+            return reportpath1;
 
-            //Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            //stream.Seek(0, SeekOrigin.Begin);
-            //stream.Write(Path.Combine(Server.MapPath("~/Reports"), "AccLedger.pdf"));
-
-            //return File(stream, "application/pdf", "AccLedger.pdf");
+           
         }
 
 

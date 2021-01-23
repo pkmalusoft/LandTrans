@@ -83,6 +83,7 @@ namespace LTMSV2.Models
         public int TruckDetailID { get; set; }
         public string VehicleRegNo { get; set; }
         public int RouteID { get; set; }
+        public int TransitDepotId { get; set; }
         public Decimal? CourierCharge { get; set; }
 
         public Decimal? OtherCharge { get; set; }

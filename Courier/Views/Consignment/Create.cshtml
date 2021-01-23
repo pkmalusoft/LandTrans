@@ -2018,20 +2018,23 @@
 
                                 </div>
                                 </div>*@
-                            <div class="row no-margin">
-                                <div class="col-md-6">
-                                    <label class="headinglabel required">Despatch Date</label>
-                                    @Html.TextBoxFor(model => model.DespatchDate, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.DespatchDate, "", new { @class = "text-danger" })
-                                </div>
-
-
-                                <div class="col-md-6">
-                                    <label class="headinglabel required">Route</label>
-                                    @Html.TextBoxFor(model => model.RouteName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Route Name" })
-                                    @Html.HiddenFor(model => model.RouteID)
-                                </div>
+                        <div class="row no-margin">
+                            <div class="col-md-3">
+                                <label class="headinglabel required">Despatch Date</label>
+                                @Html.TextBoxFor(model => model.DespatchDate, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DespatchDate, "", new { @class = "text-danger" })
                             </div>
+                            <div class="col-md-6">
+                                <label class="headinglabel required">Route</label>
+                                @Html.TextBoxFor(model => model.RouteName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Route Name" })
+                                @Html.HiddenFor(model => model.RouteID)
+                            </div>
+                            <div class="col-md-3">
+                                <label class="headinglabel required">Transit Depot</label>
+                                @Html.DropDownListFor(model => model.TransitDepotId, new SelectList(@ViewBag.Depot, "ID", "Depot"), "Select", new { @class = "form-control", @required = "true" })                                
+                                @Html.HiddenFor(model => model.RouteID)
+                            </div>
+                        </div>
                             <div class="row-margin">
                                 <div class="col-md-12">
                                     <div class="col-md-6">
@@ -2053,10 +2056,10 @@
                                                 @Html.CheckBox("COM", new { @name = "COM" }) &nbsp;
                                                 <label class="headinglabel">COM</label>
                                             </div>
-                                            <div class="checkboxdesign verticalcheckbox">
+                                            @*<div class="checkboxdesign verticalcheckbox">
                                                 @Html.CheckBox("FOC", new { @name = "FOC" }) &nbsp;
                                                 <label class="headinglabel">FOC</label>
-                                            </div>
+                                            </div>*@
                                         </div>
                                     </div>
                                 </div>

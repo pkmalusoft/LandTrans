@@ -103,8 +103,9 @@ namespace LTMSV2.Controllers
                 ViewBag.CourierStatusList = db.CourierStatus.ToList();
                 ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
                 ViewBag.PaymentMode = db.tblPaymentModes.ToList();
-            ViewBag.OtherCharge = db.OtherCharges.ToList();
-            ViewBag.Document = db.ImpExpDocumentMasters.ToList();
+                ViewBag.Depot = db.tblDepots.ToList();
+                ViewBag.OtherCharge = db.OtherCharges.ToList();
+                ViewBag.Document = db.ImpExpDocumentMasters.ToList();
             List<VoucherTypeVM> lsttype = new List<VoucherTypeVM>();
             //lsttype.Add(new VoucherTypeVM { TypeName = "All" });            
             lsttype.Add(new VoucherTypeVM { TypeName = "Shipper" });            
@@ -325,6 +326,7 @@ namespace LTMSV2.Controllers
                     inscan.COM = v.COM;
                     inscan.FOC = v.FOC;
                     inscan.RouteID = v.RouteID;
+                    inscan.TransitDepotID = v.TransitDepotId;
                     inscan.TruckDetailId = v.TruckDetailID;
                     inscan.DespatchDate = v.DespatchDate;                    
                     inscan.PickedUpEmpID =v.PickedBy;
@@ -829,7 +831,11 @@ namespace LTMSV2.Controllers
             {
                 inscan.RouteID = 0;
             }
-
+            if (data.TransitDepotID!=null && data.TransitDepotID!=0)
+            {
+                inscan.TransitDepotId = data.TransitDepotID.Value;
+            }
+            
             if (data.DespatchDate!=null)
                 inscan.DespatchDate = data.DespatchDate.Value;
 
