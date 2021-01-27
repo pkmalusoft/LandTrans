@@ -560,6 +560,7 @@ namespace LTMSV2.Controllers
             obj.Address3 = c.Address3;
             obj.Phone = c.Phone;
             obj.Mobile = c.Mobile;
+            obj.Email = c.Email;
             obj.Fax = c.Fax;
             obj.Email = c.Email;
             obj.Website = c.WebSite;

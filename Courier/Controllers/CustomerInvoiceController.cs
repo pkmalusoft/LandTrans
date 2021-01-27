@@ -19,15 +19,18 @@ namespace LTMSV2.Controllers
 
         public ActionResult Index()
         {
-
-            DatePicker model = new DatePicker
+          DatePicker model = SessionDataModel.GetTableVariable();
+            if (model == null)
             {
-                FromDate = CommanFunctions.GetFirstDayofMonth().Date,
-                ToDate = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59)
-                //      Delete = (bool)Token.Permissions.Deletion,
-                //    Update = (bool)Token.Permissions.Updation,
-                //  Create = (bool)Token.Permissions.Creation
-            };
+                model = new DatePicker
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date
+                    //      Delete = (bool)Token.Permissions.Deletion,
+                    //    Update = (bool)Token.Permissions.Updation,
+                    //  Create = (bool)Token.Permissions.Creation
+                };
+            }
             ViewBag.Token = model;
             SessionDataModel.SetTableVariable(model);
             return View(model);
@@ -42,11 +45,12 @@ namespace LTMSV2.Controllers
             DatePicker model = new DatePicker
             {
                 FromDate = picker.FromDate,
-                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                ToDate = picker.ToDate.Date, //picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 Delete = true, // (bool)Token.Permissions.Deletion,
                 Update = true, //(bool)Token.Permissions.Updation,
                 Create = true //.ToStrin//(bool)Token.Permissions.Creation
             };
+
             ViewBag.Token = model;
             SessionDataModel.SetTableVariable(model);
             return View(model);
@@ -135,6 +139,7 @@ namespace LTMSV2.Controllers
 
             DatePicker datePicker = SessionDataModel.GetTableVariable();
             ViewBag.Token = datePicker;
+            datePicker.ToDate=Convert.ToDateTime(datePicker.ToDate).AddDays(1);
 
             List<CustomerInvoiceVM> _Invoices = (from c in db.CustomerInvoices
                                                  join cust in db.CustomerMasters on c.CustomerID equals cust.CustomerID
@@ -190,52 +195,8 @@ namespace LTMSV2.Controllers
                 _custinvoice.CustomerID = Convert.ToInt32(datePicker.CustomerId);
                 _details = RevenueDAO.GenerateInvoice(datePicker.FromDate, datePicker.ToDate, Convert.ToInt32(datePicker.CustomerId), yearid,0);
 
-                //if (datePicker.CustomerId != null)
-                //{
-                //    //_details = (from c in db.InScanMasters
-                //    //                //            join l in datePicker.SelectedValues on c.MovementID
-                //    //            where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
-                //    //            && c.PaymentModeId == 3
-                //    //            && c.CustomerID == datePicker.CustomerId
-                //    //            select new CustomerInvoiceDetailVM { AWBNo = c.AWBNo,
-                //    //                AWBDateTime=c.TransactionDate, ConsigneeName = c.Consignee, ConsigneeCountryName = c.ConsigneeCountryName,
-                //    //                CourierCharge = c.CourierCharge,
-                //    //                CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
-                //    //                OtherCharge = c.OtherCharge == null ? 0 : c.OtherCharge,
-                //    //                StatusPaymentMode = c.StatusPaymentMode, InscanID = c.InScanID,
-                //    //                MovementId = c.MovementID == null ? 0 : c.MovementID.Value,
-                //    //                AWBChecked = true
-                //    //            }).ToList().Where(tt => tt.MovementId != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId.Value)).ToList();
-                //    _details = (from c in db.InScanMasters
-                //                where (c.TransactionDate >= datePicker.FromDate && c.TransactionDate < datePicker.ToDate)
-                //                && (c.InvoiceID == null || c.InvoiceID == 0)
-                //                && c.PaymentModeId == 3 //account
-                //                && c.CustomerID == datePicker.CustomerId
-                //                select new CustomerInvoiceDetailVM
-                //                {
-                //                    AWBNo = c.ConsignmentNo,
-                //                    AWBDateTime = c.TransactionDate,
-                //                    ConsigneeName = c.Consignee,
-                //                    ConsigneeCountryName = c.ConsigneeCountryName,
-                //                    CourierCharge = 100,
-                //                    CustomCharge = c.CustomsValue == null ? 0 : c.CustomsValue,
-                //                    OtherCharge = 10, //c.OtherCharge == null ? 0 : c.OtherCharge,
-                //                    //StatusPaymentMode = c.StatusPaymentMode,
-                //                    InscanID = c.InScanID,
-                //                    MovementId = c.MovementID == null ? 0 : c.MovementID.Value,
-                //                    AWBChecked = true
-                //                }).ToList().Where(tt => tt.MovementId != null).ToList().Where(cc => datePicker.SelectedValues.ToList().Contains(cc.MovementId.Value)).ToList();
-                //}
-                
                 int _index = 0;
                 _custinvoice.InvoiceTotal = 0;
-                //_custinvoice.ChargeableWT = 0;
-                //_custinvoice.CustomerInvoiceTax = 0;
-                //_custinvoice.OtherCharge = 0;
-                //_custinvoice.AdminPer = 0;
-                //_custinvoice.AdminAmt = 0;
-                //_custinvoice.FuelPer = 0;
-                //_custinvoice.FuelAmt = 0;
 
                 foreach (var item in _details)
                 {
@@ -256,7 +217,8 @@ namespace LTMSV2.Controllers
             ////_details.Add(_detail);
             ///
             _custinvoice.CustomerInvoiceDetailsVM = _details;
-
+            if (_details.Count==0)
+            TempData["SuccessMsg"] = "No more Items pending to Invoice!";
             Session["InvoiceListing"] = _details;
             return View(_custinvoice);
         }

@@ -15,8 +15,8 @@ namespace LTMSV2.Models
         public int ConsignorId { get; set; }
         public int ConsigneeId { get; set; }
 
-        public int ConsignorName { get; set; }
-        public int ConsigneeName { get; set; }
+        public string ConsignorName { get; set; }
+        public string ConsigneeName { get; set; }
         public string InvoiceTo { get; set; }
         public string PaymentType { get; set; }
         public decimal ExchangeRate { get; set; }

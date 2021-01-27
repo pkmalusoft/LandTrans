@@ -174,9 +174,11 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AcJournalID" Type="int" />
-    <Property Name="AcJournalDetailID" Type="int" />
-    <Property Name="InScanID" Type="int" />
+    <Property Name="AcJournalID" Type="int" Nullable="false" />
+    <Property Name="AcJournalDetailID" Type="int" Nullable="false" />
+    <Property Name="AcHeadID" Type="int" Nullable="false" />
+    <Property Name="InScanID" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="money" />
   </EntityType>
   <EntityType Name="AcJournalDetail">
     <Key>
@@ -844,6 +846,17 @@
     </Key>
     <Property Name="CostTypeID" Type="int" Nullable="false" />
     <Property Name="CostType" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="CostUpdateConsignment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CostUpdateMasterId" Type="int" />
+    <Property Name="CostUpdateDetaiIID" Type="int" />
+    <Property Name="RevenueCostMasterID" Type="int" />
+    <Property Name="InScanID" Type="int" />
+    <Property Name="Amount" Type="money" />
   </EntityType>
   <EntityType Name="CostUpdateDetail">
     <Key>
@@ -8283,7 +8296,11 @@
   <Function Name="SP_GetAdvanceAmountOfCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="CustomerID" Type="int" Mode="In" />
   </Function>
-  <Function Name="SP_GetAllRecieptsDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SP_GetAllRecieptsDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FromDate" Type="varchar" Mode="In" />
+    <Parameter Name="ToDate" Type="varchar" Mode="In" />
+    <Parameter Name="FYearId" Type="int" Mode="In" />
+  </Function>
   <Function Name="SP_GetAllRecieptsDetailsByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="FromDate" Type="nvarchar" Mode="In" />
     <Parameter Name="Todate" Type="nvarchar" Mode="In" />
@@ -8679,6 +8696,7 @@
     <EntitySet Name="Commission" EntityType="Self.Commission" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Content" EntityType="Self.Content" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CostType" EntityType="Self.CostType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CostUpdateConsignment" EntityType="Self.CostUpdateConsignment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CostUpdateDetail" EntityType="Self.CostUpdateDetail" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CostUpdateMaster" EntityType="Self.CostUpdateMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CountryMaster" EntityType="Self.CountryMaster" Schema="dbo" store:Type="Tables" />

@@ -82,6 +82,7 @@ namespace  LTMSV2.Models
         public string CurrencyName { get; set; }
         public string CustomerName { get; set; }
         public int JobID { get; set; }
+        public int TruckDetailID { get; set; }
         public int InvoiceID { get; set; }
         public int InvoiceNo { get; set; }
         public string Jobcode { get; set; }

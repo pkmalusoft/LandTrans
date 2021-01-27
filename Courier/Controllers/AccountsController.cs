@@ -1359,8 +1359,7 @@ new AcGroupModel()
                             accons.InScanID =Convert.ToInt32(ins);
                             db.AcJournalConsignments.Add(accons);
                             db.SaveChanges();
-                        }
-                        
+                        }                        
                     }
                     if (v.AcJDetailVM[i].AcExpAllocationVM != null)
                     {
@@ -1971,6 +1970,62 @@ new AcGroupModel()
             return Json(AcJDetailVM, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetAWBAllocation(int AcHeadId)
+        {
+            List<AcJournalConsignmentVM> AWBAllocationall = new List<AcJournalConsignmentVM>();
+            List<AcJournalConsignmentVM> AWBAllocation = new List<AcJournalConsignmentVM>();
+            AWBAllocationall = (List<AcJournalConsignmentVM>)Session["ACAWBAllocation"];
+            if (AWBAllocationall==null)
+            {
+                return Json(AWBAllocation, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                AWBAllocation = AWBAllocationall.Where(cc => cc.AcHeadID == AcHeadId).ToList();
+            }
+            
+            if (AWBAllocation==null)
+            {
+                AWBAllocation = new List<AcJournalConsignmentVM>();
+               
+            }
+            return Json(AWBAllocation, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult SaveAWBAllocation(List<AcJournalConsignmentVM> list)
+        {
+            
+            List<AcJournalConsignmentVM> AWBAllocationall = new List<AcJournalConsignmentVM>();
+            List<AcJournalConsignmentVM> AWBAllocation = new List<AcJournalConsignmentVM>();
+            AWBAllocationall = (List<AcJournalConsignmentVM>)Session["ACAWBAllocation"];
+
+            if (AWBAllocationall==null)
+            {
+                AWBAllocationall = new List<AcJournalConsignmentVM>();
+                foreach (var item2 in list)
+                {
+                    AWBAllocationall.Add(item2);
+
+                }
+
+            }
+            else
+            {
+                int acheadid = list[0].AcHeadID;
+                AWBAllocationall.RemoveAll(cc => cc.AcHeadID == acheadid);
+                foreach (var item2 in list)
+                {
+                    AWBAllocationall.Add(item2);
+
+                }
+            }
+          
+            Session["ACAWBAllocation"] = AWBAllocationall;
+           
+            return Json(AWBAllocationall, JsonRequestBehavior.AllowGet);
+
+        }
         public JsonResult GetAcJDetailsExpenseAllocation(int AcJournalDetailID)
         {
             //  AcAnalysisHeadAllocation objAcAnalysisHeadAllocation = new AcAnalysisHeadAllocation();
@@ -3718,257 +3773,9 @@ new AcGroupModel()
 
         #endregion
 
-        public ActionResult CustomerLedger()
-        {
-            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
-
-            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
-            if (model == null)
-            {
-                model = new CustomerLedgerReportParam
-                {
-                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
-                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
-                    CustomerId = 0,
-                    CustomerName = "",
-                    Output = "PDF",
-                    ReportType = "Ledger"
-                };
-            }
-            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
-            {
-                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
-            }
-
-            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
-            {
-                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
-            }
-            SessionDataModel.SetCustomerLedgerParam(model);
-
-            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
-            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
-
-            ViewBag.ReportName = "Customer Ledger";
-            if (Session["ReportOutput"] != null)
-            {
-                string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("CustomerLedger") && model.ReportType == "Ledger")
-                {
-                    Session["ReportOutput"] = null;
-                }
-                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
-                {
-                    Session["ReportOutput"] = null;
-                }
-            }
-
-            return View(model);
-
-        }
-
-        [HttpPost]
-        public ActionResult CustomerLedger(CustomerLedgerReportParam picker)
-        {
-
-            CustomerLedgerReportParam model = new CustomerLedgerReportParam
-            {
-                FromDate = picker.FromDate,
-                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
-                CustomerId = picker.CustomerId,
-                CustomerName = picker.CustomerName,
-                Output = "PDF",
-                ReportType = picker.ReportType
-            };
-
-            ViewBag.Token = model;
-            SessionDataModel.SetCustomerLedgerParam(model);
-            Response.Buffer = false;
-            Response.ClearContent();
-            Response.ClearHeaders();
-            if (model.ReportType == "Ledger")
-            {
-                //AccountsReportsDAO.GenerateCustomerLedgerReport();
-                AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
-            }
-            else if (model.ReportType == "OutStanding")
-            {
-                AccountsReportsDAO.GenerateCustomerOutStandingReport();
-            }
-            else if (model.ReportType == "AWBOutStanding")
-            {
-                AccountsReportsDAO.GenerateAWBOutStandingReport();
-            }
-
-            return RedirectToAction("CustomerLedger", "Accounts");
-
-
-        }
-
-
-        public ActionResult SupplierLedger()
-        {
-            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
-            var supplierMasterTypes = (from d in db.SupplierTypes select d).ToList();
-            ViewBag.SupplierType = supplierMasterTypes;
-            SupplierLedgerReportParam model = SessionDataModel.GetSupplierLedgerReportParam();
-            if (model == null)
-            {
-                model = new SupplierLedgerReportParam
-                {
-                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
-                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
-                    SupplierTypeId=1,
-                    SupplierId = 0,
-                    SupplierName = "",
-                    Output = "PDF",
-                    ReportType = "Ledger"
-                };
-            }
-            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
-            {
-                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
-            }
-
-            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
-            {
-                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
-            }
-            SessionDataModel.SetSupplierLedgerParam(model);
-
-            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
-            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
-
-            ViewBag.ReportName = "Supplier Ledger";
-            if (Session["ReportOutput"] != null)
-            {
-                string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("SupplierLedger") && model.ReportType == "Ledger")
-                {
-                    Session["ReportOutput"] = null;
-                }
-                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
-                {
-                    Session["ReportOutput"] = null;
-                }
-            }
-
-            return View(model);
-
-        }
-
-        [HttpPost]
-        public ActionResult SupplierLedger(SupplierLedgerReportParam picker)
-        {
-
-            SupplierLedgerReportParam model = new SupplierLedgerReportParam
-            {
-                FromDate = picker.FromDate,
-                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
-                SupplierId = picker.SupplierId,
-                SupplierName = picker.SupplierName,
-                Output = "PDF",
-                ReportType = picker.ReportType
-            };
-
-            ViewBag.Token = model;
-            SessionDataModel.SetSupplierLedgerParam(model);
-            Response.Buffer = false;
-            Response.ClearContent();
-            Response.ClearHeaders();
-            if (model.ReportType == "Ledger")
-            {
-                //AccountsReportsDAO.GenerateCustomerLedgerReport();
-                AccountsReportsDAO.GenerateSupplierLedgerDetailReport();
-            }
-            else if (model.ReportType == "OutStanding")
-            {
-                AccountsReportsDAO.GenerateCustomerOutStandingReport();
-            }
-            else if (model.ReportType == "AWBOutStanding")
-            {
-                AccountsReportsDAO.GenerateAWBOutStandingReport();
-            }
-
-            return RedirectToAction("SupplierLedger", "Accounts");
-
-
-        }
-
-        public ActionResult ManifestReport()
-        {
-            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
-
-
-            ManifestReportParam model = SessionDataModel.GetManifestReportParam();
-            if (model == null)
-            {
-                model = new ManifestReportParam
-                {
-                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
-                    ToDate = CommanFunctions.GetLastDayofMonth().Date,                    
-                    Output = "PDF",
-                    TDNo="",
-                    TDID=0
-                };
-            }
-            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
-            {
-                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
-            }
-
-            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
-            {
-                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
-            }
-            SessionDataModel.SetManifestReportParam(model);
-
-            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
-            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
-
-            ViewBag.ReportName = "Manifest Report";
-            if (Session["ReportOutput"] != null)
-            {
-                string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("TripManifestReport"))
-                {
-                    Session["ReportOutput"] = null;
-                }                
-            }
-
-            return View(model);
-
-        }
-
-        [HttpPost]
-        public ActionResult ManifestReport(ManifestReportParam picker)
-        {
-            
-            ManifestReportParam model = new ManifestReportParam
-            {
-                FromDate = picker.FromDate,
-                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),                
-                Output = "PDF",
-                TDID=picker.TDID,
-                TDNo=picker.TDNo
-            };
-
-            
-            SessionDataModel.SetManifestReportParam(model);
-            Response.Buffer = false;
-            Response.ClearContent();
-            Response.ClearHeaders();
-            
-            
-            AccountsReportsDAO.GenerateManifestReport();
-
-            return View(model);
-            //return RedirectToAction("ManifestReport", "Accounts");
-
-
-        }
-
-        public ActionResult GetTripData(string fromdate,string todate)
+        
+        [HttpGet]
+        public JsonResult GetTripData(string fromdate,string todate)
         {
             DateTime fdate = Convert.ToDateTime(fromdate);
             DateTime tdate = Convert.ToDateTime(todate).AddDays(1);
@@ -3978,7 +3785,7 @@ new AcGroupModel()
               on c.VehicleID equals v.VehicleID
                                 where c.IsDeleted == false
             && c.TDDate>= fdate
-            && c.TDDate <= tdate
+            && c.TDDate< tdate
             select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.ReceiptNo + "-" + c.RegNo }).ToList();
                return Json(itemlist, JsonRequestBehavior.AllowGet);
             
@@ -4150,6 +3957,25 @@ new AcGroupModel()
 
 
         #region "InvoiceOpening"
+        public ActionResult AcOpeningInvoiceIndex(string type)
+        {
+            if (type == null)
+                type = "All";
+
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            List<AcInvoiceOpeningVM> vm = new List<AcInvoiceOpeningVM>();
+            vm = AccountsDAO.GetInvoiceOpening(yearid, type);
+            ViewBag.Type = type;
+            
+            decimal debit = vm.Sum(i => i.Debit);
+            decimal credit = vm.Sum(i => i.Credit);
+            ViewBag.TotalDebit = String.Format("{0:0.000}", debit);
+            ViewBag.TotalCredit = String.Format("{0:0.000}", credit);
+            ViewBag.Balance = String.Format("{0:0.000}", debit - credit);
+            ViewBag.Title = "Invoice Opening";            
+            return View(vm);
+        }
+
         public ActionResult AcOpeningInvoiceSearch()
         {
 
@@ -4190,20 +4016,43 @@ new AcGroupModel()
             //return PartialView("InvoiceSearch",model);
         }
 
-        public ActionResult AcOpeningInvoice()
+        public ActionResult AcOpeningInvoice(int id=0,string invoicetype="")
         {
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
             OpeningInvoiceSearch model = SessionDataModel.GetOpeningInvoiceSearch();
+            if (model==null)
+            {
+                model = new OpeningInvoiceSearch();
+            }
+            string invoicetype1 = "C";
+            if (id > 0)
+            {
+                
+                model.PartyId = id;                
+                model.InvoiceType = invoicetype;
+                invoicetype1 = invoicetype;
+                model.OpeningDate = Convert.ToDateTime(Session["FyearFrom"]).ToString("dd-MM-yyyy");
+                if (invoicetype=="C")
+                  model.PartyName = db.CustomerMasters.Find(model.PartyId).CustomerName;
+                else
+                  model.PartyName = db.SupplierMasters.Find(model.PartyId).SupplierName;
+
+                SessionDataModel.SetOpeningInvoiceSearch(model);
+            }
+
+
             var Model = new OpeningBalanceVM();
             int year = DateTime.Now.Year;
             DateTime firstDay = new DateTime(year, 1, 1);
             int partyid = 0;
-            string invoicetype = "C";
+            
+
             if (model != null)
-            {
+            {            
                 partyid = model.PartyId;
                 invoicetype = model.InvoiceType;
             }
+
             var opinvoice = db.AcOPInvoiceMasters.Where(cc => cc.AcFinancialYearID == yearid && cc.PartyID ==partyid && cc.StatusSDSC == invoicetype).FirstOrDefault();
             AcInvoiceOpeningVM vm = new AcInvoiceOpeningVM();
             List<AcInvoiceOpeningDetailVM> detailvm= new List<AcInvoiceOpeningDetailVM>();
@@ -4219,6 +4068,7 @@ new AcGroupModel()
                                        select new AcInvoiceOpeningDetailVM { AcOPInvoiceDetailID = c.AcOPInvoiceDetailID, InvoiceNo = c.InvoiceNo, InvoiceDate = c.InvoiceDate, LastTransDate = c.LastTransDate, Amount = c.Amount }).ToList();
                 vm.Debit = opinvoicedetail.Where(cc=>cc.Amount>0).Sum(i => i.Amount).Value;
                 vm.Credit =-1 * opinvoicedetail.Where(cc => cc.Amount < 0).Sum(i => i.Amount).Value;
+                vm.Balance = vm.Debit - vm.Credit;
                 vm.InvoiceDetailVM = opinvoicedetail;
            }
             else

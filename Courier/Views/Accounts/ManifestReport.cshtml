@@ -49,7 +49,7 @@
                 $.ajax({
                     url: "/Accounts/GetTripData",
                     datatype: "json",
-                    data: { 'fromdate': $('#FromDate').val(), 'todate': $('#ToDate').val() },
+                    data: { 'fromdate': $('#FromDate').val() , 'todate': $('#ToDate').val() },
                     success: function (data) {
                         response($.map(data, function (val, item) {
                             return {

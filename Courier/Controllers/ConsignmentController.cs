@@ -36,9 +36,8 @@ namespace LTMSV2.Controllers
                 pStatusId = Convert.ToInt32(StatusId);
             }
             if (FromDate == null || ToDate == null)
-            {
-                DateTime localDateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
-                pFromDate = localDateTime1.Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
+            {                
+                pFromDate = CommanFunctions.GetLastDayofMonth(); // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
                 pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
             }
             else
@@ -812,7 +811,17 @@ namespace LTMSV2.Controllers
                 inscan.PackageId = 0;
             }
 
-
+            if (data.TruckDetailId!=null)
+            {
+                inscan.TruckDetailID =Convert.ToInt32( data.TruckDetailId);
+    
+                var itemlist = (from c in db.TruckDetails
+                                join v in db.VehicleMasters on c.VehicleID equals v.VehicleID
+                                where c.IsDeleted == false
+                        && c.TruckDetailID == inscan.TruckDetailID
+                                select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.RegNo + "-" + c.DriverName }).FirstOrDefault();
+                inscan.VehicleRegNo = itemlist.RegNo;
+            }
             if (data.RouteID != null && data.RouteID != 0)
             {
                 inscan.RouteID = data.RouteID.Value;
@@ -2268,7 +2277,7 @@ namespace LTMSV2.Controllers
         public JsonResult GetAWB(string id)
         {
             AWB obj = new AWB();
-            var data = (from c in db.InScanMasters where c.ConsignmentNo == id select c).FirstOrDefault();    
+            var data = (from c in db.InScanMasters where c.ConsignmentNo == id && c.IsDeleted==false select c).FirstOrDefault();    
             if (data == null)
             {
                 obj.Exist = 0;

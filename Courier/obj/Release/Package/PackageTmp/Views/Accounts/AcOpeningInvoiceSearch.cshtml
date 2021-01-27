@@ -25,7 +25,14 @@
     
 </style>
 <script type="text/javascript">
-
+    function EnableAdd() {
+        $('#btnadd').removeAttr('disabled');
+        $('#btnsave').removeAttr('disabled');
+    }
+    function DisabledAdd() {
+        $('#btnadd').attr('disabled', 'disabled');
+        $('#btnsave').attr('disabled', 'disabled');
+    }
     $(document).ready(function () {
         var url = '/Accounts/GetSupplierName';
         
@@ -53,11 +60,13 @@
             focus: function (e, i) {                
                 $("#PartyName").val(i.item.label);
                 $('#PartyId').val(i.item.ID);
+                DisabledAdd();
             },
             select: function (e, i) {
                 e.preventDefault();
                 $("#PartyName").val(i.item.label);
                 $('#PartyId').val(i.item.ID);
+                DisabledAdd();
             },
         });
         //$('input[type=radio][name=Type]').val($('#InvoiceType').val());
@@ -66,22 +75,26 @@
             if (this.value == 'C') {
                 $('#PartyName').val('');
                 $('#PartyId').val('0');
-                $('#InvoiceType').val('C');
+                $('#InvoiceType').val('C');    
+                DisabledAdd();
             }
             else if (this.value == 'F') {
                 $('#PartyName').val('');
                 $('#PartyId').val('0');
                 $('#InvoiceType').val('F');
+                DisabledAdd();
             }
             else if (this.value == 'H') {
                 $('#PartyName').val('');
                 $('#PartyId').val('0');
                 $('#InvoiceType').val('H');
+                DisabledAdd();
             }
             else if (this.value == 'S') {  
                 $('#PartyName').val('');
                 $('#PartyId').val('0');
                 $('#InvoiceType').val('S');
+                DisabledAdd();
             }
         });
                
@@ -135,9 +148,9 @@
                     </div>
                 </div>
                 <div class="col-md-10" style="padding-left:30px">
-                <div class="col-md-3 ">
+                <div class="col-md-2 ">
                     <label class="headinglabel">Opening Date</label>
-                    @Html.TextBoxFor(model => model.OpeningDate, new { @class = "form-control text-right" })
+                    @Html.TextBoxFor(model => model.OpeningDate, new { @class = "form-control text-right",@readonly="readonly" })
                     @*<input type="text" class="form-control" value=@LTMSV2.Models.CommanFunctions.GetShortDateFormat(Model.OpeningDate) />*@
                 </div>
                 <div class="col-md-4">
@@ -149,11 +162,12 @@
                 <div class="col-md-1" style="padding-top: 10px">
                     <button class="btn btn-primary small_btn" type="submit" id="btnsearch" ><i class="fa fa-refresh" aria-hidden="true"></i></button>
                 </div>
-                 <div class="col-md-4 btn-right">
+                <div class="col-md-5 btn-right">
                     <input type="button" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
-                    <input type="button" value="Cancel" class="btn btn-danger btnwidth" data-toggle="tooltip" title="Click here" id="btncancel" />
-
-            </div>
+                    @*<input type="button" value="Cancel" class="btn btn-danger btnwidth" data-toggle="tooltip" title="Click here" id="btncancel" />*@
+                    @*<input type="button" value="Back" class="btn btn-danger btnwidth" data-toggle="tooltip" title="Click here" id="btnBack" />*@
+                    <a href='@Url.Action("AcOpeningInvoiceIndex", "Accounts", new { type= "All" })' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+                </div>
             </div>            
             </div>
         </fieldset>

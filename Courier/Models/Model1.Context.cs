@@ -271,11 +271,12 @@ namespace LTMSV2.Models
         public virtual DbSet<CostUpdateDetail> CostUpdateDetails { get; set; }
         public virtual DbSet<CostUpdateMaster> CostUpdateMasters { get; set; }
         public virtual DbSet<RevenueUpdateDetail> RevenueUpdateDetails { get; set; }
-        public virtual DbSet<AcJournalConsignment> AcJournalConsignments { get; set; }
         public virtual DbSet<AcOpeningMaster> AcOpeningMasters { get; set; }
         public virtual DbSet<AcOPInvoiceDetail> AcOPInvoiceDetails { get; set; }
         public virtual DbSet<AcOPInvoiceMaster> AcOPInvoiceMasters { get; set; }
         public virtual DbSet<RecPayAllocationDetail> RecPayAllocationDetails { get; set; }
+        public virtual DbSet<AcJournalConsignment> AcJournalConsignments { get; set; }
+        public virtual DbSet<CostUpdateConsignment> CostUpdateConsignments { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)
@@ -7741,9 +7742,21 @@ namespace LTMSV2.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("SP_GetAdvanceAmountOfCustomer", customerIDParameter);
         }
     
-        public virtual ObjectResult<SP_GetAllRecieptsDetails_Result> SP_GetAllRecieptsDetails()
+        public virtual ObjectResult<SP_GetAllRecieptsDetails_Result> SP_GetAllRecieptsDetails(string fromDate, string toDate, Nullable<int> fYearId)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetAllRecieptsDetails_Result>("SP_GetAllRecieptsDetails");
+            var fromDateParameter = fromDate != null ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(string));
+    
+            var toDateParameter = toDate != null ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(string));
+    
+            var fYearIdParameter = fYearId.HasValue ?
+                new ObjectParameter("FYearId", fYearId) :
+                new ObjectParameter("FYearId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetAllRecieptsDetails_Result>("SP_GetAllRecieptsDetails", fromDateParameter, toDateParameter, fYearIdParameter);
         }
     
         public virtual ObjectResult<SP_GetAllRecieptsDetailsByDate_Result> SP_GetAllRecieptsDetailsByDate(string fromDate, string todate, Nullable<int> fyearId)

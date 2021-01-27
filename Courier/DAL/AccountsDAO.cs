@@ -791,6 +791,40 @@ namespace LTMSV2.DAL
             }
         }
 
+
+        public static List<AcInvoiceOpeningVM> GetInvoiceOpening(int FYearId,string Type)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetInvoiceOpening";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@FYearId", FYearId);
+            cmd.Parameters.AddWithValue("@Type", Type);
+            
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<AcInvoiceOpeningVM> objList = new List<AcInvoiceOpeningVM>();
+            AcInvoiceOpeningVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new AcInvoiceOpeningVM();
+                    obj.AcOPInvoiceMasterID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcOPInvoiceMasterID"].ToString());
+                    obj.PartyID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["PartyId"].ToString());
+                    obj.PartyName = ds.Tables[0].Rows[i]["PartName"].ToString();
+                    obj.PartyType = ds.Tables[0].Rows[i]["PartType"].ToString();
+                    obj.Debit = Convert.ToDecimal(ds.Tables[0].Rows[i]["Debit"].ToString());
+                    obj.Credit = Convert.ToDecimal(ds.Tables[0].Rows[i]["Credit"].ToString());
+                    obj.StatusSDSC = ds.Tables[0].Rows[i]["StatusSDSC"].ToString();
+                    
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
     }
 }
     

@@ -163,8 +163,8 @@ input[type=checkbox], input[type=radio] {
 
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-12">
-                    <label class="headinglabel required ">Remarks</label>
-                    @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @required = "true" })
+                    <label class="headinglabel">Remarks</label>
+                    @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Remarks)
 
                 </div>

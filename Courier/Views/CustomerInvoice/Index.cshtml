@@ -26,7 +26,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+</style>
 <script type="text/javascript">
 
 
@@ -45,7 +49,7 @@
         $('#txtpickuptime').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
     });
 
-     var table = $('#datatable-1').DataTable();
+    // var table = $('#datatable-1').DataTable();
 
 </script>
 <script type="text/javascript">
@@ -53,18 +57,24 @@
 
 
 
-         //$('#datatable-1 tfoot th').each(function () {
-         //       var title = $(this).text();
-         //       $(this).html('<input type="text" style="width:100%" />');
-         //   });
+        $('#dataTables-example tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" style="width:100%" />');
+            });       
+                          
+        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+             table.draw();
+            table.columns().every(function () {
+            var that = this;
 
-
-            var table = $('#datatable-1').dataTable({
-                "bDestroy": true,
-                //"order": []
-                "aaSorting": [],
-                "searching": false
-           });
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
 
         if ('@ismodify' == 'False')
         {
@@ -149,7 +159,37 @@
             </div>
             </div>
             <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
-                <table class="table table-responsive table-bordered tblfont" id="datatable-1">
+                <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+                    <thead>
+                        <tr>
+                            <th>
+                                Invoice No.
+                            </th>
+                            <th>
+                                Invoice Date
+                            </th>
+                            <th>
+                                Customer Name
+                            </th>
+                            <th>Invoice Amount</th>
+                            <th width="15%"></th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>
+                                Invoice No.
+                            </th>
+                            <th>
+                                Invoice Date
+                            </th>
+                            <th>
+                                Customer Name
+                            </th>
+                            <th>Invoice Amount</th>
+                            <th width="15%"></th>
+                        </tr>
+                    </tfoot>
                     @{ Html.RenderAction("Table", "CustomerInvoice");}
                 </table>
             </div>

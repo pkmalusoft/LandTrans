@@ -39,9 +39,9 @@
             $(this).html('<input type="text" style="width:100%" />');
         });
 
+        
 
-
-        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        var table = $('#dataTables-example').DataTable({ "aaSorting": []});
 
         table.columns().every(function () {
             var that = this;

@@ -78,6 +78,7 @@
                 $('#ConsigneeId').val(response.ConsigneeId);
                 $('#ConsigneeName').val(response.ConsigneeName);
                 $('#PaymentType').val(response.PaymentModeId);
+                $('#PaymentType').trigger('change');
                 $('#InvoiceTo').val(response.InvoiceTo);
                 $('#InvoiceTo').trigger('change');
             }
@@ -236,9 +237,14 @@
                 $('#ConsigneeId').val(response.ConsigneeId);
                 $('#ConsigneeName').val(response.ConsigneeName);
                 $('#PaymentType').val(response.PaymentModeId);
+                $('#PaymentType').trigger('change');
                 $('#InvoiceTo').val(response.InvoiceTo);
                 $('#InvoiceTo').trigger('change')
                 if ($('#InvoiceTo').val() == null || $('#InvoiceTo').val() == '') { $('#InvoiceTo').focus(); }
+                else if ($('#InvoiceTo').val() == 'Others')
+                {
+                    $('#txtCustomer').focus();
+                }
                 else { $('#txtRevenueCost').focus(); }
                 //AWBItems = [];
                 //if (response.revenuedetail != null && response.revenuedetail.length>0) {
@@ -835,8 +841,8 @@
             $('#EntryDate').attr('readonly', 'readonly');
             $('#EmployeeID').attr('readonly', 'readonly');
             $('#PaymentType').focus();
-            $('#txtDebitHead').val($('#DebitAccountName').val());
-            $('#txtDebitHeadId').val($('#DebitAccountId').val());
+            //$('#txtDebitHead').val($('#DebitAccountName').val());
+            //$('#txtDebitHeadId').val($('#DebitAccountId').val());
         }
         else {
             if ($('#InScanID').val() != null && $('#InScanID').val() != "" && $('#InScanID').val() != 0) {

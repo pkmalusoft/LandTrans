@@ -301,6 +301,423 @@ namespace LTMSV2.Controllers
 
         #endregion
 
+        #region "CustomerLedger"
+        public ActionResult CustomerLedger()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetCustomerLedgerParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Customer Ledger";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerLedger") && model.ReportType == "Ledger")
+                {
+                    Session["ReportOutput"] = null;
+                }
+                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerLedger(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = "PDF",
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetCustomerLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            if (model.ReportType == "Ledger")            {
+            
+                AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
+            }
+            else if (model.ReportType == "Statement")
+            {
+                AccountsReportsDAO.GenerateCustomerStatementReport();
+            }
+            
+            return RedirectToAction("CustomerLedger", "Reports");
+
+
+        }
+        #endregion
+        public ActionResult CustomerOutstanding()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "OutStanding"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetCustomerLedgerParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Customer Outstanding";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerLedger") && model.ReportType == "Ledger")
+                {
+                    Session["ReportOutput"] = null;
+                }
+                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerOutstanding(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = "PDF",
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetCustomerLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            if (model.ReportType == "Ledger")
+            {
+                //AccountsReportsDAO.GenerateCustomerLedgerReport();
+                AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
+            }
+            else if (model.ReportType == "OutStanding")
+            {
+                AccountsReportsDAO.GenerateCustomerOutStandingReport();
+            }
+            else if (model.ReportType == "AWBOutStanding")
+            {
+                AccountsReportsDAO.GenerateAWBOutStandingReport();
+            }
+
+            return RedirectToAction("CustomerLedger", "Accounts");
+
+
+        }
+
+        public ActionResult CustomerProfitAnalysis()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "OutStanding"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetCustomerLedgerParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Customer Profit Analysis";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerLedger") && model.ReportType == "Ledger")
+                {
+                    Session["ReportOutput"] = null;
+                }
+                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerProfitAnalysis(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = "PDF",
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetCustomerLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            if (model.ReportType == "Ledger")
+            {
+                //AccountsReportsDAO.GenerateCustomerLedgerReport();
+                AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
+            }
+            else if (model.ReportType == "OutStanding")
+            {
+                AccountsReportsDAO.GenerateCustomerOutStandingReport();
+            }
+            else if (model.ReportType == "AWBOutStanding")
+            {
+                AccountsReportsDAO.GenerateAWBOutStandingReport();
+            }
+
+            return RedirectToAction("CustomerLedger", "Reports");
+
+
+        }
+        public ActionResult SupplierLedger()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            var supplierMasterTypes = (from d in db.SupplierTypes select d).ToList();
+            ViewBag.SupplierType = supplierMasterTypes;
+            SupplierLedgerReportParam model = SessionDataModel.GetSupplierLedgerReportParam();
+            if (model == null)
+            {
+                model = new SupplierLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    SupplierTypeId = 1,
+                    SupplierId = 0,
+                    SupplierName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetSupplierLedgerParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Supplier Ledger";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("SupplierLedger") && model.ReportType == "Ledger")
+                {
+                    Session["ReportOutput"] = null;
+                }
+                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult SupplierLedger(SupplierLedgerReportParam picker)
+        {
+
+            SupplierLedgerReportParam model = new SupplierLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                SupplierId = picker.SupplierId,
+                SupplierName = picker.SupplierName,
+                Output = "PDF",
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetSupplierLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            if (model.ReportType == "Ledger")
+            {
+                //AccountsReportsDAO.GenerateCustomerLedgerReport();
+                AccountsReportsDAO.GenerateSupplierLedgerDetailReport();
+            }
+            else if (model.ReportType == "OutStanding")
+            {
+                AccountsReportsDAO.GenerateCustomerOutStandingReport();
+            }
+            else if (model.ReportType == "AWBOutStanding")
+            {
+                AccountsReportsDAO.GenerateAWBOutStandingReport();
+            }
+
+            return RedirectToAction("SupplierLedger", "Reports");
+
+
+        }
+
+        public ActionResult ManifestReport()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+
+            ManifestReportParam model = SessionDataModel.GetManifestReportParam();
+            if (model == null)
+            {
+                model = new ManifestReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    Output = "PDF",
+                    TDNo = "",
+                    TDID = 0
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetManifestReportParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Manifest Report";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("TripManifestReport"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult ManifestReport(ManifestReportParam picker)
+        {
+
+            ManifestReportParam model = new ManifestReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                Output = "PDF",
+                TDID = picker.TDID,
+                TDNo = picker.TDNo
+            };
+
+
+            SessionDataModel.SetManifestReportParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+
+            AccountsReportsDAO.GenerateManifestReport();
+
+            return View(model);
+            //return RedirectToAction("ManifestReport", "Accounts");
+
+
+        }
 
     }
 }

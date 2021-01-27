@@ -836,22 +836,22 @@ namespace LTMSV2.Controllers
             if (FromDate == null || ToDate == null)
             {
                 pFromDate = CommanFunctions.GetFirstDayofMonth().Date;//.AddDays(-1); // FromDate = DateTime.Now;
-                pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // // ToDate = DateTime.Now;
+                pToDate = CommanFunctions.GetLastDayofMonth().Date; // // ToDate = DateTime.Now;
 
                 pFromDate = AccountsDAO.CheckParamDate(pFromDate, FyearId).Date;
-                pToDate = AccountsDAO.CheckParamDate(pToDate, FyearId).Date.AddDays(1);
+                pToDate = AccountsDAO.CheckParamDate(pToDate, FyearId).Date;
             }
             else
             {
                 pFromDate = Convert.ToDateTime(FromDate);//.AddDays(-1);
-                pToDate = Convert.ToDateTime(ToDate).AddDays(1);
+                pToDate = Convert.ToDateTime(ToDate);
 
             }
-            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
-            ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
+            
             Reciepts = ReceiptDAO.GetCustomerReceipts(FyearId,pFromDate,pToDate); // RP.GetAllReciepts();
-
-           // var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
+            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
+            // var data = (from t in Reciepts where (t.RecPayDate >= Convert.ToDateTime(Session["FyearFrom"]) && t.RecPayDate <= Convert.ToDateTime(Session["FyearTo"])) select t).ToList();
             if (ID > 0)
             {
                 ViewBag.SuccessMsg = "You have successfully added Customer Reciept.";
@@ -1442,6 +1442,17 @@ namespace LTMSV2.Controllers
         {
             var customerlist = (from c1 in Context1.CustomerMasters
                                 where c1.CustomerType != "CN" && c1.CustomerName.ToLower().Contains(term.ToLower())
+                                orderby c1.CustomerName ascending
+                                select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, CustomerType = c1.CustomerType }).ToList();
+
+            return Json(customerlist, JsonRequestBehavior.AllowGet);
+
+        }
+        [HttpGet]
+        public JsonResult GetCreditCustomerName(string term)
+        {
+            var customerlist = (from c1 in Context1.CustomerMasters
+                                where c1.CustomerType == "CR" && c1.CustomerName.ToLower().Contains(term.ToLower())
                                 orderby c1.CustomerName ascending
                                 select new { CustomerID = c1.CustomerID, CustomerName = c1.CustomerName, CustomerType = c1.CustomerType }).ToList();
 

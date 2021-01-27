@@ -118,7 +118,7 @@
 <section class="content-header">
     <h1 class="headingfont">@ViewBag.ReportName</h1>
 </section>
-@using (Html.BeginForm("SupplierLedger", "Accounts", FormMethod.Post, new { @id = "supplierledger" }))
+@using (Html.BeginForm("SupplierLedger", "Reports", FormMethod.Post, new { @id = "supplierledger" }))
 {
     @Html.AntiForgeryToken()
 

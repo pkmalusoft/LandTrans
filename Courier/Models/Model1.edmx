@@ -179,9 +179,11 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AcJournalID" Type="int" />
-          <Property Name="AcJournalDetailID" Type="int" />
-          <Property Name="InScanID" Type="int" />
+          <Property Name="AcJournalID" Type="int" Nullable="false" />
+          <Property Name="AcJournalDetailID" Type="int" Nullable="false" />
+          <Property Name="AcHeadID" Type="int" Nullable="false" />
+          <Property Name="InScanID" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="money" />
         </EntityType>
         <EntityType Name="AcJournalDetail">
           <Key>
@@ -849,6 +851,17 @@
           </Key>
           <Property Name="CostTypeID" Type="int" Nullable="false" />
           <Property Name="CostType" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CostUpdateConsignment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CostUpdateMasterId" Type="int" />
+          <Property Name="CostUpdateDetaiIID" Type="int" />
+          <Property Name="RevenueCostMasterID" Type="int" />
+          <Property Name="InScanID" Type="int" />
+          <Property Name="Amount" Type="money" />
         </EntityType>
         <EntityType Name="CostUpdateDetail">
           <Key>
@@ -8288,7 +8301,11 @@
         <Function Name="SP_GetAdvanceAmountOfCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustomerID" Type="int" Mode="In" />
         </Function>
-        <Function Name="SP_GetAllRecieptsDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_GetAllRecieptsDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="varchar" Mode="In" />
+          <Parameter Name="ToDate" Type="varchar" Mode="In" />
+          <Parameter Name="FYearId" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_GetAllRecieptsDetailsByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FromDate" Type="nvarchar" Mode="In" />
           <Parameter Name="Todate" Type="nvarchar" Mode="In" />
@@ -8684,6 +8701,7 @@
           <EntitySet Name="Commission" EntityType="Self.Commission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Content" EntityType="Self.Content" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CostType" EntityType="Self.CostType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CostUpdateConsignment" EntityType="Self.CostUpdateConsignment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CostUpdateDetail" EntityType="Self.CostUpdateDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CostUpdateMaster" EntityType="Self.CostUpdateMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CountryMaster" EntityType="Self.CountryMaster" Schema="dbo" store:Type="Tables" />
@@ -17682,7 +17700,11 @@
           <FunctionImport Name="SP_GetAdvanceAmountOfCustomer" ReturnType="Collection(Decimal)">
           <Parameter Name="CustomerID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_GetAllRecieptsDetails" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetAllRecieptsDetails_Result)" />
+          <FunctionImport Name="SP_GetAllRecieptsDetails" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetAllRecieptsDetails_Result)" >
+            <Parameter Name="FromDate" Mode="In" Type="String" />
+            <Parameter Name="ToDate" Mode="In" Type="String" />
+            <Parameter Name="FYearId" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="SP_GetAllRecieptsDetailsByDate" ReturnType="Collection(DB_9F57C4_couriertest_newModel.SP_GetAllRecieptsDetailsByDate_Result)">
             <Parameter Name="FromDate" Mode="In" Type="String" />
             <Parameter Name="Todate" Mode="In" Type="String" />
@@ -18187,7 +18209,6 @@
             <End Role="RevenueUpdateMaster" EntitySet="RevenueUpdateMasters" />
             <End Role="RevenueUpdateDetail" EntitySet="RevenueUpdateDetails" />
           </AssociationSet>
-          <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
           <EntitySet Name="AcOpeningMasters" EntityType="DB_9F57C4_couriertest_newModel.AcOpeningMaster" />
           <EntitySet Name="AcOPInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail" />
           <EntitySet Name="AcOPInvoiceMasters" EntityType="DB_9F57C4_couriertest_newModel.AcOPInvoiceMaster" />
@@ -18220,6 +18241,8 @@
             <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
           </AssociationSet>
           <EntitySet Name="RecPayAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail" />
+          <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
+          <EntitySet Name="CostUpdateConsignments" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateConsignment" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -22943,15 +22966,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="AcJournalConsignment">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <Property Name="AcJournalDetailID" Type="Int32" />
-          <Property Name="InScanID" Type="Int32" />
-        </EntityType>
         <EntityType Name="AcOpeningMaster">
           <Key>
             <PropertyRef Name="AcOpeningID" />
@@ -23102,6 +23116,28 @@
           <Property Name="CustomerInvoiceDetailID" Type="Int32" />
           <Property Name="InScanID" Type="Int32" />
           <Property Name="AllocatedAmount" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="AcJournalConsignment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AcJournalID" Type="Int32" Nullable="false" />
+          <Property Name="AcJournalDetailID" Type="Int32" Nullable="false" />
+          <Property Name="AcHeadID" Type="Int32" Nullable="false" />
+          <Property Name="InScanID" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="CostUpdateConsignment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CostUpdateMasterId" Type="Int32" />
+          <Property Name="CostUpdateDetaiIID" Type="Int32" />
+          <Property Name="RevenueCostMasterID" Type="Int32" />
+          <Property Name="InScanID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -32120,16 +32156,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AcJournalConsignments">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalConsignment">
-              <MappingFragment StoreEntitySet="AcJournalConsignment">
-                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
-                <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AcOpeningMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOpeningMaster">
               <MappingFragment StoreEntitySet="AcOpeningMaster">
@@ -32189,6 +32215,30 @@
                 <ScalarProperty Name="CustomerInvoiceID" ColumnName="CustomerInvoiceID" />
                 <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
                 <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AcJournalConsignments">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalConsignment">
+              <MappingFragment StoreEntitySet="AcJournalConsignment">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CostUpdateConsignments">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CostUpdateConsignment">
+              <MappingFragment StoreEntitySet="CostUpdateConsignment">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="RevenueCostMasterID" ColumnName="RevenueCostMasterID" />
+                <ScalarProperty Name="CostUpdateDetaiIID" ColumnName="CostUpdateDetaiIID" />
+                <ScalarProperty Name="CostUpdateMasterId" ColumnName="CostUpdateMasterId" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -15,8 +15,10 @@ namespace LTMSV2.Models
     public partial class AcJournalConsignment
     {
         public int ID { get; set; }
-        public Nullable<int> AcJournalID { get; set; }
-        public Nullable<int> AcJournalDetailID { get; set; }
-        public Nullable<int> InScanID { get; set; }
+        public int AcJournalID { get; set; }
+        public int AcJournalDetailID { get; set; }
+        public int AcHeadID { get; set; }
+        public int InScanID { get; set; }
+        public Nullable<decimal> Amount { get; set; }
     }
 }

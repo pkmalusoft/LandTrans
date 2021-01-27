@@ -693,6 +693,9 @@
     <Compile Include="Models\CostType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CostUpdateConsignment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CostUpdateDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -3075,6 +3078,7 @@
     <Content Include="Reports\ConsignmentRegister.rpt" />
     <Content Include="Reports\ConsignmentRegister_LoadType.rpt" />
     <Content Include="Reports\ConsignmentRegister_Payment.rpt" />
+    <Content Include="Reports\AWBOutStanding.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>
@@ -3093,6 +3097,8 @@
     <Content Include="Reports\CustomerLedger.rpt" />
     <Content Include="Reports\SupplierLedger.rpt" />
     <Content Include="Reports\TripManifestreport.rpt" />
+    <Content Include="Reports\CustomerOutStanding.rpt" />
+    <Content Include="Reports\CustomerStatement.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3584,12 +3590,18 @@
     <Content Include="Views\DebitNote\List.cshtml" />
     <Content Include="Views\SupplierInvoice\InvoiceList.cshtml" />
     <Content Include="Views\Accounts\AcOpeningInvoiceSearch.cshtml" />
-    <Content Include="Views\Accounts\AcOpeningInvoice - Copy %282%29.cshtml" />
+    <Content Include="Views\Accounts\AcOpeningInvoiceIndex.cshtml" />
     <Content Include="Views\Package\Create.cshtml" />
     <Content Include="Views\CustomerInvoice\InvoicePrint - Copy.cshtml" />
     <Content Include="Views\Accounts\CustomerLedger.cshtml" />
     <Content Include="Views\Accounts\SupplierLedger.cshtml" />
     <Content Include="Views\Accounts\ManifestReport.cshtml" />
+    <Content Include="Views\Accounts\CustomerOutstanding.cshtml" />
+    <Content Include="Views\Reports\CustomerLedger.cshtml" />
+    <Content Include="Views\Reports\CustomerOutstanding.cshtml" />
+    <Content Include="Views\Reports\ManifestReport.cshtml" />
+    <Content Include="Views\Reports\SupplierLedger.cshtml" />
+    <Content Include="Views\Reports\CustomerProfitAnalysis.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

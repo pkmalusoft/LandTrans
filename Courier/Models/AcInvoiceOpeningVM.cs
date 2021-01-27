@@ -7,10 +7,11 @@ namespace LTMSV2.Models
 {
     public class AcInvoiceOpeningVM :AcOPInvoiceMaster
     {
-        public string PartName { get; set; }
+        public string PartyName { get; set; }
+        public string PartyType { get; set; }
         public decimal Debit { get; set; }
         public decimal Credit { get; set; }
-        
+        public decimal Balance { get; set; }
         public List<AcInvoiceOpeningDetailVM> InvoiceDetailVM { get; set; }
     }
     public class AcInvoiceOpeningDetailVM : AcOPInvoiceDetail

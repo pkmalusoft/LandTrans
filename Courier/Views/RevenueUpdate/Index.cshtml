@@ -3,6 +3,23 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+    var isprint = true;
+    var isview = true;
+    string path = "/RevenueUpdate/Index";
+
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        LTMSV2.Models.SourceMastersModel obj = new LTMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
 }
 
 <style>
@@ -16,11 +33,27 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#dataTables-example tfoot th').each(function () {
-            var title = $(this).text();
-            $(this).html('<input type="text" />');
+        $(function () {
+            $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
         });
-        //var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        //$("#FromDate").val(GetCurrentDate());
+        //function GetCurrentDate() {
+        //    var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");            
+        //    var sd = new Date();
+        //    var curr_date = '01';
+        //    var curr_month = sd.getMonth()+1;
+        //    var curr_year = sd.getFullYear();
+        //    return (curr_date + "-" + curr_month + "-" + curr_year);
+        //}
+
+        $(function () {
+            $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
+            $('#ToDate').datepicker("setDate", new Date());
+        });
+
+      
         var table = $('#dataTables-example').DataTable({
             "aaSorting": [],
             //"dom": '<"top"i>rt<"top"flp><"clear">',
@@ -29,20 +62,11 @@
             //"pagingType": "simple"
         });
         table.draw();
-        table.columns().every(function () {
-            var that = this;
-
-            $('input', this.footer()).on('keyup change', function () {
-                if (that.search() !== this.value) {
-                    that
-                        .search(this.value)
-                        .draw();
-                }
-            });
-        });
+       
         function format(d) {
+            debugger;
             // `d` is the original data object for the row
-            var RevenueId = d[4];
+            var RevenueId = d[6];
             var DataHtml = '';
             $.ajax({
                 type: "POST",
@@ -89,11 +113,51 @@
     <h1 class="headingfont">Revenue Update</h1>
 
 </section>
-<div class="col-md-12">
+<div class="row no-margin">
+    <div class=" d-flex">
+        <div class="col-md-2">
+            <input type="hidden" id="InScanID" />
+            <input type="hidden" id="CourierStatusId" />
+            <input type="hidden" id="StatusTypeId" />
+            <label class="headinglabel">Consignment Note</label>
+            <input id="ConsignmentNote" class="form-control" name="ConsignmentNote" type="text" value="@ViewBag.ConsignmentNo" />
+        </div>
+        <div class="col-md-1">
+            <label class="headinglabel">From </label>
+            <input id="FromDate" class="form-control text-right" name="FromDate" type="text" value="@ViewBag.FromDate" />
+            @*@Html.TextBox("FromDate",new { @class = "form-control txttarget" })*@
+        </div>
+
+        <div class="col-md-1">
+            <label class="headinglabel">To </label>
+            <input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />
+            @*@Html.TextBox("ToDate", new { @class = "form-control txttarget" })*@
+        </div>
+
+        <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:15px;">
+            <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "RevenueUpdate")?pConsignmentNo=' + $('#ConsignmentNote').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+            
+        </div>
+        <div class="pull-left" style="padding-top:32px;">
+            <p class="indexbtnpadding">
+                @if (@LTMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+                {
+                    @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
+                }
+                else
+                {
+                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                }
+
+            </p>
+        </div>
+    </div>
+</div>
+@*<div class="col-md-12">
     <p class="indexbtnpadding pull-right">
         @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
     </p>
-</div>
+</div>*@
 
 <div class="clearfix"></div>
 
@@ -115,58 +179,31 @@
                         @Html.Label("Consignment Note")
                     </th>
                     <th width="5%">
-                        @Html.Label("Consignment Date")</th>
-                        @*</th>
-                            <th width="10%">
-                                @Html.Label("Invoice To")
-                            </th>*@
+                        @Html.Label("Consignment Date")
+                    </th>
+                    <th width="10%">
+                        @Html.Label("Consignor")
+                    </th>
+                    <th width="10%">
+                        @Html.Label("Consignee")
+                    </th>
                     <th width="5%">
                         @Html.Label("Amount")
                     </th>
                     @*<th width="5%">
-                            @Html.Label("Currency")
-                        </th>
-                        <th width="15%" >
-                            @Html.Label("Debit Head")
-                        </th>
-                        <th width="15%">
-                            @Html.Label("Credit Head")
-                        </th>*@
+            @Html.Label("Currency")
+        </th>
+        <th width="15%" >
+            @Html.Label("Debit Head")
+        </th>
+        <th width="15%">
+            @Html.Label("Credit Head")
+        </th>*@
                     <th width="5%">Action</th>
                     <th style="display:none">Action</th>
                 </tr>
 
-            </thead>
-            <tfoot>
-                <tr>
-            <tfoot>
-                <tr>
-                    <th>
-                        @Html.Label("Consignment Note")
-                    </th>
-                    <th>
-                        @Html.Label("Consignment Date")
-                    </th>
-                    @*<th class="">
-                            @Html.Label("Invoice To")
-                        </th>*@
-                    <th>
-                        @Html.Label("Amount")
-                    </th>
-                    @*<th>
-                            @Html.Label("Currency")
-                        </th>
-                        <th >
-                            @Html.Label("Debit Account")
-                        </th>
-                        <th>
-                            @Html.Label("Credit Account")
-                        </th>*@
-                    <th>
-
-                    </th>
-                </tr>
-            </tfoot>
+            </thead>          
 
             <tbody>
                 @foreach (var item in Model)
@@ -174,9 +211,9 @@
                     <tr>
 
                         @*<td>
-                                @Html.DisplayFor(modelItem => item.RCCode)
+                        @Html.DisplayFor(modelItem => item.RCCode)
 
-                            </td>*@
+                    </td>*@
                         <td class="details-control">
                             <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" />
 
@@ -185,22 +222,25 @@
                         <td class="text-right">
                             @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.ConsignmentDate)
                         </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ConsignorName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ConsigneeName)
+                        </td>
+                        <td class="text-right">
+                            @*@Html.DisplayFor(modelItem => item.Amount)*@
+                            @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount, "3")
+                        </td>
                         @*<td>
-                                @Html.DisplayFor(modelItem => item.InvoicedTo)
-                            </td>*@
-                    <td class="text-right">
-                        @*@Html.DisplayFor(modelItem => item.Amount)*@
-                        @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount,"3")
+                        @Html.DisplayFor(modelItem => item.Currency)
                     </td>
-                        @*<td>
-                                @Html.DisplayFor(modelItem => item.Currency)
-                            </td>
-                            <td >
-                                @Html.DisplayFor(modelItem => item.DebitAccountName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CreditAccountName)
-                            </td>*@
+                    <td >
+                        @Html.DisplayFor(modelItem => item.DebitAccountName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreditAccountName)
+                    </td>*@
                         <td>
                             <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
                             <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>

@@ -445,6 +445,22 @@ namespace LTMSV2.Controllers
                                 cust.CustomerRcieptChildVM.Add(customerinvoice);
                             }
                         }
+                        else if (item.TruckDetailID>0)
+                        {
+                            var truckdetail = Context1.TruckDetails.Find(item.TruckDetailID);
+                            var customerinvoice = new CustomerRcieptChildVM();
+                            customerinvoice.TruckDetailID = Convert.ToInt32(item.TruckDetailID);
+                            customerinvoice.SInvoiceNo = truckdetail.ReceiptNo;
+                            customerinvoice.strDate = Convert.ToDateTime(truckdetail.TDDate).ToString("dd/MM/yyyy");
+                            customerinvoice.AmountToBePaid = 0;
+                            customerinvoice.Amount = Convert.ToDecimal(item.Amount);// * -1;
+                            customerinvoice.Balance = 0;
+                            customerinvoice.RecPayDetailID = item.RecPayDetailID;
+                            customerinvoice.AmountToBeRecieved = 0;
+                            customerinvoice.RecPayID = Convert.ToInt32(item.RecPayID);
+                            customerinvoice.AdjustmentAmount = Convert.ToDecimal(item.AdjustmentAmount);
+                            cust.CustomerRcieptChildVM.Add(customerinvoice);
+                        }
                     }
 
                     BindMasters_ForEdit(cust);

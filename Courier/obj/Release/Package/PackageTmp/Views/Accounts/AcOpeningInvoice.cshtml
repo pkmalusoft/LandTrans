@@ -147,7 +147,7 @@
 
         $('#btnadd').click(function () {
             debugger;
-            var PartyId = $('#PartyID').val();
+            var PartyId = $('#PartyId').val();
 
             if (PartyId == 0) {
                 alert('Select Party Name!');
@@ -261,7 +261,7 @@
 
                 openingitems.push(item1);
                 if (i == (parseFloat(itemcount) - 1)) {
-                    var model = { AcOPInvoiceMasterID: $('#AcOPInvoiceMasterID').val(), PartyID: $('#PartyID').val(), StatusSDSC: $('#StatusSDSC').val(), Remarks: $('#Remarks').val(), InvoiceDetailVM: openingitems }
+                    var model = { AcOPInvoiceMasterID: $('#AcOPInvoiceMasterID').val(), PartyID: $('#PartyId').val(), StatusSDSC: $('#InvoiceType').val(), Remarks: $('#Remarks').val(), InvoiceDetailVM: openingitems }
                     var items = JSON.stringify({ 'model': model });
                     $.ajax({
                         contentType: 'application/json;charset=utf-8',
@@ -270,9 +270,12 @@
                         url: "/Accounts/SaveOpeningInvoice",
                         data: items,
                         success: function (data) {
-                            if (data.success == "ok") {
-                                $.notify("Submitted Successfully!", "success");
-                                window.location.reload();
+                            if (data.status == "ok") {
+                                setTimeout(function () {
+                                    window.location.reload(); 
+                                },500)                                
+                                $.notify("Submitted Successfully!", "success");                                
+                                
                             } else {
                                 $.notify(data.message, "error");
                             }
@@ -344,10 +347,13 @@
             <div class="row no-margin  form-group">
                 <div class="col-md-2 border-right">
                     <div>
-                         <label class="headinglabel required" style="font-size:18px!Important;color:#35b8eb!important">Total Debit: <span id="spantotaldebit" >@Model.Debit </span> </label>
-                     </div>
+                        <label class="headinglabel required" style="font-size:18px!Important;color:#35b8eb!important">Total Debit: <span id="spantotaldebit">@Model.Debit </span> </label>
+                    </div>
                     <div>
-                        <label class="headinglabel required" style="font-size:18px!Important;color:#ff841a!important"> Total Credit: <span id="spantotalcredit" >@Model.Credit</span> </label>
+                        <label class="headinglabel required" style="font-size:18px!Important;color:#ff841a!important"> Total Credit: <span id="spantotalcredit">@Model.Credit</span> </label>
+                    </div>
+                    <div>
+                        <label class="headinglabel required" style="font-size:18px!Important;color:#000000!important"> Balance: <span id="spantotalcredit">@Model.Balance</span> </label>
                     </div>
                 </div>
                 <div class="col-md-10"  style="padding-left:30px">
@@ -420,11 +426,11 @@
                                         <input type="text" class="form-control date" value='@LTMSV2.Models.CommanFunctions.GetShortDateFormat1(@item.InvoiceDate)' id="txtInvoiceDate_@i" />
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control date" value="@item.LastTransDate" id="txtLastTransDate_@i" />
+                                        <input type="text" class="form-control date" value="@LTMSV2.Models.CommanFunctions.GetShortDateFormat1(@item.LastTransDate)" id="txtLastTransDate_@i" />
                                     </td>
                                     @if (item.Amount > 0)
                                     {
-                                        <td><input type="text" class="form-control text-right " value="@item.Amount" id="txtDebit_@i" />  </td>
+                                        <td><input type="text" class="form-control text-right " value="@LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount,"3")" id="txtDebit_@i" />  </td>
                                         <td><input type="text" class="form-control text-right" value="0.000" id="txtCredit_@i" />  </td>
 
                                     }
@@ -432,7 +438,7 @@
                                     {
                                         var credit = -1 * item.Amount;
                                         <td><input type="text" class="form-control text-right " value="0.000" id="txtDebit_@i" />  </td>
-                                        <td><input type="text" class="form-control text-right" value="@credit" id="txtCredit_@i" />  </td>
+                                        <td><input type="text" class="form-control text-right" value="@LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount,"3")" id="txtCredit_@i" />  </td>
 
                                     }
                                     <td>

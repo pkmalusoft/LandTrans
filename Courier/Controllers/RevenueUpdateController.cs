@@ -14,9 +14,7 @@ namespace LTMSV2.Controllers
         // GET: RevenueUpdate
         public ActionResult Index(string pConsignmentNo, string FromDate, string ToDate)
         {
-            ViewBag.Employee = db.EmployeeMasters.ToList();
-            ViewBag.PickupRequestStatus = db.PickUpRequestStatus.ToList();
-
+                        
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
 
@@ -51,24 +49,45 @@ namespace LTMSV2.Controllers
                 Customerid = Convert.ToInt32(Session["CustomerId"].ToString());
 
             }
-            //List<RevenueUpdateMasterVM> lst = new List<RevenueUpdateMasterVM>();
-            List<RevenueUpdateMasterVM> lst = RevenueDAO.GetRevenueUpdateList(ConsignmentNo, pFromDate, pToDate);
-            var list = (from d in db.RevenueUpdateMasters
-                        join c in db.InScanMasters on d.InScanID equals c.InScanID
-                        select new RevenueUpdateMasterVM
-                        {
-                            ID=d.ID,
-                           ConsignmentDate=d.EntryDate,
-                           ConsignmentNo=c.ConsignmentNo,
+            List<RevenueUpdateMasterVM> lst = new List<RevenueUpdateMasterVM>();
+            //List<RevenueUpdateMasterVM> lst = RevenueDAO.GetRevenueUpdateList(ConsignmentNo, pFromDate, pToDate);
 
-                        }).ToList();
+            if (ConsignmentNo == "" || ConsignmentNo==null)
+            {
+                lst = (from d in db.RevenueUpdateMasters
+                       join c in db.InScanMasters on d.InScanID equals c.InScanID
+                       where (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
+                       select new RevenueUpdateMasterVM
+                       {
+                           ID = d.ID,
+                           ConsignmentDate = d.EntryDate,
+                           ConsignmentNo = c.ConsignmentNo,
+                           ConsignorName = c.Consignor,
+                           ConsigneeName = c.Consignee
+                       }).ToList();
+            }
+            else
+            {
+                lst = (from d in db.RevenueUpdateMasters
+                       join c in db.InScanMasters on d.InScanID equals c.InScanID
+                       where (c.ConsignmentNo == ConsignmentNo)
+                       select new RevenueUpdateMasterVM
+                       {
+                           ID = d.ID,
+                           ConsignmentDate = d.EntryDate,
+                           ConsignmentNo = c.ConsignmentNo,
+                           ConsignorName = c.Consignor,
+                           ConsigneeName = c.Consignee
+                       }).ToList();
+            }
 
-            list.ForEach(d => d.Amount = (from s in db.RevenueUpdateDetails where s.MasterID == d.ID select s).ToList().Sum(a => a.Amount));
+            lst.ForEach(d => d.Amount = (from s in db.RevenueUpdateDetails where s.MasterID == d.ID select s).ToList().Sum(a => a.Amount));
+            lst= lst.OrderByDescending(cc => cc.ConsignmentDate).ToList();
 
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");            
             ViewBag.ConsignmentNo = ConsignmentNo;
-            return View(list);
+            return View(lst);
         }
 
         public ActionResult Create(int id=0)
@@ -357,12 +376,12 @@ namespace LTMSV2.Controllers
         {
             if (term.Trim() != "")
             {
-                var list = (from c in db.InScanMasters where c.RevenueUpdate==false && c.ConsignmentNo.Contains(term.Trim()) orderby c.ConsignmentNo select new RevenueUpdateMasterVM { ConsignmentNo = c.ConsignmentNo ,InScanID=c.InScanID }).ToList();
+                var list = (from c in db.InScanMasters where c.IsDeleted==false && c.RevenueUpdate==false && c.ConsignmentNo.Contains(term.Trim()) orderby c.ConsignmentNo select new RevenueUpdateMasterVM { ConsignmentNo = c.ConsignmentNo ,InScanID=c.InScanID }).ToList();
                 return Json(list, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                var list = (from c in db.InScanMasters where c.RevenueUpdate == false orderby c.ConsignmentNo select new RevenueUpdateMasterVM { ConsignmentNo = c.ConsignmentNo, InScanID = c.InScanID }).ToList();
+                var list = (from c in db.InScanMasters where c.IsDeleted==false && c.RevenueUpdate == false orderby c.ConsignmentNo select new RevenueUpdateMasterVM { ConsignmentNo = c.ConsignmentNo, InScanID = c.InScanID }).ToList();
                 
                 return Json(list, JsonRequestBehavior.AllowGet);
             }         

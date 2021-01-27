@@ -24,6 +24,14 @@ namespace LTMSV2.Models
                 return System.Configuration.ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
             }
         }
+
+        public static double GetGMTHours
+        {
+            get
+            {
+                return Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["GMTHours"].ToString());
+            }
+        }
         public static DateTime ParseDate(string str, string Format = "dd-MMM-yyyy")
         {
             DateTime dt = DateTime.MinValue;
@@ -132,9 +140,11 @@ namespace LTMSV2.Models
             int fyearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
             DateTime startdate = Convert.ToDateTime(db.AcFinancialYears.Find(fyearid).AcFYearFrom);
             DateTime enddate = Convert.ToDateTime(db.AcFinancialYears.Find(fyearid).AcFYearTo);
+            double hours = Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["GMTHours"].ToString());
 
-            DateTime todaydate = DateTimeOffset.Now.Date; // DateTime.Now.Date;            
+            DateTime todaydate = DateTime.UtcNow.AddHours(hours);// DateTimeOffset.Now.Date; // DateTime.Now.Date;            
             return todaydate;
+
             //if (todaydate >= startdate && todaydate <= enddate) //current date between current financial year
             //    return todaydate;
             //else
