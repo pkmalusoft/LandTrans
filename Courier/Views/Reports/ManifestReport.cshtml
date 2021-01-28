@@ -49,7 +49,7 @@
                 $.ajax({
                     url: "/Accounts/GetTripData",
                     datatype: "json",
-                    data: { 'fromdate': $('#FromDate').val() , 'todate': $('#ToDate').val() },
+                    data: { 'term': request.term, 'fromdate': $('#FromDate').val() , 'todate': $('#ToDate').val() },
                     success: function (data) {
                         response($.map(data, function (val, item) {
                             return {
@@ -75,6 +75,11 @@
 
 
         });
+
+        if (@ViewBag.ReportOption == "1") {
+            $('#divreportoption').addClass('hide');
+            //$('#btnreport').trigger('click');
+        }
     });
 </script>
 
@@ -86,7 +91,7 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="row no-margin d-flex">
+    <div class="row no-margin d-flex" id="divreportoption">
         <div class="col-md-5 ">
             <div class="form-group">
                 <div class="row">

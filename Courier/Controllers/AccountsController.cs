@@ -3775,19 +3775,33 @@ new AcGroupModel()
 
         
         [HttpGet]
-        public JsonResult GetTripData(string fromdate,string todate)
+        public JsonResult GetTripData(string term,string fromdate,string todate)
         {
             DateTime fdate = Convert.ToDateTime(fromdate);
             DateTime tdate = Convert.ToDateTime(todate).AddDays(1);
-            
+            if (term.Trim() != "")
+            {
                 var itemlist = (from c in db.TruckDetails
                                 join v in db.VehicleMasters
               on c.VehicleID equals v.VehicleID
                                 where c.IsDeleted == false
-            && c.TDDate>= fdate
-            && c.TDDate< tdate
-            select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.ReceiptNo + "-" + c.RegNo }).ToList();
-               return Json(itemlist, JsonRequestBehavior.AllowGet);
+                                && (c.ReceiptNo.Contains(term.Trim()) || c.RegNo.Contains(term.Trim())  || c.DriverName.Contains(term.Trim()))
+            && c.TDDate >= fdate
+            && c.TDDate < tdate
+                                select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.ReceiptNo + "-" + c.RegNo + "-" + c.DriverName }).ToList();
+                return Json(itemlist, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var itemlist = (from c in db.TruckDetails
+                                join v in db.VehicleMasters
+              on c.VehicleID equals v.VehicleID
+                                where c.IsDeleted == false
+            && c.TDDate >= fdate
+            && c.TDDate < tdate
+                                select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.ReceiptNo + "-" + c.RegNo + "-" + c.DriverName }).ToList();
+                return Json(itemlist, JsonRequestBehavior.AllowGet);
+            }
             
 
         }

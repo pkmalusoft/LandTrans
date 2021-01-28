@@ -13,6 +13,12 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
 <style>
+    .form-control, input {
+        height: 30px !important;
+        border-radius: 5px !important;
+        border: 1px solid #ccc;
+        margin-bottom: 0;
+    }
     #details tr {
         height: 32px;
     }
@@ -73,6 +79,7 @@
             datatype: "json",
             data: { id: $('#InScanID').val() },
             success: function (response) {
+                $('#Remarks').val(response.Remarks);
                 $('#ConsignorId').val(response.ConsignorId);
                 $('#ConsignorName').val(response.ConsignorName);
                 $('#ConsigneeId').val(response.ConsigneeId);
@@ -232,6 +239,8 @@
             data: { id: $('#InScanID').val() },
             success: function (response) {
                 debugger;
+                $('#elemError').html("")
+                $('#Remarks').val(response.Remarks);
                 $('#ConsignorId').val(response.ConsignorId);
                 $('#ConsignorName').val(response.ConsignorName);
                 $('#ConsigneeId').val(response.ConsigneeId);
@@ -240,7 +249,9 @@
                 $('#PaymentType').trigger('change');
                 $('#InvoiceTo').val(response.InvoiceTo);
                 $('#InvoiceTo').trigger('change')
-                if ($('#InvoiceTo').val() == null || $('#InvoiceTo').val() == '') { $('#InvoiceTo').focus(); }
+                if ($('#PaymentType').val()!=1 && ($('#InvoiceTo').val() == null || $('#InvoiceTo').val() == '')) {
+                    $('#InvoiceTo').focus();
+                }
                 else if ($('#InvoiceTo').val() == 'Others')
                 {
                     $('#txtCustomer').focus();
@@ -304,6 +315,11 @@
             var modeid = $('#PaymentType').val();
             if (modeid == 1) { //PKP
                 $('#InvoiceTo').html('');
+                $('#txtCustomer').val($('#ConsignorName').val());
+                $('#txtCustomerId').val($('#ConsignorId').val());
+                $('#txtCustomer').attr('readonly', 'readonly');
+                $('#txtDebitHead').val($('#DebitCashAccountName').val());
+                $('#txtDebitHeadId').val($('#DebitCashAccountId').val());
             }
             else if (modeid == 2) {
                 $('#InvoiceTo').html('');
@@ -577,37 +593,45 @@
         //});
         $('#InvoiceTo').change(function () {
             debugger;
-             if ($('#InvoiceTo').val() == "Shipper") {
+            if ($('#InvoiceTo').val() == "Shipper") {
                 $('#txtCustomer').val($('#ConsignorName').val());
                 $('#txtCustomerId').val($('#ConsignorId').val());
                 $('#txtCustomer').attr('readonly', 'readonly');
+                $('#txtDebitHead').val($('#DebitAccountName').val());
+                $('#txtDebitHeadId').val($('#DebitAccountId').val());
             }
-             else if ($('#InvoiceTo').val() == "Consignee") {
+            else if ($('#InvoiceTo').val() == "Consignee") {
                 $('#txtCustomer').val($('#ConsigneeName').val());
                 $('#txtCustomerId').val($('#ConsigneeId').val());
-                 $('#txtCustomer').attr('readonly', 'readonly');
+                $('#txtCustomer').attr('readonly', 'readonly');
+                $('#txtDebitHead').val($('#DebitAccountName').val());
+                $('#txtDebitHeadId').val($('#DebitAccountId').val());
             }
-            $('#txtDebitHead').val($('#DebitAccountName').val());
-            $('#txtDebitHeadId').val($('#DebitAccountId').val());
-            if ($('#txtCustomerId').val() > 0) {
-                $.ajax({
-                    url: '/RevenueUpdate/GetCustomerDebitHeadID',
-                    datatype: "json",
-                    data: { CustomerId: $('#txtCustomerId').val()},
-                    success: function (response) {
-                        debugger;
-                        console.log(response)
-                        var data = response[0];
-                        $('#txtDebitHeadId').val(data.AcHeadDebitId);
+            else if ($('#PaymentType').val() == 1)
+            {
+                $('#txtDebitHead').val($('#DebitCashAccountName').val());
+                $('#txtDebitHeadId').val($('#DebitCashAccountId').val());
+            }
+            
+            //if ($('#txtCustomerId').val() > 0) {
+            //    $.ajax({
+            //        url: '/RevenueUpdate/GetCustomerDebitHeadID',
+            //        datatype: "json",
+            //        data: { CustomerId: $('#txtCustomerId').val()},
+            //        success: function (response) {
+            //            debugger;
+            //            console.log(response)
+            //            var data = response[0];
+            //            $('#txtDebitHeadId').val(data.AcHeadDebitId);
 
-                        $('#txtDebitHead').val(data.DebitAccountName);
-                        if ($('#CurrencyId').val() == "" || $('#CurrencyId').val() == "0") {
-                            $('#CurrencyId').val($('#DefaultCurrencyID').val());
-                            $('#CurrencyId').trigger('change');
-                        }
-                    }
-                });
-            }
+            //            $('#txtDebitHead').val(data.DebitAccountName);
+            //            if ($('#CurrencyId').val() == "" || $('#CurrencyId').val() == "0") {
+            //                $('#CurrencyId').val($('#DefaultCurrencyID').val());
+            //                $('#CurrencyId').trigger('change');
+            //            }
+            //        }
+            //    });
+            //}
 
         })
         $('#CurrencyId').change(function () {
@@ -840,7 +864,7 @@
             $('#btnsearch').attr('disabled', 'disabled');
             $('#EntryDate').attr('readonly', 'readonly');
             $('#EmployeeID').attr('readonly', 'readonly');
-            $('#PaymentType').focus();
+            $('#txtRevenueCost').focus();
             //$('#txtDebitHead').val($('#DebitAccountName').val());
             //$('#txtDebitHeadId').val($('#DebitAccountId').val());
         }
@@ -914,6 +938,8 @@
                     @Html.HiddenFor(model => model.PickupCashHeadId, new { })
                     @Html.HiddenFor(model => model.DebitAccountId, new { })
                     @Html.HiddenFor(model => model.DebitAccountName, new { })
+                    @Html.HiddenFor(model => model.DebitCashAccountId, new { })
+                    @Html.HiddenFor(model => model.DebitCashAccountName, new { })
                     @Html.HiddenFor(model => model.CurrencyId, new { @id = "DefaultCurrencyID" })
 
                     @*@Html.HiddenFor(model => model.InScanID, new { })*@
@@ -960,12 +986,16 @@
                     @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "Select", new { @class = "form-control", @id = "InvoiceTo" })
                 </div>
                 <div class="col-md-2-5">
+                    <label class="headinglabel required">Remarks</label>
+                    @Html.TextBoxFor(model=>model.Remarks , new { @class = "form-control" })
+                </div>
+                <div class="col-md-2-5">
                     <label class="headinglabel required">Currency</label>
                     @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyCode", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
                     @Html.HiddenFor(model => model.ExchangeRate)
                 </div>
 
-                 <div class="col-md-2-5">
+                <div class="col-md-2-5">
                     <label class="headinglabel">Receivable Account(Dr.)</label>
                     <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
                     <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
@@ -981,7 +1011,7 @@
                     <input type="text" id="txtCustomer" class="form-control" autocomplete="off" />
                     <input type="hidden" id="txtCustomerId" class="form-control" autocomplete="off" />
                 </div>
-               
+
                 <div class="col-md-2-5">
                     <label class="headinglabel label1">Revenue Head</label>
                     <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
@@ -991,8 +1021,7 @@
                     <label class="headinglabel">Amount</label>
                     <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
                 </div>
-                <div class="col-md-1" style="padding-top:30px">
-                    <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data" onclick="ClearData()">-</button>&nbsp;&nbsp;
+                <div class="col-md-1" style="padding-top:30px">                    
                     <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
                 </div>
                 <div class="col-md-2">

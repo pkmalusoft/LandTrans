@@ -3,6 +3,23 @@
     @{
         ViewBag.Title = "Index";
         Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+        var isadd = true;
+        var ismodify = true;
+        var isdelete = true;
+        var isprint = true;
+        var isview = true;
+        string path = "/DailyTrips/Index";
+
+        if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+        {
+            LTMSV2.Models.SourceMastersModel obj = new LTMSV2.Models.SourceMastersModel();
+            isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+            isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+        }
     }
 
     <style>
@@ -50,9 +67,7 @@
             });
         }*@
 
-        function ShowStatusModal(InScanID,PickupRequestStatusId,ShipmentType) {
-            debugger;
-            console.log(ShipmentType);
+        function ShowStatusModal(InScanID,PickupRequestStatusId,ShipmentType) {           
             if (ShipmentType != 'PICKUP REQUEST') {
                 alert('Could not change Status,Shipment Type out of Pickup Request!');
                 return;
@@ -506,10 +521,15 @@
                                 @Html.DisplayFor(modelItem => item.Destination)
                             </td>
                            
-                            <td>                                
+                            <td>
                                 <a href="@Url.Action("Create", new { Id = item.TruckDetailID })"><i class="fa fa-pencil"></i></a> |
                                 @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
                                 <a href="#" class="text-red" onclick="Delete(ID=@item.TruckDetailID)"><i class="fa fa-times"></i></a>
+                                @if (isprint)
+                                {
+                                    <a target="_blank" href="@Url.Action("ManifestReport", "Reports", new { id = item.TruckDetailID})"><i class="fa fa-print"></i></a>
+                                    @*<a href="#" title="Label Printing" onclick="ShowLabelPrinting('@item.InScanID')"><i class="fa fa-print"></i></a>*@
+                                }
                             </td>
                         </tr>
                     }

@@ -14,7 +14,7 @@ namespace LTMSV2.Models
         public int PickupCashHeadId { get; set; }
         public int ConsignorId { get; set; }
         public int ConsigneeId { get; set; }
-
+        public string Remarks { get; set; }
         public string ConsignorName { get; set; }
         public string ConsigneeName { get; set; }
         public string InvoiceTo { get; set; }
@@ -25,6 +25,9 @@ namespace LTMSV2.Models
         public int CurrencyId { get; set; }
         public string DebitAccountName { get; set; }
         public int DebitAccountId { get; set; }
+
+        public string DebitCashAccountName { get; set; }
+        public int DebitCashAccountId { get; set; }
         public string CreditAccountName { get; set; }
         public string CustomerName { get; set; }
         public string RevenueCost { get; set; }

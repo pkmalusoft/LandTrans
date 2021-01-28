@@ -1345,7 +1345,7 @@ namespace LTMSV2.DAL
             comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@FYearId", yearid);
-
+            comd.Parameters.AddWithValue("@CustomerId",reportparam.CustomerId);
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
             sqlAdapter.SelectCommand = comd;
             DataSet ds = new DataSet();

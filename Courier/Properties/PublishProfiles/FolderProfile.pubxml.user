@@ -53,10 +53,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:32</publishTime>
     </File>
     <File Include="bin/LTMSV2.dll">
-      <publishTime>01/27/2021 19:31:57</publishTime>
+      <publishTime>01/28/2021 20:15:49</publishTime>
     </File>
     <File Include="bin/LTMSV2.pdb">
-      <publishTime>01/27/2021 19:31:57</publishTime>
+      <publishTime>01/28/2021 20:15:49</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>09/05/2018 16:10:50</publishTime>
@@ -3356,7 +3356,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/21/2021 11:00:05</publishTime>
     </File>
     <File Include="Reports/CustomerLedger.rpt">
-      <publishTime>01/27/2021 18:26:05</publishTime>
+      <publishTime>01/28/2021 11:43:10</publishTime>
     </File>
     <File Include="Reports/CustomerMaster.rpt">
       <publishTime>12/22/2020 19:46:18</publishTime>
@@ -3368,7 +3368,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/23/2021 11:17:48</publishTime>
     </File>
     <File Include="Reports/CustomerStatement.rpt">
-      <publishTime>01/27/2021 18:37:40</publishTime>
+      <publishTime>01/28/2021 12:03:09</publishTime>
     </File>
     <File Include="Reports/DayBook.rpt">
       <publishTime>12/24/2020 12:26:45</publishTime>
@@ -3398,7 +3398,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:18</publishTime>
     </File>
     <File Include="Reports/TripManifestreport.rpt">
-      <publishTime>01/21/2021 16:37:45</publishTime>
+      <publishTime>01/28/2021 13:33:38</publishTime>
     </File>
     <File Include="ReportsPDF/AccLedger_2810201826.pdf">
       <publishTime>12/22/2020 19:46:18</publishTime>
@@ -4028,7 +4028,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/22/2021 18:19:37</publishTime>
     </File>
     <File Include="Views/DailyTrips/Index.cshtml">
-      <publishTime>12/22/2020 19:46:22</publishTime>
+      <publishTime>01/28/2021 19:47:17</publishTime>
     </File>
     <File Include="Views/DailyTrips/_contractVehicle.cshtml">
       <publishTime>12/22/2020 19:46:22</publishTime>
@@ -4601,7 +4601,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/27/2021 17:35:29</publishTime>
     </File>
     <File Include="Views/Reports/CustomerOutstanding.cshtml">
-      <publishTime>01/27/2021 17:35:19</publishTime>
+      <publishTime>01/28/2021 12:33:25</publishTime>
     </File>
     <File Include="Views/Reports/CustomerProfitAnalysis.cshtml">
       <publishTime>01/27/2021 17:33:51</publishTime>
@@ -4610,7 +4610,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/Reports/ManifestReport.cshtml">
-      <publishTime>01/27/2021 17:36:38</publishTime>
+      <publishTime>01/28/2021 19:48:23</publishTime>
     </File>
     <File Include="Views/Reports/PrintSearch.cshtml">
       <publishTime>12/22/2020 19:46:25</publishTime>
@@ -4658,7 +4658,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/22/2020 19:46:25</publishTime>
     </File>
     <File Include="Views/RevenueUpdate/Create.cshtml">
-      <publishTime>01/27/2021 19:21:08</publishTime>
+      <publishTime>01/28/2021 20:14:52</publishTime>
     </File>
     <File Include="Views/RevenueUpdate/Index.cshtml">
       <publishTime>01/27/2021 09:48:55</publishTime>

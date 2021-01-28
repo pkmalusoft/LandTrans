@@ -112,10 +112,20 @@ namespace LTMSV2.Controllers
                 vm.DetailVM = new List<RevenueUpdateDetailVM>();
                 vm.EntryDate = DateTime.Now;
                 var acc = db.AcHeads.Where(cc => cc.AcHead1 == "Un-invoiced Consignment Note").FirstOrDefault();
+
+                
                 if (acc!=null)
                 {
                     vm.DebitAccountName = acc.AcHead1;
                     vm.DebitAccountId = acc.AcHeadID;
+
+                }
+
+                var pacc = db.AcHeads.Where(cc => cc.AcHead1 == "Pickup Cash Control Account").FirstOrDefault();
+                if (pacc != null)
+                {
+                    vm.DebitCashAccountName = pacc.AcHead1;
+                    vm.DebitCashAccountId = pacc.AcHeadID;
 
                 }
                 vm.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
@@ -142,6 +152,13 @@ namespace LTMSV2.Controllers
                 {
                     vm.DebitAccountName = acc.AcHead1;
                     vm.DebitAccountId = acc.AcHeadID;
+
+                }
+                var pacc = db.AcHeads.Where(cc => cc.AcHead1 == "Pickup Cash Control Account").FirstOrDefault();
+                if (pacc != null)
+                {
+                    vm.DebitCashAccountName = pacc.AcHead1;
+                    vm.DebitCashAccountId = pacc.AcHeadID;
 
                 }
                 vm.ConsignmentNo = db.InScanMasters.Find(v.InScanID).ConsignmentNo;
@@ -275,16 +292,16 @@ namespace LTMSV2.Controllers
                     }                
                }
 
-            if (vm.ID==0)
-            {
+            
                 //update inscan revenue update status 
                 var inscan = db.InScanMasters.Find(vm.InScanID);
+                inscan.Remarks = vm.Remarks;
                 inscan.RevenueUpdate = true;
                 db.Entry(inscan).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-            }
+            
             PickupRequestDAO _dao = new PickupRequestDAO();
-            _dao.GenerateRevenueUpdatePosting(vm.ID);
+            _dao.GenerateRevenueUpdatePosting(v.ID);
             Session["CreateRevenueUpdate"] =null;
             TempData["SuccessMsg"] = "Revenue of Consignment Updated Successfully!";
             return RedirectToAction("Index");
@@ -327,9 +344,10 @@ namespace LTMSV2.Controllers
             var inscan = db.InScanMasters.Find(id);
             int paymentModeid =Convert.ToInt32(inscan.PaymentModeId);
             string InvoiceTo = inscan.InvoiceTo;
-
+                       
             var cust = (from c in db.CustomerMasters where c.CustomerName == inscan.Consignor select c).FirstOrDefault();
             var receiver = (from c in db.CustomerMasters where c.CustomerName == inscan.Consignee select c).FirstOrDefault();
+            var customer = (from c in db.CustomerMasters where c.CustomerName == "Pickupcash Customer" select c).FirstOrDefault();
             int consignorid = 0;
             string consignorname = "";
             int consigneeid = 0;
@@ -344,6 +362,13 @@ namespace LTMSV2.Controllers
             {
                 consigneeid = receiver.CustomerID;
                 consigneename = receiver.CustomerName;
+            }
+            if (paymentModeid==1 && customer!=null)
+            {
+                consignorid = customer.CustomerID;
+                consigneeid = customer.CustomerID;
+                consignorname = customer.CustomerName;
+                consigneename = customer.CustomerName;
             }
             List<RevenueUpdateDetailVM> list = new List<RevenueUpdateDetailVM>();
             if (vm != null)
@@ -367,7 +392,7 @@ namespace LTMSV2.Controllers
             }
 
             Session["CreateRevenueUpdate"] = null;
-            return Json(new {PaymentModeId=paymentModeid,InvoiceTo=InvoiceTo, ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename ,revenuedetail=list }, JsonRequestBehavior.AllowGet);
+            return Json(new {Remarks=inscan.Remarks, PaymentModeId=paymentModeid,InvoiceTo=InvoiceTo, ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename ,revenuedetail=list }, JsonRequestBehavior.AllowGet);
 
         }
 

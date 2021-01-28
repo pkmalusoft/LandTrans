@@ -466,7 +466,7 @@ namespace LTMSV2.Controllers
                 AccountsReportsDAO.GenerateAWBOutStandingReport();
             }
 
-            return RedirectToAction("CustomerLedger", "Accounts");
+            return RedirectToAction("CustomerOutstanding", "Reports");
 
 
         }
@@ -553,7 +553,7 @@ namespace LTMSV2.Controllers
                 AccountsReportsDAO.GenerateAWBOutStandingReport();
             }
 
-            return RedirectToAction("CustomerLedger", "Reports");
+            return RedirectToAction("CustomerProfitAnalysis", "Reports");
 
 
         }
@@ -646,10 +646,9 @@ namespace LTMSV2.Controllers
 
         }
 
-        public ActionResult ManifestReport()
+        public ActionResult ManifestReport(int id=0)
         {
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
-
 
             ManifestReportParam model = SessionDataModel.GetManifestReportParam();
             if (model == null)
@@ -661,8 +660,10 @@ namespace LTMSV2.Controllers
                     Output = "PDF",
                     TDNo = "",
                     TDID = 0
-                };
+                };                
             }
+
+           
             if (model.FromDate.ToString() == "01-01-0001 00:00:00")
             {
                 model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
@@ -672,21 +673,39 @@ namespace LTMSV2.Controllers
             {
                 model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
             }
-            SessionDataModel.SetManifestReportParam(model);
 
-            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
-            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
-
-            ViewBag.ReportName = "Manifest Report";
-            if (Session["ReportOutput"] != null)
+            if (id > 0)
             {
-                string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("TripManifestReport"))
-                {
-                    Session["ReportOutput"] = null;
-                }
-            }
 
+                model.TDID = id;
+                var td = db.TruckDetails.Find(model.TDID);//
+                model.TDNo = td.ReceiptNo + "-" + td.RegNo + "-" + td.DriverName;
+                ViewBag.ReportOption = "1";
+                ViewBag.ReportName = "Manifest Report - " + td.ReceiptNo;
+                SessionDataModel.SetManifestReportParam(model);
+                AccountsReportsDAO.GenerateManifestReport();
+
+                return View(model);
+            }
+            else
+            {
+                ViewBag.ReportOption = "0";
+                SessionDataModel.SetManifestReportParam(model);
+
+                model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+                model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+                ViewBag.ReportName = "Manifest Report";
+                if (Session["ReportOutput"] != null)
+                {
+                    string currentreport = Session["ReportOutput"].ToString();
+                    if (!currentreport.Contains("TripManifestReport"))
+                    {
+                        Session["ReportOutput"] = null;
+                    }
+                }
+
+            }
             return View(model);
 
         }
@@ -712,7 +731,17 @@ namespace LTMSV2.Controllers
 
 
             AccountsReportsDAO.GenerateManifestReport();
-
+            //if (id > 0)
+            //{
+            //    model.TDID = id;
+            //    var td = db.TruckDetails.Find(model.TDID);//
+            //    model.TDNo = td.ReceiptNo + "-" + td.RegNo + "-" + td.DriverName;
+            //    ViewBag.ReportOption = "1";
+            //}
+            //else
+            //{
+            //    ViewBag.ReportOption = "0";
+            //}
             return View(model);
             //return RedirectToAction("ManifestReport", "Accounts");
 
