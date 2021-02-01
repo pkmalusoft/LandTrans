@@ -3056,7 +3056,6 @@
     <Content Include="Content\plugins\input-mask\phone-codes\phone-be.json" />
     <Content Include="Content\plugins\input-mask\phone-codes\phone-codes.json" />
     <Content Include="Reports\AccLedger.rpt" />
-    <Content Include="ReportsPDF\AccLedger_2810201826.pdf" />
     <EntityDeploy Include="Models\Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
@@ -3099,6 +3098,7 @@
     <Content Include="Reports\TripManifestreport.rpt" />
     <Content Include="Reports\CustomerOutStanding.rpt" />
     <Content Include="Reports\CustomerStatement.rpt" />
+    <Content Include="Reports\SupplierStatement.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3602,9 +3602,11 @@
     <Content Include="Views\Reports\ManifestReport.cshtml" />
     <Content Include="Views\Reports\SupplierLedger.cshtml" />
     <Content Include="Views\Reports\CustomerProfitAnalysis.cshtml" />
+    <Content Include="Views\Accounts\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ReportsPDF\" />
     <Folder Include="ReportsXSD\" />
     <Folder Include="Views\Master\" />
     <Folder Include="Views\UserRegistration\New folder\" />

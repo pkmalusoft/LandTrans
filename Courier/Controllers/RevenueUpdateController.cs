@@ -128,6 +128,12 @@ namespace LTMSV2.Controllers
                     vm.DebitCashAccountId = pacc.AcHeadID;
 
                 }
+                var codacc = db.AcHeads.Where(cc => cc.AcHead1 == "Cod Control A/c.").FirstOrDefault();
+                if (codacc != null)
+                {
+                    vm.DebitCODAccountName = codacc.AcHead1;
+                    vm.DebitCODAccountId = codacc.AcHeadID;
+                }
                 vm.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
                 var emp = db.EmployeeMasters.Where(cc => cc.UserID == userId).FirstOrDefault();
                 if (emp != null)
@@ -161,6 +167,13 @@ namespace LTMSV2.Controllers
                     vm.DebitCashAccountId = pacc.AcHeadID;
 
                 }
+                var codacc = db.AcHeads.Where(cc => cc.AcHead1 == "Cod Control A/c.").FirstOrDefault();
+                if (codacc != null)
+                {
+                    vm.DebitCODAccountName = codacc.AcHead1;
+                    vm.DebitCODAccountId = codacc.AcHeadID;
+                }
+                
                 vm.ConsignmentNo = db.InScanMasters.Find(v.InScanID).ConsignmentNo;
                 ViewBag.EditMode = "true";
             }
@@ -459,6 +472,9 @@ namespace LTMSV2.Controllers
                                   join cu in db.CurrencyMasters on s.CurrencyId equals cu.CurrencyID
                                   join dh in db.AcHeads on s.AcHeadDebitId equals dh.AcHeadID
                                   join ch in db.AcHeads on s.AcHeadCreditId equals ch.AcHeadID
+                                  join cust in db.CustomerMasters on s.CustomerId equals cust.CustomerID
+                                  join inv in db.CustomerInvoices on s.InvoiceId equals inv.CustomerInvoiceID into gj
+                                  from subpet in gj.DefaultIfEmpty()
                                   select new RevenueUpdateDetailVM{
                 ID=s.ID,
                 MasterID=s.MasterID,
@@ -466,9 +482,11 @@ namespace LTMSV2.Controllers
                 Currency=cu.CurrencyName,
                 DebitAccountName=dh.AcHead1,
                 CreditAccountName=ch.AcHead1,
-                Amount=s.Amount
-
-            }).ToList();
+                Amount=s.Amount,
+                CustomerName=cust.CustomerName,
+                InvoiceTo=s.InvoiceTo,
+                InvoiceNo= subpet.CustomerInvoiceNo  ?? string.Empty                
+               }).ToList();
             
             return Json(RevenueDetails, JsonRequestBehavior.AllowGet);
         }

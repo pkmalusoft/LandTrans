@@ -880,6 +880,7 @@ namespace LTMSV2.Controllers
             int FyearId = Convert.ToInt32(Session["fyearid"]);
             CustomerRcieptVM cust = new CustomerRcieptVM();
             cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
+            cust.AWBAllocation = new List<ReceiptAllocationDetailVM>();
             if (Session["UserID"] != null)
             {
                 var branchid = Convert.ToInt32(Session["CurrentBranchID"]);
@@ -888,19 +889,19 @@ namespace LTMSV2.Controllers
                 {
                     ViewBag.Title = "Customer Receipt - Modify";
                     cust = RP.GetRecPayByRecpayID(id);
-
+                    
                     var acheadforcash = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Cash" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
                     var acheadforbank = (from c in Context1.AcHeads join g in Context1.AcGroups on c.AcGroupID equals g.AcGroupID where g.AcGroup1 == "Bank" select new { AcHeadID = c.AcHeadID, AcHead = c.AcHead1 }).ToList();
                     ViewBag.achead = acheadforcash;
                     ViewBag.acheadbank = acheadforbank;
                     cust.recPayDetail = Context1.RecPayDetails.Where(item => item.RecPayID == id).ToList();
-                    cust.AWBAllocation = new List<ReceiptAllocationDetailVM>();
+                  
                     
                     cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
                     foreach (var item in cust.recPayDetail)
                     {
                         if (item.InvoiceID > 0)
-                        {
+                        {                            
                             cust.AWBAllocation = ReceiptDAO.GetAWBAllocation(cust.AWBAllocation,Convert.ToInt32(item.InvoiceID),Convert.ToDecimal(item.Amount), cust.RecPayID); //customer invoiceid,amount
                             var sInvoiceDetail = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.InvoiceID select d ).ToList();
                             var awbDetail = (from d in Context1.RecPayAllocationDetails where d.CustomerInvoiceID == item.InvoiceID && d.RecPayDetailID == item.RecPayDetailID select d).ToList();

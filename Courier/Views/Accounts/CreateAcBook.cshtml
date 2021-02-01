@@ -772,8 +772,14 @@
         $("#txtConsignmentNo").focus();
     }
     function ShowConsignmentPopup(acheadid) {
+        
+        if (acheadid == 0) {
+            alert('select account head and amount');
+        }
         $('#elemError').html('');
         //$('#hdnEditAcHeadId').val($('#SelectedReceivedFrom').val());
+
+
         $('#hAcHead').html('A/C : ' + $('#ReceivedFrom').val());
         var Amount = $('#amount').val();
          $('#hdnEditAmount').val(Amount);

@@ -6,7 +6,7 @@
         <xs:element name="SupplierLedgerDetail">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="SupplierId" type="xs:int" minOccurs="0" />
+              <xs:element name="SupplierID" type="xs:int" minOccurs="0" />
               <xs:element name="InvOrder" type="xs:int" minOccurs="0" />
               <xs:element name="InvoiceNo" type="xs:string" minOccurs="0" />
               <xs:element name="InvoiceDate" type="xs:dateTime" minOccurs="0" />

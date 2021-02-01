@@ -179,10 +179,10 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AcJournalID" Type="int" Nullable="false" />
-          <Property Name="AcJournalDetailID" Type="int" Nullable="false" />
+          <Property Name="AcJournalID" Type="int" />
+          <Property Name="AcJournalDetailID" Type="int" />
+          <Property Name="InScanID" Type="int" />
           <Property Name="AcHeadID" Type="int" Nullable="false" />
-          <Property Name="InScanID" Type="int" Nullable="false" />
           <Property Name="Amount" Type="money" />
         </EntityType>
         <EntityType Name="AcJournalDetail">
@@ -858,7 +858,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CostUpdateMasterId" Type="int" />
-          <Property Name="CostUpdateDetaiIID" Type="int" />
+          <Property Name="CostUpdateDetailId" Type="int" />
           <Property Name="RevenueCostMasterID" Type="int" />
           <Property Name="InScanID" Type="int" />
           <Property Name="Amount" Type="money" />
@@ -18241,8 +18241,8 @@
             <End Role="AcOPInvoiceMaster" EntitySet="AcOPInvoiceMasters" />
           </AssociationSet>
           <EntitySet Name="RecPayAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail" />
-          <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
           <EntitySet Name="CostUpdateConsignments" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateConsignment" />
+          <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -23117,26 +23117,26 @@
           <Property Name="InScanID" Type="Int32" />
           <Property Name="AllocatedAmount" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
-        <EntityType Name="AcJournalConsignment">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AcJournalID" Type="Int32" Nullable="false" />
-          <Property Name="AcJournalDetailID" Type="Int32" Nullable="false" />
-          <Property Name="AcHeadID" Type="Int32" Nullable="false" />
-          <Property Name="InScanID" Type="Int32" Nullable="false" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-        </EntityType>
         <EntityType Name="CostUpdateConsignment">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CostUpdateMasterId" Type="Int32" />
-          <Property Name="CostUpdateDetaiIID" Type="Int32" />
+          <Property Name="CostUpdateDetailId" Type="Int32" />
           <Property Name="RevenueCostMasterID" Type="Int32" />
           <Property Name="InScanID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="AcJournalConsignment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="AcJournalDetailID" Type="Int32" />
+          <Property Name="InScanID" Type="Int32" />
+          <Property Name="AcHeadID" Type="Int32" Nullable="false" />
           <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         </Schema>
@@ -32219,26 +32219,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AcJournalConsignments">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalConsignment">
-              <MappingFragment StoreEntitySet="AcJournalConsignment">
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
-                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-                <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CostUpdateConsignments">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CostUpdateConsignment">
               <MappingFragment StoreEntitySet="CostUpdateConsignment">
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="InScanID" ColumnName="InScanID" />
                 <ScalarProperty Name="RevenueCostMasterID" ColumnName="RevenueCostMasterID" />
-                <ScalarProperty Name="CostUpdateDetaiIID" ColumnName="CostUpdateDetaiIID" />
+                <ScalarProperty Name="CostUpdateDetailId" ColumnName="CostUpdateDetailId" />
                 <ScalarProperty Name="CostUpdateMasterId" ColumnName="CostUpdateMasterId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AcJournalConsignments">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalConsignment">
+              <MappingFragment StoreEntitySet="AcJournalConsignment">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

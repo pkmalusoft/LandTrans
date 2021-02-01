@@ -17,7 +17,21 @@
         height: 30px !important;
         border-radius: 5px !important;
         border: 1px solid #ccc;
-        margin-bottom: 0;
+    }
+    .content {
+        padding: 0px;
+        margin-top: 0;
+}
+.sub_title_block h4{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+    #btnsearch{
+        height: 30px!important;
+        line-height: 30px;
+        border-radius: 5px;
+        font-size: 17px;
+        padding: 0!important;
     }
     #details tr {
         height: 32px;
@@ -124,14 +138,18 @@
                         var CreditHead = item.CreditAccountName;
                         var CreditHeadId = item.AcHeadCreditId;
                         var DetailID = item.ID;
+                        var InvoiceNO = item.InvoiceNo;
+                        var readonly = '';
+                        if (InvoiceNO != '')
+                           readonly = ' readonly ';
 
                         var objHtml = '<tr>' + '<td style="padding-left:10px">' + paytype + '<input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input id="hdndel_' + i + '" type="hidden" name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> <input type="hidden" class=JAcHead value="' + paytypeid + '" name="DetailVM[' + i + '].PaymentModeId"></td>';
                         objHtml = objHtml + '<td style="padding-left:10px">' + invoiceto + '<input type="hidden" value="' + invoiceto + '" name="DetailVM[' + i + '].InvoiceTo"></td>';
                         objHtml = objHtml + '<td style="padding-left:10px">' + currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
                         objHtml = objHtml + '<td class="textright" style="padding-right:10px">' + exchangerate + '<input type="hidden" class="JAcAmt" id="txtex_' + i +'" value=' + exchangerate + ' name="DetailVM[' + i + '].ExchangeRate"></td>';
-                        var revenuehtml = '<input type="text" class="form-control" id="txtrevenue_' + i + '" value="' + revenuecost + '" />';
+                        var revenuehtml = '<input type="text" class="form-control" ' + readonly + ' id="txtrevenue_' + i + '" value="' + revenuecost + '" />';
                         objHtml = objHtml + '<td  style="padding-right:10px">' + revenuehtml + '<input type="hidden" class="JAcAmt" id="txtrevenueid_' + i + '" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
-                        var revenueamthtml = '<input type="text" class="form-control text-right" id="txtrevenueamt_' + i + '" value="' + amount + '" name="DetailVM[' + i + '].Amount" />';
+                        var revenueamthtml = '<input type="text" class="form-control text-right" ' + readonly + ' id="txtrevenueamt_' + i + '" value="' + amount + '" name="DetailVM[' + i + '].Amount" />';
                         objHtml = objHtml + '<td class class="textright" style="padding-right:10px">' + revenueamthtml + '</td>'; //'<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount">
                         var frevenueamthtml = '<span class="text-right" id="spanfamt_' + i + '">' + famount + ' </span>';
                         objHtml = objHtml + '<td class="text-right" style="padding-right:10px">' + frevenueamthtml + '<input type="hidden"id="txtfrevenueamt_' + i + '"  class="JAcAmt" value=' + famount + '"></td>';
@@ -140,9 +158,15 @@
                         objHtml = objHtml + '<td style="padding-left:10px">' + DebitHead + '<input type="hidden" value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
                         var CreditHeadhtml = '<span id="spancredithead_' + i + '">' + CreditHead + '</span>';
                         objHtml = objHtml + '<td style="padding-left:10px">' + CreditHeadhtml + '<input type="hidden" id="txtcreditid_' + i + '"  value="' + CreditHeadId + '" name="DetailVM[' + i + '].AcHeadCreditId"></td>';
+                        objHtml = objHtml + '<td style="padding-left:10px">' + InvoiceNO + '<input type="hidden" name="DetailVM[' + i + '].InvoiceNo"></td>';
                         //  objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
-                        objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
-                        objHtml = objHtml + '</tr>';
+                        if (readonly == '') {
+                            objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
+                            objHtml = objHtml + '</tr>';
+                        }
+                        else {
+                            objHtml = objHtml + '</tr>'
+                        }
                         $("#details").append(objHtml);
                         TotalAmount = parseFloat(TotalAmount)+parseFloat($('#txtrevenueamt_' + i).val());
                         $('#txtTotalAmount').val(parseFloat(TotalAmount).toFixed(3));
@@ -170,8 +194,8 @@
                             $('#spanfamt_' + idindex).html(parseFloat(famount).toFixed(@_decimal));
                             checkdetailcount();
                         });
-                        
-                        
+
+
                         $("#txtrevenue_" + i).autocomplete({
                             source: function (request, response) {
                                 $.ajax({
@@ -305,12 +329,13 @@
             }
         });
     }
+    
     $(document).ready(function () {
         AWBItems = [];
 
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
-
+     
         $('#PaymentType').change(function () {
             var modeid = $('#PaymentType').val();
             if (modeid == 1) { //PKP
@@ -337,7 +362,7 @@
 
         });
 
-        $('#EntryDate').datetimepicker({ format: 'DD-MM-YYYY' });
+    
 
         $("#txtDebitHead").autocomplete({
             source: function (request, response) {
@@ -571,7 +596,7 @@
         //});
 
 
-       
+
 
         //$("#InScanSheetNo").change(function () {
 
@@ -607,12 +632,16 @@
                 $('#txtDebitHead').val($('#DebitAccountName').val());
                 $('#txtDebitHeadId').val($('#DebitAccountId').val());
             }
-            else if ($('#PaymentType').val() == 1)
+
+            if ($('#PaymentType').val() == 1)
             {
                 $('#txtDebitHead').val($('#DebitCashAccountName').val());
                 $('#txtDebitHeadId').val($('#DebitCashAccountId').val());
             }
-            
+            else if ($('#PaymentType').val() == 2) {
+                $('#txtDebitHead').val($('#DebitCODAccountName').val());
+                $('#txtDebitHeadId').val($('#DebitCODAccountId').val());
+            }
             //if ($('#txtCustomerId').val() > 0) {
             //    $.ajax({
             //        url: '/RevenueUpdate/GetCustomerDebitHeadID',
@@ -648,7 +677,7 @@
 
         });
 
-       
+
         $('#details').on("click", "#DeleteNewRow", function () {
             debugger;
             //$(this).parent().parent().remove();
@@ -754,9 +783,9 @@
                 var CreditHeadhtml = '<span id="spancredithead_' + i + '">' + CreditHead + '</span>';
                 objHtml = objHtml + '<td style="padding-left:10px">' + CreditHeadhtml + '<input type="hidden" id="txtcreditid_' + i + '"  value="' + CreditHeadId + '" name="DetailVM[' + i + '].AcHeadCreditId"></td>';
               //  objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
-                objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
+                objHtml = objHtml + '<td></td><td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
                 objHtml = objHtml + '</tr>';
-                console.log(objHtml);
+
                 $("#details").append(objHtml);
                 $('#RowCount').val("0");
                 //$('#PaymentType').val('');
@@ -940,6 +969,8 @@
                     @Html.HiddenFor(model => model.DebitAccountName, new { })
                     @Html.HiddenFor(model => model.DebitCashAccountId, new { })
                     @Html.HiddenFor(model => model.DebitCashAccountName, new { })
+                    @Html.HiddenFor(model => model.DebitCODAccountId, new { })
+                    @Html.HiddenFor(model => model.DebitCODAccountName, new { })
                     @Html.HiddenFor(model => model.CurrencyId, new { @id = "DefaultCurrencyID" })
 
                     @*@Html.HiddenFor(model => model.InScanID, new { })*@
@@ -977,75 +1008,96 @@
                 </div>
             </div>
             <div class="row no-margin">
-                <div class="col-md-2-5">
-                    <label class="headinglabel required">Payment Type</label>
+                <div class="col-md-8">
+                <div class="col-md-2">
+                    <label class="headinglabel required">Payment Mode</label>
                     @Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentType, "ID", "PaymentModeText", 0), "Select", new { @class = "form-control", @id = "PaymentType" })
                 </div>
-                <div class="col-md-2-5">
+                <div class="col-md-2">
                     <label class="headinglabel required">Invoice To</label>
                     @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "Select", new { @class = "form-control", @id = "InvoiceTo" })
                 </div>
-                <div class="col-md-2-5">
+                <div class="col-md-5">
                     <label class="headinglabel required">Remarks</label>
                     @Html.TextBoxFor(model=>model.Remarks , new { @class = "form-control" })
                 </div>
-                <div class="col-md-2-5">
+                <div class="col-md-2">
                     <label class="headinglabel required">Currency</label>
                     @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyCode", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
                     @Html.HiddenFor(model => model.ExchangeRate)
                 </div>
 
-                <div class="col-md-2-5">
-                    <label class="headinglabel">Receivable Account(Dr.)</label>
-                    <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
-                    <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
-                </div>
-                <div class="col-md-2-5">
-                    <label class="headinglabel">Revenue Account (Cr.)</label>
-                    <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
-                    <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
-                </div>
+                
 
-                <div class="col-md-3-5">
+                <div class="col-md-4">
                     <label class="headinglabel">Customer</label>
                     <input type="text" id="txtCustomer" class="form-control" autocomplete="off" />
                     <input type="hidden" id="txtCustomerId" class="form-control" autocomplete="off" />
                 </div>
 
-                <div class="col-md-2-5">
+                <div class="col-md-5">
                     <label class="headinglabel label1">Revenue Head</label>
                     <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
                     <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <label class="headinglabel">Amount</label>
                     <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
                 </div>
                 <div class="col-md-1" style="padding-top:30px">                    
                     <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
                 </div>
-                <div class="col-md-2">
-                    <label class="headinglabel">Total Amount</label>
-                    <input type="text" class="form-control text-right" readonly id="txtTotalAmount" value="0" />
+                
+            </div>
+            <div class="col-md-4" style="margin-top:32px">
+                <div class="col-md-12 flex align-center">
+                    <div class="col-md-5">
+                    <label class="headinglabel">Receivable Account(Dr.)</label>
+                </div>
+                    <div class="col-md-7">
+
+                    <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
+                    <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
+                </div>
+                </div>
+                <div class="col-md-12 flex align-center">
+                    <div class="col-md-5">
+                    <label class="headinglabel">Revenue Account (Cr.)</label>
+                </div>
+                    <div class="col-md-7">
+
+                    <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
+                    <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
                 </div>
             </div>
-            <br />
-            <div class="row no-margin" style="padding-top:10px">
+            <div class="col-md-12 flex align-center">
+            <div class="col-md-5">
+                    <label class="headinglabel">Total Amount</label>
+                </div>
+                <div class="col-md-7">
+                    <input type="text" class="form-control text-right" readonly id="txtTotalAmount" value="0" />
+                </div>
+
+            </div>
+            </div>
+            </div>            
+            <div class="row no-margin" style="padding-top:3px">
                 <table class="table table-bordered table-responsive">
                     <thead>
-                    <tr>
-                        <th style="width:3%">Payment Mode</th>
-                        <th style="width:5%">Invoice To</th>
-                        <th style="width:1%">Currency</th>
-                        <th style="width:2%">Ex.Rate</th>
-                        <th style="width:10%">Revenue Head</th>
-                        <th style="width:6%">Amount</th>
-                        <th style="width:5%">Amount(F.C)</th>
-                        <th style="width:10%">Customer</th>
-                        <th style="width:10%">Receivable Account</th>
-                        <th style="width:10%">Revenue Account</th>
-                        <th style="width:2%"></th>
-                    </tr>
+                        <tr>
+                            <th style="width:3%">PayMode</th>
+                            <th style="width:5%">Invoice To</th>
+                            <th style="width:1%">Currency</th>
+                            <th style="width:2%">Ex.Rate</th>
+                            <th style="width:10%">Revenue Head</th>
+                            <th style="width:6%">Amount</th>
+                            <th style="width:5%">Amount(F.C)</th>
+                            <th style="width:10%">Customer</th>
+                            <th style="width:10%">Receivable Account</th>
+                            <th style="width:10%">Revenue Account</th>
+                            <th style="width:10%">Invoice</th>
+                            <th style="width:2%"></th>
+                        </tr>
                    </thead>
                     <tbody  id="details">
 

@@ -289,6 +289,13 @@ namespace LTMSV2.Controllers
                             db.SaveChanges();
 
                             RevenueUpdateMaster _revenueupdate = db.RevenueUpdateMasters.Where(cc => cc.InScanID == e_details.InScanID).FirstOrDefault();
+                            var revenuedetails = db.RevenueUpdateDetails.Where(cc => cc.MasterID == _revenueupdate.ID && cc.InvoiceId==null).ToList();
+                            foreach(var revdetail in revenuedetails)
+                            {
+                                revdetail.InvoiceId = _custinvoice.CustomerInvoiceID;
+                                db.Entry(revdetail).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
                             _revenueupdate.InvoiceId = _custinvoice.CustomerInvoiceID;
                             db.Entry(_revenueupdate).State = EntityState.Modified;
                             db.SaveChanges();

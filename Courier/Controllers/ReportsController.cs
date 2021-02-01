@@ -632,14 +632,10 @@ namespace LTMSV2.Controllers
                 //AccountsReportsDAO.GenerateCustomerLedgerReport();
                 AccountsReportsDAO.GenerateSupplierLedgerDetailReport();
             }
-            else if (model.ReportType == "OutStanding")
+            else if (model.ReportType == "Statement")
             {
-                AccountsReportsDAO.GenerateCustomerOutStandingReport();
-            }
-            else if (model.ReportType == "AWBOutStanding")
-            {
-                AccountsReportsDAO.GenerateAWBOutStandingReport();
-            }
+                AccountsReportsDAO.GenerateSupplierStatementDetailReport();
+            }            
 
             return RedirectToAction("SupplierLedger", "Reports");
 

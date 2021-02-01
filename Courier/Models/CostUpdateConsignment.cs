@@ -16,7 +16,7 @@ namespace LTMSV2.Models
     {
         public int ID { get; set; }
         public Nullable<int> CostUpdateMasterId { get; set; }
-        public Nullable<int> CostUpdateDetaiIID { get; set; }
+        public Nullable<int> CostUpdateDetailId { get; set; }
         public Nullable<int> RevenueCostMasterID { get; set; }
         public Nullable<int> InScanID { get; set; }
         public Nullable<decimal> Amount { get; set; }

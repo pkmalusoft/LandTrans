@@ -28,6 +28,9 @@ namespace LTMSV2.Models
 
         public string DebitCashAccountName { get; set; }
         public int DebitCashAccountId { get; set; }
+
+        public string DebitCODAccountName { get; set; }
+        public int DebitCODAccountId { get; set; }
         public string CreditAccountName { get; set; }
         public string CustomerName { get; set; }
         public string RevenueCost { get; set; }
@@ -44,5 +47,7 @@ namespace LTMSV2.Models
         public string DebitAccountName { get; set; }
         public string CreditAccountName { get; set; }
         public bool IsDeleted { get; set; }
-    }
+        public string InvoiceNo { get; set; }
+        public DateTime InvoiceDate { get; set; }
+    } 
 }

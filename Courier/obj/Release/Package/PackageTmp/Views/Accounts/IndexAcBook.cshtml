@@ -173,11 +173,11 @@
             <p class="indexbtnpadding">
                 @if (@LTMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || (!isadd))
                 {
-                    @Html.ActionLink("Create New", "CreateAcBook", null, new { @class = "btn btn-primary btnwidth", @disabled = "disabled" })
+                    @Html.ActionLink("Create New", "Create",null, new { @class = "btn btn-primary btnwidth", @disabled = "disabled" })
                 }
                 else
                 {
-                    @Html.ActionLink("Create New", "CreateAcBook", null, new { @class = "btn btn-primary btnwidth" })
+                    @Html.ActionLink("Create New", "Create",null, new {@class = "btn btn-primary btnwidth" })
                 }
             </p>
         </div>
@@ -253,21 +253,22 @@
                             @LTMSV2.Models.CommanFunctions.GetShortDateFormat((item.TransDate))
                         </td>
                         <td class="tdtarget textright">
-                            @string.Format("{0:n2}", item.Amount)
+                            @string.Format("{0:n3}", item.Amount)
                         </td>
                         <td class="tdtarget">
                             @Html.DisplayFor(modelItem => item.Remarks)
                         </td>
-                        <td>
-                            @*  @Html.ActionLink("Edit", "Edit", new { id=item.CountryID }) |
-                                @Html.ActionLink("Details", "Details", new { id=item.CountryID }) |
-                                @Html.ActionLink("Delete", "Delete", new { id=item.CountryID })*@
+                        <td>                            
                             @if (ismodify)
                             {
-                                <a href="@Url.Action("EditAcBook", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
-                            } @*<a href="@Url.Action("Delete", new { id = item.CountryID })"><i class="fa fa-times"></i></a>*@
-                            @* <a href="#" onclick="Delete(ID=@item.AcCategoryID)"><i class="fa fa-times"></i></a>*@
+                                <a href="@Url.Action("Create", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
+                            }
 
+                            @if (isdelete)
+                            {
+                                <a onclick="Delete(ID=@item.AcJournalID)" href="#"><i class="fa fa-times"></i></a>
+                            }
+                            
                         </td>
                         <td style="display:none;">
                             @item.AcJournalID
@@ -278,3 +279,10 @@
         </table>
     </div>
 </section>
+<script type="text/javascript">
+    function Delete(ID) {
+        if (confirm("Are you sure, You want to Delete this Voucher?")) {
+            window.location.href = "/Accounts/DeleteAcBook/?id=" + ID;
+        }
+    }
+</script>

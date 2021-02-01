@@ -134,6 +134,7 @@ namespace LTMSV2.DAL
                     obj.Currency = ds.Tables[0].Rows[i]["CurrencyName"].ToString();                    
                     obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
                     obj.PaymentType = ds.Tables[0].Rows[i]["PaymentType"].ToString();
+                    obj.InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"].ToString();
                     objList.Add(obj);
                 }
             }

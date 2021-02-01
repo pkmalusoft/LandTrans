@@ -63,8 +63,7 @@
         });
         table.draw();
        
-        function format(d) {
-            debugger;
+        function format(d) {            
             // `d` is the original data object for the row
             var RevenueId = d[6];
             var DataHtml = '';
@@ -76,7 +75,7 @@
                 success: function (data) {
                     DataHtml = '<table class="subtable">';
                     $.each(data, function (index, value) {
-                        DataHtml = DataHtml + '<tr><td  class="text-right">' + parseFloat(value.Amount).toFixed(3) + '</td><td>' + value.Currency + '</td><td>' + value.DebitAccountName + '</td><td>' + value.CreditAccountName + '</td></tr>';
+                        DataHtml = DataHtml + '<tr><td  class="text-right">' + parseFloat(value.Amount).toFixed(3) + '</td><td>' + value.InvoiceTo + '</td><td>' + value.CustomerName + '</td><td>' + value.DebitAccountName + '</td><td>' + value.CreditAccountName + '</td><td>' + value.InvoiceNo + '</td></tr>';
                     });
                     DataHtml = DataHtml + '</table>';
                     $('#pr_' + RevenueId).append(DataHtml);

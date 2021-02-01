@@ -9075,26 +9075,26 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="AcJournalConsignments">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalConsignment">
-        <MappingFragment StoreEntitySet="AcJournalConsignment">
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
-          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-          <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CostUpdateConsignments">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CostUpdateConsignment">
         <MappingFragment StoreEntitySet="CostUpdateConsignment">
           <ScalarProperty Name="Amount" ColumnName="Amount" />
           <ScalarProperty Name="InScanID" ColumnName="InScanID" />
           <ScalarProperty Name="RevenueCostMasterID" ColumnName="RevenueCostMasterID" />
-          <ScalarProperty Name="CostUpdateDetaiIID" ColumnName="CostUpdateDetaiIID" />
+          <ScalarProperty Name="CostUpdateDetailId" ColumnName="CostUpdateDetailId" />
           <ScalarProperty Name="CostUpdateMasterId" ColumnName="CostUpdateMasterId" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AcJournalConsignments">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcJournalConsignment">
+        <MappingFragment StoreEntitySet="AcJournalConsignment">
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>

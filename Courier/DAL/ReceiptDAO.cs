@@ -529,6 +529,9 @@ namespace LTMSV2.DAL
         {
             try
             {
+                if (list == null)
+                    list = new List<ReceiptAllocationDetailVM>();
+
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
                 cmd.CommandText = "SP_GetInvoiceAWBAllocation";

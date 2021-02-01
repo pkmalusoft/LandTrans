@@ -600,7 +600,7 @@ new AcGroupModel()
             a.StatusDelete = true;
             db.Entry(a).State = EntityState.Modified;
             db.SaveChanges();
-            ViewBag.SuccessMsg = "You have successfully deleted Cash Bank Book Voucher!";
+            ViewBag.SuccessMsg = "You have successfully deleted the Voucher!";
             return RedirectToAction("IndexAcBook");
             //return View("IndexAcHead", db.AcHeadSelectAll(Convert.ToInt32(Session["CurrentCompanyID"].ToString())));
         }
@@ -1347,20 +1347,20 @@ new AcGroupModel()
                     db.SaveChanges();
                     db.Entry(acJournalDetail).State = EntityState.Detached;
 
-                    //adding consignment referece to this entry
-                    if (v.AcJDetailVM[i].InScans!=null && v.AcJDetailVM[i].InScans!="")
-                    {
-                        var inscanlist = v.AcJDetailVM[i].InScans.Split(',');
-                        foreach(var ins in inscanlist)
-                        {
-                            AcJournalConsignment accons = new AcJournalConsignment();
-                            accons.AcJournalID = ajm.AcJournalID;
-                            accons.AcJournalDetailID = acJournalDetail.AcJournalDetailID;
-                            accons.InScanID =Convert.ToInt32(ins);
-                            db.AcJournalConsignments.Add(accons);
-                            db.SaveChanges();
-                        }                        
-                    }
+                    ////adding consignment referece to this entry
+                    //if (v.AcJDetailVM[i].InScans!=null && v.AcJDetailVM[i].InScans!="")
+                    //{
+                    //    var inscanlist = v.AcJDetailVM[i].InScans.Split(',');
+                    //    foreach(var ins in inscanlist)
+                    //    {
+                    //        AcJournalConsignment accons = new AcJournalConsignment();
+                    //        accons.AcJournalID = ajm.AcJournalID;
+                    //        accons.AcJournalDetailID = acJournalDetail.AcJournalDetailID;
+                    //        accons.InScanID =Convert.ToInt32(ins);
+                    //        db.AcJournalConsignments.Add(accons);
+                    //        db.SaveChanges();
+                    //    }                        
+                    //}
                     if (v.AcJDetailVM[i].AcExpAllocationVM != null)
                     {
                         for (int j = 0; j < v.AcJDetailVM[i].AcExpAllocationVM.Count; j++)
@@ -1420,7 +1420,7 @@ new AcGroupModel()
         }
 
         [HttpPost]
-        public ActionResult EditAcBook(AcBookVM v)
+        public ActionResult Create(AcBookVM v)
         {
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             string cheque = "";
@@ -1436,25 +1436,66 @@ new AcGroupModel()
             }
 
             AcJournalMaster ajm = new AcJournalMaster();
-            ajm.TransactionNo = v.TransactionNo;
-            ajm.AcJournalID = v.AcJournalID;
-            ajm.VoucherNo = v.VoucherNo;
-            ajm.TransDate = v.transdate;
-            ajm.TransType = Convert.ToInt16(v.transtype);
-            ajm.AcFinancialYearID = Convert.ToInt32(Session["fyearid"].ToString());
-            ajm.VoucherType = v.TransactionType;
-            ajm.StatusDelete = false;
+            if (v.AcJournalID ==0)
+            {
+                int voucherno = 0;
+                voucherno = (from c in db.AcJournalMasters select c).ToList().Count();
+
+                int max = 0;
+                max = (from c in db.AcJournalMasters orderby c.AcJournalID descending select c.AcJournalID).FirstOrDefault();
+
+                int MaxId = 0;
+                MaxId = (from c in db.AcJournalMasters orderby c.ID descending select c.ID).FirstOrDefault();
+                ajm.AcJournalID = max + 1;
+                ajm.VoucherNo = (voucherno + 1).ToString();
+                ajm.TransDate = v.transdate;
+                ajm.TransType = Convert.ToInt16(v.transtype);
+                if (v.transtype == 1)
+                {
+                    v.TransactionNo = "RE" + (max + 1).ToString().PadLeft(7, '0');                    
+                }
+                else if (v.transtype == 2)
+                {
+                    v.TransactionNo = "PA" + (max + 1).ToString().PadLeft(7, '0');
+                }
+                ajm.TransactionNo = v.TransactionNo;
+                ajm.AcFinancialYearID = Convert.ToInt32(Session["fyearid"].ToString());
+                ajm.VoucherType = v.TransactionType;
+                ajm.StatusDelete = false;
+                ajm.UserID = Convert.ToInt32(Session["UserID"].ToString());
+                ajm.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            }
+            else
+            {
+                ajm = db.AcJournalMasters.Find(v.AcJournalID);
+            }
+           
+            //ajm.TransactionNo = v.TransactionNo;
+            //ajm.AcJournalID = v.AcJournalID;
+            //ajm.VoucherNo = v.VoucherNo;
+            //ajm.TransDate = v.transdate;
+            //ajm.TransType = Convert.ToInt16(v.transtype);
+            //ajm.AcFinancialYearID = Convert.ToInt32(Session["fyearid"].ToString());
+            //ajm.VoucherType = v.TransactionType;
+            //ajm.StatusDelete = false;
             ajm.Remarks = v.remarks;
-            ajm.UserID = Convert.ToInt32(Session["UserID"].ToString()); 
+            
             ajm.ShiftID = null;
             ajm.PaymentType = v.paytype;
 
-            ajm.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+           
             ajm.Reference = v.reference;
-
-            db.Entry(ajm).State = EntityState.Modified;
-            db.SaveChanges();
+            if (v.AcJournalID == 0)
+            {
+                db.AcJournalMasters.Add(ajm);
+                db.SaveChanges();
+            }
+            else
+            {
+                db.Entry(ajm).State = EntityState.Modified;
+                db.SaveChanges();
+            }
 
             if (v.TransactionType == "CBR" || v.TransactionType == "BKR")
                 StatusTrans = "R";
@@ -1516,9 +1557,25 @@ new AcGroupModel()
                     totalTaxAmount = Convert.ToDecimal(totalTaxAmount) + Convert.ToDecimal(v.AcJDetailVM[i].TaxAmount);
                 }
             }
-            var ac = (from c in db.AcJournalDetails where c.AcJournalID == ajm.AcJournalID select c).FirstOrDefault();
-            ac.AcJournalDetailID = ac.AcJournalDetailID;
-            ac.AcJournalID = ajm.AcJournalID;
+            int maxAcJDetailID = 0;
+
+            AcJournalDetail ac = new AcJournalDetail();
+            if (v.AcJournalID==0)
+            {                
+                maxAcJDetailID = 0;
+                maxAcJDetailID = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
+
+                ac.AcJournalDetailID = maxAcJDetailID + 1;
+                ac.AcJournalID = ajm.AcJournalID;
+                ac.AcHeadID = v.SelectedAcHead;
+            }
+            else
+            {
+                ac = (from c in db.AcJournalDetails where c.AcJournalID == ajm.AcJournalID select c).FirstOrDefault();
+            }
+            
+            //ac.AcJournalDetailID = ac.AcJournalDetailID;
+            //ac.AcJournalID = ajm.AcJournalID;
             ac.AcHeadID = v.SelectedAcHead;
             if (StatusTrans == "P")
             {
@@ -1530,12 +1587,21 @@ new AcGroupModel()
             }
             ac.Remarks = v.AcJDetailVM[0].Rem;
             ac.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            if (v.AcJournalID == 0)
+            {
+                db.AcJournalDetails.Add(ac);
+                db.SaveChanges();
+            }
+            else
+            {
+                db.Entry(ac).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+                       
 
-            db.Entry(ac).State = EntityState.Modified;
-            db.SaveChanges();
+            List<AcJournalConsignmentVM> AWBAllocationall = (List<AcJournalConsignmentVM>)Session["ACAWBAllocation"];
 
-            int maxAcJDetailID = 0;
-          
+
             for (int i = 0; i < v.AcJDetailVM.Count; i++)
             {
                 if (v.AcJDetailVM[i].IsDeleted != true)
@@ -1600,21 +1666,33 @@ new AcGroupModel()
                     }
 
                     //adding consignment referece to this entry
-                    if (v.AcJDetailVM[i].InScans != null && v.AcJDetailVM[i].InScans != "")
+                    int acheadid =Convert.ToInt32(v.AcJDetailVM[i].AcHeadID);
+
+                    var oldlist = db.AcJournalConsignments.Where(cc => cc.AcJournalDetailID == acJournalDetail.AcJournalDetailID && cc.AcHeadID == acheadid).ToList();
+                    if (oldlist != null)
                     {
-                        var inscanlist = v.AcJDetailVM[i].InScans.Split(',');
-                        foreach (var ins in inscanlist)
+                        foreach (var olditem in oldlist)
+                        {
+                            db.AcJournalConsignments.Remove(olditem);
+                            db.SaveChanges();
+                        }
+                    }
+
+                    var list=AWBAllocationall.Where(cc => cc.AcHeadID == acheadid).ToList();
+                    if (list != null)
+                    {
+                        foreach (var item2 in list)
                         {
                             AcJournalConsignment accons = new AcJournalConsignment();
                             accons.AcJournalID = ajm.AcJournalID;
                             accons.AcJournalDetailID = acJournalDetail.AcJournalDetailID;
-                            accons.InScanID = Convert.ToInt32(ins);
+                            accons.AcHeadID = acheadid;
+                            accons.InScanID = Convert.ToInt32(item2.InScanID);
+                            accons.Amount = item2.Amount;
                             db.AcJournalConsignments.Add(accons);
                             db.SaveChanges();
                         }
-
                     }
-
                     if (v.AcJDetailVM[i].AcExpAllocationVM != null)
                     {
                         for (int k = 0; k < v.AcJDetailVM[i].AcExpAllocationVM.Count; k++)
@@ -1836,37 +1914,47 @@ new AcGroupModel()
             //return View("IndexAcBook", db.AcJournalMasterSelectAll(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentCompanyID"].ToString())));
         }
 
-        public ActionResult EditAcBook(int id)
+        public ActionResult Create(int id=0)
         {
             AcBookVM v = new AcBookVM();
-
-            AcJournalMaster ajm = db.AcJournalMasters.Find(id);
-            AcBankDetail abank = (from a in db.AcBankDetails where a.AcJournalID == id select a).FirstOrDefault();
-            v.TransactionNo = ajm.TransactionNo;
-            v.transdate = ajm.TransDate.Value;
-            v.SelectedAcHead = (from c in db.AcJournalDetails where c.AcJournalID == ajm.AcJournalID select c.AcHeadID).FirstOrDefault();
-            v.AcHead = (from c in db.AcHeads where c.AcHeadID == v.SelectedAcHead select c.AcHead1).FirstOrDefault();
-            v.remarks = ajm.Remarks;
-            v.reference = ajm.Reference;
-            v.VoucherType = ajm.VoucherType;
-            v.AcJournalID = ajm.AcJournalID;
-            v.VoucherNo = ajm.VoucherNo;
-            v.TransactionType = v.VoucherType;
-            v.paytype = Convert.ToInt16(ajm.PaymentType);
-            v.transtype = Convert.ToInt32(ajm.TransType);
-
-
-
-            if (abank != null)
+            if (id > 0)
             {
-                v.AcBankDetailID = abank.AcBankDetailID;
-                v.bankname = abank.BankName;
-                v.partyname = abank.PartyName;
-                v.chequedate = abank.ChequeDate.Value;
-                v.chequeno = abank.ChequeNo;
+                ViewBag.EditMode = "true";
+                ViewBag.Title = "Cash & Bank Book - Modify";
+                AcJournalMaster ajm = db.AcJournalMasters.Find(id);
+                AcBankDetail abank = (from a in db.AcBankDetails where a.AcJournalID == id select a).FirstOrDefault();
+                v.TransactionNo = ajm.TransactionNo;
+                v.transdate = ajm.TransDate.Value;
+                v.SelectedAcHead = (from c in db.AcJournalDetails where c.AcJournalID == ajm.AcJournalID select c.AcHeadID).FirstOrDefault();
+                v.AcHead = (from c in db.AcHeads where c.AcHeadID == v.SelectedAcHead select c.AcHead1).FirstOrDefault();
+                v.remarks = ajm.Remarks;
+                v.reference = ajm.Reference;
+                v.VoucherType = ajm.VoucherType;
+                v.AcJournalID = ajm.AcJournalID;
+                v.VoucherNo = ajm.VoucherNo;
+                v.TransactionType = v.VoucherType;
+                v.paytype = Convert.ToInt16(ajm.PaymentType);
+                v.transtype = Convert.ToInt32(ajm.TransType);
+
+                if (abank != null)
+                {
+                    v.AcBankDetailID = abank.AcBankDetailID;
+                    v.bankname = abank.BankName;
+                    v.partyname = abank.PartyName;
+                    v.chequedate = abank.ChequeDate.Value;
+                    v.chequeno = abank.ChequeNo;
+                }
+
+                List<AcJournalConsignmentVM> AWBAllocationall = (from c in db.AcJournalConsignments join d in db.InScanMasters on c.InScanID equals d.InScanID where c.AcJournalID == id select new AcJournalConsignmentVM { ID=c.ID,AcJournalID=c.AcJournalID,AcJournalDetailID=c.AcJournalDetailID,AcHeadID=c.AcHeadID,Amount=c.Amount,InScanID=c.InScanID,ConsignmentNo=d.ConsignmentNo,ConsignmentDate=d.TransactionDate } ).ToList();
+                
+                Session["ACAWBAllocation"] = AWBAllocationall;
             }
-
-
+            else
+            {
+                ViewBag.Title = "Cash & Bank Book - Create";
+                ViewBag.EditMode = "false";
+                Session["ACAWBAllocation"] = null;
+            }
 
             var transtypes = new SelectList(new[]
                                         {
@@ -1931,18 +2019,18 @@ new AcGroupModel()
             foreach(var item in AcJDetailVM)
             {
                 AcJDetailVM[i].InScans = "";
-                var consignment= db.AcJournalConsignments.Where(cc => cc.AcJournalDetailID == item.AcJournalDetID).ToList();
-                foreach(var item2 in consignment)
-                {
-                    if (AcJDetailVM[i].InScans=="")
-                    {
-                        AcJDetailVM[i].InScans = item2.InScanID.ToString();
-                    }
-                    else
-                    {
-                        AcJDetailVM[i].InScans = AcJDetailVM[i].InScans + "," +  item2.InScanID.ToString();
-                    }
-                }
+                //var consignment= db.AcJournalConsignments.Where(cc => cc.AcJournalDetailID == item.AcJournalDetID).ToList();
+                //foreach(var item2 in consignment)
+                //{
+                //    if (AcJDetailVM[i].InScans=="")
+                //    {
+                //        AcJDetailVM[i].InScans = item2.InScanID.ToString();
+                //    }
+                //    else
+                //    {
+                //        AcJDetailVM[i].InScans = AcJDetailVM[i].InScans + "," +  item2.InScanID.ToString();
+                //    }
+                //}
             }
 
             //foreach (var item in acjlist)

@@ -275,8 +275,8 @@ namespace LTMSV2.Models
         public virtual DbSet<AcOPInvoiceDetail> AcOPInvoiceDetails { get; set; }
         public virtual DbSet<AcOPInvoiceMaster> AcOPInvoiceMasters { get; set; }
         public virtual DbSet<RecPayAllocationDetail> RecPayAllocationDetails { get; set; }
-        public virtual DbSet<AcJournalConsignment> AcJournalConsignments { get; set; }
         public virtual DbSet<CostUpdateConsignment> CostUpdateConsignments { get; set; }
+        public virtual DbSet<AcJournalConsignment> AcJournalConsignments { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

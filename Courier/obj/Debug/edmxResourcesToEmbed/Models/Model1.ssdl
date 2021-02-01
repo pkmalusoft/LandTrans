@@ -174,10 +174,10 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="AcJournalID" Type="int" Nullable="false" />
-    <Property Name="AcJournalDetailID" Type="int" Nullable="false" />
+    <Property Name="AcJournalID" Type="int" />
+    <Property Name="AcJournalDetailID" Type="int" />
+    <Property Name="InScanID" Type="int" />
     <Property Name="AcHeadID" Type="int" Nullable="false" />
-    <Property Name="InScanID" Type="int" Nullable="false" />
     <Property Name="Amount" Type="money" />
   </EntityType>
   <EntityType Name="AcJournalDetail">
@@ -853,7 +853,7 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CostUpdateMasterId" Type="int" />
-    <Property Name="CostUpdateDetaiIID" Type="int" />
+    <Property Name="CostUpdateDetailId" Type="int" />
     <Property Name="RevenueCostMasterID" Type="int" />
     <Property Name="InScanID" Type="int" />
     <Property Name="Amount" Type="money" />
