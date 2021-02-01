@@ -310,6 +310,8 @@
           <Property Name="Amount" Type="money" />
           <Property Name="StatusClose" Type="bit" />
           <Property Name="AcMemoJournalID" Type="int" />
+          <Property Name="RecPayStatus" Type="int" />
+          <Property Name="RecPayDetailId" Type="int" />
         </EntityType>
         <EntityType Name="AcOPInvoiceMaster">
           <Key>
@@ -2975,6 +2977,7 @@
           <Property Name="JobID" Type="int" />
           <Property Name="AdjustmentAmount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TruckDetailID" Type="int" />
+          <Property Name="AcOPInvoiceDetailID" Type="int" />
         </EntityType>
         <EntityType Name="RequestType">
           <Key>
@@ -12356,6 +12359,7 @@
           <Property Name="JobID" Type="Int32" />
           <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="TruckDetailID" Type="Int32" />
+          <Property Name="AcOPInvoiceDetailID" Type="Int32" />
         </EntityType>
         <EntityType Name="RequestType">
           <Key>
@@ -23001,6 +23005,8 @@
           <Property Name="StatusClose" Type="Boolean" />
           <Property Name="AcMemoJournalID" Type="Int32" />
           <NavigationProperty Name="AcOPInvoiceMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceDetail" ToRole="AcOPInvoiceMaster" />
+          <Property Name="RecPayStatus" Type="Int32" />
+          <Property Name="RecPayDetailId" Type="Int32" />
         </EntityType>
         <EntityType Name="AcOPInvoiceMaster">
           <Key>
@@ -25762,6 +25768,7 @@
           <EntitySetMapping Name="RecPayDetails">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPayDetail">
               <MappingFragment StoreEntitySet="RecPayDetails">
+                <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
                 <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
                 <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
                 <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
@@ -32179,6 +32186,8 @@
           <EntitySetMapping Name="AcOPInvoiceDetails">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcOPInvoiceDetail">
               <MappingFragment StoreEntitySet="AcOPInvoiceDetails">
+                <ScalarProperty Name="RecPayDetailId" ColumnName="RecPayDetailId" />
+                <ScalarProperty Name="RecPayStatus" ColumnName="RecPayStatus" />
                 <ScalarProperty Name="AcMemoJournalID" ColumnName="AcMemoJournalID" />
                 <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />

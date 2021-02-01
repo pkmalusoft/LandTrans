@@ -2733,6 +2733,7 @@
     <Property Name="JobID" Type="Int32" />
     <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="TruckDetailID" Type="Int32" />
+    <Property Name="AcOPInvoiceDetailID" Type="Int32" />
   </EntityType>
   <EntityType Name="RequestType">
     <Key>
@@ -13378,6 +13379,8 @@
     <Property Name="StatusClose" Type="Boolean" />
     <Property Name="AcMemoJournalID" Type="Int32" />
     <NavigationProperty Name="AcOPInvoiceMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_AcOPInvoiceDetails_AcOPInvoiceMaster" FromRole="AcOPInvoiceDetail" ToRole="AcOPInvoiceMaster" />
+    <Property Name="RecPayStatus" Type="Int32" />
+    <Property Name="RecPayDetailId" Type="Int32" />
   </EntityType>
   <EntityType Name="AcOPInvoiceMaster">
     <Key>

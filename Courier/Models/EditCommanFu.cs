@@ -71,7 +71,7 @@ namespace LTMSV2.Models
         {
             using (Entities1 Context1 = new Entities1())
             {
-                var obj = (from t in Context1.RecPayDetails where t.RecPayID == recpayid && t.InvoiceID == 0 select t).FirstOrDefault();
+                var obj = (from t in Context1.RecPayDetails where t.RecPayID == recpayid && t.InvoiceID == 0 && t.AcOPInvoiceDetailID==0 select t).FirstOrDefault();
                 //var obj = Context1.RecPayDetails.Find(recpayid,0);
                 if (obj != null)
                 {

@@ -305,6 +305,8 @@
     <Property Name="Amount" Type="money" />
     <Property Name="StatusClose" Type="bit" />
     <Property Name="AcMemoJournalID" Type="int" />
+    <Property Name="RecPayStatus" Type="int" />
+    <Property Name="RecPayDetailId" Type="int" />
   </EntityType>
   <EntityType Name="AcOPInvoiceMaster">
     <Key>
@@ -2970,6 +2972,7 @@
     <Property Name="JobID" Type="int" />
     <Property Name="AdjustmentAmount" Type="decimal" Precision="18" Scale="2" />
     <Property Name="TruckDetailID" Type="int" />
+    <Property Name="AcOPInvoiceDetailID" Type="int" />
   </EntityType>
   <EntityType Name="RequestType">
     <Key>

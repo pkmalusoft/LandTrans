@@ -84,6 +84,8 @@ namespace  LTMSV2.Models
         public int JobID { get; set; }
         public int TruckDetailID { get; set; }
         public int InvoiceID { get; set; }
+        public int AcOPInvoiceDetailID { get; set; }
+        public string InvoiceType { get; set; }
         public int InvoiceNo { get; set; }
         public string Jobcode { get; set; }
         public decimal salesHome { get; set; }

@@ -11,6 +11,8 @@ namespace LTMSV2.Models
         public int SalesInvoiceDetailID { get; set; }
         public Nullable<int> SalesInvoiceID { get; set; }
         public Nullable<int> ProductID { get; set; }
+        public int AcOPInvoiceDetailID { get; set; }
+        public string InvoiceType { get; set; }
         public string ProductName { get; set; }       
         public Nullable<decimal> NetValue { get; set; }
         public Nullable<int> JobID { get; set; }
