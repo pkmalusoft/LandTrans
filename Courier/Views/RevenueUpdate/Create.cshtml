@@ -185,6 +185,7 @@
                                 $(this).val('0.000');
                             } else {
                                 var amt = parseFloat($(this).val());
+                                $(this).attr('value',amt.toFixed(3));
                                 $(this).val(amt.toFixed(3));
                             }
                             var idindex = $(this).attr('id').split('_')[1];
@@ -225,6 +226,7 @@
 
                                 var index = $(this).attr('id').split('_')[1];
                                 $(this).val(i.item.label);
+                                $(this).attr('value', i.item.label);
                                 $('#txtrevenueid_' + index).val(i.item.ID);
                                 $("#spancredithead_" + index).html(i.item.RevenueAcHeadName);
                                 $("#txtcreditid_" + index).val(i.item.RevenueAcHeadID);
@@ -235,6 +237,7 @@
 
                                 var index = $(this).attr('id').split('_')[1];
                                 $(this).val(i.item.label);
+                                $(this).attr('value', i.item.label);
                                 $('#txtrevenueid_' + index).val(i.item.ID);
                                 $("#spancredithead_" + index).html(i.item.RevenueAcHeadName);
                                 $("#txtcreditid_" + index).val(i.item.RevenueAcHeadID);
@@ -811,6 +814,7 @@
                     } else {
                         var amt = parseFloat($(this).val());
                         $(this).val(amt.toFixed(3));
+                        $(this).attr('value',amt.toFixed(3));
                     }
                     var idindex = $(this).attr('id').split('_')[1];
                     var exrate = $('#txtex_' + idindex).val();
@@ -846,10 +850,9 @@
                     minLength: 1,
                     autoFocus: false,
                     focus: function (e, i) {
-
-
                         var index = $(this).attr('id').split('_')[1];
                         $(this).val(i.item.label);
+                        $(this).attr('value', i.item.label);
                         $('#txtrevenueid_' + index).val(i.item.ID);
                         $("#spancredithead_" + index).html(i.item.RevenueAcHeadName);
                         $("#txtcreditid_" + index).val(i.item.RevenueAcHeadID);
@@ -860,6 +863,7 @@
 
                         var index = $(this).attr('id').split('_')[1];
                         $(this).val(i.item.label);
+                        $(this).attr('value',i.item.label);
                         $('#txtrevenueid_' + index).val(i.item.ID);
                         $("#spancredithead_" + index).html(i.item.RevenueAcHeadName);
                         $("#txtcreditid_" + index).val(i.item.RevenueAcHeadID);

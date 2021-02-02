@@ -37,12 +37,12 @@ namespace LTMSV2.Controllers
             }
             if (FromDate == null || ToDate == null)
             {                
-                pFromDate = CommanFunctions.GetLastDayofMonth(); // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
+                pFromDate = CommanFunctions.GetLastDayofMonth().Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
                 pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
             }
             else
             {
-                pFromDate = Convert.ToDateTime(FromDate); //.AddDays(-1);
+                pFromDate = Convert.ToDateTime(FromDate).Date; //.AddDays(-1);
                 pToDate = Convert.ToDateTime(ToDate).AddDays(1);
 
             }
@@ -258,7 +258,8 @@ namespace LTMSV2.Controllers
                         inscan.LastModifiedBy = userid;
                         inscan.LastModifiedDate = localDateTime1;
                     }
-                    
+                    inscan.PickupLocationID = v.PickUpLocationID;
+                    inscan.DeliveryLocationID = v.DeliveryLocationID;
                     if (v.Weight!=null)
                     {
                         inscan.Weight = Convert.ToDecimal(v.Weight);
@@ -810,17 +811,29 @@ namespace LTMSV2.Controllers
             {
                 inscan.PackageId = 0;
             }
-
+            if (data.PickupLocationID!=null)
+            {
+                inscan.PickUpLocationID = Convert.ToInt32(data.PickupLocationID);
+                inscan.PickUpLocationName = db.LocationMasters.Find(inscan.PickUpLocationID).Location;
+            }
+            if (data.DeliveryLocationID!=null)
+            {
+                inscan.DeliveryLocationID =Convert.ToInt32(data.DeliveryLocationID);
+                inscan.DeliveryLocationName = db.LocationMasters.Find(inscan.DeliveryLocationID).Location;
+            }
+            
             if (data.TruckDetailId!=null)
             {
                 inscan.TruckDetailID =Convert.ToInt32( data.TruckDetailId);
-    
-                var itemlist = (from c in db.TruckDetails
-                                join v in db.VehicleMasters on c.VehicleID equals v.VehicleID
-                                where c.IsDeleted == false
-                        && c.TruckDetailID == inscan.TruckDetailID
-                                select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.RegNo + "-" + c.DriverName }).FirstOrDefault();
-                inscan.VehicleRegNo = itemlist.RegNo;
+                if (inscan.TruckDetailID > 0)
+                {
+                    var itemlist = (from c in db.TruckDetails
+                                    join v in db.VehicleMasters on c.VehicleID equals v.VehicleID
+                                    where c.IsDeleted == false
+                            && c.TruckDetailID == inscan.TruckDetailID
+                                    select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.RegNo + "-" + c.DriverName }).FirstOrDefault();
+                    inscan.VehicleRegNo = itemlist.RegNo;
+                }
             }
             if (data.RouteID != null && data.RouteID != 0)
             {
@@ -1493,7 +1506,7 @@ namespace LTMSV2.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetReceiverName(string term)
+        public JsonResult GetReceiverName(string term,string type="")
         {
             //var shipperlist = (from c1 in db.InScanMasters
             //                   where c1.Consignee.ToLower().StartsWith(term.ToLower())
@@ -1503,6 +1516,7 @@ namespace LTMSV2.Controllers
             {
                 var shipperlist = (from c1 in db.CustomerMasters
                                    where c1.CustomerName.ToLower().StartsWith(term.ToLower())
+                                    && (c1.CustomerType == type || type == "")
                                    orderby c1.CustomerName ascending
                                    select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
 
@@ -1510,7 +1524,8 @@ namespace LTMSV2.Controllers
             }
             else
             {
-                var shipperlist = (from c1 in db.CustomerMasters                                   
+                var shipperlist = (from c1 in db.CustomerMasters
+                                   where (c1.CustomerType == type || type == "")
                                    orderby c1.CustomerName ascending
                                    select new { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct();
 
@@ -1520,7 +1535,7 @@ namespace LTMSV2.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetShipperName(string term)
+        public JsonResult GetShipperName(string term,string type="")
         {
             //var shipperlist = (from c1 in db.InScanMasters
             //                   where c1.Consignor.ToLower().StartsWith(term.ToLower())
@@ -1531,6 +1546,7 @@ namespace LTMSV2.Controllers
             {
                List<ShipperVM> shipperlist = (from c1 in db.CustomerMasters
                                    where c1.CustomerName.ToLower().Contains(term.ToLower())
+                                   && (c1.CustomerType==type || type=="")
                                    orderby c1.CustomerName ascending
                                    select new ShipperVM() { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct().ToList();
 
@@ -1539,7 +1555,8 @@ namespace LTMSV2.Controllers
             else
             {
                 List<ShipperVM> shipperlist = (from c1 in db.CustomerMasters
-                                   orderby c1.CustomerName ascending
+                                    where (c1.CustomerType == type || type == "")
+                                    orderby c1.CustomerName ascending
                                    select new ShipperVM() { ShipperName = c1.CustomerName, ContactPerson = c1.ContactPerson, Phone = c1.Phone, LocationName = c1.LocationName, CityName = c1.CityName, CountryName = c1.CountryName, Address1 = c1.Address1, Address2 = c1.Address2, PinCode = c1.Address3 }).Distinct().ToList();
 
                 return Json(shipperlist, JsonRequestBehavior.AllowGet);
@@ -2332,13 +2349,22 @@ namespace LTMSV2.Controllers
 
             return Json(objCust, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult GetRouteTripData(int RouteId,string despatchdate)
+        public ActionResult GetRouteTripData(int RouteId, string despatchdate)
         {
-            DateTime tdate = Convert.ToDateTime(despatchdate);
-            var itemlist = (from c in db.TruckDetails join v in db.VehicleMasters on c.VehicleID equals v.VehicleID where c.IsDeleted==false && c.RouteID == RouteId && c.TDDate == tdate.Date select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.RegNo + "-" + c.DriverName }).ToList();            
-            return Json(itemlist, JsonRequestBehavior.AllowGet);
-            
-        }
+            if (despatchdate != "")
+            {
+                DateTime tdate = Convert.ToDateTime(despatchdate);
+                var itemlist = (from c in db.TruckDetails join v in db.VehicleMasters on c.VehicleID equals v.VehicleID where c.IsDeleted == false && c.RouteID == RouteId && c.TDDate == tdate.Date select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.RegNo + "-" + c.DriverName }).ToList();
+                return Json(itemlist, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                
+                var itemlist = (from c in db.TruckDetails join v in db.VehicleMasters on c.VehicleID equals v.VehicleID where c.IsDeleted == false && c.RouteID == RouteId  select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.RegNo + "-" + c.DriverName }).ToList();
+                return Json(itemlist, JsonRequestBehavior.AllowGet);
+            }
+        
+    }
         public class PickUp
         {
             public int CustomerID { get; set; }

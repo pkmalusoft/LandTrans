@@ -13185,6 +13185,8 @@
     <Property Name="COM" Type="Boolean" />
     <Property Name="RevenueUpdate" Type="Boolean" />
     <Property Name="FOC" Type="Boolean" />
+    <Property Name="PickupLocationID" Type="Int32" />
+    <Property Name="DeliveryLocationID" Type="Int32" />
   </EntityType>
   <EntityType Name="CostUpdateDetail">
     <Key>

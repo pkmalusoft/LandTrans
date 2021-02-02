@@ -76,9 +76,17 @@
                 i = 1;
                 $("#listContainer tbody tr").addClass('Selected');
                 $(".checkfilter").prop('checked', true);
+                $('.checkfilter').each(function (index, item) {
+                    $(item).prop('checked', true);
+                    $(item).attr('value', 'true');
+                });
             } else {
                 $("#listContainer tbody tr").removeClass('Selected');
                 $(".checkfilter").prop('checked', false);
+                $('.checkfilter').each(function (index, item) {
+                    $(item).prop('checked', false);
+                    $(item).attr('value', 'false');
+                });
             }
 
              var fullform = $('form#customerInvoice').serialize();
@@ -118,9 +126,11 @@
             var id = this.id;
             var countryid = id.split('_');
             if ($(this).prop("checked") == true) {
+                $(this).attr('value', 'true');
                 $("#listContainer tbody tr[id=" + countryid[1] + "]").addClass('Selected');
 
             } else {
+                $(this).attr('value', 'false');
                 $("#listContainer tbody tr[id=" + countryid[1] + "]").removeClass('Selected');
                 $("#Selectall").prop('checked', false);
             }

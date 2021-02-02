@@ -94,6 +94,96 @@
 </style>
 <script type="text/javascript">
     $(document).ready(function () {
+        $("#PickUpLocationName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Route/Location',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Location,
+                                value: val.Location,
+                                ItemID: val.LocationID
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: -1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $('#PickUpLocationName').val(ui.item.value);
+                $('#PickUpLocationID').val(ui.item.ItemID);
+                $('#PickUpLocationID').attr('label',ui.item.value);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $('#PickUpLocationName').val(i.item.value);                
+                $('#PickUpLocationID').val(i.item.ItemID);
+                $('#PickUpLocationID').attr('label', i.item.value);
+            },
+
+        });
+        $("#DeliveryLocationName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Route/Location',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Location,
+                                value: val.Location,
+                                ItemID: val.LocationID
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: -1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $("#DeliveryLocationName").val(ui.item.label);
+                $("#DeliveryLocationID").val(ui.item.ItemID);
+                $("#DeliveryLocationID").attr('label',ui.item.label);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#DeliveryLocationName").val(i.item.value);
+                $("#DeliveryLocationID").val(i.item.ItemID);
+                $("#DeliveryLocationID").attr('label',i.item.label);
+            },
+
+        });
+
+        $("#DeliveryLocationName").change(function () {
+            if ($("#DeliveryLocationName").val().trim() == '') {
+                $("#DeliveryLocationID").val(0);
+            }
+            else if ($("#DeliveryLocationName").val().trim()!="" && ($("#DeliveryLocationName").val().trim() != $("#DeliveryLocationID").attr('label').trim() )) {
+                $("#DeliveryLocationName").val('');
+                $("#DeliveryLocationID").val(0);
+                $("#DeliveryLocationName").focus();
+            }
+        });
+
+        $("#PickUpLocationName").change(function () {
+            if ($("#PickUpLocationName").val().trim() == '') {
+                $("#PickUpLocationID").val(0);
+            }
+            else if ( $("#PickUpLocationName").val().trim()!="" && ($("#PickUpLocationName").val().trim() != $("#PickUpLocationID").attr('label').trim())) {
+                $("#PickUpLocationName").val('');
+                $("#PickUpLocationID").val(0);
+                $("#PickUpLocationName").focus();
+            }
+        });
         $("#ConsignorLocationName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -454,11 +544,13 @@
             var modeid = $('#PaymentModeId').val();
             if (modeid == 1) { //PKP
                 $('#InvoiceTo1').html('');
+                $('#InvoiceTo1').trigger('change');
             }
             else if (modeid == 2) {
                 $('#InvoiceTo1').html('');
                 var html = '<option>Consignee</option>'
                 $('#InvoiceTo1').html(html);
+                $('#InvoiceTo1').trigger('change');
             }
             else if (modeid == 3) {
                 $('#InvoiceTo1').html('');
@@ -466,6 +558,7 @@
                 html = html + '<option>Consignee</option>';
                 html = html + '<option>Others</option>';
                 $('#InvoiceTo1').html(html);
+                $('#InvoiceTo1').trigger('change');
             }
 
         });
@@ -570,7 +663,7 @@
                     url: '/Consignment/GetShipperName',
                     datatype: "json",
                     data: {
-                        term: request.term
+                        term: request.term,type:$('#hdnshippertype').val()
                     },
                     success: function (data) {
                         response($.map(data, function (val, item) {
@@ -630,7 +723,7 @@
                     url: '/Consignment/GetReceiverName',
                     datatype: "json",
                     data: {
-                        term: request.term
+                        term: request.term, type: $('#hdnconsigneetype').val()
                     },
                     success: function (data) {
                         response($.map(data, function (val, item) {
@@ -1133,7 +1226,20 @@
         }
         $('#InvoiceTo1').change(function () {
             $('#InvoiceTo').val($('#InvoiceTo1').val());
-        })
+            if ($("#PaymentModeId").val() == 3 && $("#InvoiceTo").val() == 'Shipper') {
+                $('#hdnshippertype').val('CR');
+                $('#hdnconsigneetype').val('');
+            }
+            else if ($("#PaymentModeId").val() == 3 && $("#InvoiceTo").val() == 'Consignee') {
+                $('#hdnconsigneetype').val('CR');
+                $('#hdnshippertype').val('');
+            }
+            else {
+                $('#hdnshippertype').val('');
+                $('#hdnconsigneetype').val('');
+            }
+
+         })
 
         $('#btnprintLabel').on('click', function () {
             debugger;
@@ -1690,6 +1796,8 @@
                 @Html.HiddenFor(model => model.ConsigneeCountryID)
                 @Html.HiddenFor(model => model.ConsigneeCityID)
                 @Html.HiddenFor(model => model.ConsigneeLocationID)
+                <input type="hidden" id="hdnshippertype" value="" />
+                <input type="hidden" id="hdnconsigneetype" value="" />
 
                 <label class="headinglabel required">Consignment No.</label>
                 @if (@Model.InScanID == 0)
@@ -1756,7 +1864,7 @@
                     <div class="row no-margin">
                         <div class="col-md-6">
                             <label class="headinglabel required">Name</label>
-                            @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Shipper Name", autocomplete = "off" })
+                            @Html.TextBoxFor(model => model.shippername, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Shipper Name", @autocomplete = "off" })
                         </div>
 
                         <div class="col-md-6">
@@ -2084,14 +2192,23 @@
             </div>
             <div class="row no-margin">
 
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label class="headinglabel">Picked up By</label>
                     @Html.DropDownListFor(model => model.PickedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
                 </div>
-
-                <div class="col-md-6">
+                <div class="col-md-3">
+                    <label class="headinglabel">Pickup Location</label>
+                    @Html.TextBoxFor(model => model.PickUpLocationName, new { @class = "form-control" })
+                    @Html.HiddenFor(model => model.PickUpLocationID)
+                </div>
+                <div class="col-md-3">
                     <label class="headinglabel">Depot Received By</label>
                     @Html.DropDownListFor(model => model.ReceivedBy, new SelectList(@ViewBag.Employee, "EmployeeID", "EmployeeName"), "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel">Delivery Location</label>
+                    @Html.TextBoxFor(model => model.DeliveryLocationName, new { @class = "form-control" })
+                    @Html.HiddenFor(model => model.DeliveryLocationID)
                 </div>
 
             </div>

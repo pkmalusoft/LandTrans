@@ -132,7 +132,7 @@ namespace LTMSV2.Controllers
         }
         public ActionResult Location(string term)
         {
-            if (!String.IsNullOrEmpty(term))
+            if (!String.IsNullOrEmpty(term.Trim()))
             {
                 List<LocationMasterVm> locationMaster = new List<LocationMasterVm>();
                 locationMaster = (from c in db.LocationMasters where c.Location.ToLower().StartsWith(term.ToLower()) orderby c.Location select new LocationMasterVm {

@@ -116,5 +116,7 @@ namespace LTMSV2.Models
         public Nullable<bool> COM { get; set; }
         public Nullable<bool> RevenueUpdate { get; set; }
         public Nullable<bool> FOC { get; set; }
+        public Nullable<int> PickupLocationID { get; set; }
+        public Nullable<int> DeliveryLocationID { get; set; }
     }
 }

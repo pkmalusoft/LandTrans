@@ -212,8 +212,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="headinglabel required">Origin</label>
-                    <input type="text" class="form-control" id="OriginName" name="OriginName" required />
+                    <label class="headinglabel required">Origin</label>                    
+                    @Html.TextBoxFor(model => model.OriginName, new { @class = "form-control", @required = "required" })
                     @Html.HiddenFor(model => model.OrginLocationID)
 
                 </div>

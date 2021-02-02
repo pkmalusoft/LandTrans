@@ -172,6 +172,11 @@ namespace LTMSV2.Models
         public bool COM { get; set; }
         public bool FOC { get; set; }
         public string CargoDescription { get; set; }
+
+        public int PickUpLocationID { get; set; }
+        public string PickUpLocationName { get; set; }
+        public int DeliveryLocationID { get; set; }
+        public string DeliveryLocationName { get; set; }
         public List<OtherChargeDetailVM> otherchargesVM { get; set; }
         
 

@@ -2249,6 +2249,8 @@
     <Property Name="COM" Type="bit" />
     <Property Name="RevenueUpdate" Type="bit" />
     <Property Name="FOC" Type="bit" />
+    <Property Name="PickupLocationID" Type="int" />
+    <Property Name="DeliveryLocationID" Type="int" />
   </EntityType>
   <EntityType Name="InscanOtherCharge">
     <Key>
