@@ -210,6 +210,7 @@ namespace LTMSV2.Models
     {
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public DateTime AsonDate { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public string Output { get; set; } //printer ,pdf,word,excel
@@ -226,6 +227,7 @@ namespace LTMSV2.Models
         public string SupplierName { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+        public DateTime AsonDate { get; set; }
         public string Output { get; set; } //printer ,pdf,word,excel
         public string ReportType { get; set; } //sumary details
         public string ReportFileName { get; set; }

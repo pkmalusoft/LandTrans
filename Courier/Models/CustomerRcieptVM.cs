@@ -36,8 +36,7 @@ namespace  LTMSV2.Models
         public int CurrencyId { get; set; }
         public string CurrencyName { get; set; }
         public string customerName { get; set; }
-        public string JobID { get; set; } 
-        public string Jobcode { get; set; }
+        public string JobID { get; set; }         
         public decimal salesHome { get; set; }
         public decimal AmountToBeRecieved { get; set; }
         public decimal AmountToBePaid { get; set; }
@@ -82,12 +81,12 @@ namespace  LTMSV2.Models
         public string CurrencyName { get; set; }
         public string CustomerName { get; set; }
         public int JobID { get; set; }
+        public string JobCode { get; set; }
         public int TruckDetailID { get; set; }
         public int InvoiceID { get; set; }
         public int AcOPInvoiceDetailID { get; set; }
         public string InvoiceType { get; set; }
-        public int InvoiceNo { get; set; }
-        public string Jobcode { get; set; }
+        public int InvoiceNo { get; set; }        
         public decimal salesHome { get; set; }
         public decimal AmountToBeRecieved { get; set; }
         public Nullable<decimal> AmtPaidTillDate { get; set; }

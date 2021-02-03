@@ -1677,20 +1677,23 @@ new AcGroupModel()
                             db.SaveChanges();
                         }
                     }
-
-                    var list=AWBAllocationall.Where(cc => cc.AcHeadID == acheadid).ToList();
-                    if (list != null)
+                    if (AWBAllocationall != null)
                     {
-                        foreach (var item2 in list)
+
+                        var list = AWBAllocationall.Where(cc => cc.AcHeadID == acheadid).ToList();
+                        if (list != null)
                         {
-                            AcJournalConsignment accons = new AcJournalConsignment();
-                            accons.AcJournalID = ajm.AcJournalID;
-                            accons.AcJournalDetailID = acJournalDetail.AcJournalDetailID;
-                            accons.AcHeadID = acheadid;
-                            accons.InScanID = Convert.ToInt32(item2.InScanID);
-                            accons.Amount = item2.Amount;
-                            db.AcJournalConsignments.Add(accons);
-                            db.SaveChanges();
+                            foreach (var item2 in list)
+                            {
+                                AcJournalConsignment accons = new AcJournalConsignment();
+                                accons.AcJournalID = ajm.AcJournalID;
+                                accons.AcJournalDetailID = acJournalDetail.AcJournalDetailID;
+                                accons.AcHeadID = acheadid;
+                                accons.InScanID = Convert.ToInt32(item2.InScanID);
+                                accons.Amount = item2.Amount;
+                                db.AcJournalConsignments.Add(accons);
+                                db.SaveChanges();
+                            }
                         }
                     }
                     if (v.AcJDetailVM[i].AcExpAllocationVM != null)

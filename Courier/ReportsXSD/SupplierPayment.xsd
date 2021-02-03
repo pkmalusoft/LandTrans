@@ -23,7 +23,7 @@
               <xs:element name="RegistrationNo" type="xs:string" minOccurs="0" />
               <xs:element name="CurrencyName" type="xs:string" minOccurs="0" />
               <xs:element name="Paid" type="xs:decimal" minOccurs="0" />
-              <xs:element name="Ageing" type="xs:int" minOccurs="0" />
+              <xs:element name="Aging" type="xs:int" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

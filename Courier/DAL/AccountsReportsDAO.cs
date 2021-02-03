@@ -1252,8 +1252,8 @@ namespace LTMSV2.DAL
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "SP_CustomerStatement";
             comd.Parameters.AddWithValue("@CustomerId", reportparam.CustomerId);
-            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
-            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@AsonDate", reportparam.AsonDate.ToString("MM/dd/yyyy"));
+            //comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@FYearId", yearid);
 
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
@@ -1284,7 +1284,7 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
             rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Statement");
-            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            string period = " As on " + reportparam.AsonDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
@@ -1715,8 +1715,8 @@ namespace LTMSV2.DAL
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "SP_SupplierStatement";
             comd.Parameters.AddWithValue("@SupplierId", reportparam.SupplierId);
-            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
-            comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@AsonDate", reportparam.AsonDate.ToString("MM/dd/yyyy"));
+            //comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@FYearId", yearid);
 
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
@@ -1747,7 +1747,7 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
             rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Supplier Statement");
-            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            string period = "As on " + reportparam.AsonDate.ToString("dd-MM-yyyy"); 
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;

@@ -313,6 +313,7 @@ namespace LTMSV2.Controllers
                 {
                     FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
                     ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
                     CustomerId = 0,
                     CustomerName = "",
                     Output = "PDF",
@@ -362,7 +363,8 @@ namespace LTMSV2.Controllers
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
                 Output = "PDF",
-                ReportType = picker.ReportType
+                ReportType = picker.ReportType,
+                AsonDate=picker.AsonDate
             };
 
             ViewBag.Token = model;
@@ -568,6 +570,7 @@ namespace LTMSV2.Controllers
                 model = new SupplierLedgerReportParam
                 {
                     FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
                     ToDate = CommanFunctions.GetLastDayofMonth().Date,
                     SupplierTypeId = 1,
                     SupplierId = 0,
@@ -575,6 +578,10 @@ namespace LTMSV2.Controllers
                     Output = "PDF",
                     ReportType = "Ledger"
                 };
+            }
+            if (model.AsonDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.AsonDate = CommanFunctions.GetFirstDayofMonth().Date;
             }
             if (model.FromDate.ToString() == "01-01-0001 00:00:00")
             {
@@ -616,6 +623,7 @@ namespace LTMSV2.Controllers
             {
                 FromDate = picker.FromDate,
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                AsonDate=picker.AsonDate,
                 SupplierId = picker.SupplierId,
                 SupplierName = picker.SupplierName,
                 Output = "PDF",

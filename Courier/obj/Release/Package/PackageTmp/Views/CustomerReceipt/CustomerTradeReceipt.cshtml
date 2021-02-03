@@ -14,8 +14,6 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
 
-@*<script src="@Url.Content("~/Scripts/angular.js")"></script>
-    <script src="@Url.Content("~/MyJsFiles/CustomerReceiptJS.js")"></script>*@
 <style>
     #tbl1 tr {
         height: 32px;
@@ -68,7 +66,7 @@
 
 </style>
 <script type="text/javascript">
-    var customernames = [];
+    
     function isNumberKey1(evt) {
         var charCode = (evt.which) ? evt.which : evt.keyCode;
         //if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
@@ -259,7 +257,7 @@
                             '<td> <input type="text" onchange="CheckAmt(this)"  id="txtinvoice_' + data[i].SalesInvoiceID  + '" class="amt txtNum text-right AmountReceived" name="CustomerRcieptChildVM[' + i + '].Amount"  value="' + parseFloat(data[i].Amount).toFixed(@_decimal) + '" />' +
                             '<td> <input type="text"  onchange="CheckAmt1(this)" id="txtadjust_' + data[i].SalesInvoiceID + '" class="amt1 txtNum text-right AdjustmentAmount" name="CustomerRcieptChildVM[' + i + '].AdjustmentAmount" />' +
                             '<td> <a href="JavaScript:void(0)"   onclick="ShowAWBAllocation(' + data[i].SalesInvoiceID + ',' + data[i].Amount + ',' + invoiceno + ')" ><i class="fa fa-eye"></i></a>' +
-                            '<tr>');
+                            '</tr>');
                         //hideLoading();
                     }
 
@@ -878,16 +876,7 @@
 
         <div class="row no-margin" style="padding-top:10px">
             <div class="col-xs-12 no-padding for-device">
-                <div class="data-table payment-div">
-                    @* <div class="heading">
-                            <div class="title1">Invoice No</div>
-                            <div class="title2">Job Code</div>
-                            <div class="title3">Invoice Date</div>
-                            <div class="title4">Amount To Be Received</div>
-                            <div class="title5">Amount Already Received</div>
-                            <div class="title6">Balance</div>
-                            <div class="title7">Amount</div>
-                        </div>*@
+                <div class="data-table payment-div">                    
                     <div class="data">
                         <table border="1" style="margin-top: 15px; " class="table table-bordered table-responsive" >
                             <thead>
