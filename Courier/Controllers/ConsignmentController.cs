@@ -37,7 +37,7 @@ namespace LTMSV2.Controllers
             }
             if (FromDate == null || ToDate == null)
             {                
-                pFromDate = CommanFunctions.GetLastDayofMonth().Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
                 pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
             }
             else
@@ -814,12 +814,23 @@ namespace LTMSV2.Controllers
             if (data.PickupLocationID!=null)
             {
                 inscan.PickUpLocationID = Convert.ToInt32(data.PickupLocationID);
-                inscan.PickUpLocationName = db.LocationMasters.Find(inscan.PickUpLocationID).Location;
+                if (inscan.PickUpLocationID > 0)
+                {
+                    var dellocation = db.LocationMasters.Find(inscan.PickUpLocationID);
+                    if (dellocation!=null)
+                        inscan.PickUpLocationName = dellocation.Location;
+                    
+                }
             }
             if (data.DeliveryLocationID!=null)
             {
                 inscan.DeliveryLocationID =Convert.ToInt32(data.DeliveryLocationID);
-                inscan.DeliveryLocationName = db.LocationMasters.Find(inscan.DeliveryLocationID).Location;
+                if (inscan.DeliveryLocationID > 0)
+                {
+                    var dellocation = db.LocationMasters.Find(inscan.DeliveryLocationID);
+                    if (dellocation!=null)
+                      inscan.DeliveryLocationName = dellocation.Location;
+                }
             }
             
             if (data.TruckDetailId!=null)

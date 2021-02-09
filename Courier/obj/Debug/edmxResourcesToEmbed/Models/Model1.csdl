@@ -12966,6 +12966,7 @@
     <NavigationProperty Name="CurrencyMaster1" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2" FromRole="TruckDetail" ToRole="CurrencyMaster" />
     <NavigationProperty Name="RouteMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="TruckDetail" ToRole="RouteMaster" />
     <NavigationProperty Name="CostUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail" FromRole="TruckDetail" ToRole="CostUpdateMaster" />
+    <Property Name="CostUpdated" Type="Boolean" Nullable="false" />
   </EntityType>
   <Association Name="FK_TruckDetails_BranchMaster">
     <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
@@ -13201,7 +13202,7 @@
     <Property Name="InvoiceId" Type="Int32" />
     <Property Name="AcHeadDebitId" Type="Int32" />
     <Property Name="AcHeadCreditId" Type="Int32" />
-    <Property Name="SupplierId" Type="Int32" />
+    <Property Name="SupplierId" Type="Int32" Nullable="false" />
     <Property Name="CurrencyId" Type="Int32" />
     <Property Name="ExchangeRate" Type="Decimal" Precision="18" Scale="3" />
     <NavigationProperty Name="CostUpdateMaster" Relationship="DB_9F57C4_couriertest_newModel.FK__CostUpdat__Maste__057A84B9" FromRole="CostUpdateDetail" ToRole="CostUpdateMaster" />
@@ -13504,9 +13505,9 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CostUpdateMasterId" Type="Int32" />
-    <Property Name="CostUpdateDetailId" Type="Int32" />
-    <Property Name="RevenueCostMasterID" Type="Int32" />
+    <Property Name="CostUpdateMasterId" Type="Int32" Nullable="false" />
+    <Property Name="CostUpdateDetailId" Type="Int32" Nullable="false" />
+    <Property Name="RevenueCostMasterID" Type="Int32" Nullable="false" />
     <Property Name="InScanID" Type="Int32" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>

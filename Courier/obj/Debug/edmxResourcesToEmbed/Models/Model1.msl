@@ -8762,6 +8762,7 @@
     <EntitySetMapping Name="TruckDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TruckDetail">
         <MappingFragment StoreEntitySet="TruckDetail">
+          <ScalarProperty Name="CostUpdated" ColumnName="CostUpdated" />
           <ScalarProperty Name="ParcelTypeId" ColumnName="ParcelTypeId" />
           <ScalarProperty Name="ConsignmentNoNote" ColumnName="ConsignmentNoNote" />
           <ScalarProperty Name="RecPayId" ColumnName="RecPayId" />

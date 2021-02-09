@@ -169,7 +169,7 @@ namespace LTMSV2.DAL
                     obj.Currency = ds.Tables[0].Rows[i]["CurrencyName"].ToString();                    
                     obj.DebitAccountName = ds.Tables[0].Rows[i]["DebitAccountHead"].ToString();
                     obj.CreditAccountName = ds.Tables[0].Rows[i]["CreditAccountHead"].ToString();
-                    obj.InvoicedTo = ds.Tables[0].Rows[i]["SupplierName"].ToString();
+                    //obj.InvoicedTo = ds.Tables[0].Rows[i]["SupplierName"].ToString();
                     if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
                     {
                         obj.Amount = 0;

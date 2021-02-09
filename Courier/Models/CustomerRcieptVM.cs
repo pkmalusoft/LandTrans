@@ -32,6 +32,7 @@ namespace  LTMSV2.Models
         public Nullable<int> AcCompanyID { get; set; }
         public Nullable<decimal> EXRate { get; set; }
         public Nullable<decimal> FMoney { get; set; }
+        public Nullable<decimal> AllocatedAmount { get; set; }
         public Nullable<int> UserID { get; set; }
         public int CurrencyId { get; set; }
         public string CurrencyName { get; set; }

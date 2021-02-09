@@ -6,11 +6,10 @@
         <xs:element name="SupplierLedgerDetail">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="SupplierID" type="xs:int" minOccurs="0" />
+              <xs:element name="SupplierId" type="xs:int" minOccurs="0" />
               <xs:element name="InvOrder" type="xs:int" minOccurs="0" />
               <xs:element name="InvoiceNo" type="xs:string" minOccurs="0" />
               <xs:element name="InvoiceDate" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="Credit" type="xs:decimal" minOccurs="0" />
               <xs:element name="SupplierName" type="xs:string" minOccurs="0" />
               <xs:element name="CountryName" type="xs:string" minOccurs="0" />
               <xs:element name="CityName" type="xs:string" minOccurs="0" />
@@ -21,13 +20,10 @@
               <xs:element name="MobileNo" type="xs:string" minOccurs="0" />
               <xs:element name="LocationName" type="xs:string" minOccurs="0" />
               <xs:element name="RegistrationNo" type="xs:string" minOccurs="0" />
-              <xs:element name="Debit" type="xs:decimal" minOccurs="0" />
               <xs:element name="CurrencyName" type="xs:string" minOccurs="0" />
-              <xs:element name="Amount" type="xs:decimal" minOccurs="0" />
-              <xs:element name="AdjustmentAmount" type="xs:decimal" minOccurs="0" />
-              <xs:element name="RecPayDate" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="DocumentNo" type="xs:string" minOccurs="0" />
-              <xs:element name="PaidAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Debit" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Credit" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Remarks" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

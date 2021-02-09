@@ -854,9 +854,9 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CostUpdateMasterId" Type="int" />
-    <Property Name="CostUpdateDetailId" Type="int" />
-    <Property Name="RevenueCostMasterID" Type="int" />
+    <Property Name="CostUpdateMasterId" Type="int" Nullable="false" />
+    <Property Name="CostUpdateDetailId" Type="int" Nullable="false" />
+    <Property Name="RevenueCostMasterID" Type="int" Nullable="false" />
     <Property Name="InScanID" Type="int" />
     <Property Name="Amount" Type="money" />
   </EntityType>
@@ -873,7 +873,7 @@
     <Property Name="InvoiceId" Type="int" />
     <Property Name="AcHeadDebitId" Type="int" />
     <Property Name="AcHeadCreditId" Type="int" />
-    <Property Name="SupplierId" Type="int" />
+    <Property Name="SupplierId" Type="int" Nullable="false" />
     <Property Name="CurrencyId" Type="int" />
     <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="3" />
   </EntityType>
@@ -3689,6 +3689,7 @@
     <Property Name="RecPayId" Type="int" />
     <Property Name="ConsignmentNoNote" Type="varchar" MaxLength="100" />
     <Property Name="ParcelTypeId" Type="int" />
+    <Property Name="CostUpdated" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="TruckDetailOtherCharge">
     <Key>

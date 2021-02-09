@@ -3,37 +3,97 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var isadd = true;
+    var ismodify = true;
+    var isdelete = true;
+    var isprint = true;
+    var isview = true;
+    string path = "/CostUpdate/Index";
+    if (Convert.ToInt32(Session["UserRoleID"]) > 1)
+    {
+        LTMSV2.Models.SourceMastersModel obj = new LTMSV2.Models.SourceMastersModel();
+        isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+        isview = obj.GetViewpermission(Convert.ToInt32(Session["UserRoleID"]), path);
+
+    }
 }
 
 <style>
     tfoot {
         display: table-header-group;
     }
-    table input {
-        width: 100%;
+    .subtable > tbody > tr > td {
+        padding-left: 30px;
     }
+    /*table input {
+        width: 100%;
+    }*/
 </style>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#dataTables-example tfoot th').each(function () {
-            var title = $(this).text();
-            $(this).html('<input type="text" />');
+        $(function () {
+            $('#FromDate').datetimepicker({ format: 'DD-MM-YYYY' });
+
         });
+        $(function () {
+            $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
+            $('#ToDate').datepicker("setDate", new Date());
+        });
+      
 
-        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        var table = $('#dataTables-example').DataTable({
+            "aaSorting": [],
+            //"dom": '<"top"i>rt<"top"flp><"clear">',
+            //dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+            //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            //"pagingType": "simple"
+        });
+        table.draw();
 
-        table.columns().every(function () {
-            var that = this;
-
-            $('input', this.footer()).on('keyup change', function () {
-                if (that.search() !== this.value) {
-                    that
-                        .search(this.value)
-                        .draw();
+        function format(d) {
+            // `d` is the original data object for the row
+        
+            var RevenueId = d[6];
+            var DataHtml = '';
+            $.ajax({
+                type: "POST",
+                url: "/CostUpdate/GetCostUpdateDetails",
+                datatype: "Json",
+                data: { Id: RevenueId },
+                success: function (data) {
+                    DataHtml = '<table class="subtable">';
+                    $.each(data, function (index, value) {
+                        DataHtml = DataHtml + '<tr><td  class="text-right">' + parseFloat(value.Amount).toFixed(3) + '</td><td>' + value.SupplierName + '</td><td>' + value.DebitAccountName + '</td><td>' + value.CreditAccountName + '</td></tr>';
+                    });
+                    DataHtml = DataHtml + '</table>';
+                    $('#pr_' + RevenueId).append(DataHtml);
                 }
             });
+
+            return '<p id="pr_' + RevenueId + '"></p>';
+        }
+
+        $('#dataTables-example tbody').on('click', 'td.details-control', function () {
+            debugger;
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                $(this).find('img').attr('src', '/Content/img/details_open.png');
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+                $(this).find('img').attr('src', '/Content/img/details_close.png');
+            }
         });
 
     });
@@ -44,10 +104,42 @@
     <h1 class="headingfont">Cost Update</h1>
 
 </section>
-<div class="col-md-12">
-    <p class="indexbtnpadding pull-right">
-        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
-    </p>
+<div class="row no-margin">
+    <div class=" d-flex">
+        <div class="col-md-2">
+            <label class="headinglabel">TD No.</label>
+            <input id="TDNo" class="form-control" name="TDNo" type="text" value="@ViewBag.TDNo" />
+        </div>
+        <div class="col-md-1">
+            <label class="headinglabel">From </label>
+            <input id="FromDate" class="form-control text-right" name="FromDate" type="text" value="@ViewBag.FromDate" />
+            @*@Html.TextBox("FromDate",new { @class = "form-control txttarget" })*@
+        </div>
+
+        <div class="col-md-1">
+            <label class="headinglabel">To </label>
+            <input type="text" id="ToDate" name="ToDate" class="form-control text-right" value="@ViewBag.ToDate" />
+            @*@Html.TextBox("ToDate", new { @class = "form-control txttarget" })*@
+        </div>
+
+        <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:15px;">
+            <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "CostUpdate")?pTDNo=' + $('#TDNo').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+
+        </div>
+        <div class="pull-left" style="padding-top:32px;">
+            <p class="indexbtnpadding">
+                @if (@LTMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+                {
+                    @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btnwidth", @Title = "Create Not allowed in the previous financial year" })
+                }
+                else
+                {
+                    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btnwidth" })
+                }
+
+            </p>
+        </div>
+    </div>
 </div>
 <div class="clearfix"></div>
 
@@ -62,100 +154,60 @@
         </script>
     }
     <div class="table-responsive tblbackground" style="padding:15px">
-        <table class="table table-responsive table-bordered tblfont" id="dataTables-example" style="width:100%;table-layout:fixed">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example" style="width:100%;">
             <thead>
                 <tr>
                     <th>
                         TD No.
                     </th>
                     <th>
-                        @Html.Label("TD Date")
-                    </th>
-                    <th>
-                        @Html.Label("Invoice To")
+                        Cost Entry Date
                     </th>
                     <th>
                         @Html.Label("Amount")
                     </th>
                     <th>
-                        @Html.Label("Currency")
+                        @Html.Label("Driver")
                     </th>
                     <th>
-                        @Html.Label("Debit Head")
-                    </th>
-                    <th>
-                        @Html.Label("Credit Head")
+                        @Html.Label("RegNo")
                     </th>
                     <th> Action</th>
+                    <th style="display:none">Action</th>
                 </tr>
 
             </thead>
-            <tfoot>
-                <tr>
-            <tfoot>
-                <tr>
-                    <th>
-                        @Html.Label("TDno")
-                    </th>
-                    <th>
-                        @Html.Label("Date")
-                    </th>
-                    <th class="">
-                        @Html.Label("Invoice To")
-                    </th>
-                    <th>
-                        @Html.Label("Amount")
-                    </th>
-                    <th>
-                        @Html.Label("Currency")
-                    </th>
-                    <th>
-                        @Html.Label("Debit Account")
-                    </th>
-                    <th>
-                        @Html.Label("Credit Account")
-                    </th>
-                    <th>
-
-                    </th>
-                </tr>
-            </tfoot>
+                      
 
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
+                <tr>
+                    <td class="details-control">
 
-                        @*<td>
-                        @Html.DisplayFor(modelItem => item.RCCode)
-
-                    </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TDNo)
-                        </td>
-                        <td class="text-right">
-                            @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.TDDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.InvoicedTo)
-                        </td>
-                        <td class="text-right">
-                            @Html.DisplayFor(modelItem => item.Amount)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Currency)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DebitAccountName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreditAccountName)
-                        </td>
-                        <td>
-                            <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
-                            <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
-                        </td>
-                    </tr>
+                        <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" />
+                        @Html.DisplayFor(modelItem => item.TDNo)
+                    </td>
+                    <td>
+                        @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.EntryDate)
+                    </td>
+                    <td class="text-right">                      
+                        @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount, "3")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DriverName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RegNo)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Create", new { id = item.ID })"><i class="fa fa-pencil"></i></a>|
+                        <a href="#" onclick="Delete(ID=@item.ID)"><i class="fa fa-times"></i></a>
+                    </td>
+                    <td style="display:none;">
+                        @item.ID
+                    </td>
+                </tr>
 
                 }
             </tbody>
@@ -168,8 +220,8 @@
 
 <script type="text/javascript">
     function Delete(ID) {
-        if (confirm("Are you sure, You want to Delete Country?")) {
-            window.location.href = "/RevenueCost/DeleteConfirmed/?id=" + ID;
+        if (confirm("Are you sure, You want to Delete Cost Update?")) {
+            window.location.href = "/CostUpdate/DeleteConfirmed/?id=" + ID;
         }
     }
 </script>

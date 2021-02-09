@@ -7,18 +7,14 @@ namespace LTMSV2.Models
 {
     public class CostUpdateMasterVM:CostUpdateMaster
     {
-        
+        public int MasterID { get; set; }
+
         public string TDNo { get; set; }
-        public DateTime TDDate { get; set; }
-
-        public int PickupCashHeadId { get; set; }
-        public int ConsignorId { get; set; }
-        public int ConsigneeId { get; set; }
-
-        public int ConsignorName { get; set; }
-        public int ConsigneeName { get; set; }
-        public string InvoicedTo { get; set; }
-        public string PaymentType { get; set; }
+        public DateTime TDDate { get; set; }                        
+        public string DriverName { get; set; }
+        public string RegNo { get; set; }        
+        public int SupplierID { get; set; }
+        public string SupplierName { get; set; }
         public decimal ExchangeRate { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }
@@ -26,6 +22,8 @@ namespace LTMSV2.Models
         public string CreditAccountName { get; set; }
         public string RevenueCost { get; set; }
         public int CurrencyId { get; set; }
+
+        public string TDRemarks { get; set; }
         public List<CostUpdateDetailVM> DetailVM { get; set; }
     }
 
@@ -37,5 +35,12 @@ namespace LTMSV2.Models
         public string DebitAccountName { get; set; }
         public string CreditAccountName { get; set; }
         public bool IsDeleted { get; set; }
+    }
+
+    public class CostUpdateConsignmentVM : CostUpdateConsignment
+    {
+        public int TruckDetailID { get; set; }
+        public string ConsignmentNo { get; set; }
+        public DateTime ConsignmentDate { get; set; }
     }
 }

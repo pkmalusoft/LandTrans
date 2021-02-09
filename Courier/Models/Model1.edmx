@@ -859,9 +859,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CostUpdateMasterId" Type="int" />
-          <Property Name="CostUpdateDetailId" Type="int" />
-          <Property Name="RevenueCostMasterID" Type="int" />
+          <Property Name="CostUpdateMasterId" Type="int" Nullable="false" />
+          <Property Name="CostUpdateDetailId" Type="int" Nullable="false" />
+          <Property Name="RevenueCostMasterID" Type="int" Nullable="false" />
           <Property Name="InScanID" Type="int" />
           <Property Name="Amount" Type="money" />
         </EntityType>
@@ -878,7 +878,7 @@
           <Property Name="InvoiceId" Type="int" />
           <Property Name="AcHeadDebitId" Type="int" />
           <Property Name="AcHeadCreditId" Type="int" />
-          <Property Name="SupplierId" Type="int" />
+          <Property Name="SupplierId" Type="int" Nullable="false" />
           <Property Name="CurrencyId" Type="int" />
           <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="3" />
         </EntityType>
@@ -3694,6 +3694,7 @@
           <Property Name="RecPayId" Type="int" />
           <Property Name="ConsignmentNoNote" Type="varchar" MaxLength="100" />
           <Property Name="ParcelTypeId" Type="int" />
+          <Property Name="CostUpdated" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TruckDetailOtherCharge">
           <Key>
@@ -22594,6 +22595,7 @@
           <NavigationProperty Name="CurrencyMaster1" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_CurrencyMaster2" FromRole="TruckDetail" ToRole="CurrencyMaster" />
           <NavigationProperty Name="RouteMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_TruckDetails_RouteMaster" FromRole="TruckDetail" ToRole="RouteMaster" />
           <NavigationProperty Name="CostUpdateMasters" Relationship="DB_9F57C4_couriertest_newModel.FK_CostUpdateMaster_TruckDetail" FromRole="TruckDetail" ToRole="CostUpdateMaster" />
+          <Property Name="CostUpdated" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_TruckDetails_BranchMaster">
           <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="0..1" />
@@ -22829,7 +22831,7 @@
           <Property Name="InvoiceId" Type="Int32" />
           <Property Name="AcHeadDebitId" Type="Int32" />
           <Property Name="AcHeadCreditId" Type="Int32" />
-          <Property Name="SupplierId" Type="Int32" />
+          <Property Name="SupplierId" Type="Int32" Nullable="false" />
           <Property Name="CurrencyId" Type="Int32" />
           <Property Name="ExchangeRate" Type="Decimal" Precision="18" Scale="3" />
           <NavigationProperty Name="CostUpdateMaster" Relationship="DB_9F57C4_couriertest_newModel.FK__CostUpdat__Maste__057A84B9" FromRole="CostUpdateDetail" ToRole="CostUpdateMaster" />
@@ -23132,9 +23134,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CostUpdateMasterId" Type="Int32" />
-          <Property Name="CostUpdateDetailId" Type="Int32" />
-          <Property Name="RevenueCostMasterID" Type="Int32" />
+          <Property Name="CostUpdateMasterId" Type="Int32" Nullable="false" />
+          <Property Name="CostUpdateDetailId" Type="Int32" Nullable="false" />
+          <Property Name="RevenueCostMasterID" Type="Int32" Nullable="false" />
           <Property Name="InScanID" Type="Int32" />
           <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
@@ -31916,6 +31918,7 @@
           <EntitySetMapping Name="TruckDetails">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.TruckDetail">
               <MappingFragment StoreEntitySet="TruckDetail">
+                <ScalarProperty Name="CostUpdated" ColumnName="CostUpdated" />
                 <ScalarProperty Name="ParcelTypeId" ColumnName="ParcelTypeId" />
                 <ScalarProperty Name="ConsignmentNoNote" ColumnName="ConsignmentNoNote" />
                 <ScalarProperty Name="RecPayId" ColumnName="RecPayId" />

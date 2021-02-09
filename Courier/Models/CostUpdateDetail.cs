@@ -23,7 +23,7 @@ namespace LTMSV2.Models
         public Nullable<int> InvoiceId { get; set; }
         public Nullable<int> AcHeadDebitId { get; set; }
         public Nullable<int> AcHeadCreditId { get; set; }
-        public Nullable<int> SupplierId { get; set; }
+        public int SupplierId { get; set; }
         public Nullable<int> CurrencyId { get; set; }
         public Nullable<decimal> ExchangeRate { get; set; }
     

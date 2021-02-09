@@ -56,7 +56,7 @@ namespace LTMSV2.Controllers
             {
                 lst = (from d in db.RevenueUpdateMasters
                        join c in db.InScanMasters on d.InScanID equals c.InScanID
-                       where (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
+                       where (d.EntryDate >= pFromDate && d.EntryDate < pToDate)
                        select new RevenueUpdateMasterVM
                        {
                            ID = d.ID,

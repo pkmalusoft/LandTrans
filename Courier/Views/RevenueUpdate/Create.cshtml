@@ -57,6 +57,7 @@
     }
 </style>
 <script type="text/javascript">
+    $('#EntryDate').datetimepicker({ format: 'DD-MM-YYYY' });
     var AWBItems = [];
     var RemoveAWBItems = [];
     function isNumberKey(evt) {
@@ -73,7 +74,7 @@
 
     function checkdetailcount() {
         var i = $('#details >  tr').length;
-        var idtext = 'hdndel';
+        var idtext = 'hdndel_';
         var totalcount = 0;
         $('#hdndetailcount').val(totalcount);
         var totalamount = 0;
@@ -502,11 +503,15 @@
             focus: function (e, i) {
                 $("#txtCustomer").val(i.item.label);
                 $('#txtCustomerId').val(i.item.CustomerId);
+                $('#txtDebitHead').val($('#DebitAccountName').val());
+                $('#txtDebitHeadId').val($('#DebitAccountId').val());
             },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtCustomer").val(i.item.label);
                 $('#txtCustomerId').val(i.item.CustomerId);
+                $('#txtDebitHead').val($('#DebitAccountName').val());
+                $('#txtDebitHeadId').val($('#DebitAccountId').val());
 
             },
 
@@ -636,6 +641,13 @@
                 $('#txtDebitHeadId').val($('#DebitAccountId').val());
             }
 
+            else if ($('#InvoiceTo').val() == "Others") {       
+                $('#txtCustomer').removeAttr('readonly');                
+                $('#txtDebitHead').val($('#DebitAccountName').val());
+                $('#txtDebitHeadId').val($('#DebitAccountId').val());
+                $('#txtCustomer').focus();
+            }
+
             if ($('#PaymentType').val() == 1)
             {
                 $('#txtDebitHead').val($('#DebitCashAccountName').val());
@@ -731,7 +743,7 @@
                 $("#txtAmount").focus();
                 return false;
             }
-            else if (parseInt($("#txtAmount").val()) == 0) {
+            else if (parseFloat($("#txtAmount").val()) == 0) {
                 $('#spanerr').html("Please Enter The Amount");
                 $("#txtAmount").focus();
                 return false;
@@ -878,14 +890,17 @@
         //    DisplayCostItems();
         //}
         $('#btnsave').click(function () {
-
+            
             var totalcount = $('#hdndetailcount').val();
             if (totalcount == 0) {
                 $('#elemError').html("Add Revenue Detail to Save!");
+                $('#btnsave').removeAttr('disabled');
                 return false;
             }
             else {
                 $('#elemError').html("");
+                $('#btnsave').attr('disabled', 'disabled');
+                $("#revenueupdate").submit();
                 return true;
             }
 
@@ -906,8 +921,10 @@
                 getrevenuecost();
             }
             $("#ConsignmentNo").focus();
+            
         }
 
+        $('#EntryDate').datetimepicker({ format: 'DD-MM-YYYY' });
         $('.text-right').change(function () {
             if (isNaN(parseInt($(this).val()))) {
                 $(this).val('0.000');
@@ -947,7 +964,7 @@
         </script>
     }
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Create", "RevenueUpdate", FormMethod.Post, new { @id = "revenueupdate" }))
     {
         @Html.ValidationSummary(true)
         <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
@@ -979,7 +996,7 @@
 
                     @*@Html.HiddenFor(model => model.InScanID, new { })*@
                     <label class="headinglabel required">Transaction Date</label>
-                    @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control text-right" })
+                    @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control",@autocomplete="off", @style= "text-align:right" })
                     @Html.ValidationMessageFor(model => model.EntryDate)
                 </div>
                 <div class="col-md-4 hidden">

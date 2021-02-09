@@ -70,6 +70,7 @@ namespace LTMSV2.Models
         public Nullable<int> RecPayId { get; set; }
         public string ConsignmentNoNote { get; set; }
         public Nullable<int> ParcelTypeId { get; set; }
+        public bool CostUpdated { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual CurrencyMaster CurrencyMaster { get; set; }

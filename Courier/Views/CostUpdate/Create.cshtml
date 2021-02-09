@@ -3,6 +3,7 @@
 
 @{
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
+    var _decimal = @Session["Decimal"].ToString();
 }
 
 
@@ -12,18 +13,51 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
 <style>
+    .form-control, input {
+        height: 30px !important;
+        border-radius: 5px !important;
+        border: 1px solid #ccc;
+    }
     #details tr {
         height: 32px;
     }
-
+    ul.ui-front {
+        z-index: 1100;
+    }
     #DeleteNewRow {
         color: #dd4b39;
+    }
+    #details td input:focus {
+        border-color: #07a7e3;
+    }
+
+ /*   #details tr:nth-of-type(2) td:nth-of-type(7) {
+        display: flex;
     }
 
     #details tr:first-of-type, #ExpAllocationTable tr:first-of-type {
         background: #35b8eb;
         color: #fff;
+    }*/
+
+    .justify-content-between {
+        justify-content: space-between;
     }
+
+    #consignmentpopup h5 {
+        border: 2px solid #35b8eb;
+        min-width: 150px;
+        height: 40px;
+        border-radius: 5px;
+        line-height: 40px;
+        color: #35b8eb;
+        text-align: center;
+        font-weight: bold;
+    }
+  /*  #details tr:first-of-type, #ExpAllocationTable tr:first-of-type {
+        background: #35b8eb;
+        color: #fff;
+    }*/
 
     .taxCheck input {
         margin-right: 6px;
@@ -36,6 +70,7 @@
     }
 </style>
 <script type="text/javascript">
+    $('#EntryDate').datetimepicker({ format: 'DD-MM-YYYY' });
     var AWBItems = [];
     var RemoveAWBItems = [];
     function isNumberKey(evt) {
@@ -47,12 +82,29 @@
         return true;
     }
 
-    function setNumberDecimal(obj) {
+        function setNumberDecimal(obj) {
+       $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+    }
 
-        $(obj).val(parseFloat($(obj).val()).toFixed(3));
+    function checkdetailcount() {
+        debugger;
+        var i = $('#details >  tr').length;
+        var idtext = 'hdndel_';
+        var totalcount = 0;
+        $('#hdndetailcount').val(totalcount);
+        var totalamount = 0;
+        $('[id^=' + idtext + ']').each(function (index, item) {
+            if ($(item).val() != "true") {
+                totalcount = parseFloat(totalcount) + 1;
+                $('#hdndetailcount').val(totalcount);
+                totalamount = parseFloat(totalamount) + parseFloat($('#txtrevenueamt_' + index).val());
+                $('#txtTotalAmount').val(totalamount.toFixed(3));
+
+            }
+        });
     }
     function DisplayCostItems() {
-                        
+        var TotalAmount = 0;
         $.ajax({
             type: "POST",
             url: "/CostUpdate/GetCostUpdateDetail",
@@ -66,7 +118,7 @@
                     //$('#details > tbody > tr').html('');
                     $.each(AWBItems, function (index, item) {
                         debugger;
-                        var i = $('#details > tbody > tr').length - 1;
+                        var i = $('#details > tr').length;
                         var paytype = item.PaymentType;
                         var currencyid = item.CurrencyId;
                         var currencyname = item.Currency;
@@ -83,19 +135,95 @@
                         var CreditHeadId = item.AcHeadCreditId;
                         var DetailID = item.ID;
 
-                        var objHtml = '<tr>' + '<td style="padding-left:10px"><input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input type="hidden" name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> ';
-                        objHtml = objHtml +  currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
+                        var objHtml = '<tr>' + '<td style="padding-left:10px"><input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input type="hidden" name="DetailVM[' + i + '].IsDeleted" id="hdndel_' + i + '" class="hdndeleted" /> ';
+                        objHtml = objHtml + currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
                         objHtml = objHtml + '<td class="textright" style="padding-right:10px">' + exchangerate + '<input type="hidden" class="JAcAmt" value=' + exchangerate + ' name="DetailVM[' + i + '].ExchangeRate"></td>';
-                        objHtml = objHtml + '<td class=textright style="padding-right:10px">' + revenuecost + '<input type="hidden" class="JAcAmt" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
-                        objHtml = objHtml + '<td class style="padding-right:10px">' + amount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
-                        objHtml = objHtml + '<td class style="padding-right:10px">' + famount + '</td>';
+                        var revenuehtml = '<input type="text" class="form-control" id="txtrevenue_' + i + '" value="' + revenuecost + '" />';
+                        objHtml = objHtml + '<td  style="padding-right:10px">' + revenuehtml + '<input type="hidden" class="JAcAmt" id="txtrevenueid_' + i + '" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
+                        var revenueamthtml = '<input type="text" class="form-control text-right" id="txtrevenueamt_' + i + '" value="' + amount + '" name="DetailVM[' + i + '].Amount" />';
+                        objHtml = objHtml + '<td class=textright style="padding-right:10px">' + revenueamthtml + '<input type="hidden" class="JAcAmt" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
+                        //objHtml = objHtml + '<td class style="padding-right:10px">' + amount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
+                        objHtml = objHtml + '<td class style="padding-right:10px">' + famount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
                         objHtml = objHtml + '<td style="padding-left:10px">' + invoicedto + '<input type="hidden" value=' + customerid + ' name="DetailVM[' + i + '].SupplierId"></td>'
-                        objHtml = objHtml + '<td style="padding-left:10px">' + DebitHead + '<input type="hidden" value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
+                        var DebitHeadhtml = '<span id="spandebithead_' + i + '">' + DebitHead + '</span>';
+                        objHtml = objHtml + '<td style="padding-left:10px">' + DebitHeadhtml + '<input type="hidden" id="txtdebitid_' + i + '"  value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
+                        //objHtml = objHtml + '<td style="padding-left:10px">' + DebitHead + '<input type="hidden" value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
                         objHtml = objHtml + '<td style="padding-left:10px">' + CreditHead + '<input type="hidden" value="' + CreditHeadId + '" name="DetailVM[' + i + '].AcHeadCreditId"></td>';
-                        //  objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
+                        var ConsignmentHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Add Consignments" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-eye" ></i></a></td> ';
+                        objHtml = objHtml + ConsignmentHTML;
                         objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
                         objHtml = objHtml + '</tr>';
+
                         $("#details").append(objHtml);
+
+                        setNumberDecimal($('#txtrevenueamt_' + i));
+                        TotalAmount = parseFloat(TotalAmount) + parseFloat($('#txtrevenueamt_' + i).val());
+                        $('#txtTotalAmount').val(parseFloat(TotalAmount).toFixed(3));
+
+                $('#txtrevenueamt_' + i).change(function () {
+                    debugger;
+                    if (isNaN(parseInt($(this).val()))) {
+                        $(this).val('0.000');
+                    } else {
+                        var amt = parseFloat($(this).val());
+                        $(this).val(amt.toFixed(3));
+                        $(this).attr('value',amt.toFixed(3));
+                    }
+                    var idindex = $(this).attr('id').split('_')[1];
+                    var exrate = $('#txtex_' + idindex).val();
+                    var famount = parseFloat($(this).val()) * parseFloat(exrate);
+                   $('#txtfrevenueamt_' + idindex).val(parseFloat(famount).toFixed(@_decimal));
+                    $('#spanfamt_' + idindex).html(parseFloat(famount).toFixed(@_decimal));
+                    checkdetailcount();
+                });
+
+                checkdetailcount();
+                $("#txtrevenue_" + i).autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '/CostUpdate/CostComponent',
+                            datatype: "json",
+                            data: {
+                                term: request.term
+                            },
+                            success: function (data) {
+                                response($.map(data, function (val, item) {
+                                    return {
+                                        label: val.RevenueComponent,
+                                        value: val.RevenueComponent,
+                                        ID: val.RCID,
+                                        RevenueAcHeadID: val.RevenueAcHeadID,
+                                        RevenueAcHeadName: val.RevenueHeadName,
+                                        Amount: val.RevenueRate
+                                    }
+                                }))
+                            }
+                        })
+                    },
+                    minLength: 1,
+                    autoFocus: false,
+                    focus: function (e, i) {
+                        var index = $(this).attr('id').split('_')[1];
+                        $(this).val(i.item.label);
+                        $(this).attr('value', i.item.label);
+                        $('#txtrevenueid_' + index).val(i.item.ID);
+                        $("#spandebithead_" + index).html(i.item.RevenueAcHeadName);
+                        $("#txtdebitid_" + index).val(i.item.RevenueAcHeadID);
+                        $('#txtrevenueamt_' + index).val(i.item.Amount);
+                    },
+                    select: function (e, i) {
+                        e.preventDefault();
+
+                        var index = $(this).attr('id').split('_')[1];
+                        $(this).val(i.item.label);
+                        $(this).attr('value',i.item.label);
+                        $('#txtrevenueid_' + index).val(i.item.ID);
+                        $("#spandebithead_" + index).html(i.item.RevenueAcHeadName);
+                        $("#txtdebitid_" + index).val(i.item.RevenueAcHeadID);
+                        $('#txtrevenueamt_' + index).val(i.item.Amount);
+                    },
+
+                });
                     });
 
                 }
@@ -109,15 +237,203 @@
             }
         });
     }
+    function addcostitem() {
+         $('#spanerr').html("");
+                var str = "";
+                var totalamt = 0;
+                var i = $('#details >  tr').length;
+
+                var currencyid = $('#CurrencyId').val();
+                var currencyname = $("#CurrencyId option:selected").text();
+                var exchangerate = $('#ExchangeRate').val();
+                var revenuecost = $('#txtRevenueCost').val();
+                var revenuecostid = $('#txtRevenueCostId').val();
+                var amount = $('#txtAmount').val();
+                var famount =parseFloat(amount * exchangerate).toFixed(2);
+                var invoicedto = $('#txtSupplier').val();
+                var customerid = $('#txtSupplierId').val();
+                var DebitHead = $('#txtDebitHead').val();
+                var DebitHeadId = $('#txtDebitHeadId').val();
+                var CreditHead = $('#txtCreditHead').val();
+                var CreditHeadId = $('#txtCreditHeadId').val();
+                var DetailID = 0;
+
+                var objHtml = '<tr>' + '<td style="padding-left:10px"><input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input type="hidden" id="hdndel_' + i + '"  name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> ';
+                objHtml = objHtml +  currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
+               objHtml = objHtml + '<td class="textright" style="padding-right:10px">' + exchangerate + '<input type="hidden" class="JAcAmt" value=' + exchangerate + ' name="DetailVM[' + i + '].ExchangeRate"></td>';
+               var revenuehtml = '<input type="text" class="form-control" id="txtrevenue_' + i + '" value="' + revenuecost + '" />';
+               objHtml = objHtml + '<td  style="padding-right:10px">' + revenuehtml + '<input type="hidden" class="JAcAmt" id="txtrevenueid_' + i + '" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
+               var revenueamthtml = '<input type="text" class="form-control text-right" id="txtrevenueamt_' + i + '" value="' + amount + '" name="DetailVM[' + i + '].Amount" />';
+               objHtml = objHtml + '<td class=textright style="padding-right:10px">' + revenueamthtml + '<input type="hidden" class="JAcAmt" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
+                //objHtml = objHtml + '<td class style="padding-right:10px">' + amount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
+                objHtml = objHtml + '<td class style="padding-right:10px">' + famount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
+                objHtml = objHtml + '<td style="padding-left:10px">' + invoicedto + '<input type="hidden" value=' + customerid + ' name="DetailVM[' + i + '].SupplierId"></td>'
+                var DebitHeadhtml = '<span id="spandebithead_' + i + '">' + DebitHead + '</span>';
+                objHtml = objHtml + '<td style="padding-left:10px">' + DebitHeadhtml + '<input type="hidden" id="txtdebitid_' + i + '"  value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
+                //objHtml = objHtml + '<td style="padding-left:10px">' + DebitHead + '<input type="hidden" value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
+                objHtml = objHtml + '<td style="padding-left:10px">' + CreditHead + '<input type="hidden" value="' + CreditHeadId + '" name="DetailVM[' + i + '].AcHeadCreditId"></td>';
+                var ConsignmentHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Add Consignments" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-eye" ></i></a></td> ';
+                objHtml = objHtml + ConsignmentHTML;
+                objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
+                objHtml = objHtml + '</tr>';
+
+                $("#details").append(objHtml);
+                $('#RowCount').val("0");
+                //$('#PaymentType').val('');
+                //$('#CurrencyId').val('');
+                //$('#CurrencyId').val(0);
+                //$('#ExchangeRate').val(1);
+                $('#txtRevenueCost').val('');
+                $('#txtRevenueCostId').val(0);
+                $('#txtAmount').val(0);
+                //$('#txtSupplier').val('');
+                //$('#txtSupplierId').val(0);
+                $('#txtDebitHead').val('');
+                $('#txtDebitHeadId').val(0);
+                //$('#txtCreditHead').val('');
+                //$('#txtCreditHeadId').val(0);
+                $('#txtRevenueCost').focus();
+
+                setNumberDecimal($('#txtrevenueamt_' + i));
+
+                $('#txtrevenueamt_' + i).change(function () {
+                    debugger;
+                    if (isNaN(parseInt($(this).val()))) {
+                        $(this).val('0.000');
+                    } else {
+                        var amt = parseFloat($(this).val());
+                        $(this).val(amt.toFixed(3));
+                        $(this).attr('value',amt.toFixed(3));
+                    }
+                    var idindex = $(this).attr('id').split('_')[1];
+                    var exrate = $('#txtex_' + idindex).val();
+                    var famount = parseFloat($(this).val()) * parseFloat(exrate);
+                   $('#txtfrevenueamt_' + idindex).val(parseFloat(famount).toFixed(@_decimal));
+                    $('#spanfamt_' + idindex).html(parseFloat(famount).toFixed(@_decimal));
+                    checkdetailcount();
+                });
+
+                checkdetailcount();
+                $("#txtrevenue_" + i).autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '/CostUpdate/CostComponent',
+                            datatype: "json",
+                            data: {
+                                term: request.term
+                            },
+                            success: function (data) {
+                                response($.map(data, function (val, item) {
+                                    return {
+                                        label: val.RevenueComponent,
+                                        value: val.RevenueComponent,
+                                        ID: val.RCID,
+                                        RevenueAcHeadID: val.RevenueAcHeadID,
+                                        RevenueAcHeadName: val.RevenueHeadName,
+                                        Amount: val.RevenueRate
+                                    }
+                                }))
+                            }
+                        })
+                    },
+                    minLength: 1,
+                    autoFocus: false,
+                    focus: function (e, i) {
+                        var index = $(this).attr('id').split('_')[1];
+                        $(this).val(i.item.label);
+                        $(this).attr('value', i.item.label);
+                        $('#txtrevenueid_' + index).val(i.item.ID);
+                        $("#spandebithead_" + index).html(i.item.RevenueAcHeadName);
+                        $("#txtdebitid_" + index).val(i.item.RevenueAcHeadID);
+                        $('#txtrevenueamt_' + index).val(i.item.Amount);
+                    },
+                    select: function (e, i) {
+                        e.preventDefault();
+
+                        var index = $(this).attr('id').split('_')[1];
+                        $(this).val(i.item.label);
+                        $(this).attr('value',i.item.label);
+                        $('#txtrevenueid_' + index).val(i.item.ID);
+                        $("#spandebithead_" + index).html(i.item.RevenueAcHeadName);
+                        $("#txtdebitid_" + index).val(i.item.RevenueAcHeadID);
+                        $('#txtrevenueamt_' + index).val(i.item.Amount);
+                    },
+
+                });
+    }
+    function checkduplicateCost(costid) {
+
+        var idtext = 'txtrevenueid_';
+        var maxrow = $("#details >tr").length;
+        $('#hdnItemCount').val(maxrow);
+        if (maxrow > 0) {
+            var duplicate = false;
+            $('[id^=' + idtext + ']').each(function (index, item) {
+                var con = $(item).val();
+                if (con.trim() == costid.trim()) {                    
+                    $('#spanerr').html('Duplicate Cost Item not allowed!');
+                    duplicate = true;
+                    return false;
+                }
+
+                if (duplicate == false && index == (parseInt(maxrow - 1))) {
+                    addcostitem();
+                    return;
+                }
+            });
+        }
+        else {
+            addcostitem();
+            return;
+        }
+    }
     $(document).ready(function () {
         AWBItems = [];
 
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
 
+        if ($('#CurrencyId').val() == "" || $('#CurrencyId').val() == "0") {
+            $('#CurrencyId').val($('#DefaultCurrencyID').val());
+            $('#ExchangeRate').val(1);
+            $('#CurrencyId').trigger('change');
+        }
+        $("#TDNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/CostUpdate/GetTrips',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    //open: function () {
+                    //    autoComplete.zIndex(dlg.zIndex() + 1);
+                    //}
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.ReceiptNo,
+                                value: val.ReceiptNo,
+                                ID: val.TruckDetailID
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 0,
+            focus: function (e, i) {
+                $("#TDNo").val(i.item.label);
+                $("#TruckDetailID").val(i.item.ID);
+                $("#TruckDetailID").attr('label', i.item.label);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#TDNo").val(i.item.label);
+                $("#TruckDetailID").val(i.item.ID);
+                $("#TruckDetailID").attr('label', i.item.label);
+            }
+        });
 
-
-        $('#EntryDate').datetimepicker({ format: 'DD-MM-YYYY HH:mm' });
+        $('#EntryDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
         $("#txtDebitHead").autocomplete({
             source: function (request, response) {
@@ -140,7 +456,7 @@
             },
             minLength: 1,
             autoFocus: false,
-            focus: function (e, i) {              
+            focus: function (e, i) {
                 $("#txtDebitHead").val(i.item.label);
                 $('#txtDebitHeadId').val(i.item.AcHeadID);
             },
@@ -174,7 +490,7 @@
             },
             minLength: 1,
             autoFocus: false,
-            focus: function (e, i) {                
+            focus: function (e, i) {
                 $("#txtCreditHead").val(i.item.label);
                 $('#txtCreditHeadId').val(i.item.AcHeadID);
             },
@@ -212,15 +528,15 @@
             focus: function (event, i) {
                 $("#txtRevenueCost").val(i.item.label);
                 $("#txtRevenueCostId").val(i.item.ID);
-                $("#txtCreditHeadId").val(i.item.RevenueAcHeadID);
-                $("#txtCreditHead").val(i.item.RevenueAcHeadName);                
+                $("#txtDebitHeadId").val(i.item.RevenueAcHeadID);
+                $("#txtDebitHead").val(i.item.RevenueAcHeadName);
             },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtRevenueCost").val(i.item.label);
                 $("#txtRevenueCostId").val(i.item.ID);
-                $("#txtCreditHeadId").val(i.item.RevenueAcHeadID);
-                $("#txtCreditHead").val(i.item.RevenueAcHeadName);                
+                $("#txtDebitHeadId").val(i.item.RevenueAcHeadID);
+                $("#txtDebitHead").val(i.item.RevenueAcHeadName);
             },
 
         });
@@ -238,7 +554,9 @@
                             return {
                                 label: val.SupplierName,
                                 value: val.SupplierName,
-                                SupplierID: val.SupplierID
+                                SupplierID: val.SupplierID,
+                                AcHeadID: val.AcHeadID,
+                                SupplierInfo: val.SupplierInfo
 
                             }
                         }))
@@ -247,16 +565,19 @@
             },
             minLength: 1,
             autoFocus: false,
-            focus: function (e, i) {                
+            focus: function (e, i) {
                 $("#txtSupplier").val(i.item.label);
                 $('#txtSupplierId').val(i.item.SupplierID);
+                $("#txtCreditHeadId").val(i.item.AcHeadID);
+                $('#txtCreditHead').val(i.item.SupplierInfo);
 
             },
             select: function (e, i) {
                 e.preventDefault();
                 $("#txtSupplier").val(i.item.label);
                 $('#txtSupplierId').val(i.item.SupplierID);
-
+                $("#txtCreditHeadId").val(i.item.AcHeadID);
+                $('#txtCreditHead').val(i.item.SupplierInfo);
             },
 
         });
@@ -290,31 +611,6 @@
             });
         });
 
-        //$("#InScanSheetNo").change(function () {
-        
-
-        //$('#PaymentType').change(function () {
-        //    debugger;
-        //    if ($('#PaymentType').val() == "Pickup Cash") {
-                
-        //        $('#txtCustomer').val('');
-        //        $('#txtCustomerId').val('');
-        //        $('#txtCustomer').attr('readonly', 'readonly');
-        //    }
-        //    else if ($('#PaymentType').val() == "Shipper") {
-        //        $('#txtCustomer').val($('#ConsignorName').val());
-        //        $('#txtCustomerId').val($('#ConsignorId').val());
-        //        $('#txtCustomer').attr('readonly', 'readonly');
-        //    }
-        //    else if ($('#PaymentType').val() == "Consignee") {
-        //        $('#txtCustomer').val($('#ConsigneeName').val());
-        //        $('#txtCustomerId').val($('#ConsigneeId').val());
-        //        $('#txtCustomer').attr('readonly', 'readonly');
-
-        //    }
-
-        //});
-
         $('#CurrencyId').change(function () {
             $.ajax({
                 url: '/CostUpdate/GetCurrencyExRate',
@@ -328,22 +624,7 @@
 
         });
 
-        //$('#InScanID').change(function () {
-        //    $.ajax({
-        //        url: '/CostUpdate/GetConsignmentDetail',
-        //        datatype: "json",
-        //        data: { id: $('#InScanID').val() },
-        //        success: function (response) {
-        //            debugger;
-        //            $('#ConsignorId').val(response.ConsignorId);
-        //            $('#ConsignorName').val(response.ConsignorName);
-        //            $('#ConsigneeId').val(response.ConsigneeId);
-        //            $('#ConsigneeName').val(response.ConsigneeName);
-        //        }
-        //    });
 
-        //})
-        
         $('#details').on("click", "#DeleteNewRow", function () {
             debugger;
             //$(this).parent().parent().remove();
@@ -354,23 +635,26 @@
         $("#btnAdd").click(function () {
             var errormessage = "";
             $('#spanerr').html();
-           
-           if ($('#CurrencyId').val() == "" || $('#CurrencyId').val()=="0") {
-              $('#spanerr').html("Please Select Currency!");
-                $("#txtAmount").focus();
-                return false;
+
+            if ($('#CurrencyId').val() == "" || $('#CurrencyId').val() == "0") {
+                $('#CurrencyId').val($('#DefaultCurrencyID').val());
+                $('#ExchangeRate').val(1);
             }
-            else if ($('#txtSupplier').val() == "" || $('#txtSupplierId').val() == "0" || $('#txtSupplierId').val() == "")
+            if ($('#ExchangeRate').val() == "" || $('#ExchangeRate').val() == 0) {
+                $('#ExchangeRate').val(1);
+            }
+
+            if ($('#txtSupplier').val() == "" || $('#txtSupplierId').val() == "0" || $('#txtSupplierId').val() == "")
             {
                 $('#spanerr').html("Select Supplier!");
                 $("#txtSupplier").focus();
                 return false;
-            }         
+            }
             else if ($('#txtRevenueCost').val() == "" || $('#txtRevenueCostId').val() == "0") {
                 $('#spanerr').html("Select Revenue Cost!");
                 $("#txtRevenueCost").focus();
                 return false;
-            }     
+            }
             else if ($("#txtAmount").val() == "") {
                 $('#spanerr').html("Please Enter The Amount");
                 $("#txtAmount").focus();
@@ -385,62 +669,15 @@
                 $('#spanerr').html("Select Debit Head!");
                 $('#txtDebitHead').focus();
                 return false;
-            }     
+            }
             else if ($('#txtCreditHead').val() == "" || $('#txtCreditHeadId').val() == "0") {
                 $('#spanerr').html("Select Credit Head!");
                 $('#txtCreditHead').focus();
                 return false;
-            }      
-            
-            else {
-                $('#spanerr').html("");
-                var str = "";
-                var totalamt = 0;
-                var i = $('#details > tbody > tr').length - 1;
-                
-                var currencyid = $('#CurrencyId').val();
-                var currencyname = $("#CurrencyId option:selected").text();
-                var exchangerate = $('#ExchangeRate').val();
-                var revenuecost = $('#txtRevenueCost').val();
-                var revenuecostid = $('#txtRevenueCostId').val();
-                var amount = $('#txtAmount').val();
-                var famount =parseFloat(amount * exchangerate).toFixed(2);
-                var invoicedto = $('#txtSupplier').val();
-                var customerid = $('#txtSupplierId').val();
-                var DebitHead = $('#txtDebitHead').val();
-                var DebitHeadId = $('#txtDebitHeadId').val();
-                var CreditHead = $('#txtCreditHead').val();
-                var CreditHeadId = $('#txtCreditHeadId').val();
-                var DetailID = 0;
+            }
 
-                var objHtml = '<tr>' + '<td style="padding-left:10px"><input type="hidden" name ="DetailVM[' + i + '].ID" value="' + DetailID + '" /><input type="hidden" name="DetailVM[' + i + '].IsDeleted" class="hdndeleted" /> ';
-                objHtml = objHtml +  currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
-                objHtml = objHtml + '<td class="textright" style="padding-right:10px">' + exchangerate + '<input type="hidden" class="JAcAmt" value=' + exchangerate + ' name="DetailVM[' + i + '].ExchangeRate"></td>';
-                objHtml = objHtml + '<td class=textright style="padding-right:10px">' + revenuecost + '<input type="hidden" class="JAcAmt" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
-                objHtml = objHtml + '<td class style="padding-right:10px">' + amount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
-                objHtml = objHtml + '<td class style="padding-right:10px">' + famount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
-                objHtml = objHtml + '<td style="padding-left:10px">' + invoicedto + '<input type="hidden" value=' + customerid + ' name="DetailVM[' + i + '].SupplierId"></td>'
-                objHtml = objHtml + '<td style="padding-left:10px">' + DebitHead + '<input type="hidden" value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
-                objHtml = objHtml + '<td style="padding-left:10px">' + CreditHead + '<input type="hidden" value="' + CreditHeadId + '" name="DetailVM[' + i + '].AcHeadCreditId"></td>';
-              //  objHtml = objHtml + '<td><img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" class="open" />' + ExpTableHtml + '</td>';
-                objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
-                objHtml = objHtml + '</tr>';
-                console.log(objHtml);
-                $("#details").append(objHtml);
-                $('#RowCount').val("0");
-                $('#PaymentType').val('');
-                $('#CurrencyId').val('');
-                $('#CurrencyId').val(0);
-                $('#ExchangeRate').val(1);
-                $('#txtRevenueCost').val('');
-                $('#txtRevenueCostId').val(0);
-                $('#Amount').val(0);
-                $('#Customer').val('');
-                $('#txtSupplierId').val(0);
-                $('#txtDebitHead').val('');
-                $('#txtDebitHeadId').val(0);
-                $('#txtCreditHead').val('');
-                $('#txtCreditHeadId').val(0);
+            else {
+                checkduplicateCost($('#txtRevenueCostId').val());
             }
             return false;
         });
@@ -448,25 +685,433 @@
         //    DisplayCostItems();
         //}
         $('#btnsave').click(function () {
-            
+
             var lst1 = [];
             var SelectedInScanId = '';
             var RemovedAWB = '';
-           
 
-       
+
+
 
         });
-     if ('@ViewBag.EditMode' == "true") {
-         DisplayCostItems();
-        }        
+        if ('@ViewBag.EditMode' == "true") {
+            DisplayCostItems();
+            $('#btnsearch').attr('disabled', 'disabled');
+            $('#EntryDate').attr('readonly', 'readonly');
+            $('#TDNo').attr('readonly', 'readonly');
+        }
+        else {
 
-        $("#EntryDate").focus();
+            $("#EntryDate").focus();
+        }
+
+
     });
 
 </script>
 
+<script type="text/javascript">
 
+    
+
+    function checkduplicate(consignment) {
+
+        var idtext = 'txtinscan_';
+        var maxrow = $('#consignmentdetailsbody > tr').length;
+        $('#hdnItemCount').val(maxrow);
+        if (maxrow > 0) {
+            var duplicate = false;
+            $('[id^=' + idtext + ']').each(function (index, item) {
+                var con = $('#txtcons_' + index).val();
+                if (con.trim() == consignment.trim()) {
+                    $('#elemError').html('Duplicate Consignment No.!');
+                    duplicate = true;
+                }
+
+                if (duplicate == false && index == (parseInt(maxrow - 1))) {
+                    addconsigmentitem();
+                    return;
+                }
+            });
+        }
+        else {
+            addconsigmentitem();
+            return;
+        }
+    }
+
+    function autoallocation() {
+
+        var acheadid = $('#hdnEditAcHeadId').val();
+        var idtext = 'atxt_' + acheadid + '_' ;
+        var maxrow = $('#consignmentdetailsbody > tr').length;
+        var totalamount = $("#hdnEditAmount").val();
+        var amountperitem = parseFloat(totalamount) / maxrow;
+        $('#hdnItemCount').val(maxrow);
+        if (maxrow > 0) {
+            var duplicate = false;
+            $('[id^=' + idtext + ']').each(function (index, item) {
+                $(item).val(parseFloat(amountperitem).toFixed(@_decimal));
+            });
+        }
+
+
+    }
+    function addconsigmentitem() {
+        var acheadid = $('#hdnEditAcHeadId').val();
+        var consignmento = $('#txtConsignmentNo').val();
+        var amount = parseFloat($('#hdnEditAmount').val());
+        var InscanId = $("#txtInScanID").val();
+        var i = $('#consignmentdetailsbody > tr').length;
+        if (i == -1)
+            i = 0;
+        var objHtml = '<tr>' + '<td style="padding-left:10px">' + consignmento + '<input type="hidden" class="hdndeleted" /><input type="hidden" id="txtcons_' + i + '" value="' + consignmento + '" /> <input type="hidden" id="txtinscan_' + i + '" value="' + InscanId + '" /></td>';
+        objHtml = objHtml + '<td style="padding-left:10px;"><input detailid="0" type="text" class="form-control text-right" id="atxt_' + acheadid + '_' + + i + '" value="0.000" /></td>';
+        objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteConsignRow"><i class="fa fa-times"></i></a></td>';
+        objHtml = objHtml + '</tr>';
+        $("#consignmentdetailsbody").append(objHtml);
+        $('#elemError').html('');
+        $("#txtConsignmentNo").val('');
+        $("#txtConsignmentNo").focus();
+    }
+    function EditConsignmentPopup(index) {
+        $("#hdnEditAcHeadId").val($('#txtrevenueid_' + index).val());
+        $('#hdnEditRowIndex').val(index);
+        $('#txtTruckDetail').val($('#TDNo').val());
+        
+        var amount = $("#txtrevenueamt_" + index).val();
+        $("#hdnEditAmount").val(amount);
+        $('#elemError').html('');
+
+        var acheadname = 'Cost : ' + $('#txtrevenue_' + index).val();
+        var acheadid = $("#hdnEditAcHeadId").val();
+        $('#hAcHead').html(acheadname);
+        $('#hTotal').html(parseFloat(amount).toFixed(@_decimal));
+        $('#txtTruckDetailID').val($('#TruckDetailID').val());
+        $("#consignmentdetailsbody").html('');
+        $.ajax({
+                type:'GET',
+                url: '/CostUpdate/GetAWBAllocation',
+                datatype: "json",
+                data: {
+                    Id: acheadid, tripno: $('#TruckDetailID').val(), amount: amount
+                },
+                success: function (data) {
+
+                    $('#hdnItemCount').val(data.length);
+                    $.each(data, function (val, item) {
+
+                        var obj = {
+                            label: item.ConsignmentNo,
+                            value: item.ConsignmentNo,
+                            ID: item.InScanID,
+                            Amount: item.Amount,
+                            ID: item.ID
+                        }
+                        var i = $('#consignmentdetailsbody > tr').length;
+                        if (i == -1)
+                            i = 0;
+                        var objHtml = '<tr>' + '<td style="padding-left:10px">' + item.ConsignmentNo + '<input type="hidden" class="hdndeleted" /><input type="hidden" id="txtcons_' + i + '" value="' + item.ConsignmentNo + '" /> <input type="hidden" id="txtinscan_' + i + '" value="' + item.InScanID + '" /></td>';
+                        objHtml = objHtml + '<td style="padding-left:10px;"><input detailid="0" type="text" class="form-control text-right" id="atxt_' + acheadid + '_' + + i + '" value="' + parseFloat(obj.Amount).toFixed(@_decimal) + '" /></td>';
+                        objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteConsignRow"><i class="fa fa-times"></i></a></td>';
+                        objHtml = objHtml + '</tr>';
+                        $("#consignmentdetailsbody").append(objHtml);
+
+                    });
+
+                    //$('#txtTruckDetailID').val(0);
+                    //$('#txtTruckDetail').val('');
+                    $('#txtConsignmentNo').val('');
+                    $("#txtInScanID").val('0');
+                    $('#consignmentpopup').modal('show');
+                }
+            });
+            //var consignments = $('#editremark_' + index).val().split(',');
+            //var inscans = $('#editinscans_' + index).val().split(',');
+            //var i = 0;
+            //$("#consignmentdetailsbody").html('');
+            //for (i = 0; i < consignments.length; i++) {
+            //    var consignmento = consignments[i];
+            //    var InscanId = inscans[i];
+            //    var objHtml = '<tr>' + '<td style="padding-left:10px">' + consignmento + '<input type="hidden" class="hdndeleted" /><input type="hidden" id="txtcons_' + i + '" value="' + consignmento + '" /> <input type="hidden" id="txtinscan_' + i + '" value="' + InscanId + '" /></td>';
+            //    objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteConsignRow"><i class="fa fa-times"></i></a></td>';
+            //    objHtml = objHtml + '</tr>';
+            //    $("#consignmentdetailsbody").append(objHtml);
+            //}
+
+
+    }
+    function ShowConsignmentPopup(index) {
+        debugger;
+        var TDNo = $('#TDNo').val();
+        var acheadid = $('#txtRevenueCostId').val();
+        $('#hdnEditAcHeadId').val(acheadid);
+        var acheadname = 'AcHead : ' + $('#txtRevenueCost').val();
+        $('#hAcHead').html(acheadname);
+        $('#hdnEditRowIndex').val(-1);
+        $('#txtTruckDetail').val($('#TDNo').val());
+        var amount = $("#txtAmount").val();
+        $("#hdnEditAmount").val(amount);
+        $('#hTotal').html(parseFloat(amount).toFixed(@_decimal));
+        $('#txtTruckDetailID').val($('#TruckDetailID').val());
+        $("#consignmentdetailsbody").html('');
+      //  $('#consignmentpopup').modal('show');
+        $.ajax({
+            url: '/CostUpdate/GetAWBAllocation',
+            datatype: "json",
+            data: {
+                Id: $('#hdnEditAcHeadId').val(), tripno: $('#TruckDetailID').val(), amount: amount
+            },
+            success: function (data) {
+
+                $('#hdnItemCount').val(data.length);
+                $.each(data, function (val, item) {
+
+                    var obj = {
+                        label: item.ConsignmentNo,
+                        value: item.ConsignmentNo,
+                        ID: item.InScanID,
+                        Amount:item.Amount,
+                    }
+                    var i = $('#consignmentdetailsbody > tr').length;
+                    if (i == -1)
+                        i = 0;
+                    var objHtml = '<tr>' + '<td style="padding-left:10px">' + item.ConsignmentNo + '<input type="hidden" class="hdndeleted" /><input type="hidden" id="txtcons_' + i + '" value="' + item.ConsignmentNo + '" /> <input type="hidden" id="txtinscan_' + i + '" value="' + item.InScanID + '" /></td>';
+                    objHtml = objHtml + '<td style="padding-left:10px;"><input detailid="0" type="text" class="form-control text-right" id="atxt_' + acheadid + '_' + + i + '" value="' + parseFloat(obj.Amount).toFixed(@_decimal)   + '" /></td>';
+                    objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteConsignRow"><i class="fa fa-times"></i></a></td>';
+                    objHtml = objHtml + '</tr>';
+                    $("#consignmentdetailsbody").append(objHtml);
+
+                });
+
+                //$('#txtTruckDetailID').val(0);
+                //$('#txtTruckDetail').val('');
+                $('#txtConsignmentNo').val('');
+                $("#txtInScanID").val('0');
+                $('#consignmentpopup').modal('show');
+            }
+        });
+        //if ($('#remark1').val() != '') {
+
+        //    var consignments = $('#remark1').val().split(',');
+        //    var inscans = $('#remark1').attr('inscans').split(',');
+        //    var i = 0;
+        //    $("#consignmentdetailsbody").html('');
+        //    for (i = 0; i < consignments.length; i++) {
+        //        var consignmento = consignments[i];
+        //        var InscanId = inscans[i];
+        //        var objHtml = '<tr>' + '<td style="padding-left:10px">' + consignmento + '<input type="hidden" class="hdndeleted" /><input type="hidden" id="txtcons_' + i + '" value="' + consignmento + '" /> <input type="hidden" id="txtinscan_' + i + '" value="' + InscanId + '" /></td>';
+        //        objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteConsignRow"><i class="fa fa-times"></i></a></td>';
+        //        objHtml = objHtml + '</tr>';
+        //        $("#consignmentdetailsbody").append(objHtml);
+        //    }
+        //    $('#txtTruckDetailID').val(0);
+        //    $('#txtTruckDetail').val('');
+        //    $('#txtConsignmentNo').val('');
+        //    $("#txtInScanID").val('0');
+        //    $("#consignmentdetailsbody").html('')
+        //}
+        //else {
+        //    $('#txtTruckDetailID').val(0);
+        //    $('#txtTruckDetail').val('');
+        //    $('#txtConsignmentNo').val('');
+        //    $("#txtInScanID").val('0');
+        //    $("#consignmentdetailsbody").html('')
+        //}
+        //$('#consignmentpopup').modal('show');
+    }
+
+    $(document).ready(function () {
+        //$("#txtTruckDetail").autocomplete({
+        //    source: function (request, response) {
+        //        $.ajax({
+        //            url: '/Accounts/GetTrips',
+        //            datatype: "json",
+        //            data: {
+        //                term: request.term
+        //            },
+        //            //open: function () {
+        //            //    autoComplete.zIndex(dlg.zIndex() + 1);
+        //            //}
+        //            success: function (data) {
+        //                response($.map(data, function (val, item) {
+        //                    return {
+        //                        label: val.ReceiptNo,
+        //                        value: val.ReceiptNo,
+        //                        ID: val.TruckDetailID
+        //                    }
+        //                }))
+        //            }
+        //        })
+        //    }, minLength: 0,
+        //    focus: function (e, i) {
+        //        $("#txtTruckDetail").val(i.item.label);
+        //        $("#txtTruckDetailID").val(i.item.ID);
+        //        $("#txtTruckDetailID").attr('label', i.item.label);
+        //    },
+        //    select: function (e, i) {
+        //        e.preventDefault();
+        //        $("#txtTruckDetail").val(i.item.label);
+        //        $("#txtTruckDetailID").val(i.item.ID);
+        //        $("#txtTruckDetailID").attr('label', i.item.label);
+        //    }
+        //});
+
+        $("#txtConsignmentNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/CostUpdate/GetConsignment',
+                    datatype: "json",
+                    data: {
+                        term: request.term, tripno: $('#txtTruckDetailID').val()
+                    },
+                    //open: function () {
+                    //    autoComplete.zIndex(dlg.zIndex() + 1);
+                    //}
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.ConsignmentNo,
+                                value: val.ConsignmentNo,
+                                ID: val.InScanID
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 0,
+            focus: function (e, i) {
+                $("#txtConsignmentNo").val(i.item.label);
+                $("#txtInScanID").val(i.item.ID);
+                $("#txtInScanID").attr('label', i.item.label);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#txtConsignmentNo").val(i.item.label);
+                $("#txtInScanID").val(i.item.ID);
+                $("#txtInScanID").attr('label', i.item.label);
+            }
+        });
+        $("#txtConsignmentNo").change(function () {
+
+            if ($('#txtConsignmentNo').val() != "" && $('#txtConsignmentNo').val() != $('#txtInScanID').attr('label')) {
+                $('#txtConsignmentNo').val('');
+                $("#txtInScanID").val(0);
+            }
+        });
+
+        $("#txtTruckDetail").change(function () {
+            if ($("#txtTruckDetail").val() == "") {
+                $('#txtTruckDetail').val('');
+                $("#txtTruckDetailID").val(0);
+            }
+            if ($("#txtTruckDetail").val() != "" && $("#txtTruckDetail").val() != $('#txtTruckDetailID').attr('label')) {
+                $('#txtTruckDetail').val('');
+                $("#txtTruckDetailID").val(0);
+            }
+        });
+
+        $('#btnaddConsignment').click(function () {
+
+            var consignmento = $('#txtConsignmentNo').val();
+            var InscanId = $("#txtInScanID").val();
+            if (consignmento == '' || InscanId == 0) {
+                $('#elemError').html('Select Consignment No.');
+                return;
+            }
+            else {
+
+                checkduplicate(consignmento);
+            }
+        });
+
+        $('#consignmentdetailsbody').on("click", "#DeleteConsignRow", function () {
+
+            $(this).parent().parent().remove();
+            //$(this).parent().parent().addClass('hide');
+            //var obj = $(this).parent().parent().find('.hdndeleted');
+            //$(obj).val(true);
+        });
+        $('#btnaddall').click(function () {
+            var acheadid = $('#hdnEditAcHeadId').val();
+            $.ajax({
+                url: '/Accounts/GetConsignment',
+                datatype: "json",
+                data: {
+                    term: '', tripno: $('#txtTruckDetailID').val()
+                },
+                //open: function () {
+                //    autoComplete.zIndex(dlg.zIndex() + 1);
+                //}
+                success: function (data) {
+                    $('#consignmentdetailsbody').html('');
+                    $('#hdnItemCount').val(data.length);
+                    $.each(data, function (val, item) {
+
+                        var obj = {
+                            label: item.ConsignmentNo,
+                            value: item.ConsignmentNo,
+                            ID: item.InScanID
+                        }
+                        var i = $('#consignmentdetailsbody > tr').length;
+                        if (i == -1)
+                            i = 0;
+                        var objHtml = '<tr>' + '<td style="padding-left:10px">' + item.ConsignmentNo + '<input type="hidden" class="hdndeleted" /><input type="hidden" id="txtcons_' + i + '" value="' + item.ConsignmentNo + '" /> <input type="hidden" id="txtinscan_' + i + '" value="' + item.InScanID + '" /></td>';
+                        objHtml = objHtml + '<td style="padding-left:10px;"><input detailid="0" type="text" class="form-control text-right" id="atxt_' + acheadid + '_' + + i + '" value="0.000" /></td>';
+                        objHtml = objHtml + '<td><a href="javascript:void(0)" id="DeleteConsignRow"><i class="fa fa-times"></i></a></td>';
+                        objHtml = objHtml + '</tr>';
+                        $("#consignmentdetailsbody").append(objHtml);
+
+                    });
+                }
+            })
+        });
+            $('#ConsignmentSave').on("click", function () {
+
+                var acheadid = $("#hdnEditAcHeadId").val();
+            var allocatedamount = parseFloat($('#hdnEditAmount').val()).toFixed(@_decimal);
+            var amt = 0;
+            var obj = [];
+            var idtext = 'atxt_' + acheadid;
+                //var maxrow = parseFloat($('#hdnItemCount').val());
+                var maxrow = $('#consignmentdetailsbody > tr').length;
+
+                $('[id^=' + idtext + ']').each(function (index, item) {
+                var inscanid = $('#txtinscan_' + index).val();
+                var consno= $('#txtcons_' + index).val();
+                var detailid = $(item).attr('detailid');
+                if ($(item).val() == "") {
+                    $(item).val(0);
+                }
+                amt = amt + parseFloat($(item).val());
+                    var item1 = { RevenueCostMasterID: acheadid, InScanID: inscanid, ConsignmentNo: consno, Amount: $(item).val() }
+                obj.push(item1);
+                if (maxrow == obj.length) {
+                    if (parseFloat(amt).toFixed(@_decimal) != allocatedamount) {
+                        alert('Allocate Amount should be equal to allocation of AWB!')
+                        return false;
+                    }
+                    else {
+                        var RecP = JSON.stringify({ 'list': obj });
+                        $.ajax({
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            type: 'POST',
+                            url: '/CostUpdate/SaveAWBAllocation/',
+                            data: RecP,
+                            success: function (data) {
+                                $('#consignmentpopup').modal('hide');
+                            }
+                        });
+                    }
+                }
+            });
+
+
+
+        });
+    });
+
+</script>
 
 <section class="content-header">
     <h1 class="headingfont">@ViewBag.Title</h1>
@@ -485,19 +1130,13 @@
     @using (Html.BeginForm())
     {
         @Html.ValidationSummary(true)
-    <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
+        <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
         <fieldset>
-            
+
             <div class="row no-margin">
                 <div class="col-md-3">
-                    @Html.HiddenFor(model => model.ID, new { })
-                    @Html.HiddenFor(model => model.ConsignorId, new { })
-                    @Html.HiddenFor(model => model.ConsignorName, new { })
-                    @Html.HiddenFor(model => model.ConsigneeId, new { })
-                    @Html.HiddenFor(model => model.ConsigneeName, new { })
-                    @Html.HiddenFor(model => model.PickupCashHeadId, new { })
-
-                    @*@Html.HiddenFor(model => model.InScanID, new { })*@
+                    @Html.HiddenFor(model => model.ID, new { })                  
+                    @Html.HiddenFor(model => model.CurrencyId, new { @id = "DefaultCurrencyID" })                    
                     <label class="headinglabel required">Transaction Date</label>
                     @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.EntryDate)
@@ -508,20 +1147,20 @@
                 </div>
                 <div class="col-md-3">
                     <label class="headinglabel required">Truck Details Number</label>
-                    @Html.DropDownListFor(model => model.TruckDetailID, new SelectList(@ViewBag.Trips, "TruckDetailID", "ReceiptNo"), "Select", new { @class = "form-control" })
-                    @*@Html.TextBoxFor(model => model.ConsignmentNo, new { @class = "form-control" })*@
+                    @Html.TextBoxFor(model => model.TDNo, new { @class = "form-control" })
+                    @Html.HiddenFor(model => model.TruckDetailID)
+
                 </div>
                 <div class="col-md-1">
                     <button class="btn btn-primary" type="button" id="btnsearch" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                 </div>
-                 <div class="col-md-5 btn-right">
-                            <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
+                <div class="col-md-5 btn-right">
+                    <input type="submit" value="Save" class="btn btn-primary btnwidth" data-toggle="tooltip" title="Click here" id="btnsave" />
 
-                            <a href='@Url.Action("Index", "CostUpdate")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
+                    <a href='@Url.Action("Index", "CostUpdate")' class="btn btn-danger btnwidth" data-toggle="tooltip" data-placement="right" title="Click here" style="margin-left:5px;">Cancel</a>
 
-                        </div>
+                </div>
             </div>
-
             <div class="col-md-12 sub_title_block">
                 <h4 style="color:#0094ff">Add Cost Details</h4>
                 <hr style="margin-bottom:0px" />
@@ -529,76 +1168,173 @@
             <div class="row no-margin">
                 <div class="col-md-12">
                     <span id="spanerr" style="color:red"></span>
-                    </div>
                 </div>
-                <div class="row no-margin">                   
-                    <div class="col-md-3">
+            </div>
+            <div class="row no-margin">
+                <div class="col-md-8">
+                    <div class="col-md-5 hide">
+                        <label class="headinglabel required">Remarks</label>
+                        @*@Html.TextBoxFor(model => model.Remarks, new { @class = "form-control" })*@
+                    </div>
+                    <div class="col-md-2">
                         <label class="headinglabel required">Currency</label>
-                        @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyName", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
+                        @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyCode", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
                         @Html.HiddenFor(model => model.ExchangeRate)
                     </div>
-                     <div class="col-md-3">
-                        <label class="headinglabel required">Payable Account</label>
-                        <input type="text" class="form-control"/>
-                    </div>
-                      <div class="col-md-3">
-                        <label class="headinglabel required">Cost Account</label>
-                        <input type="text" class="form-control"/>
-                    </div>
-                </div>
-
-                    <div class="row">
-                    
                     <div class="col-md-4">
                         <label class="headinglabel">Supplier</label>
                         <input type="text" id="txtSupplier" class="form-control" autocomplete="off" />
                         <input type="hidden" id="txtSupplierId" class="form-control" autocomplete="off" />
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-5">
                         <label class="headinglabel label1">Cost Head</label>
                         <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
                         <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <label class="headinglabel">Amount</label>
-                        <input type="text" id="txtAmount" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" class="form-control text-right" autocomplete="off" />
+                        <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
                     </div>
-                     <div class="col-md-3">
-                        <label class="headinglabel label1">Consignment Note</label>
-                        <input type="text" class="form-control"  />
-                    </div>
-
-                    <div class="col-md-2 hidden">
-                        <label class="headinglabel">Debit Account</label>
-                        <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
-                        <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
-                    </div>
-                    <div class="col-md-2 hidden">
-                        <label class="headinglabel">Credit Account</label>
-                        <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
-                        <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
-                    </div>
-                    <div class="col-md-1 text-right" style="padding-top:30px">
-                        <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data" onclick="ClearData()">-</button>&nbsp;&nbsp;
+                    <div class="col-md-1" style="padding-top:30px">
                         <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
                     </div>
+                    <div class="col-md-1">
+                        <button type="button" style="height: 35px !important; background: #07a7e3;color: #fff;border: 0; line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Add Consignments" onclick="ShowConsignmentPopup(-1)">...</button>
+                    </div>
+
+
                 </div>
-                <br />
-                <div class="row no-margin" style="padding-top:10px">
-                    <table class="table table-bordered table-responsive" id="details">
-                        <tr>                            
-                            <td style="width:5%">Currency</td>
-                            <td style="width:5%">Ex.Rate</td>
-                            <td style="width:15%">Revenue</td>
-                            <td style="width:5%">Amount</td>
-                            <td style="width:5%">Amount(F.C)</td>
-                            <td style="width:15%">Invoiced To</td>
-                            <td style="width:15%">Debit Chart of Account</td>
-                            <td style="width:15%">Credit Chart of Account</td>
+                <div class="col-md-4" style="margin-top:32px">
+                    <div class="col-md-12 flex align-center">
+                        <div class="col-md-5">
+                            <label class="headinglabel">Receivable Account(Dr.)</label>
+                        </div>
+                        <div class="col-md-7">
+
+                            <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
+                            <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 flex align-center">
+                        <div class="col-md-5">
+                            <label class="headinglabel">Revenue Account (Cr.)</label>
+                        </div>
+                        <div class="col-md-7">
+
+                            <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
+                            <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 flex align-center">
+                        <div class="col-md-5">
+                            <label class="headinglabel">Total Amount</label>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control text-right" readonly id="txtTotalAmount" value="0" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row no-margin" style="padding-top:10px">
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="width:3%">Currency</th>
+                            <th style="width:3%">Ex.Rate</th>
+                            <th style="width:15%">Cost</th>
+                            <th style="width:8%">Amount</th>
+                            <th style="width:5%">Amount(F.C)</th>
+                            <th style="width:15%">Supplier</th>
+                            <th style="width:15%">Debit Chart of Account</th>
+                            <th style="width:15%">Credit Chart of Account</th>
+                            <th style="width:2%"></th>
+                            <th style="width:2%"></th>
                         </tr>
-                    </table>
+                    </thead>
+                    <tbody id="details"></tbody>
+                </table>
+            </div>
+
+        </fieldset>
+    }
+
+    <div class="modal fade" id="consignmentpopup" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius:5px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">
+                        Consignment Reference
+                    </h4>
                 </div>
 
-</fieldset>
-    }
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-11 flex justify-content-between">
+                                <h4 id="hAcHead"></h4>
+                                <h5 id="hTotal">Total</h5>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-primary small_btn" onclick="autoallocation()" title="Auto Allocation" type="button" id="btnAllocate" style="margin-top:10px;"><i class="fa fa-tasks" aria-hidden="true"></i></button>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="flex justify-content-between">
+                                <span id="elemError" class="errors"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label class="headinglabel">Truck Detail No.</label>
+                                <input type="text" id="txtTruckDetail" class="form-control" readonly />
+                                <input type="hidden" id="txtTruckDetailID" class="form-control" />
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-primary small_btn" type="button" id="btnaddall" title="Add all Consignments of TD" style="margin-top:30px;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="headinglabel"> Consignment Note </label>
+                                <input type="text" id="txtConsignmentNo" class="form-control" />
+                                <input type="hidden" id="txtInScanID" class="form-control" />
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-primary small_btn" type="button" id="btnaddConsignment" style="margin-top:30px;"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="popUpgrid modal-scrollable">
+                            <table class="table table-bordered table-responsive" id="Consignmentdetails">
+                                <thead>
+                                    <tr>
+                                        <th>Consignment Note</th>
+                                        <th>Amount</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="consignmentdetailsbody">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="row">
+
+                            <input type="hidden" value="" id="hdnEditAcHeadId" />
+                            <input type="hidden" value="" id="hdnEditRowIndex" />
+                            <input type="hidden" value="" id="hdnEditAmount" />
+                            <input type="hidden" value="" id="hdnItemCount" />
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding-top: 5px">
+                    <button type="button" id="ConsignmentSave" class="btn btn-primary">Save</button>
+                    <button type="button" id="ConsignmentClose" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
