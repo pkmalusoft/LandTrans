@@ -350,11 +350,17 @@
                 $('#txtDebitHead').val($('#DebitCashAccountName').val());
                 $('#txtDebitHeadId').val($('#DebitCashAccountId').val());
             }
-            else if (modeid == 2) {
+            else if (modeid == 2) { //COD
                 $('#InvoiceTo').html('');
                 var html = '<option>Consignee</option>'
                 $('#InvoiceTo').html(html);
                 $('#InvoiceTo').trigger('change');
+                $('#txtCustomer').val($('#DebitCODCustomer').val());
+                $('#txtCustomerId').val($('#DebitCODCustomerId').val());
+                $('#txtDebitHead').val($('#DebitCODAccountName').val());
+                $('#txtDebitHeadId').val($('#DebitCODAccountId').val());
+                $('#txtCustomer').attr('readonly', 'readonly');
+                $('#txtDebitHead').attr('readonly', 'readonly');
             }
             else if (modeid == 3) {
                 $('#InvoiceTo').html('');
@@ -645,6 +651,7 @@
                 $('#txtCustomer').removeAttr('readonly');                
                 $('#txtDebitHead').val($('#DebitAccountName').val());
                 $('#txtDebitHeadId').val($('#DebitAccountId').val());
+                $('#txtCustomer').removeAttr('readonly', 'readonly');
                 $('#txtCustomer').focus();
             }
 
@@ -652,10 +659,14 @@
             {
                 $('#txtDebitHead').val($('#DebitCashAccountName').val());
                 $('#txtDebitHeadId').val($('#DebitCashAccountId').val());
+                $('#txtCustomer').attr('readonly', 'readonly');
             }
             else if ($('#PaymentType').val() == 2) {
                 $('#txtDebitHead').val($('#DebitCODAccountName').val());
                 $('#txtDebitHeadId').val($('#DebitCODAccountId').val());
+                $('#txtCustomer').val($('#DebitCODCustomer').val());
+                $('#txtCustomerId').val($('#DebitCODCustomerId').val());
+                $('#txtCustomer').attr('readonly', 'readonly');
             }
             //if ($('#txtCustomerId').val() > 0) {
             //    $.ajax({
@@ -981,6 +992,9 @@
                 <div class="col-md-3">
                     <input type="hidden" id="hdndetailcount" value="0" />
                     @Html.HiddenFor(model => model.ID, new { })
+                    @Html.HiddenFor(model => model.DebitCODCustomerId, new { })
+                    @Html.HiddenFor(model => model.DebitCODCustomer, new { })
+                    @Html.HiddenFor(model => model.ConsignorName, new { })
                     @Html.HiddenFor(model => model.ConsignorId, new { })
                     @Html.HiddenFor(model => model.ConsignorName, new { })
                     @Html.HiddenFor(model => model.ConsigneeId, new { })
@@ -996,7 +1010,7 @@
 
                     @*@Html.HiddenFor(model => model.InScanID, new { })*@
                     <label class="headinglabel required">Transaction Date</label>
-                    @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control",@autocomplete="off", @style= "text-align:right" })
+                    @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control", @autocomplete = "off", @style = "text-align:right" })
                     @Html.ValidationMessageFor(model => model.EntryDate)
                 </div>
                 <div class="col-md-4 hidden">

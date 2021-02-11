@@ -2615,28 +2615,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="RecPayDetails">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPayDetail">
-        <MappingFragment StoreEntitySet="RecPayDetails">
-          <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
-          <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
-          <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
-          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
-          <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-          <ScalarProperty Name="StatusInvoice" ColumnName="StatusInvoice" />
-          <ScalarProperty Name="StatusAdvance" ColumnName="StatusAdvance" />
-          <ScalarProperty Name="statusReceipt" ColumnName="statusReceipt" />
-          <ScalarProperty Name="InvDate" ColumnName="InvDate" />
-          <ScalarProperty Name="InvNo" ColumnName="InvNo" />
-          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-          <ScalarProperty Name="Lock" ColumnName="Lock" />
-          <ScalarProperty Name="JobID" ColumnName="JobID" />
-          <ScalarProperty Name="AdjustmentAmount" ColumnName="AdjustmentAmount" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="RequestTypes">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RequestType">
         <MappingFragment StoreEntitySet="RequestType">
@@ -9102,6 +9080,28 @@
           <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
           <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RecPayDetails">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPayDetail">
+        <MappingFragment StoreEntitySet="RecPayDetails">
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
+          <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
+          <ScalarProperty Name="AdjustmentAmount" ColumnName="AdjustmentAmount" />
+          <ScalarProperty Name="Lock" ColumnName="Lock" />
+          <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+          <ScalarProperty Name="InvNo" ColumnName="InvNo" />
+          <ScalarProperty Name="InvDate" ColumnName="InvDate" />
+          <ScalarProperty Name="statusReceipt" ColumnName="statusReceipt" />
+          <ScalarProperty Name="StatusAdvance" ColumnName="StatusAdvance" />
+          <ScalarProperty Name="StatusInvoice" ColumnName="StatusInvoice" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+          <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

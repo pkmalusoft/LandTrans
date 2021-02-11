@@ -29,6 +29,8 @@ namespace LTMSV2.Models
         public string DebitCashAccountName { get; set; }
         public int DebitCashAccountId { get; set; }
 
+        public string DebitCODCustomer { get; set; }
+        public int DebitCODCustomerId { get; set; }
         public string DebitCODAccountName { get; set; }
         public int DebitCODAccountId { get; set; }
         public string CreditAccountName { get; set; }

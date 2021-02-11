@@ -2971,10 +2971,10 @@
     <Property Name="InvNo" Type="varchar" MaxLength="100" />
     <Property Name="CurrencyID" Type="int" />
     <Property Name="Lock" Type="bit" />
-    <Property Name="JobID" Type="int" />
     <Property Name="AdjustmentAmount" Type="decimal" Precision="18" Scale="2" />
     <Property Name="TruckDetailID" Type="int" />
     <Property Name="AcOPInvoiceDetailID" Type="int" />
+    <Property Name="InScanID" Type="int" />
   </EntityType>
   <EntityType Name="RequestType">
     <Key>

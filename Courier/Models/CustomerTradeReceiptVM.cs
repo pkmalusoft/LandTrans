@@ -15,7 +15,8 @@ namespace LTMSV2.Models
         public string InvoiceType { get; set; }
         public string ProductName { get; set; }       
         public Nullable<decimal> NetValue { get; set; }
-        public Nullable<int> JobID { get; set; }
+        public Nullable<int> InScanID { get; set; }
+        public string ConsignmentNo { get; set; }
         public string JobCode { get; set; }
         public string Description { get; set; }
         public DateTime? date { get; set; }

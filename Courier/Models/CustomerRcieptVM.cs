@@ -45,6 +45,9 @@ namespace  LTMSV2.Models
         public Nullable<System.DateTime> AmtPaidTillDate { get; set; }
         public decimal Balance { get; set; }
         public decimal Amount { get; set;}
+
+        public string ConsignmentNo { get; set; }
+        public int InScanID { get; set; }
         public Nullable<System.DateTime> InvoiceDate { get; set; }
 
         public List<CustomerRcieptChildVM> CustomerRcieptChildVM { get; set; }
@@ -97,6 +100,8 @@ namespace  LTMSV2.Models
         public decimal? Amount { get; set; }
         public decimal AdjustmentAmount { get; set; }
         public string SInvoiceNo { get; set; }
+        public string ConsignmentNo { get; set; }
+        public int InScanID { get; set; }
         public Nullable<System.DateTime> InvoiceDate { get; set; }
 
         public bool? IsTradingReceipt { get; set; }

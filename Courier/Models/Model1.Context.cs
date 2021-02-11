@@ -178,7 +178,6 @@ namespace LTMSV2.Models
         public virtual DbSet<Quotation> Quotations { get; set; }
         public virtual DbSet<QuotationDetail> QuotationDetails { get; set; }
         public virtual DbSet<RecPay> RecPays { get; set; }
-        public virtual DbSet<RecPayDetail> RecPayDetails { get; set; }
         public virtual DbSet<RequestType> RequestTypes { get; set; }
         public virtual DbSet<ReturnDetail> ReturnDetails { get; set; }
         public virtual DbSet<RevenueType> RevenueTypes { get; set; }
@@ -277,6 +276,7 @@ namespace LTMSV2.Models
         public virtual DbSet<RecPayAllocationDetail> RecPayAllocationDetails { get; set; }
         public virtual DbSet<CostUpdateConsignment> CostUpdateConsignments { get; set; }
         public virtual DbSet<AcJournalConsignment> AcJournalConsignments { get; set; }
+        public virtual DbSet<RecPayDetail> RecPayDetails { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

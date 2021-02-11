@@ -128,9 +128,16 @@ namespace LTMSV2.Controllers
                     vm.DebitCashAccountId = pacc.AcHeadID;
 
                 }
+                var customer = db.CustomerMasters.Where(cc => cc.CustomerName == "Cod Customer").FirstOrDefault();
+                if (customer != null)
+                {
+                    vm.DebitCODCustomerId = customer.CustomerID;
+                    vm.DebitCODCustomer = customer.CustomerName;
+                }
                 var codacc = db.AcHeads.Where(cc => cc.AcHead1 == "Cod Control A/c.").FirstOrDefault();
                 if (codacc != null)
                 {
+                    
                     vm.DebitCODAccountName = codacc.AcHead1;
                     vm.DebitCODAccountId = codacc.AcHeadID;
                 }

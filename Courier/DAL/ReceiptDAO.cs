@@ -38,7 +38,7 @@ namespace LTMSV2.DAL
                     obj.RecPayDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["RecPayDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
                     obj.DocumentNo = ds.Tables[0].Rows[i]["DocumentNo"].ToString();
                     obj.PartyName = ds.Tables[0].Rows[i]["PartyName"].ToString();
-                    obj.PartyName = ds.Tables[0].Rows[i]["PartyName"].ToString();
+                    
                     if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
                     {
                         obj.Amount = 0;
@@ -352,7 +352,7 @@ namespace LTMSV2.DAL
             }
 
         }
-        public static int InsertRecpayDetailsForCust(int RecPayID, int InvoiceID, int JInvoiceID, decimal Amount, string Remarks, string StatusInvoice, bool StatusAdvance, string statusReceip, string InvDate, string InvNo, int CurrencyID, int invoiceStatus, int JobID)
+        public static int InsertRecpayDetailsForCust(int RecPayID, int InvoiceID, int JInvoiceID, decimal Amount, string Remarks, string StatusInvoice, bool StatusAdvance, string statusReceip, string InvDate, string InvNo, int CurrencyID, int invoiceStatus, int InScanId)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
@@ -369,7 +369,7 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@InvNo", InvNo);
             cmd.Parameters.AddWithValue("@CurrencyID", CurrencyID);            
             cmd.Parameters.AddWithValue("@invoiceStatus", invoiceStatus);
-            cmd.Parameters.AddWithValue("@JobID",  JobID);
+            cmd.Parameters.AddWithValue("@InScanId",  InScanId);
                         
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -403,7 +403,7 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@InvNo", InvNo);
             cmd.Parameters.AddWithValue("@CurrencyID", CurrencyID);
             cmd.Parameters.AddWithValue("@invoiceStatus", invoiceStatus);
-            cmd.Parameters.AddWithValue("@JobID", JobID);
+            //cmd.Parameters.AddWithValue("@InScanId", JobID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -602,5 +602,104 @@ namespace LTMSV2.DAL
 
             return list;
         }
+
+        #region "Cod REceipt"
+        public static string SP_GetMaxCODID()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetMaxCODID";
+            cmd.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0].Rows[0][0].ToString();
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+        public static List<ReceiptVM> GetCODReceipts(int FYearId, DateTime FromDate, DateTime ToDate)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetAllCODRecieptsDetails";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FYearId", FYearId);
+
+            //cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
+            //cmd.Parameters["@AcJournalDetailID"].Value = AcJournalDetailID;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<ReceiptVM> objList = new List<ReceiptVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    ReceiptVM obj = new ReceiptVM();
+                    obj.RecPayID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["RecPayID"].ToString());
+                    obj.RecPayDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["RecPayDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.DocumentNo = ds.Tables[0].Rows[i]["DocumentNo"].ToString();
+                    obj.Remarks = ds.Tables[0].Rows[i]["Remarks"].ToString();
+                    if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
+                    {
+                        obj.Amount = 0;
+                    }
+                    else
+                    {
+                        obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
+                    }
+                    obj.Currency = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Currency"].ToString());
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
+
+        public static List<CustomerTradeReceiptVM> GetCODPending(int FYearId,int RecPayId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCODPending";
+            cmd.CommandType = CommandType.StoredProcedure;
+            //cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            //cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FYearId", FYearId);
+            cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            
+            var custreceipt = new List<CustomerTradeReceiptVM>();
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    CustomerTradeReceiptVM obj = new CustomerTradeReceiptVM();
+                    obj.InScanID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["InScanID"].ToString());
+                    obj.DateTime = Convert.ToDateTime(ds.Tables[0].Rows[i]["TransactionDate"].ToString()).ToString("dd-MM-yyyy"); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.ConsignmentNo = ds.Tables[0].Rows[i]["ConsignmentNo"].ToString();
+                    obj.InvoiceAmount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["InvoiceAmount"].ToString());
+                    obj.AmountReceived = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["ReceivedAmount"].ToString());
+                    obj.Balance = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["PendingAmount"].ToString());
+                    custreceipt.Add(obj);
+                }
+            }
+            return custreceipt;
+        }
+        #endregion
     }
 }

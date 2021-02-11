@@ -2976,10 +2976,10 @@
           <Property Name="InvNo" Type="varchar" MaxLength="100" />
           <Property Name="CurrencyID" Type="int" />
           <Property Name="Lock" Type="bit" />
-          <Property Name="JobID" Type="int" />
           <Property Name="AdjustmentAmount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TruckDetailID" Type="int" />
           <Property Name="AcOPInvoiceDetailID" Type="int" />
+          <Property Name="InScanID" Type="int" />
         </EntityType>
         <EntityType Name="RequestType">
           <Key>
@@ -12343,27 +12343,6 @@
           <Property Name="UserID" Type="Int32" />
           <Property Name="IsTradingReceipt" Type="Boolean" />
         </EntityType>
-        <EntityType Name="RecPayDetail">
-          <Key>
-            <PropertyRef Name="RecPayDetailID" />
-          </Key>
-          <Property Name="RecPayDetailID" Type="Int32" Nullable="false" />
-          <Property Name="RecPayID" Type="Int32" />
-          <Property Name="InvoiceID" Type="Int32" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Remarks" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
-          <Property Name="StatusInvoice" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="StatusAdvance" Type="Boolean" />
-          <Property Name="statusReceipt" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="InvDate" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="InvNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="CurrencyID" Type="Int32" />
-          <Property Name="Lock" Type="Boolean" />
-          <Property Name="JobID" Type="Int32" />
-          <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="TruckDetailID" Type="Int32" />
-          <Property Name="AcOPInvoiceDetailID" Type="Int32" />
-        </EntityType>
         <EntityType Name="RequestType">
           <Key>
             <PropertyRef Name="Id" />
@@ -14913,7 +14892,6 @@
           <EntitySet Name="Quotations" EntityType="Self.Quotation" />
           <EntitySet Name="QuotationDetails" EntityType="Self.QuotationDetail" />
           <EntitySet Name="RecPays" EntityType="Self.RecPay" />
-          <EntitySet Name="RecPayDetails" EntityType="Self.RecPayDetail" />
           <EntitySet Name="RequestTypes" EntityType="Self.RequestType" />
           <EntitySet Name="ReturnDetails" EntityType="Self.ReturnDetail" />
           <EntitySet Name="RevenueTypes" EntityType="Self.RevenueType" />
@@ -18250,6 +18228,7 @@
           <EntitySet Name="RecPayAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail" />
           <EntitySet Name="CostUpdateConsignments" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateConsignment" />
           <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
+          <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -23151,6 +23130,27 @@
           <Property Name="AcHeadID" Type="Int32" Nullable="false" />
           <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
+        <EntityType Name="RecPayDetail">
+          <Key>
+            <PropertyRef Name="RecPayDetailID" />
+          </Key>
+          <Property Name="RecPayDetailID" Type="Int32" Nullable="false" />
+          <Property Name="RecPayID" Type="Int32" />
+          <Property Name="InvoiceID" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Remarks" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="StatusInvoice" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="StatusAdvance" Type="Boolean" />
+          <Property Name="statusReceipt" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="InvDate" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InvNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CurrencyID" Type="Int32" />
+          <Property Name="Lock" Type="Boolean" />
+          <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TruckDetailID" Type="Int32" />
+          <Property Name="AcOPInvoiceDetailID" Type="Int32" />
+          <Property Name="InScanID" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -25768,28 +25768,6 @@
                 <ScalarProperty Name="FMoney" ColumnName="FMoney" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="IsTradingReceipt" ColumnName="IsTradingReceipt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RecPayDetails">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPayDetail">
-              <MappingFragment StoreEntitySet="RecPayDetails">
-                <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
-                <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
-                <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
-                <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
-                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="StatusInvoice" ColumnName="StatusInvoice" />
-                <ScalarProperty Name="StatusAdvance" ColumnName="StatusAdvance" />
-                <ScalarProperty Name="statusReceipt" ColumnName="statusReceipt" />
-                <ScalarProperty Name="InvDate" ColumnName="InvDate" />
-                <ScalarProperty Name="InvNo" ColumnName="InvNo" />
-                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
-                <ScalarProperty Name="Lock" ColumnName="Lock" />
-                <ScalarProperty Name="JobID" ColumnName="JobID" />
-                <ScalarProperty Name="AdjustmentAmount" ColumnName="AdjustmentAmount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -32258,6 +32236,28 @@
                 <ScalarProperty Name="AcJournalDetailID" ColumnName="AcJournalDetailID" />
                 <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RecPayDetails">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPayDetail">
+              <MappingFragment StoreEntitySet="RecPayDetails">
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="AcOPInvoiceDetailID" ColumnName="AcOPInvoiceDetailID" />
+                <ScalarProperty Name="TruckDetailID" ColumnName="TruckDetailID" />
+                <ScalarProperty Name="AdjustmentAmount" ColumnName="AdjustmentAmount" />
+                <ScalarProperty Name="Lock" ColumnName="Lock" />
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="InvNo" ColumnName="InvNo" />
+                <ScalarProperty Name="InvDate" ColumnName="InvDate" />
+                <ScalarProperty Name="statusReceipt" ColumnName="statusReceipt" />
+                <ScalarProperty Name="StatusAdvance" ColumnName="StatusAdvance" />
+                <ScalarProperty Name="StatusInvoice" ColumnName="StatusInvoice" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+                <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

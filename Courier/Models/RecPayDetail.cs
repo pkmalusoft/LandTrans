@@ -26,9 +26,9 @@ namespace LTMSV2.Models
         public string InvNo { get; set; }
         public Nullable<int> CurrencyID { get; set; }
         public Nullable<bool> Lock { get; set; }
-        public Nullable<int> JobID { get; set; }
         public Nullable<decimal> AdjustmentAmount { get; set; }
         public Nullable<int> TruckDetailID { get; set; }
         public Nullable<int> AcOPInvoiceDetailID { get; set; }
+        public Nullable<int> InScanID { get; set; }
     }
 }
