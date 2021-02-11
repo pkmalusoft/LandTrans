@@ -603,6 +603,52 @@ namespace LTMSV2.DAL
             return list;
         }
 
+        #region "supplierInvoice"
+
+        public static DataTable DeleteSupplierInvoice(int InvoiceId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteSupplierInvoice";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@SupplierInvoiceId", InvoiceId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+        public static string SP_GetMaxSINo()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetMaxSupplierInvoiceNo";
+            cmd.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0].Rows[0][0].ToString();
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+        #endregion
+
         #region "Cod REceipt"
         public static string SP_GetMaxCODID()
         {

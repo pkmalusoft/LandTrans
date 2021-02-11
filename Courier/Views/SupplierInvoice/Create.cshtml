@@ -93,7 +93,7 @@
     });
     $(document).ready(function () {
         $('#SupplierTypeId').on('change', function () {
-            
+
             if ($('#SupplierTypeId').val() == 4) {
                 $('#InvoiceNo').removeAttr('readonly');
             }
@@ -113,14 +113,14 @@
                     $.each(response.InvoiceDetails, function (index, value) {
                         debugger;
                         AWBItems.push(value);
-                        $("#detailsbody").append('<tr awbno="' + value.InvNo + '"><td>' + value.Particulars + '</td><td>' + parseFloat(value.Rate).toFixed(3) + '</td><td>' + value.Quantity + '</td><td>' + value.Currency + '</td><td>' + parseFloat(value.CurrencyAmount).toFixed(3) + '</td><td>' + parseFloat(value.Amount).toFixed(3) + '</td><td>' + value.TaxPercentage + '</td><td>' + parseFloat(value.Value).toFixed(3) + '</td><td><a awbno="' + value.InvNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        $("#detailsbody").append('<tr awbno="' + value.InvNo + '"><td>' + value.AcHeadName + '</td><td>' + value.Particulars + '</td><td class="text-right" >' + parseFloat(value.Rate).toFixed(3) + '</td><td class="text-right" >' + value.Quantity + '</td><td>' + value.Currency + '</td><td class="text-right" >' + parseFloat(value.CurrencyAmount).toFixed(3) + '</td><td class="text-right" >' + parseFloat(value.Amount).toFixed(3) + '</td><td class="text-right" >' + value.TaxPercentage + '</td><td class="text-right">' + parseFloat(value.Value).toFixed(3) + '</td><td><a awbno="' + value.InvNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
 
                     });
 
                 }
             });
 
-                   
+
 
 
         }
@@ -157,12 +157,27 @@
         });
         $("#btnadd").on('click', function () {
             debugger;
+            var AcHead = $("#txtAcHead").val();
+            var AcHeadId = $("#txtAcHeadId").val();
             var Particulars = $("#Particulars").val();
             var Rate = $("#Rate").val();
             var Qty = $("#Qty").val();
             var currency = $("#currency").val();
             var Taxpercent = $("#Taxpercent").val();
-            if (Particulars == null || Particulars == "") {
+            if (Taxpercent == null || Taxpercent == "") {
+                $("#Taxpercent").val(0);
+                Taxpercent = $("#Taxpercent").val();
+            }
+            else if (currency == null || currency == "") {
+                $('#currency').val(@ViewBag.CurrencyId);
+                var currency = $("#currency").val();                
+            }
+
+            if (AcHead == '' || AcHeadId== 0 || AcHeadId== '')
+            {
+                $("#validations").show();
+            }
+            else if (Particulars == null || Particulars == "") {
                 $("#validations").show();
             }
             else if (Rate == null || Rate == "") {
@@ -171,27 +186,24 @@
             else if (Qty == null || Qty == "") {
                 $("#validations").show();
             }
-            else if (currency == null || currency == "") {
-                $("#validations").show();
-            }
-            else if (Taxpercent == null || Taxpercent == "") {
-                $("#validations").show();
-            } else {
+             else {
                 $("#validations").hide();
                 $.ajax({
                     type: "POST",
                     url: "/SupplierInvoice/SetSupplierInvDetails",
                     datatype: "Json",
-                    data: { invno: $("#InvoiceNo").val(), Particulars: Particulars, Rate: Rate, Qty: Qty, currency: currency, Taxpercent: Taxpercent },
+                    data: { acheadid: AcHeadId, achead: AcHead,invno: $("#InvoiceNo").val(), Particulars: Particulars, Rate: Rate, Qty: Qty, currency: currency, Taxpercent: Taxpercent },
                     success: function (response) {
                         AWBItems.push(response.InvoiceDetails);
-                        $("#detailsbody").append('<tr awbno="' + response.InvoiceDetails.InvNo + '"><td>' + response.InvoiceDetails.Particulars + '</td><td>' + parseFloat(response.InvoiceDetails.Rate).toFixed(3) + '</td><td>' + response.InvoiceDetails.Quantity + '</td><td>' + response.InvoiceDetails.Currency + '</td><td>' + parseFloat(response.InvoiceDetails.CurrencyAmount).toFixed(3) + '</td><td>' + parseFloat(response.InvoiceDetails.Amount).toFixed(3) + '</td><td>' + response.InvoiceDetails.TaxPercentage + '</td><td>' + parseFloat(response.InvoiceDetails.Value).toFixed(3) + '</td><td><a awbno="' + response.InvoiceDetails.InvNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
-
+                        var i = 0;
+                        //<td>' + AcHead + '<input type="hidden" id="hdnacheadid_' + AcHeadId + ' />
+                        $("#detailsbody").append('<tr awbno="' + response.InvoiceDetails.InvNo + '"><td>' + AcHead + '</td><td>' + response.InvoiceDetails.Particulars + '</td><td class="text-right">' + parseFloat(response.InvoiceDetails.Rate).toFixed(3) + '</td><td class="text-right" >' + response.InvoiceDetails.Quantity + '</td><td>' + response.InvoiceDetails.Currency + '</td><td class="text-right" >' + parseFloat(response.InvoiceDetails.CurrencyAmount).toFixed(3) + '</td><td class="text-right" >' + parseFloat(response.InvoiceDetails.Amount).toFixed(3) + '</td><td class="text-right" >' + response.InvoiceDetails.TaxPercentage + '</td><td class="text-right" >' + parseFloat(response.InvoiceDetails.Value).toFixed(3) + '</td><td><a awbno="' + response.InvoiceDetails.InvNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
+                        $('#txtAcHeadId').val(0);
+                        $('#txtAcHead').val('');
                          $("#Particulars").val('');
                         $("#Rate").val('');
-                        $("#Qty").val('');
-                       $("#currency").val('');
-                        $("#Taxpercent").val('');
+                        $("#Qty").val('');                       
+                        $("#Taxpercent").val('0');
                     }
                 });
             }
@@ -229,11 +241,8 @@
             var InvoiceDate = $("#InvoiceDate").val();
             var InvoiceDate = $("#InvoiceDate").val();
             var Id = $("#Id").val();
-           
-            if (AWBItems.length == 0) {
-                $.notify("Invoice Details not found! ", "warning");
-                return false;
-            } else if (supplier == null || supplier=='')
+
+            if (supplier == null || supplier=='')
             {
                 $("#validations").show();
                 return false;
@@ -242,14 +251,17 @@
                 $("#validations").show();
                 return false;
             }
-
+            else if (AWBItems.length == 0) {
+                $.notify("Add Invoice Details! ", "warning");
+                return false;
+            }
             else {
                 $("#validations").hide();
                 $.ajax({
                     type: "POST",
                     url: "/SupplierInvoice/SaveSupplierInvoice",
                     datatype: "Json",
-                    data: { Id: Id, SupplierID: SupplierID, InvoiceDate: InvoiceDate, InvoiceNo: $("#InvoiceNo").val(),  Details: JSON.stringify(AWBItems) },
+                    data: { Id: Id, SupplierID: SupplierID, InvoiceDate: InvoiceDate, InvoiceNo: $("#InvoiceNo").val(),Remarks:$('#Remarks').val(), Details: JSON.stringify(AWBItems) },
                     success: function (response) {
                         if (response.status == "ok") {
 
@@ -265,12 +277,62 @@
                 });
             }
         });
+
+
+        $("#txtAcHead").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Accounts/AccountHead',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.AcHead,
+                                value: val.AcHead,
+                                AcHeadID: val.AcHeadID,
+                                TaxPercent: val.TaxPercent
+                            }
+                        }))
+                    }
+                })
+            }, minLength: 1,
+            autoFocus: false,
+            select: function (e, i) {
+                $("#txtAcHead").val(i.item.label);
+                $('#txtAcHeadId').val(i.item.AcHeadID);
+                $('#txtAcHeadId').attr('label', i.item.label)
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#txtAcHead").val(i.item.label);
+                $('#txtAcHeadId').val(i.item.AcHeadID);
+                $('#txtAcHeadId').attr('label', i.item.label)
+            }
+        });
+
+        $("#txtAcHead").change(function () {
+            if ($("#txtAcHead").val().trim() == '') {
+                $('#txtAcHead').val('');
+                $('#txtAcHeadId').val(0);
+                $('#txtAcHeadId').attr('label', '')
+            }
+            else if ($("#txtAcHead").val() != $("#txtAcHeadId").attr('label')) {
+                $('#txtAcHead').val('');
+                $('#txtAcHeadId').val(0);
+                $('#txtAcHeadId').attr('label', '')
+                $('#txtAcHead').focus();
+            }
+        })
+
     });
     function ChangeSupplier() {
         $("#SupplierName").val('');
         $("#SupplierID").val('');
     }
-  
+
 </script>
 
 
@@ -292,24 +354,6 @@
             <input type="hidden" id="Id" name="Id" value="@Model.SupplierInvoiceID" />
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-2">
-                    <label class=" required headinglabel">Supplier Type</label>
-                    @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(@ViewBag.Suppliertype, "SupplierTypeID", "SupplierType1"), "Select", new { @class = "form-control" })
-                    @*<select class="form-control" id="vendortype" onchange="ChangeSupplier()">
-                        @foreach (var item in ViewBag.SupplierType)
-                        {
-                            <option value="@item.SupplierTypeID">@item.SupplierType1</option>
-                        }
-                    </select>*@
-                </div>
-                <div class="col-md-3">
-                    <label class="headinglabel required ">Supplier</label>
-                    @Html.HiddenFor(model => model.SupplierID)
-                    @*@Html.DropDownListFor(model => model.CustomerId, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @required = "true" })*@
-                    @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.SupplierName)
-                </div>
-
-                <div class="col-md-2">
                     <label class="headinglabel required"> Invoice No</label>
                     @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control txttarget", @required = "true", @readonly = "true" })
                     @Html.ValidationMessageFor(model => model.InvoiceNo)
@@ -319,102 +363,124 @@
                     <label class="headinglabel required"> Invoice Date</label>
                     @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right txttarget", @required = "true" })
                     @Html.ValidationMessageFor(model => model.InvoiceDate)
-
                 </div>
-
+                <div class="col-md-2">
+                    <label class=" required headinglabel">Supplier Type</label>
+                    @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(@ViewBag.Suppliertype, "SupplierTypeID", "SupplierType1"), "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    <label class="headinglabel required ">Supplier</label>
+                    @Html.HiddenFor(model => model.SupplierID)
+                    @*@Html.DropDownListFor(model => model.CustomerId, new SelectList(@ViewBag.Customer, "CustomerID", "CustomerName"), "Select", new { @class = "form-control", @required = "true" })*@
+                    @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control",@required="true" })
+                    @Html.ValidationMessageFor(model => model.SupplierName)
+                </div>
                 <div class="col-md-3 align_self">
                     <input type="submit" value="Save" id="btnsave" class="btn btn-primary btnwidth " />&nbsp;&nbsp;
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger btnwidth float-right" })
 
                 </div>
             </div>
-            <div class="col-md-12 sub_title_block">
-                <h4 style="color:#0094ff;">Details</h4>
-                <hr />
-            </div>
-          
-            <div class="row no-margin">
-                `
-                <div class="col-md-3">
-                    <label class="headinglabel required "> Particulars</label>
-
-                    <input type="text" class="form-control" id="Particulars" name="Particulars" />
-                </div>
-                <div class="col-md-2">
-
-
-                    <label class="headinglabel required "> Rate</label>
-
-                    <input type="text" class="form-control" id="Rate" name="Rate" onchange="setThreeNumberDecimal(this)" />
-
-                </div>
-
-
-                <div class="col-md-1">
-                    <label class="headinglabel required "> Qty</label>
-
-                    <input type="number" class="form-control" id="Qty" name="Qty" />
-                </div>
-                <div class="col-md-2">
-
-
-                    <label class="headinglabel required "> Currency</label>
-
-                    <select class="form-control" id="currency" name="currency">
-                        <option value="">Select</option>
-                        @foreach (var item in ViewBag.Currency)
-                        {
-                            <option value="@item.CurrencyID">@item.CurrencyName</option>
-                        }
-                    </select>
-
-                </div>
-                <div class="col-md-2">
-                    <label class="headinglabel "> Tax %</label>
-
-                    <input type="number" class="form-control" id="Taxpercent" name="Taxpercent" />
-                </div>
-
-                <div class="col-md-1 " style="padding-top:10px">
-                    <button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+            <div class="row no-margin" style="padding-top:10px">
+                <div class="col-md-11">
+                    <label class="headinglabel">Remarks</label>
+                    @Html.TextBoxFor(model => model.Remarks, new {@class="form-control"})                                
                 </div>
             </div>
-
-
-
-            <div class="row no-margin" style="padding-top: 10px">
-                <div class="col-md-12">
-                    <table class="table table-bordered table-responsive" id="details" style="background-color: white">
-
-                        <thead>
-                            <tr>
-
-                                <th>Particulars</th>
-                                <th>Rate</th>
-                                <th>Qty</th>
-                                <th>Currency</th>
-                                <th>Exchange Rate</th>
-                                <th>Value</th>
-                                <th>Tax(%)</th>
-                                <th>Net Value</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="input-table" id="detailsbody">
-                            @*@{Html.RenderPartial("InvoiceList", Model);}*@
-                          
-
-                        </tbody>
-
-                    </table>
+                <div class="col-md-12 sub_title_block">
+                    <h4 style="color:#0094ff;">Details</h4>
+                    <hr />
                 </div>
-            </div>
+
+                <div class="row no-margin">
+                    <div class="col-md-12">
+                        `<div class="col-md-3">
+                            <label class="headinglabel required ">AcHead</label>
+                            <input type="text" class="form-control" id="txtAcHead" name="txtAcHead" />
+                            <input type="hidden" class="form-control" id="txtAcHeadId" name="txtAcHeadId" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="headinglabel required "> Particulars</label>
+
+                            <input type="text" class="form-control" id="Particulars" name="Particulars" />
+                        </div>
+                        <div class="col-md-2">
+
+
+                            <label class="headinglabel required "> Rate</label>
+
+                            <input type="text" class="form-control text-right" id="Rate" name="Rate" onchange="setThreeNumberDecimal(this)" />
+
+                        </div>
+
+
+                        <div class="col-md-1">
+                            <label class="headinglabel required"> Qty</label>
+
+                            <input type="number" class="form-control text-right " id="Qty" name="Qty" />
+                        </div>
+                        <div class="col-md-1">
+
+
+                            <label class="headinglabel required "> Currency</label>
+
+                            <select class="form-control" id="currency" name="currency">
+                                <option value="">Select</option>
+                                @foreach (var item in ViewBag.Currency)
+                                {
+                                    <option value="@item.CurrencyID">@item.CurrencyName</option>
+                                }
+                            </select>
+
+                        </div>
+                        <div class="col-md-1">
+                            <label class="headinglabel "> Tax %</label>
+
+                            <input type="number" class="form-control" id="Taxpercent" name="Taxpercent" />
+                        </div>
+
+                        <div class="col-md-1 " style="padding-top:10px">
+                            @*<button type="button" id="btnadd" class="btn btn-primary small_btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>*@
+                            <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnadd" title="Add New" class="addmore">+</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row no-margin" style="padding-top: 10px">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-responsive" id="details" style="background-color: white">
+
+                            <thead>
+                                <tr>
+                                    <th>Account Head</th>
+                                    <th>Particulars</th>
+                                    <th>Rate</th>
+                                    <th>Qty</th>
+                                    <th>Currency</th>
+                                    <th>Exchange Rate</th>
+                                    <th>Value</th>
+                                    <th>Tax(%)</th>
+                                    <th>Net Value</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="input-table" id="detailsbody">
+                                @*@{Html.RenderPartial("InvoiceList", Model);}*@
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
 
 
 
 
-        }
-    </fieldset>
+                }
+        </fieldset>
 </section>
 
 

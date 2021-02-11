@@ -277,6 +277,7 @@ namespace LTMSV2.Models
         public virtual DbSet<CostUpdateConsignment> CostUpdateConsignments { get; set; }
         public virtual DbSet<AcJournalConsignment> AcJournalConsignments { get; set; }
         public virtual DbSet<RecPayDetail> RecPayDetails { get; set; }
+        public virtual DbSet<SupplierInvoiceConsignment> SupplierInvoiceConsignments { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)
@@ -7961,7 +7962,7 @@ namespace LTMSV2.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_InsertRecPay", recPayDateParameter, documentNoParameter, customerIDParameter, businessCentreIDParameter, bankNameParameter, chequeNoParameter, chequeDateParameter, remarksParameter, acJournalIDParameter, statusRecParameter, statusEntryParameter, statusOriginParameter, fYearIDParameter, acCompanyIDParameter, eXRateParameter, fMoneyParameter, userIDParameter);
         }
     
-        public virtual ObjectResult<Nullable<int>> SP_InsertRecPayDetailsForCustomer(Nullable<int> recPayID, Nullable<int> invoiceID, Nullable<decimal> amount, string remarks, string statusInvoice, Nullable<bool> statusAdvance, string statusReceipt, string invDate, string invNo, Nullable<int> currencyID, Nullable<int> invoiceStatus, Nullable<int> jobID)
+        public virtual ObjectResult<Nullable<int>> SP_InsertRecPayDetailsForCustomer(Nullable<int> recPayID, Nullable<int> invoiceID, Nullable<decimal> amount, string remarks, string statusInvoice, Nullable<bool> statusAdvance, string statusReceipt, string invDate, string invNo, Nullable<int> currencyID, Nullable<int> invoiceStatus, Nullable<int> inScanId)
         {
             var recPayIDParameter = recPayID.HasValue ?
                 new ObjectParameter("RecPayID", recPayID) :
@@ -8007,14 +8008,14 @@ namespace LTMSV2.Models
                 new ObjectParameter("InvoiceStatus", invoiceStatus) :
                 new ObjectParameter("InvoiceStatus", typeof(int));
     
-            var jobIDParameter = jobID.HasValue ?
-                new ObjectParameter("JobID", jobID) :
-                new ObjectParameter("JobID", typeof(int));
+            var inScanIdParameter = inScanId.HasValue ?
+                new ObjectParameter("InScanId", inScanId) :
+                new ObjectParameter("InScanId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_InsertRecPayDetailsForCustomer", recPayIDParameter, invoiceIDParameter, amountParameter, remarksParameter, statusInvoiceParameter, statusAdvanceParameter, statusReceiptParameter, invDateParameter, invNoParameter, currencyIDParameter, invoiceStatusParameter, jobIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_InsertRecPayDetailsForCustomer", recPayIDParameter, invoiceIDParameter, amountParameter, remarksParameter, statusInvoiceParameter, statusAdvanceParameter, statusReceiptParameter, invDateParameter, invNoParameter, currencyIDParameter, invoiceStatusParameter, inScanIdParameter);
         }
     
-        public virtual int SP_InsertRecPayDetailsForSupplier(Nullable<int> recPayID, Nullable<int> invoiceID, Nullable<decimal> amount, string remarks, string statusInvoice, Nullable<bool> statusAdvance, string statusReceipt, string invDate, string invNo, Nullable<int> currencyID, Nullable<int> invoiceStatus, Nullable<int> jobID)
+        public virtual int SP_InsertRecPayDetailsForSupplier(Nullable<int> recPayID, Nullable<int> invoiceID, Nullable<decimal> amount, string remarks, string statusInvoice, Nullable<bool> statusAdvance, string statusReceipt, string invDate, string invNo, Nullable<int> currencyID, Nullable<int> invoiceStatus)
         {
             var recPayIDParameter = recPayID.HasValue ?
                 new ObjectParameter("RecPayID", recPayID) :
@@ -8060,11 +8061,7 @@ namespace LTMSV2.Models
                 new ObjectParameter("InvoiceStatus", invoiceStatus) :
                 new ObjectParameter("InvoiceStatus", typeof(int));
     
-            var jobIDParameter = jobID.HasValue ?
-                new ObjectParameter("JobID", jobID) :
-                new ObjectParameter("JobID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_InsertRecPayDetailsForSupplier", recPayIDParameter, invoiceIDParameter, amountParameter, remarksParameter, statusInvoiceParameter, statusAdvanceParameter, statusReceiptParameter, invDateParameter, invNoParameter, currencyIDParameter, invoiceStatusParameter, jobIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_InsertRecPayDetailsForSupplier", recPayIDParameter, invoiceIDParameter, amountParameter, remarksParameter, statusInvoiceParameter, statusAdvanceParameter, statusReceiptParameter, invDateParameter, invNoParameter, currencyIDParameter, invoiceStatusParameter);
         }
     
         public virtual int SPGetAllLocalCurrencyCustRecievable(Nullable<int> acFinancialYearID)

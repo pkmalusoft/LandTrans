@@ -8818,6 +8818,7 @@
     <EntitySetMapping Name="SupplierInvoiceDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail">
         <MappingFragment StoreEntitySet="SupplierInvoiceDetails">
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
           <ScalarProperty Name="RecPayDetailId" ColumnName="RecPayDetailId" />
           <ScalarProperty Name="RecPayStatus" ColumnName="RecPayStatus" />
           <ScalarProperty Name="Value" ColumnName="Value" />
@@ -9102,6 +9103,18 @@
           <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
           <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
           <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplierInvoiceConsignments">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceConsignment">
+        <MappingFragment StoreEntitySet="SupplierInvoiceConsignment">
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+          <ScalarProperty Name="AcHeadId" ColumnName="AcHeadId" />
+          <ScalarProperty Name="SupplierInvoiceDetailId" ColumnName="SupplierInvoiceDetailId" />
+          <ScalarProperty Name="SupplierInvoiceId" ColumnName="SupplierInvoiceId" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

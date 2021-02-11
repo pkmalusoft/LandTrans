@@ -3192,6 +3192,17 @@
           <Property Name="InvoiceTotal" Type="money" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
+        <EntityType Name="SupplierInvoiceConsignment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierInvoiceId" Type="int" Nullable="false" />
+          <Property Name="SupplierInvoiceDetailId" Type="int" Nullable="false" />
+          <Property Name="AcHeadId" Type="int" Nullable="false" />
+          <Property Name="InScanID" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="money" />
+        </EntityType>
         <EntityType Name="SupplierInvoiceDetails">
           <Key>
             <PropertyRef Name="SupplierInvoiceDetailID" />
@@ -3205,9 +3216,10 @@
           <Property Name="CurrencyAmount" Type="money" Nullable="false" />
           <Property Name="Amount" Type="money" />
           <Property Name="TaxPercentage" Type="decimal" Precision="10" Scale="2" />
-          <Property Name="Value" Type="money" />
+          <Property Name="Value" Type="money" Nullable="false" />
           <Property Name="RecPayStatus" Type="int" />
           <Property Name="RecPayDetailId" Type="int" />
+          <Property Name="AcHeadID" Type="int" />
         </EntityType>
         <EntityType Name="SupplierMaster">
           <Key>
@@ -8380,7 +8392,7 @@
           <Parameter Name="InvNo" Type="nvarchar" Mode="In" />
           <Parameter Name="CurrencyID" Type="int" Mode="In" />
           <Parameter Name="InvoiceStatus" Type="int" Mode="In" />
-          <Parameter Name="JobID" Type="int" Mode="In" />
+          <Parameter Name="InScanId" Type="int" Mode="In" />
         </Function>
         <Function Name="SP_InsertRecPayDetailsForSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RecPayID" Type="int" Mode="In" />
@@ -8394,7 +8406,6 @@
           <Parameter Name="InvNo" Type="nvarchar" Mode="In" />
           <Parameter Name="CurrencyID" Type="int" Mode="In" />
           <Parameter Name="InvoiceStatus" Type="int" Mode="In" />
-          <Parameter Name="JobID" Type="int" Mode="In" />
         </Function>
         <Function Name="SPGetAllLocalCurrencyCustRecievable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AcFinancialYearID" Type="int" Mode="In" />
@@ -8843,6 +8854,7 @@
           <EntitySet Name="SubStatus" EntityType="Self.SubStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierInvoice" EntityType="Self.SupplierInvoice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SupplierInvoiceConsignment" EntityType="Self.SupplierInvoiceConsignment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierInvoiceDetails" EntityType="Self.SupplierInvoiceDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierMaster" EntityType="Self.SupplierMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierType" EntityType="Self.SupplierType" Schema="dbo" store:Type="Tables" />
@@ -17758,7 +17770,7 @@
             <Parameter Name="InvNo" Mode="In" Type="String" />
             <Parameter Name="CurrencyID" Mode="In" Type="Int32" />
             <Parameter Name="InvoiceStatus" Mode="In" Type="Int32" />
-            <Parameter Name="JobID" Mode="In" Type="Int32" />
+            <Parameter Name="InScanId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_InsertRecPayDetailsForSupplier">
             <Parameter Name="RecPayID" Mode="In" Type="Int32" />
@@ -17772,7 +17784,6 @@
             <Parameter Name="InvNo" Mode="In" Type="String" />
             <Parameter Name="CurrencyID" Mode="In" Type="Int32" />
             <Parameter Name="InvoiceStatus" Mode="In" Type="Int32" />
-            <Parameter Name="JobID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SPGetAllLocalCurrencyCustRecievable">
           <Parameter Name="AcFinancialYearID" Mode="In" Type="Int32" />
@@ -18229,6 +18240,7 @@
           <EntitySet Name="CostUpdateConsignments" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateConsignment" />
           <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
           <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
+          <EntitySet Name="SupplierInvoiceConsignments" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceConsignment" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -22659,10 +22671,11 @@
           <Property Name="CurrencyAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
           <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="TaxPercentage" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="Value" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Value" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="RecPayStatus" Type="Int32" />
           <Property Name="RecPayDetailId" Type="Int32" />
           <NavigationProperty Name="SupplierInvoice" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" FromRole="SupplierInvoiceDetail" ToRole="SupplierInvoice" />
+          <Property Name="AcHeadID" Type="Int32" />
         </EntityType>
         <Association Name="FK_SupplierInvoice_SupplierMaster">
           <End Type="DB_9F57C4_couriertest_newModel.SupplierMaster" Role="SupplierMaster" Multiplicity="1" />
@@ -23150,6 +23163,17 @@
           <Property Name="TruckDetailID" Type="Int32" />
           <Property Name="AcOPInvoiceDetailID" Type="Int32" />
           <Property Name="InScanID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SupplierInvoiceConsignment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierInvoiceId" Type="Int32" Nullable="false" />
+          <Property Name="SupplierInvoiceDetailId" Type="Int32" Nullable="false" />
+          <Property Name="AcHeadId" Type="Int32" Nullable="false" />
+          <Property Name="InScanID" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -31974,6 +31998,7 @@
           <EntitySetMapping Name="SupplierInvoiceDetails">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceDetail">
               <MappingFragment StoreEntitySet="SupplierInvoiceDetails">
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
                 <ScalarProperty Name="RecPayDetailId" ColumnName="RecPayDetailId" />
                 <ScalarProperty Name="RecPayStatus" ColumnName="RecPayStatus" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
@@ -32258,6 +32283,18 @@
                 <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
                 <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
                 <ScalarProperty Name="RecPayDetailID" ColumnName="RecPayDetailID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SupplierInvoiceConsignments">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoiceConsignment">
+              <MappingFragment StoreEntitySet="SupplierInvoiceConsignment">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="InScanID" ColumnName="InScanID" />
+                <ScalarProperty Name="AcHeadId" ColumnName="AcHeadId" />
+                <ScalarProperty Name="SupplierInvoiceDetailId" ColumnName="SupplierInvoiceDetailId" />
+                <ScalarProperty Name="SupplierInvoiceId" ColumnName="SupplierInvoiceId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

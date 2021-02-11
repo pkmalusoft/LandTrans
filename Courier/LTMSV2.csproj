@@ -1790,6 +1790,9 @@
     <Compile Include="Models\SupplierInvoice.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SupplierInvoiceConsignment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SupplierInvoiceDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

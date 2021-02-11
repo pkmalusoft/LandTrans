@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using LTMSV2.Models;
 using LTMSV2.DAL;
 using Newtonsoft.Json;
+using System.Data;
+using System.Data.Entity;
 namespace LTMSV2.Controllers
 { [SessionExpire]
     public class SupplierInvoiceController : Controller
@@ -33,11 +35,11 @@ namespace LTMSV2.Controllers
 
             }
 
-            var lst = (from c in db.SupplierInvoices
-                       join d in db.SupplierInvoiceDetails on c.SupplierInvoiceID equals d.SupplierInvoiceID
+            var lst = (from c in db.SupplierInvoices                       
                        join s in db.SupplierMasters on c.SupplierID equals s.SupplierID orderby c.InvoiceDate descending
-                       select new SupplierInvoiceVM {SupplierInvoiceID=c.SupplierInvoiceID, InvoiceNo = c.InvoiceNo, InvoiceDate = c.InvoiceDate, SupplierName = s.SupplierName, Amount = 0,SupplierType=s.SupplierType.SupplierType1 }).ToList();
-            lst.ForEach(d => d.Amount = (from s in db.SupplierInvoiceDetails where s.SupplierInvoiceID == d.SupplierInvoiceID select s).ToList().Sum(a => a.Rate));
+                       where c.InvoiceNo.StartsWith("SI")
+                       select new SupplierInvoiceVM {SupplierInvoiceID=c.SupplierInvoiceID, InvoiceNo = c.InvoiceNo, InvoiceDate = c.InvoiceDate, SupplierName = s.SupplierName, Amount = 0,SupplierType=s.SupplierType.SupplierType1,Remarks=s.Remarks }).ToList();
+            lst.ForEach(d => d.Amount = (from s in db.SupplierInvoiceDetails where s.SupplierInvoiceID == d.SupplierInvoiceID select s).ToList().Sum(a => a.Value));
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
 
@@ -68,13 +70,14 @@ namespace LTMSV2.Controllers
                     _supinvoice.SupplierTypeId = Convert.ToInt32(supplier.SupplierTypeID);
                 }
 
-                List<SupplierInvoiceDetail> _details = new List<SupplierInvoiceDetail>();
-                _details = (from c in db.SupplierInvoiceDetails
+                //List<SupplierInvoiceDetail> _details = new List<SupplierInvoiceDetail>();
+                List<SupplierInvoiceDetailVM> _details = new List<SupplierInvoiceDetailVM>();
+                _details = (from c in db.SupplierInvoiceDetails join a in db.AcHeads on c.AcHeadID equals a.AcHeadID
                             where c.SupplierInvoiceID == id
-                            select c).ToList();
+                            select new SupplierInvoiceDetailVM {SupplierInvoiceDetailID=c.SupplierInvoiceDetailID,SupplierInvoiceID=c.SupplierInvoiceID,AcHeadId=c.AcHeadID,AcHeadName=a.AcHead1,Particulars=c.Particulars,TaxPercentage=c.TaxPercentage,CurrencyID=c.CurrencyID,Amount=c.Amount,Rate=c.Rate, Quantity=c.Quantity, Value=c.Value}   ).ToList();
 
 
-                _supinvoice.SupplierInvoiceDetails = _details;
+                _supinvoice.details = _details;
                 
                 Session["SInvoiceListing"] = _details;
             }
@@ -82,25 +85,19 @@ namespace LTMSV2.Controllers
             {
                 ViewBag.Title = "Supplier Invoice - Create";
                 var Maxnumber = db.SupplierInvoices.ToList().LastOrDefault();
-                if (Maxnumber == null)
-                {
-                    _supinvoice.InvoiceNo = "TD10001";
-
-                }
-                else
-                {
-                    _supinvoice.InvoiceNo = "TD" + (10000 + Maxnumber.SupplierInvoiceID);
-                }
+                _supinvoice.InvoiceNo = ReceiptDAO.SP_GetMaxSINo();
             }
             return View(_supinvoice);
 
         }
-        public JsonResult SetSupplierInvDetails(string invno,string Particulars, decimal Rate, int Qty, int currency, decimal Taxpercent)
+        public JsonResult SetSupplierInvDetails(int acheadid,string achead, string invno,string Particulars, decimal Rate, int Qty, int currency, decimal Taxpercent)
         {
             Random rnd = new Random();
             int dice = rnd.Next(1, 7);   // creates a number between 1 and 6
            
             var invoice = new SupplierInvoiceDetailVM();
+            invoice.AcHeadId = acheadid;
+            invoice.AcHeadName = achead;
             invoice.InvNo = invno+"_"+ dice;
             invoice.Particulars = Particulars;
             invoice.Rate =Rate;
@@ -125,13 +122,21 @@ namespace LTMSV2.Controllers
 
             var _invoice = db.SupplierInvoices.Find(Id);
             List<SupplierInvoiceDetailVM> _details = new List<SupplierInvoiceDetailVM>();
-          var details = (from c in db.SupplierInvoiceDetails
+            List<SupplierInvoiceDetailVM> _details1 = new List<SupplierInvoiceDetailVM>();
+            _details = (from c in db.SupplierInvoiceDetails
+                        join a in db.AcHeads on c.AcHeadID equals a.AcHeadID
                         where c.SupplierInvoiceID == Id
-                        select c).ToList();
-            foreach (var item in details)
+                        select new SupplierInvoiceDetailVM { SupplierInvoiceDetailID = c.SupplierInvoiceDetailID, SupplierInvoiceID = c.SupplierInvoiceID, AcHeadId = c.AcHeadID, AcHeadName = a.AcHead1, Particulars = c.Particulars, TaxPercentage = c.TaxPercentage, CurrencyID = c.CurrencyID, Amount = c.Amount, Rate = c.Rate, Quantity = c.Quantity, Value = c.Value }).ToList();
+
+            //var details = (from c in db.SupplierInvoiceDetails
+            //            where c.SupplierInvoiceID == Id
+            //            select c).ToList();
+            foreach (var item in _details)
             {
                 int dice = rnd.Next(1, 7);
                 var invoice = new SupplierInvoiceDetailVM();
+                invoice.AcHeadId = item.AcHeadId;
+                invoice.AcHeadName = item.AcHeadName;
                 invoice.InvNo = _invoice.InvoiceNo + "_" + dice;
                 invoice.Particulars = item.Particulars;
                 invoice.Rate = item.Rate;
@@ -140,17 +145,18 @@ namespace LTMSV2.Controllers
                 var currencyMaster = db.CurrencyMasters.Find(item.CurrencyID);
                 invoice.CurrencyAmount = Convert.ToDecimal(currencyMaster.ExchangeRate);
                 invoice.Currency = currencyMaster.CurrencyName;
-                var amount = (item.Quantity * item.Rate);
-                var value = amount + (amount * item.TaxPercentage / 100);
+                decimal amount = (item.Quantity * item.Rate);
+                decimal value = amount + (amount * Convert.ToDecimal(item.TaxPercentage) / 100);
                 invoice.Amount = amount;
-                invoice.Value = value;
+                invoice.Value =  value;
                 invoice.TaxPercentage = item.TaxPercentage;
-                _details.Add(invoice);
+                _details1.Add(invoice);
             }
-            return Json(new { InvoiceDetails = _details }, JsonRequestBehavior.AllowGet);
+
+            return Json(new { InvoiceDetails = _details1 }, JsonRequestBehavior.AllowGet);
         }
         //SaveSupplierInvoice
-        public JsonResult SaveSupplierInvoice(int Id, int SupplierID, string InvoiceDate, string InvoiceNo,  string Details)
+        public JsonResult SaveSupplierInvoice(int Id, int SupplierID, string InvoiceDate, string InvoiceNo, string Remarks, string Details)
         {
             try
             {
@@ -176,6 +182,7 @@ namespace LTMSV2.Controllers
                 Supplierinvoice.InvoiceTotal = IDetails.Sum(d => d.Amount);
                 Supplierinvoice.StatusClose = false;
                 Supplierinvoice.IsDeleted = false;
+                Supplierinvoice.Remarks = Remarks;
                 if (Supplierinvoice.SupplierInvoiceID == 0)
                 {
                     db.SupplierInvoices.Add(Supplierinvoice);
@@ -185,6 +192,7 @@ namespace LTMSV2.Controllers
                 {
                     var InvoiceDetail = new SupplierInvoiceDetail();
                     InvoiceDetail.SupplierInvoiceID = Supplierinvoice.SupplierInvoiceID;
+                    InvoiceDetail.AcHeadID = item.AcHeadId;
                     InvoiceDetail.Particulars = item.Particulars;
                     InvoiceDetail.Quantity = item.Quantity;
                     InvoiceDetail.Rate = item.Rate;
@@ -198,6 +206,10 @@ namespace LTMSV2.Controllers
                     db.SaveChanges();
 
                 }
+
+                PickupRequestDAO dao = new PickupRequestDAO();
+                dao.GenerateSupplierInvoicePosting(Supplierinvoice.SupplierInvoiceID);
+
                 return Json(new { status = "ok", message = "Invoice Submitted Successfully!" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -208,16 +220,53 @@ namespace LTMSV2.Controllers
         }
         public ActionResult Delete (int id)
         {
-            var details = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == id select d).ToList();
-            db.SupplierInvoiceDetails.RemoveRange(details);
-            db.SaveChanges();
-            SupplierInvoice invoice = (from d in db.SupplierInvoices where d.SupplierInvoiceID == id select d).FirstOrDefault();
-            //invoice.SupplierInvoiceDetails = null;
-            db.SupplierInvoices.Remove(invoice);
-            db.SaveChanges();
-           
-            TempData["SuccessMsg"] = "You have successfully Deleted Supplier Invoice.";
+            //int k = 0;
+            if (id != 0)
+            {
+                DataTable dt = ReceiptDAO.DeleteSupplierInvoice(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
+            }
+
             return RedirectToAction("Index");
+
+        }
+
+        public ActionResult AccountHead(string term)
+        {
+            int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            if (!String.IsNullOrEmpty(term))
+            {
+                List<AcHeadSelectAllVM> AccountHeadList = new List<AcHeadSelectAllVM>();
+                AccountHeadList = AccountsDAO.GetAcHeadSelectAll(branchID).Where(c => c.AcHead.ToLower().Contains(term.ToLower())).OrderBy(x => x.AcHead).ToList(); ;
+
+                //List<AcHeadSelectAll_Result> AccountHeadList = new List<AcHeadSelectAll_Result>();
+                //AccountHeadList =db.AcHeadSelectAll(branchID).Where(c => c.AcHead.ToLower().Contains(term.ToLower())).OrderBy(x => x.AcHead).ToList();
+                return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
+
+                //List<AcHeadSelectAll_Result> AccountHeadList = new List<AcHeadSelectAll_Result>();
+                //AccountHeadList = MM.AcHeadSelectAll(Common.ParseInt(Session["CurrentBranchID"].ToString()), term);
+
+            }
+            else
+            {
+                List<AcHeadSelectAllVM> AccountHeadList = new List<AcHeadSelectAllVM>();
+                AccountHeadList = AccountsDAO.GetAcHeadSelectAll(branchID);
+                //List<AcHeadSelectAll_Result> AccountHeadList = new List<AcHeadSelectAll_Result>();
+                //AccountHeadList = db.AcHeadSelectAll(branchID).ToList();
+                return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

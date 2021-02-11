@@ -3187,6 +3187,17 @@
     <Property Name="InvoiceTotal" Type="money" />
     <Property Name="IsDeleted" Type="bit" />
   </EntityType>
+  <EntityType Name="SupplierInvoiceConsignment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplierInvoiceId" Type="int" Nullable="false" />
+    <Property Name="SupplierInvoiceDetailId" Type="int" Nullable="false" />
+    <Property Name="AcHeadId" Type="int" Nullable="false" />
+    <Property Name="InScanID" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="money" />
+  </EntityType>
   <EntityType Name="SupplierInvoiceDetails">
     <Key>
       <PropertyRef Name="SupplierInvoiceDetailID" />
@@ -3200,9 +3211,10 @@
     <Property Name="CurrencyAmount" Type="money" Nullable="false" />
     <Property Name="Amount" Type="money" />
     <Property Name="TaxPercentage" Type="decimal" Precision="10" Scale="2" />
-    <Property Name="Value" Type="money" />
+    <Property Name="Value" Type="money" Nullable="false" />
     <Property Name="RecPayStatus" Type="int" />
     <Property Name="RecPayDetailId" Type="int" />
+    <Property Name="AcHeadID" Type="int" />
   </EntityType>
   <EntityType Name="SupplierMaster">
     <Key>
@@ -8375,7 +8387,7 @@
     <Parameter Name="InvNo" Type="nvarchar" Mode="In" />
     <Parameter Name="CurrencyID" Type="int" Mode="In" />
     <Parameter Name="InvoiceStatus" Type="int" Mode="In" />
-    <Parameter Name="JobID" Type="int" Mode="In" />
+    <Parameter Name="InScanId" Type="int" Mode="In" />
   </Function>
   <Function Name="SP_InsertRecPayDetailsForSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="RecPayID" Type="int" Mode="In" />
@@ -8389,7 +8401,6 @@
     <Parameter Name="InvNo" Type="nvarchar" Mode="In" />
     <Parameter Name="CurrencyID" Type="int" Mode="In" />
     <Parameter Name="InvoiceStatus" Type="int" Mode="In" />
-    <Parameter Name="JobID" Type="int" Mode="In" />
   </Function>
   <Function Name="SPGetAllLocalCurrencyCustRecievable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="AcFinancialYearID" Type="int" Mode="In" />
@@ -8838,6 +8849,7 @@
     <EntitySet Name="SubStatus" EntityType="Self.SubStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierInvoice" EntityType="Self.SupplierInvoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SupplierInvoiceConsignment" EntityType="Self.SupplierInvoiceConsignment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierInvoiceDetails" EntityType="Self.SupplierInvoiceDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierMaster" EntityType="Self.SupplierMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SupplierType" EntityType="Self.SupplierType" Schema="dbo" store:Type="Tables" />

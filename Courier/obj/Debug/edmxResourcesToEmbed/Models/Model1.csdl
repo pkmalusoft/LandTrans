@@ -8129,7 +8129,7 @@
       <Parameter Name="InvNo" Mode="In" Type="String" />
       <Parameter Name="CurrencyID" Mode="In" Type="Int32" />
       <Parameter Name="InvoiceStatus" Mode="In" Type="Int32" />
-      <Parameter Name="JobID" Mode="In" Type="Int32" />
+      <Parameter Name="InScanId" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="SP_InsertRecPayDetailsForSupplier">
       <Parameter Name="RecPayID" Mode="In" Type="Int32" />
@@ -8143,7 +8143,6 @@
       <Parameter Name="InvNo" Mode="In" Type="String" />
       <Parameter Name="CurrencyID" Mode="In" Type="Int32" />
       <Parameter Name="InvoiceStatus" Mode="In" Type="Int32" />
-      <Parameter Name="JobID" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="SPGetAllLocalCurrencyCustRecievable">
       <Parameter Name="AcFinancialYearID" Mode="In" Type="Int32" />
@@ -8600,6 +8599,7 @@
     <EntitySet Name="CostUpdateConsignments" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateConsignment" />
     <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
     <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
+    <EntitySet Name="SupplierInvoiceConsignments" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceConsignment" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -13030,10 +13030,11 @@
     <Property Name="CurrencyAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="TaxPercentage" Type="Decimal" Precision="10" Scale="2" />
-    <Property Name="Value" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Value" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
     <Property Name="RecPayStatus" Type="Int32" />
     <Property Name="RecPayDetailId" Type="Int32" />
     <NavigationProperty Name="SupplierInvoice" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" FromRole="SupplierInvoiceDetail" ToRole="SupplierInvoice" />
+    <Property Name="AcHeadID" Type="Int32" />
   </EntityType>
   <Association Name="FK_SupplierInvoice_SupplierMaster">
     <End Type="DB_9F57C4_couriertest_newModel.SupplierMaster" Role="SupplierMaster" Multiplicity="1" />
@@ -13521,5 +13522,16 @@
     <Property Name="TruckDetailID" Type="Int32" />
     <Property Name="AcOPInvoiceDetailID" Type="Int32" />
     <Property Name="InScanID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="SupplierInvoiceConsignment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SupplierInvoiceId" Type="Int32" Nullable="false" />
+    <Property Name="SupplierInvoiceDetailId" Type="Int32" Nullable="false" />
+    <Property Name="AcHeadId" Type="Int32" Nullable="false" />
+    <Property Name="InScanID" Type="Int32" Nullable="false" />
+    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
 </Schema>
