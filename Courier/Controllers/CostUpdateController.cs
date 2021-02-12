@@ -537,6 +537,7 @@ namespace LTMSV2.Controllers
             AWBAllocationall = (List<CostUpdateConsignmentVM>)Session["CostAWBAllocation"];
             if (AWBAllocationall == null)
             {
+                AWBAllocationall = new List<CostUpdateConsignmentVM>();
                 var list = (from c in db.InScanMasters where c.IsDeleted == false && (c.TruckDetailId == tripno || tripno == 0) orderby c.ConsignmentNo select new { InScanID = c.InScanID, TransactionDate = c.TransactionDate, ConsignmentNo = c.ConsignmentNo, TruckDetailID = c.TruckDetailId }).ToList();
                 if (list != null)
                 {

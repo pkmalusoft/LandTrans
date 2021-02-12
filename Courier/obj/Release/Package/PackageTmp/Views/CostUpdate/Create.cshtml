@@ -126,7 +126,7 @@
                         var revenuecost = item.RevenueCost;
                         var revenuecostid = item.RevenueCostMasterID;
                         var amount = item.Amount;
-                        var famount = parseFloat(amount * exchangerate).toFixed(2);
+                        var famount = parseFloat(amount * exchangerate).toFixed(3);
                         var invoicedto = item.InvoicedTo;
                         var customerid = item.SupplierId;
                         var DebitHead = item.DebitAccountName;
@@ -143,7 +143,7 @@
                         var revenueamthtml = '<input type="text" class="form-control text-right" id="txtrevenueamt_' + i + '" value="' + amount + '" name="DetailVM[' + i + '].Amount" />';
                         objHtml = objHtml + '<td class=textright style="padding-right:10px">' + revenueamthtml + '<input type="hidden" class="JAcAmt" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
                         //objHtml = objHtml + '<td class style="padding-right:10px">' + amount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
-                        objHtml = objHtml + '<td class style="padding-right:10px">' + famount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
+                        objHtml = objHtml + '<td class=textright style="padding-right:10px">' + famount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
                         objHtml = objHtml + '<td style="padding-left:10px">' + invoicedto + '<input type="hidden" value=' + customerid + ' name="DetailVM[' + i + '].SupplierId"></td>'
                         var DebitHeadhtml = '<span id="spandebithead_' + i + '">' + DebitHead + '</span>';
                         objHtml = objHtml + '<td style="padding-left:10px">' + DebitHeadhtml + '<input type="hidden" id="txtdebitid_' + i + '"  value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
@@ -266,7 +266,7 @@
                var revenueamthtml = '<input type="text" class="form-control text-right" id="txtrevenueamt_' + i + '" value="' + amount + '" name="DetailVM[' + i + '].Amount" />';
                objHtml = objHtml + '<td class=textright style="padding-right:10px">' + revenueamthtml + '<input type="hidden" class="JAcAmt" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
                 //objHtml = objHtml + '<td class style="padding-right:10px">' + amount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
-                objHtml = objHtml + '<td class style="padding-right:10px">' + famount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
+        objHtml = objHtml + '<td class=textright style="padding-right:10px">' + famount + '<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
                 objHtml = objHtml + '<td style="padding-left:10px">' + invoicedto + '<input type="hidden" value=' + customerid + ' name="DetailVM[' + i + '].SupplierId"></td>'
                 var DebitHeadhtml = '<span id="spandebithead_' + i + '">' + DebitHead + '</span>';
                 objHtml = objHtml + '<td style="padding-left:10px">' + DebitHeadhtml + '<input type="hidden" id="txtdebitid_' + i + '"  value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
@@ -843,6 +843,37 @@
     }
     function ShowConsignmentPopup(index) {
         debugger;
+        $('#spanerr').html();
+        if ($('#TDNo').val().trim() == '') {
+            $('#spanerr').html('Select TD No.!');
+            $('#TDNo').focus();
+            return;
+        }
+        else if ($('#txtSupplier').val()=='')
+        {
+            $('#spanerr').html('Select Supplier!');
+            $('#txtSupplier').focus();
+            return;
+
+        }
+        else if ($('#txtRevenueCost').val().trim() == '' || $('#txtRevenueCostId').val() == 0) {
+            $('#spanerr').html('Select Cost!');
+            $('#txtRevenueCost').focus();
+            return;
+        }
+        else if ($("#txtAmount").val() == '0' || $("#txtAmount").val().trim() == '' ) {
+            $('#spanerr').html('Enter Amount!');
+            $("#txtAmount").val(0);
+            $("#txtAmount").focus();
+            return;
+        }
+        else if (parseFloat($("#txtAmount").val())<=0 ) {
+            $('#spanerr').html('Enter Amount!');
+            $("#txtAmount").focus();
+            return;
+        }
+        
+
         var TDNo = $('#TDNo').val();
         var acheadid = $('#txtRevenueCostId').val();
         $('#hdnEditAcHeadId').val(acheadid);

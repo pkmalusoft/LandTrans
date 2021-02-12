@@ -752,5 +752,138 @@ namespace LTMSV2.Controllers
 
         }
 
+        #region "CustomerAging"
+        public ActionResult CustomerAging()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam                {
+                    
+                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Summary"
+                };
+            }
+            if (model.AsonDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            SessionDataModel.SetCustomerLedgerParam(model);
+
+            model.AsonDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;            
+            ViewBag.ReportName = "Customer Aging Report";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerAging"))
+                {
+                    Session["ReportOutput"] = null;
+                }                
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerAging(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {               
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = "PDF",
+                ReportType = picker.ReportType,
+                AsonDate = picker.AsonDate
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetCustomerLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            AccountsReportsDAO.GenerateCustomerAgingReport();
+
+            return RedirectToAction("CustomerAging", "Reports");
+
+
+        }
+        #endregion
+
+
+        #region "SupplierAging"
+        public ActionResult SupplierAging()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            var supplierMasterTypes = (from d in db.SupplierTypes select d).ToList();
+            ViewBag.SupplierType = supplierMasterTypes;
+
+            SupplierLedgerReportParam model = SessionDataModel.GetSupplierLedgerReportParam();
+            if (model == null)
+            {
+                model = new SupplierLedgerReportParam
+                {
+
+                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    SupplierId = 0,
+                    SupplierName = "",
+                    Output = "PDF",
+                    ReportType = "Summary"
+                };
+            }
+            if (model.AsonDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            SessionDataModel.SetSupplierLedgerParam(model);
+
+            model.AsonDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            ViewBag.ReportName = "Supplier Aging Report";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("SupplierAging"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult SupplierAging(SupplierLedgerReportParam picker)
+        {
+
+            SupplierLedgerReportParam model = new SupplierLedgerReportParam
+            {
+                SupplierId = picker.SupplierId,
+                SupplierName = picker.SupplierName,
+                Output = "PDF",
+                ReportType = picker.ReportType,
+                AsonDate = picker.AsonDate
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetSupplierLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            AccountsReportsDAO.GenerateSupplierAgingReport();
+
+            return RedirectToAction("SupplierAging", "Reports");
+
+
+        }
+        #endregion
     }
 }

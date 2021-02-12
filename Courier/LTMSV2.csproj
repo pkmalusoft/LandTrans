@@ -3068,6 +3068,7 @@
     </Content>
     <Content Include="Controllers\EditAcGroup.cshtml" />
     <Content Include="Controllers\EditAcType.cshtml" />
+    <None Include="ReportsXSD\AccLedger.xsd" />
     <None Include="Reports\AccLedger.xsd" />
     <Content Include="Reports\AccTrialBalance.rpt" />
     <Content Include="Reports\AccTradingAccount.rpt" />
@@ -3102,6 +3103,10 @@
     <Content Include="Reports\CustomerOutStanding.rpt" />
     <Content Include="Reports\CustomerStatement.rpt" />
     <Content Include="Reports\SupplierStatement.rpt" />
+    <Content Include="Reports\CustomerAgingDetail.rpt" />
+    <Content Include="Reports\CustomerAgingSummary.rpt" />
+    <Content Include="Reports\SupplierAgingDetail.rpt" />
+    <Content Include="Reports\SupplierAgingSummary.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3607,11 +3612,12 @@
     <Content Include="Views\Reports\CustomerProfitAnalysis.cshtml" />
     <Content Include="Views\Accounts\Create.cshtml" />
     <Content Include="Views\SupplierPayment\SupplierPayment - Copy.cshtml" />
+    <Content Include="Views\Reports\CustomerAging.cshtml" />
+    <Content Include="Views\Reports\SupplierAging.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="ReportsPDF\" />
-    <Folder Include="ReportsXSD\" />
     <Folder Include="Views\Master\" />
     <Folder Include="Views\UserRegistration\New folder\" />
   </ItemGroup>
