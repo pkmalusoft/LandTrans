@@ -16,8 +16,10 @@
             $("#divreport1").addClass('hide');
         }
         else if (@ViewBag.ReportId == '3') {
-            console.log('report3');
-            $("#divreport1").addClass('hide');
+            
+            $("#divreport2").addClass('hide');
+            $('#divachead1').addClass('hide');
+            $('#AcHeadName').removeAttr('required');
         }
     });
 </script>

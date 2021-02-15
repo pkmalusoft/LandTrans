@@ -31,4 +31,11 @@ namespace LTMSV2.Models
         public string InvNo { get; set; }
         public string Currency { get; set; }
     }
+
+    public class SupplierInvoiceConsignmentVM:SupplierInvoiceConsignment
+    {
+        public int TruckDetailID { get; set; }
+        public string ConsignmentNo { get; set; }
+        public DateTime ConsignmentDate { get; set; }
+    }
 }

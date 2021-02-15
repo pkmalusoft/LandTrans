@@ -80,6 +80,12 @@ namespace LTMSV2.Controllers
                 _supinvoice.details = _details;
                 
                 Session["SInvoiceListing"] = _details;
+                               
+                
+                List<SupplierInvoiceConsignmentVM> AWBAllocationall = (from c in db.SupplierInvoiceConsignments  join d in db.InScanMasters on c.InScanID equals d.InScanID 
+                                                                       where c.SupplierInvoiceId == id select new SupplierInvoiceConsignmentVM { ID = c.ID, SupplierInvoiceId = c.SupplierInvoiceId, SupplierInvoiceDetailId = c.SupplierInvoiceDetailId,
+                                                                                    AcHeadId = c.AcHeadId, Amount = c.Amount, InScanID = c.InScanID, ConsignmentNo = d.ConsignmentNo, ConsignmentDate = d.TransactionDate }).ToList();
+                Session["SIAWBAllocation"] = AWBAllocationall;
             }
             else
             {
@@ -90,7 +96,7 @@ namespace LTMSV2.Controllers
             return View(_supinvoice);
 
         }
-        public JsonResult SetSupplierInvDetails(int acheadid,string achead, string invno,string Particulars, decimal Rate, int Qty, int currency, decimal Taxpercent)
+        public JsonResult SetSupplierInvDetails(int acheadid,string achead, string invno,string Particulars, decimal Rate, int Qty,decimal amount,int currency, decimal Taxpercent,decimal netvalue)
         {
             Random rnd = new Random();
             int dice = rnd.Next(1, 7);   // creates a number between 1 and 6
@@ -106,11 +112,11 @@ namespace LTMSV2.Controllers
             var currencyMaster = db.CurrencyMasters.Find(currency);
             invoice.CurrencyAmount =Convert.ToDecimal(currencyMaster.ExchangeRate);
             invoice.Currency =currencyMaster.CurrencyName;
-            var amount = (Qty * Rate);
-            var value = amount + (amount * Taxpercent / 100);
+            //var amount = (Qty * Rate);
+            //var value = amount + (amount * Taxpercent / 100);
           
             invoice.Amount = amount;
-            invoice.Value =value;
+            invoice.Value =netvalue;
             invoice.TaxPercentage = Taxpercent;
 
             return Json(new { InvoiceDetails = invoice }, JsonRequestBehavior.AllowGet);
@@ -125,8 +131,9 @@ namespace LTMSV2.Controllers
             List<SupplierInvoiceDetailVM> _details1 = new List<SupplierInvoiceDetailVM>();
             _details = (from c in db.SupplierInvoiceDetails
                         join a in db.AcHeads on c.AcHeadID equals a.AcHeadID
+                        join cu in db.CurrencyMasters on c.CurrencyID equals cu.CurrencyID
                         where c.SupplierInvoiceID == Id
-                        select new SupplierInvoiceDetailVM { SupplierInvoiceDetailID = c.SupplierInvoiceDetailID, SupplierInvoiceID = c.SupplierInvoiceID, AcHeadId = c.AcHeadID, AcHeadName = a.AcHead1, Particulars = c.Particulars, TaxPercentage = c.TaxPercentage, CurrencyID = c.CurrencyID, Amount = c.Amount, Rate = c.Rate, Quantity = c.Quantity, Value = c.Value }).ToList();
+                        select new SupplierInvoiceDetailVM { SupplierInvoiceDetailID = c.SupplierInvoiceDetailID, SupplierInvoiceID = c.SupplierInvoiceID, AcHeadId = c.AcHeadID, AcHeadName = a.AcHead1, Particulars = c.Particulars, TaxPercentage = c.TaxPercentage, CurrencyID = c.CurrencyID, Amount = c.Amount, Rate = c.Rate, Quantity = c.Quantity, Value = c.Value ,Currency=cu.CurrencyCode }).ToList();
 
             //var details = (from c in db.SupplierInvoiceDetails
             //            where c.SupplierInvoiceID == Id
@@ -135,6 +142,7 @@ namespace LTMSV2.Controllers
             {
                 int dice = rnd.Next(1, 7);
                 var invoice = new SupplierInvoiceDetailVM();
+                invoice.SupplierInvoiceDetailID = item.SupplierInvoiceDetailID;
                 invoice.AcHeadId = item.AcHeadId;
                 invoice.AcHeadName = item.AcHeadName;
                 invoice.InvNo = _invoice.InvoiceNo + "_" + dice;
@@ -145,10 +153,10 @@ namespace LTMSV2.Controllers
                 var currencyMaster = db.CurrencyMasters.Find(item.CurrencyID);
                 invoice.CurrencyAmount = Convert.ToDecimal(currencyMaster.ExchangeRate);
                 invoice.Currency = currencyMaster.CurrencyName;
-                decimal amount = (item.Quantity * item.Rate);
-                decimal value = amount + (amount * Convert.ToDecimal(item.TaxPercentage) / 100);
-                invoice.Amount = amount;
-                invoice.Value =  value;
+                //decimal amount = (item.Quantity * item.Rate);
+                //decimal value = amount + (amount * Convert.ToDecimal(item.TaxPercentage) / 100);
+                invoice.Amount = item.Amount;
+                invoice.Value = item.Value;
                 invoice.TaxPercentage = item.TaxPercentage;
                 _details1.Add(invoice);
             }
@@ -161,7 +169,9 @@ namespace LTMSV2.Controllers
             try
             {
                 var IDetails = JsonConvert.DeserializeObject<List<SupplierInvoiceDetailVM>>(Details);
-
+                List<SupplierInvoiceConsignmentVM> AWBAllocationall = new List<SupplierInvoiceConsignmentVM>();
+                List<SupplierInvoiceConsignmentVM> AWBAllocation = new List<SupplierInvoiceConsignmentVM>();
+                AWBAllocationall = (List<SupplierInvoiceConsignmentVM>)Session["SIAWBAllocation"];
                 var Supplierinvoice = (from d in db.SupplierInvoices where d.SupplierInvoiceID == Id select d).FirstOrDefault();
                 if (Supplierinvoice == null)
                 {
@@ -172,7 +182,12 @@ namespace LTMSV2.Controllers
                     var details = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == Supplierinvoice.SupplierInvoiceID select d).ToList();
                     db.SupplierInvoiceDetails.RemoveRange(details);
                     db.SaveChanges();
+
+                    var consignmentdetails = (from d in db.SupplierInvoiceConsignments where d.SupplierInvoiceId == Supplierinvoice.SupplierInvoiceID select d).ToList();
+                    db.SupplierInvoiceConsignments.RemoveRange(consignmentdetails);
+                    db.SaveChanges();
                 }
+
                 Supplierinvoice.SupplierID = SupplierID;
                 Supplierinvoice.InvoiceDate = Convert.ToDateTime(InvoiceDate);
                 Supplierinvoice.InvoiceNo = InvoiceNo;
@@ -204,6 +219,29 @@ namespace LTMSV2.Controllers
 
                     db.SupplierInvoiceDetails.Add(InvoiceDetail);
                     db.SaveChanges();
+
+                    //adding consignment referece to this entry
+                    int acheadid = Convert.ToInt32(item.AcHeadId);
+
+                    if (AWBAllocationall != null)
+                    {
+
+                        var list = AWBAllocationall.Where(cc => cc.AcHeadId == acheadid).ToList();
+                        if (list != null)
+                        {
+                            foreach (var item2 in list)
+                            {
+                                SupplierInvoiceConsignment accons = new SupplierInvoiceConsignment();
+                                accons.SupplierInvoiceId = Supplierinvoice.SupplierInvoiceID;
+                                accons.SupplierInvoiceDetailId = item.SupplierInvoiceDetailID;
+                                accons.AcHeadId = acheadid;
+                                accons.InScanID = Convert.ToInt32(item2.InScanID);
+                                accons.Amount = item2.Amount;
+                                db.SupplierInvoiceConsignments.Add(accons);
+                                db.SaveChanges();
+                            }
+                        }
+                    }
 
                 }
 
@@ -267,6 +305,64 @@ namespace LTMSV2.Controllers
                 //AccountHeadList = db.AcHeadSelectAll(branchID).ToList();
                 return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
             }
+        }
+
+
+        [HttpGet]
+        public JsonResult GetAWBAllocation(int AcHeadId)
+        {
+            List<SupplierInvoiceConsignmentVM> AWBAllocationall = new List<SupplierInvoiceConsignmentVM>();
+            List<SupplierInvoiceConsignmentVM> AWBAllocation = new List<SupplierInvoiceConsignmentVM>();
+            AWBAllocationall = (List<SupplierInvoiceConsignmentVM>)Session["SIAWBAllocation"];
+            if (AWBAllocationall == null)
+            {
+                return Json(AWBAllocation, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                AWBAllocation = AWBAllocationall.Where(cc => cc.AcHeadId == AcHeadId).ToList();
+            }
+
+            if (AWBAllocation == null)
+            {
+                AWBAllocation = new List<SupplierInvoiceConsignmentVM>();
+
+            }
+            return Json(AWBAllocation, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult SaveAWBAllocation(List<SupplierInvoiceConsignmentVM> list)
+        {
+
+            List<SupplierInvoiceConsignmentVM> AWBAllocationall = new List<SupplierInvoiceConsignmentVM>();
+            List<SupplierInvoiceConsignmentVM> AWBAllocation = new List<SupplierInvoiceConsignmentVM>();
+            AWBAllocationall = (List<SupplierInvoiceConsignmentVM>)Session["SIAWBAllocation"];
+
+            if (AWBAllocationall == null)
+            {
+                AWBAllocationall = new List<SupplierInvoiceConsignmentVM>();
+                foreach (var item2 in list)
+                {
+                    AWBAllocationall.Add(item2);
+
+                }
+
+            }
+            else
+            {
+                int acheadid = list[0].AcHeadId;
+                AWBAllocationall.RemoveAll(cc => cc.AcHeadId == acheadid);
+                foreach (var item2 in list)
+                {
+                    AWBAllocationall.Add(item2);
+
+                }
+            }
+
+            Session["SIAWBAllocation"] = AWBAllocationall;
+
+            return Json(AWBAllocationall, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

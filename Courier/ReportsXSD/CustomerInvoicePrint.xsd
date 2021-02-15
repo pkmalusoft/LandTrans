@@ -51,6 +51,7 @@
               <xs:element name="LocationName" type="xs:string" minOccurs="0" />
               <xs:element name="CountryName" type="xs:string" minOccurs="0" />
               <xs:element name="Remarks1" type="xs:string" minOccurs="0" />
+              <xs:element name="PickUpLocation" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

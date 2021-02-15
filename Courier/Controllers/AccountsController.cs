@@ -3467,7 +3467,7 @@ new AcGroupModel()
             }
             else if (id == 3)
             {
-                ViewBag.ReportName = "Trading Account";
+                ViewBag.ReportName = "Trading and P/L Statement";
                 ViewBag.ReportId = "3";
                 if (Session["ReportOutput"] != null)
                 {
@@ -3555,20 +3555,26 @@ new AcGroupModel()
             Response.ClearHeaders();
             //Stream stream= GenerateReport();
             //GenerateDefaultReport();
-            
-            AccountsReportsDAO.GenerateLedgerReport();
-            if (model.Output!="PDF")
-                return RedirectToAction("Download","Accounts",new { file = "a" });
+            var reportid = Session["ReportId"].ToString();
+            if (reportid == "1") //ledger
+            {
+                AccountsReportsDAO.GenerateLedgerReport();
+                if (model.Output != "PDF")
+                    return RedirectToAction("Download", "Accounts", new { file = "a" });
+                else
+                    return RedirectToAction("Ledger", "Accounts", new { id = 1 });
+            }
+            else if (reportid == "3")
+            {
+                AccountsReportsDAO.GenerateTradingAccountReport();
+                return RedirectToAction("Ledger", "Accounts", new { id = reportid });
+
+            }
             else
+            {
                 return RedirectToAction("Ledger", "Accounts", new { id = 1 });
-
-            //return File(stream, "application/pdf", "AccLedger.pdf");
-
-
-            //return PartialView(model);
-            //return View(model);
-
-            //return PartialView("InvoiceSearch",model);
+            }
+           
 
         }
 

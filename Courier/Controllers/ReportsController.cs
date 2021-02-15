@@ -799,7 +799,7 @@ namespace LTMSV2.Controllers
             {               
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
-                Output = "PDF",
+                Output = picker.Output,
                 ReportType = picker.ReportType,
                 AsonDate = picker.AsonDate
             };
@@ -868,7 +868,7 @@ namespace LTMSV2.Controllers
             {
                 SupplierId = picker.SupplierId,
                 SupplierName = picker.SupplierName,
-                Output = "PDF",
+                Output = picker.Output,
                 ReportType = picker.ReportType,
                 AsonDate = picker.AsonDate
             };
