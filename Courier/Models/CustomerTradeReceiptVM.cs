@@ -27,6 +27,7 @@ namespace LTMSV2.Models
         public decimal? AdjustmentAmount { get; set; }
 
         public decimal? Amount { get; set; }
+        public bool Allocated { get; set; }
     }
 
     public class ReceiptAllocationDetailVM

@@ -906,7 +906,8 @@ namespace LTMSV2.Controllers
                             if (sInvoiceDetail != null)
                             {
                                 var invoicetotal = sInvoiceDetail.Sum(d => d.Amount); //  sInvoiceDetail.Sum(d=>d.OtherCharge);                                                                
-                                var allrecpay = (from d in Context1.RecPayDetails where d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();
+                                //var allrecpay = (from d in Context1.RecPayDetails where d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();
+                                var allrecpay = (from d in Context1.RecPayDetails join c in Context1.RecPays on d.RecPayID equals c.RecPayID where c.RecPayDate.Value < cust.RecPayDate && d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();
                                 var totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
                                 var totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
                                 //var CreditNote = (from d in Context1.CreditNotes where d.InvoiceID == item.InvoiceID && d.CustomerID == Sinvoice.CustomerID select d).ToList();
@@ -920,12 +921,13 @@ namespace LTMSV2.Controllers
                                 customerinvoice.InvoiceID = 0;
                                 customerinvoice.AcOPInvoiceDetailID = sInvoiceDetail[0].AcOPInvoiceDetailID;
                                 customerinvoice.InvoiceType = "OP";
+                                customerinvoice.JobCode = customerinvoice.InvoiceType + customerinvoice.AcOPInvoiceDetailID;
                                 customerinvoice.SInvoiceNo = sInvoiceDetail[0].InvoiceNo;
                                 customerinvoice.strDate = Convert.ToDateTime(item.InvDate).ToString("dd/MM/yyyy");
-                                customerinvoice.AmountToBeRecieved = Convert.ToDecimal(invoicetotal) - Convert.ToDecimal(totamt) - Convert.ToDecimal(item.Amount);
-                                customerinvoice.AmountToBePaid = Convert.ToDecimal(invoicetotal) - customerinvoice.AmountToBeRecieved;
+                                customerinvoice.AmountToBeRecieved = Convert.ToDecimal(invoicetotal);// - Convert.ToDecimal(totamt) - Convert.ToDecimal(item.Amount);
+                                customerinvoice.AmountToBePaid =  Convert.ToDecimal(totamt); // Convert.ToDecimal(totamtpaid) - Convert.ToDecimal(totadjust);// ;// customerinvoice.AmountToBeRecieved;
                                 customerinvoice.Amount = Convert.ToDecimal(item.Amount) * -1;
-                                customerinvoice.Balance = (Convert.ToDecimal(invoicetotal) - Convert.ToDecimal(totamt)) - Convert.ToDecimal(item.Amount); //  Convert.ToDecimal(sInvoiceDetail.NetValue - totamt);
+                                customerinvoice.Balance = customerinvoice.AmountToBeRecieved - customerinvoice.AmountToBePaid; // (Convert.ToDecimal(invoicetotal) - Convert.ToDecimal(totamt)) - Convert.ToDecimal(item.Amount); //  Convert.ToDecimal(sInvoiceDetail.NetValue - totamt);
                                 customerinvoice.RecPayDetailID = item.RecPayDetailID;
 
                                 customerinvoice.RecPayID = Convert.ToInt32(item.RecPayID);
@@ -943,7 +945,7 @@ namespace LTMSV2.Controllers
                                 var invoicetotal = sInvoiceDetail.Sum(d => d.NetValue); //  sInvoiceDetail.Sum(d=>d.OtherCharge);
                                 var awbtotal = awbDetail.Sum(d => d.AllocatedAmount);
                                 var Sinvoice = (from d in Context1.CustomerInvoices where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
-                                var allrecpay = (from d in Context1.RecPayDetails where d.InvoiceID == item.InvoiceID select d).ToList();
+                                var allrecpay = (from d in Context1.RecPayDetails join c in Context1.RecPays on d.RecPayID equals c.RecPayID where c.RecPayDate.Value<cust.RecPayDate &&  d.InvoiceID == item.InvoiceID select d).ToList();
                                 var totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
                                 var totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
                                 var CreditNote = (from d in Context1.CreditNotes where d.InvoiceID == item.InvoiceID && d.CustomerID == Sinvoice.CustomerID select d).ToList();
@@ -957,12 +959,13 @@ namespace LTMSV2.Controllers
                                 customerinvoice.InvoiceID = Convert.ToInt32(item.InvoiceID);
                                 customerinvoice.AcOPInvoiceDetailID = 0;
                                 customerinvoice.InvoiceType = "TR";
+                                customerinvoice.JobCode = customerinvoice.InvoiceType + customerinvoice.InvoiceID;
                                 customerinvoice.SInvoiceNo = Sinvoice.CustomerInvoiceNo;
                                 customerinvoice.strDate = Convert.ToDateTime(item.InvDate).ToString("dd/MM/yyyy");
-                                customerinvoice.AmountToBeRecieved = Convert.ToDecimal(invoicetotal) - Convert.ToDecimal(totamt) - Convert.ToDecimal(item.Amount);
-                                customerinvoice.AmountToBePaid = Convert.ToDecimal(invoicetotal) - customerinvoice.AmountToBeRecieved;
+                                customerinvoice.AmountToBeRecieved = Convert.ToDecimal(invoicetotal);// - Convert.ToDecimal(totamt) - Convert.ToDecimal(item.Amount);
                                 customerinvoice.Amount = Convert.ToDecimal(item.Amount) * -1;
-                                customerinvoice.Balance = (Convert.ToDecimal(invoicetotal)- Convert.ToDecimal(totamt)) - Convert.ToDecimal(item.Amount); //  Convert.ToDecimal(sInvoiceDetail.NetValue - totamt);
+                                customerinvoice.AmountToBePaid =  Convert.ToDecimal(totamt); // - customerinvoice.AmountToBeRecieved;
+                                customerinvoice.Balance = (Convert.ToDecimal(invoicetotal) - customerinvoice.AmountToBePaid); // - Convert.ToDecimal(totamt)) - Convert.ToDecimal(item.Amount); //  Convert.ToDecimal(sInvoiceDetail.NetValue - totamt);
                                 customerinvoice.RecPayDetailID = item.RecPayDetailID;
                                 
                                 customerinvoice.RecPayID = Convert.ToInt32(item.RecPayID);
@@ -1078,6 +1081,7 @@ namespace LTMSV2.Controllers
                     {
                         if (amountreceived >= Invoice.Balance)
                         {
+                            Invoice.Allocated = true;
                             Invoice.Amount = Invoice.Balance;
                             amountreceived = amountreceived - Invoice.Amount;
                         }
@@ -1141,6 +1145,7 @@ namespace LTMSV2.Controllers
                     {
                         if (amountreceived >= Invoice.Balance)
                         {
+                            Invoice.Allocated = true;
                             Invoice.Amount = Invoice.Balance;
                             amountreceived = amountreceived - Invoice.Amount;
                         }
@@ -1266,10 +1271,10 @@ namespace LTMSV2.Controllers
                 {
                     Fmoney = Fmoney + Convert.ToDecimal(RecP.CustomerRcieptChildVM[j].Amount);
                 }
-                if (Fmoney > 0)
-                {
-                    RecP.FMoney = Fmoney;
-                }
+                //if (Fmoney > 0)
+                //{
+                //    RecP.FMoney = Fmoney;
+                //}
                 RecP.AcCompanyID = branchid; 
                 RPID = ReceiptDAO.AddCustomerRecieptPayment(RecP, Session["UserID"].ToString()); //.AddCustomerRecieptPayment(RecP, Session["UserID"].ToString());
 
@@ -1286,7 +1291,7 @@ namespace LTMSV2.Controllers
                     Advance = Convert.ToDecimal(item.Amount )- item.AmountToBeRecieved;
                     DateTime vInvoiceDate = Convert.ToDateTime(item.InvoiceDate);
                     string vInvoiceDate1 = Convert.ToDateTime(vInvoiceDate).ToString("yyyy-MM-dd h:mm tt");
-                    if (item.Amount > 0 || item.AdjustmentAmount > 0)
+                    if (1==1) //item.Amount > 0 || item.AdjustmentAmount > 0)
                     {
                         var maxrecpaydetailid = (from c in Context1.RecPayDetails orderby c.RecPayDetailID descending select c.RecPayDetailID).FirstOrDefault();
                         string invoicetype = "C";
@@ -1448,7 +1453,7 @@ namespace LTMSV2.Controllers
                 recpay.DocumentNo = RecP.DocumentNo;
                 recpay.EXRate = RecP.EXRate;
                 recpay.FYearID = RecP.FYearID;
-                recpay.FMoney = Fmoney;
+                recpay.FMoney = RecP.FMoney;
                 recpay.StatusEntry = RecP.StatusEntry;
                 recpay.IsTradingReceipt = true;
                 recpay.Remarks = RecP.Remarks;
@@ -1457,13 +1462,13 @@ namespace LTMSV2.Controllers
 
                 foreach (var item in RecP.CustomerRcieptChildVM)
                 {
-                    RecPayDetail recpd = new RecPayDetail();
-                    recpd.RecPayDetailID = item.RecPayDetailID;
+                    RecPayDetail recpd = Context1.RecPayDetails.Find(item.RecPayDetailID);
+                    //recpd.RecPayDetailID = item.RecPayDetailID;
                     recpd.Amount = -(item.Amount);
-                    recpd.CurrencyID = item.CurrencyId;
+                    //recpd.CurrencyID = item.CurrencyId;
                     recpd.AdjustmentAmount = item.AdjustmentAmount;
                     //recpd.InvDate = item.InvoiceDate.Value;
-                    recpd.RecPayID = RecP.RecPayID;
+                    //recpd.RecPayID = RecP.RecPayID;
                     recpd.Remarks = item.Remarks;
                     recpd.InvoiceID = item.InvoiceID;
                     recpd.AcOPInvoiceDetailID = item.AcOPInvoiceDetailID;
@@ -1590,8 +1595,11 @@ namespace LTMSV2.Controllers
                 }
                 int editrecPay = 0;
                 var sumOfAmount = Context1.RecPayDetails.Where(m => m.RecPayID == RecP.RecPayID && m.InvoiceID != 0).Sum(c => c.Amount);
-                editrecPay = editfu.EditRecpayDetailsCustR(RecP.RecPayID, Convert.ToInt32(sumOfAmount));
-                int editAcJdetails = editfu.EditAcJDetails(RecP.AcJournalID.Value, Convert.ToInt32(sumOfAmount));
+                if (sumOfAmount != null)
+                {
+                    editrecPay = editfu.EditRecpayDetailsCustR(RecP.RecPayID, Convert.ToInt32(sumOfAmount));
+                    int editAcJdetails = editfu.EditAcJDetails(RecP.AcJournalID.Value, Convert.ToInt32(sumOfAmount));
+                }
             }
 
 

@@ -152,12 +152,13 @@
                  }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
             </div>         
             <div class="col-md-5">
-                <label class="headinglabel">Report Type</label>
+                <label class="headinglabel required">Report Type</label>
                 @Html.DropDownList("ReportType", new List<SelectListItem>
                {                   
                    new SelectListItem{ Text="OutStanding", Value = "OutStanding" },                   
+                   new SelectListItem{ Text="CN Note Unallocated", Value = "AWBUnAllocated" },
                    new SelectListItem{ Text="CN Note OutStanding", Value = "AWBOutStanding" }
-                }, "Select", new { @class = "form-control" })
+                }, "Select", new { @class = "form-control", @required = "true" })
             </div>
             <div class="col-md-2">
                 <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>

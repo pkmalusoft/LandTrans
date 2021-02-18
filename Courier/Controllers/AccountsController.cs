@@ -4576,8 +4576,16 @@ new AcGroupModel()
                 }
             }            
 
-        }       
+        }
 
+
+        public ActionResult CheckDateValidate(string entrydate)
+        {
+            int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
+            StatusModel result = AccountsDAO.CheckDateValidate(entrydate, fyearid);
+            return Json(result, JsonRequestBehavior.AllowGet);
+
+        }
         //public JsonResult GetConsignment(string term)
         //{
         //    if (term.Trim() != "")
@@ -4599,7 +4607,7 @@ new AcGroupModel()
 
         //    }
 
-            
+
         //}
     }
 

@@ -93,11 +93,18 @@
                 })
             },
             minLength: 1,
-            autoFocus: true,
+            autoFocus: false,
+            focus: function (e, i) {
+                e.preventDefault();
+                $("#CustomerName").val(i.item.label);
+                $('#CustomerId').val(i.item.ID);
+                $('#CustomerId').attr('label', i.item.label);
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#CustomerName").val(i.item.label);
                 $('#CustomerId').val(i.item.ID);
+                $('#CustomerId').attr('label',i.item.label);
                 //$('#hdnCustomerType').val(i.item.type);
                 //if ($('#hdnCustomerType').val() == "CR") {
                 //    $("#Consignor1").css('color', 'blue');

@@ -18,10 +18,7 @@
         $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
     });
-    $(function () {
-        $('#AsonDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
-    });
     $(document).ready(function () {
 
         @*if (@ViewBag.ReportId == '1') {
@@ -43,28 +40,21 @@
 
         }*@
         $('#ReportType').change(function () {
-            if ($('#ReportType').val() == "Ledger") {
-                $('#divledger').removeClass('hide');
-                $('#divstatement').addClass('hide');
-                $('#AsonDate').removeAttr('required');
-                $('#FromDate').attr('required','true');
-                $('#ToDate').attr('required','true');
-                $("#CustomerName").removeAttr('readonly');
-                $('#CustomerName').attr('required','true')
-                $('#lblcustomername').addClass('required');
+            if ($('#ReportType').val() == "OutStanding") {
+                $("#CustomerName").val('');
+                $("#CustomerName").attr('readonly', 'readonly');
+                $("#CustomerName").removeAttr('required');
+                $('#lblcustomername').removeClass('required');
             }
-            else if ($('#ReportType').val() == "Statement") {
-                $('#divledger').addClass('hide');
-                $('#divstatement').removeClass('hide');
-                $('#AsonDate').attr('required', 'true')
-                $('#FromDate').removeAttr('required');
-                $('#ToDate').removeAttr('required');
+            else if ($('#ReportType').val() == "AWBOutStanding") {
+                $("#CustomerName").val('');
                 $("#CustomerName").removeAttr('readonly');
                 $("#CustomerName").removeAttr('required');
                 $('#lblcustomername').removeClass('required');
             }
             else {
-
+                $("#CustomerName").removeAttr('readonly');
+                $('#lblcustomername').addClass('required');
             }
         });
         $("#CustomerName").autocomplete({
@@ -120,38 +110,34 @@
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="row no-margin d-flex">
-        <div class="col-md-5 ">
-            <div class="form-group" id="divledger">
-                <div class="row">
-                    <div class="col-md-6">
+        <div class="col-md-12 ">
+            <div class="form-group">
+                    <div class="col-md-2">
                         <label class="headinglabel required ">From Date</label>
                         @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <label class="headinglabel required">To Date</label>
                         @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
                     </div>
-                </div>
-            </div>
-            <div class="form-group hide" id="divstatement">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="headinglabel required ">As on date</label>
-                        @Html.TextBoxFor(model => model.AsonDate, new { @class = "form-control text-right" })
-                    </div>                    
-                </div>
+                    <div class="col-md-2">
+                        <label class="headinglabel">Report Type</label>
+                        @Html.DropDownList("ReportType", new List<SelectListItem>
+                       {
+                           new SelectListItem{ Text="Ledger", Value = "Ledger" },                   
+                           new SelectListItem{ Text="Statement", Value = "Statement" }                   
+                        }, "Select", new { @class = "form-control" })
+                 </div>
+               <div class="col-md-6">
+                     <div id="divachead">
+                        <label class="headinglabel required" id="lblcustomername" >Customer Name</label>
+                        @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off", @required = "true" })
+                        @Html.HiddenFor(model => model.CustomerId)
+                    </div>
+               </div>
             </div>
             <div class="col-md-12" id="divachead1">
-                <div id="divachead">
-                    <label class="headinglabel required" id="lblcustomername">Customer Name</label>
-                    @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off", @required = "true" })
-                    @Html.HiddenFor(model => model.CustomerId)
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-md-offset-1">
-            <div class="col-md-5">
+                 <div class="col-md-2">
                 <label class="headinglabel  required">Output</label>
                 @Html.DropDownList("Output", new List<SelectListItem>
                 {
@@ -160,18 +146,17 @@
                     new SelectListItem{ Text="WORD", Value = "WORD" },
 
                  }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
-            </div>         
-            <div class="col-md-5">
-                <label class="headinglabel">Report Type</label>
-                @Html.DropDownList("ReportType", new List<SelectListItem>
-               {
-                   new SelectListItem{ Text="Ledger", Value = "Ledger" },                   
-                   new SelectListItem{ Text="Statement", Value = "Statement" }                   
-                }, "Select", new { @class = "form-control" })
-            </div>
-            <div class="col-md-2">
+            </div> 
+             <div class="col-md-2">
                 <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
             </div>
+               
+            </div>
+        </div>
+
+        <div class="col-md-6 col-md-offset-1">
+                   
+
         </div>
     </div>
 

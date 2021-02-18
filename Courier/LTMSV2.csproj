@@ -3082,6 +3082,7 @@
     <Content Include="Reports\ConsignmentRegister_LoadType.rpt" />
     <Content Include="Reports\ConsignmentRegister_Payment.rpt" />
     <Content Include="Reports\AWBOutStanding.rpt" />
+    <Content Include="Reports\AWBUnInvoiced.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>

@@ -38,8 +38,10 @@
               <xs:element name="InvNo" type="xs:string" minOccurs="0" />
               <xs:element name="CurrencyID" type="xs:int" minOccurs="0" />
               <xs:element name="Lock" type="xs:boolean" minOccurs="0" />
-              <xs:element name="JobID" type="xs:int" minOccurs="0" />
               <xs:element name="AdjustmentAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="TruckDetailID" type="xs:int" minOccurs="0" />
+              <xs:element name="AcOPInvoiceDetailID" type="xs:int" minOccurs="0" />
+              <xs:element name="InScanID" type="xs:int" minOccurs="0" />
               <xs:element name="CustomerName" type="xs:string" minOccurs="0" />
               <xs:element name="CustomerInvoiceNo" type="xs:string" minOccurs="0" />
               <xs:element name="InvoiceDate" type="xs:dateTime" minOccurs="0" />

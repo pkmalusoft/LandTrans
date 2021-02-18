@@ -463,9 +463,13 @@ namespace LTMSV2.Controllers
             {
                 AccountsReportsDAO.GenerateCustomerOutStandingReport();
             }
-            else if (model.ReportType == "AWBOutStanding")
+            else if (model.ReportType == "AWBUnAllocated")
             {
                 AccountsReportsDAO.GenerateAWBOutStandingReport();
+            }            
+            else if (model.ReportType == "AWBOutStanding")
+            {
+                AccountsReportsDAO.GenerateAWBUnInvoiced();
             }
 
             return RedirectToAction("CustomerOutstanding", "Reports");

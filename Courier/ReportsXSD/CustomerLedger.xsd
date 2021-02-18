@@ -24,11 +24,6 @@
               <xs:element name="VATTRN" type="xs:string" minOccurs="0" />
               <xs:element name="Credit" type="xs:decimal" minOccurs="0" />
               <xs:element name="CurrencyName" type="xs:string" minOccurs="0" />
-              <xs:element name="Amount" type="xs:decimal" minOccurs="0" />
-              <xs:element name="AdjustmentAmount" type="xs:decimal" minOccurs="0" />
-              <xs:element name="RecPayDate" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="DocumentNo" type="xs:string" minOccurs="0" />
-              <xs:element name="ReceivedAmount" type="xs:decimal" minOccurs="0" />
               <xs:element name="Consignments" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
