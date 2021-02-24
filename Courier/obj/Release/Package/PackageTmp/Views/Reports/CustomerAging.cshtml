@@ -131,15 +131,15 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="row no-margin d-flex">
-        <div class="col-md-5 ">            
-            <div class="form-group" id="divstatement">
-                <div class="row">
-                    <div class="col-md-6">
+    <div class="row no-margin">
+                 
+            <div class="" id="divstatement">
+            
+                    <div class="col-md-2">
                         <label class="headinglabel required ">As on date</label>
                         @Html.TextBoxFor(model => model.AsonDate, new { @class = "form-control text-right" })
                     </div>                
-                    <div class="col-md-4 text-right">
+                    <div class="col-md-2 text-center">
                         <label class="headinglabel required ">Option</label>
                         <div class="innerCheckbox">
                             <div class="field checkboxdesign verticalcheckbox">
@@ -150,9 +150,15 @@
                             </div>
                         </div>
                     </div>
-                </div>
+             <div class="col-md-2">
+                <label class="headinglabel required">Report Type</label>
+                @Html.DropDownList("ReportType", new List<SelectListItem>
+               {
+                   new SelectListItem{ Text="Summary", Value = "Summary"},                   
+                   new SelectListItem{ Text="Detail", Value = "Detail" }                   
+                }, "Select", new { @class = "form-control",@required="true" })
             </div>
-            <div class="col-md-12" id="divachead1">
+            <div class="col-md-6" id="divachead1">
                 <div id="divachead">
                     <label class="headinglabel required" id="lblcustomername">Customer Name</label>
                     @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off", @required = "true",@readonly="readonly" })
@@ -161,8 +167,8 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-md-offset-1">
-            <div class="col-md-5">
+        <div class="col-md-2">
+            
                 <label class="headinglabel  required">Output</label>
                 @Html.DropDownList("Output", new List<SelectListItem>
                 {
@@ -171,19 +177,12 @@
                     new SelectListItem{ Text="WORD", Value = "WORD" },
 
                  }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
-            </div>         
-            <div class="col-md-5">
-                <label class="headinglabel required">Report Type</label>
-                @Html.DropDownList("ReportType", new List<SelectListItem>
-               {
-                   new SelectListItem{ Text="Summary", Value = "Summary"},                   
-                   new SelectListItem{ Text="Detail", Value = "Detail" }                   
-                }, "Select", new { @class = "form-control",@required="true" })
+                    
             </div>
             <div class="col-md-2">
                 <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
             </div>
-        </div>
+        
     </div>
 
 

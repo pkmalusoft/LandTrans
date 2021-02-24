@@ -962,7 +962,7 @@
       <PropertyRef Name="CreditNoteID" />
     </Key>
     <Property Name="CreditNoteID" Type="int" Nullable="false" />
-    <Property Name="CreditNoteNo" Type="int" />
+    <Property Name="CreditNoteNo" Type="varchar" MaxLength="20" />
     <Property Name="InvoiceID" Type="int" />
     <Property Name="CreditNoteDate" Type="datetime" />
     <Property Name="Amount" Type="money" />
@@ -975,6 +975,7 @@
     <Property Name="CustomerID" Type="int" />
     <Property Name="statusclose" Type="bit" />
     <Property Name="IsShipping" Type="bit" />
+    <Property Name="Description" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="CreditNoteDetails">
     <Key>
@@ -7512,9 +7513,6 @@
   <Function Name="GetMaxPickupRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="CompanyId" Type="int" Mode="In" />
     <Parameter Name="BranchId" Type="int" Mode="In" />
-  </Function>
-  <Function Name="GetMaxVouchrNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="Inputstring" Type="varchar" Mode="In" />
   </Function>
   <Function Name="GetMenu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="UserName" Type="varchar" Mode="In" />

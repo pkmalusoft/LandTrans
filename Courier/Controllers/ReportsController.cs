@@ -386,6 +386,89 @@ namespace LTMSV2.Controllers
 
         }
         #endregion
+
+        #region "CustomerStatement"
+        public ActionResult CustomerStatement()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            if (model.AsonDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetCustomerLedgerParam(model);
+
+            
+            model.AsonDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Customer Statement";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerStatement"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+                
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerStatement(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),                                
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = "PDF",
+                ReportType = picker.ReportType,
+                AsonDate = picker.AsonDate
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetCustomerLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();           
+                        
+            AccountsReportsDAO.GenerateCustomerStatementReport();            
+
+            return RedirectToAction("CustomerStatement", "Reports");
+
+
+        }
+        #endregion
+        #region "CustomerOustanding"
         public ActionResult CustomerOutstanding()
         {
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
@@ -445,7 +528,7 @@ namespace LTMSV2.Controllers
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
-                Output = "PDF",
+                Output = picker.Output,
                 ReportType = picker.ReportType
             };
 
@@ -476,7 +559,7 @@ namespace LTMSV2.Controllers
 
 
         }
-
+        #endregion
         public ActionResult CustomerProfitAnalysis()
         {
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
@@ -536,7 +619,7 @@ namespace LTMSV2.Controllers
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
-                Output = "PDF",
+                Output = picker.Output,
                 ReportType = picker.ReportType
             };
 
@@ -563,6 +646,7 @@ namespace LTMSV2.Controllers
 
 
         }
+        #region supplierledger
         public ActionResult SupplierLedger()
         {
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
@@ -653,7 +737,7 @@ namespace LTMSV2.Controllers
 
 
         }
-
+        #endregion
         public ActionResult ManifestReport(int id=0)
         {
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
@@ -726,7 +810,7 @@ namespace LTMSV2.Controllers
             {
                 FromDate = picker.FromDate,
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
-                Output = "PDF",
+                Output = picker.Output,
                 TDID = picker.TDID,
                 TDNo = picker.TDNo
             };

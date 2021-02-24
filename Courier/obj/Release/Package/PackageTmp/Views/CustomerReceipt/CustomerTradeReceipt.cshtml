@@ -76,8 +76,10 @@
         return true;
     }
     function ShowAWBAllocation(InvoiceId, Amount, InvoiceNo) {
+        debugger;
         Amount = parseFloat($('#txtinvoice_' + InvoiceId).val());
         $('#hdnEditCustomerInvoiceId').val(InvoiceId);
+        InvoiceId = InvoiceId.replace('TR', '');
         $('#hdnAllocatedAmount').val(Amount);
         $('#hInvoice').html('<b>Invoice No:</b>' + InvoiceNo + ' <b> Allocated Amount :</b>' + Amount.toFixed(@_decimal));
         $('#hTotal').html(parseFloat(Amount).toFixed(@_decimal));
@@ -316,7 +318,7 @@
                             html = html + '<td></td>';
                         }
                         else {
-                            html = html + '<td> <a href="JavaScript:void(0)"   onclick="ShowAWBAllocation(' + data[i].SalesInvoiceID + ',' + data[i].Amount + ',' + invoiceno + ')" ><i class="fa fa-eye"></i></a></td>';
+                            html = html + '<td> <a href="JavaScript:void(0)"   onclick="ShowAWBAllocation(' + i + ',' + data[i].Amount + ',' + invoiceno + ')" ><i class="fa fa-eye"></i></a></td>';
                         }
 
                         html = html + '</tr>';
@@ -965,7 +967,7 @@
                                             <td>
                                                 @if (Model.CustomerRcieptChildVM[i].InvoiceID > 0)
                                                 {
-                                                    <a href="Javascript:void(0)" onclick="ShowAWBAllocation(@Model.CustomerRcieptChildVM[i].InvoiceID,@Model.CustomerRcieptChildVM[i].Amount,'@Model.CustomerRcieptChildVM[i].SInvoiceNo')"><i class="fa fa-eye"></i></a>
+                                                    <a href="Javascript:void(0)" onclick="ShowAWBAllocation('@Model.CustomerRcieptChildVM[i].JobCode',@Model.CustomerRcieptChildVM[i].Amount,'@Model.CustomerRcieptChildVM[i].SInvoiceNo')"><i class="fa fa-eye"></i></a>
                                                 }
                                             </td>
 

@@ -81,7 +81,6 @@ namespace LTMSV2.Models
         public virtual DbSet<CourierSchedule> CourierSchedules { get; set; }
         public virtual DbSet<CourierService> CourierServices { get; set; }
         public virtual DbSet<CourierStatu> CourierStatus { get; set; }
-        public virtual DbSet<CreditNote> CreditNotes { get; set; }
         public virtual DbSet<CurrencyMaster> CurrencyMasters { get; set; }
         public virtual DbSet<CustomerContract> CustomerContracts { get; set; }
         public virtual DbSet<CustomerEnquiry> CustomerEnquiries { get; set; }
@@ -278,6 +277,7 @@ namespace LTMSV2.Models
         public virtual DbSet<AcJournalConsignment> AcJournalConsignments { get; set; }
         public virtual DbSet<RecPayDetail> RecPayDetails { get; set; }
         public virtual DbSet<SupplierInvoiceConsignment> SupplierInvoiceConsignments { get; set; }
+        public virtual DbSet<CreditNote> CreditNotes { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)

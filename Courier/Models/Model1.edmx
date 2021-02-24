@@ -967,7 +967,7 @@
             <PropertyRef Name="CreditNoteID" />
           </Key>
           <Property Name="CreditNoteID" Type="int" Nullable="false" />
-          <Property Name="CreditNoteNo" Type="int" />
+          <Property Name="CreditNoteNo" Type="varchar" MaxLength="20" />
           <Property Name="InvoiceID" Type="int" />
           <Property Name="CreditNoteDate" Type="datetime" />
           <Property Name="Amount" Type="money" />
@@ -980,6 +980,7 @@
           <Property Name="CustomerID" Type="int" />
           <Property Name="statusclose" Type="bit" />
           <Property Name="IsShipping" Type="bit" />
+          <Property Name="Description" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="CreditNoteDetails">
           <Key>
@@ -7518,9 +7519,6 @@
           <Parameter Name="CompanyId" Type="int" Mode="In" />
           <Parameter Name="BranchId" Type="int" Mode="In" />
         </Function>
-        <Function Name="GetMaxVouchrNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Inputstring" Type="varchar" Mode="In" />
-        </Function>
         <Function Name="GetMenu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
         </Function>
@@ -10452,25 +10450,6 @@
           <Property Name="StatusType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="StatusTypeID" Type="Int32" />
           <NavigationProperty Name="DRRConsignments" Relationship="Self.FK_DRSDetails_CourierStatus" FromRole="CourierStatus" ToRole="DRRConsignment" />
-        </EntityType>
-        <EntityType Name="CreditNote">
-          <Key>
-            <PropertyRef Name="CreditNoteID" />
-          </Key>
-          <Property Name="CreditNoteID" Type="Int32" Nullable="false" />
-          <Property Name="CreditNoteNo" Type="Int32" />
-          <Property Name="InvoiceID" Type="Int32" />
-          <Property Name="CreditNoteDate" Type="DateTime" Precision="3" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="AcJournalID" Type="Int32" />
-          <Property Name="FYearID" Type="Int32" />
-          <Property Name="AcCompanyID" Type="Int32" />
-          <Property Name="InvoiceType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="RecPayID" Type="Int32" />
-          <Property Name="AcHeadID" Type="Int32" />
-          <Property Name="CustomerID" Type="Int32" />
-          <Property Name="statusclose" Type="Boolean" />
-          <Property Name="IsShipping" Type="Boolean" />
         </EntityType>
         <EntityType Name="CurrencyMaster">
           <Key>
@@ -14807,7 +14786,6 @@
           <EntitySet Name="CourierSchedules" EntityType="Self.CourierSchedule" />
           <EntitySet Name="CourierServices" EntityType="Self.CourierService" />
           <EntitySet Name="CourierStatus" EntityType="Self.CourierStatu" />
-          <EntitySet Name="CreditNotes" EntityType="Self.CreditNote" />
           <EntitySet Name="CurrencyMasters" EntityType="Self.CurrencyMaster" />
           <EntitySet Name="CustomerContracts" EntityType="Self.CustomerContract" />
           <EntitySet Name="CustomerEnquiries" EntityType="Self.CustomerEnquiry" />
@@ -18241,6 +18219,7 @@
           <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
           <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
           <EntitySet Name="SupplierInvoiceConsignments" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceConsignment" />
+          <EntitySet Name="CreditNotes" EntityType="DB_9F57C4_couriertest_newModel.CreditNote" />
           </EntityContainer>
         <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
           <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -23175,6 +23154,26 @@
           <Property Name="InScanID" Type="Int32" Nullable="false" />
           <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
+        <EntityType Name="CreditNote">
+          <Key>
+            <PropertyRef Name="CreditNoteID" />
+          </Key>
+          <Property Name="CreditNoteID" Type="Int32" Nullable="false" />
+          <Property Name="CreditNoteNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="InvoiceID" Type="Int32" />
+          <Property Name="CreditNoteDate" Type="DateTime" Precision="3" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="FYearID" Type="Int32" />
+          <Property Name="AcCompanyID" Type="Int32" />
+          <Property Name="InvoiceType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="RecPayID" Type="Int32" />
+          <Property Name="AcHeadID" Type="Int32" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="statusclose" Type="Boolean" />
+          <Property Name="IsShipping" Type="Boolean" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23977,26 +23976,6 @@
                 <ScalarProperty Name="StatusCourier" ColumnName="StatusCourier" />
                 <ScalarProperty Name="StatusType" ColumnName="StatusType" />
                 <ScalarProperty Name="StatusTypeID" ColumnName="StatusTypeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CreditNotes">
-            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CreditNote">
-              <MappingFragment StoreEntitySet="CreditNote">
-                <ScalarProperty Name="CreditNoteID" ColumnName="CreditNoteID" />
-                <ScalarProperty Name="CreditNoteNo" ColumnName="CreditNoteNo" />
-                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
-                <ScalarProperty Name="CreditNoteDate" ColumnName="CreditNoteDate" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-                <ScalarProperty Name="InvoiceType" ColumnName="InvoiceType" />
-                <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
-                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="statusclose" ColumnName="statusclose" />
-                <ScalarProperty Name="IsShipping" ColumnName="IsShipping" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -29366,7 +29345,6 @@
           <FunctionImportMapping FunctionImportName="GetMaxInvoiceNo" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMaxInvoiceNo" />
           <FunctionImportMapping FunctionImportName="GetMaxNumber" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMaxNumber" />
           <FunctionImportMapping FunctionImportName="GetMaxPickupRequest" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMaxPickupRequest" />
-          <FunctionImportMapping FunctionImportName="GetMaxVouchrNo" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMaxVouchrNo" />
           <FunctionImportMapping FunctionImportName="GetMenu" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMenu" />
           <FunctionImportMapping FunctionImportName="GetMenuAccessLevel" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMenuAccessLevel" />
           <FunctionImportMapping FunctionImportName="GetMultipleAWBStatus" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMultipleAWBStatus" />
@@ -32295,6 +32273,27 @@
                 <ScalarProperty Name="SupplierInvoiceDetailId" ColumnName="SupplierInvoiceDetailId" />
                 <ScalarProperty Name="SupplierInvoiceId" ColumnName="SupplierInvoiceId" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CreditNotes">
+            <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CreditNote">
+              <MappingFragment StoreEntitySet="CreditNote">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsShipping" ColumnName="IsShipping" />
+                <ScalarProperty Name="statusclose" ColumnName="statusclose" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+                <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+                <ScalarProperty Name="InvoiceType" ColumnName="InvoiceType" />
+                <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+                <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+                <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="CreditNoteDate" ColumnName="CreditNoteDate" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="CreditNoteNo" ColumnName="CreditNoteNo" />
+                <ScalarProperty Name="CreditNoteID" ColumnName="CreditNoteID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

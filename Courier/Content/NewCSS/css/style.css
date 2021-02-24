@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
+5298@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
 
 html, body {
     min-height: 100%;
@@ -5295,8 +5295,8 @@ table.text-center, table.text-center td, table.text-center th {
     padding-right: 14px !important;
 }
 
-.content-header + .row .d-flex {
-    margin-right: 20px;
+.content-header + .row{
+    padding:0 15px;
 }
 
 @media print {
@@ -6043,7 +6043,9 @@ input {
 .form-100 input {
     width: 100%;
 }
-
+body .no-padding{
+    padding:0!important;
+}
 input[type=checkbox], input[type=radio] {
     height: auto !important;
     margin-right: 10px;
@@ -6087,7 +6089,7 @@ p.indexbtnpadding {
 
 .content-header + form .row {
     margin-left: 0;
-    margin-right: 20px;
+    margin-right:0;
 }
 
 .modal-header {
@@ -6136,10 +6138,16 @@ p.indexbtnpadding {
 .small_btn {
     min-width: 25px !important;
     width: 30px !important;
-    margin-top: 30px;
+    margin-top: 32px;
     font-size: 15px;
     padding: 0 5px !important;
     border-radius: 5px !important;
+}
+.t-read-only td{
+     color: #35b8eb;
+}
+.border-0{
+    border:0!important;
 }
 
 .divider {
@@ -6165,6 +6173,11 @@ p.indexbtnpadding {
     body .headinglabel {
         font-size: 13px;
     }
+.small_btn {
+
+    margin-top: 28px;
+
+}
 }
 
 @media(max-width:1300px) {

@@ -1018,7 +1018,7 @@ namespace LTMSV2.Controllers
                 obj.CustomerID = max + 1;
                 obj.AcCompanyID = accompanyid;
 
-                obj.CustomerCode = ""; // _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
+                obj.CustomerCode = GetCustomerCode(v.Consignee); // _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
                 obj.CustomerName = v.Consignee;
                 obj.CustomerType = "CN"; //Consignee
 
@@ -1056,18 +1056,18 @@ namespace LTMSV2.Controllers
                 obj.CustomerID = max + 1;
                 obj.AcCompanyID = accompanyid;
 
-                obj.CustomerCode = ""; // _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
+                obj.CustomerCode = GetCustomerCode(v.shippername); // _dao.GetMaxCustomerCode(branchid); // c.CustomerCode;
                 obj.CustomerName = v.shippername;//  v.Consignor;
                 obj.CustomerType = "CS"; //Cash customer
 
-                //obj.ContactPerson = v.ConsignorContact;
-                //obj.Address1 = v.ConsignorAddress1_Building;
-                //obj.Address2 = v.ConsignorAddress2_Street;
-                //obj.Address3 = v.ConsignorAddress3_PinCode;
-                //obj.Phone = v.ConsignorPhone;
-                //obj.CountryName = v.ConsignorCountryName;
-                //obj.CityName = v.ConsignorCityName;
-                //obj.LocationName = v.ConsignorLocationName;
+                obj.ContactPerson = v.ConsignorContact;
+                obj.Address1 = v.ConsignorAddress1_Building;
+                obj.Address2 = v.ConsignorAddress2_Street;
+                obj.Address3 = v.ConsignorAddress3_PinCode;
+                obj.Phone = v.ConsignorPhone;
+                obj.CountryName = v.ConsignorCountryName;
+                obj.CityName = v.ConsignorCityName;
+                obj.LocationName = v.ConsignorLocationName;
                 obj.UserID = null;
                 obj.statusCommission = false;
                 obj.Referal = "";
@@ -1604,7 +1604,63 @@ namespace LTMSV2.Controllers
             return View();
 
         }
+        public string GetCustomerCode(string custname)
+        {
+            string status = "ok";
+            string customercode = "";
+            //List<CourierStatu> _cstatus = new List<CourierStatu>();
+            try
+            {
+                string custform = "000000";
+                string maxcustomercode = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerCode).FirstOrDefault();
+                string last6digit = "";
+                if (maxcustomercode == null || maxcustomercode == "")
+                {
+                    //maxcustomercode="AA000000";
+                    last6digit = "0";
 
+                }
+                else
+                {
+                    last6digit = maxcustomercode.Substring(maxcustomercode.Length - 6); //, maxcustomercode.Length - 6);
+                }
+                if (last6digit != "")
+                {
+
+                    string customerfirst = custname.Substring(0, 1);
+                    string customersecond = "";
+                    try
+                    {
+                        customersecond = custname.Split(' ')[1];
+                        customersecond = customersecond.Substring(0, 1);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                    if (customerfirst != "" && customersecond != "")
+                    {
+                        customercode = customerfirst + customersecond + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1);
+                    }
+                    else
+                    {
+                        customercode = customerfirst + "C" + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1);
+                    }
+
+                }
+
+                return customercode;
+            }
+
+            catch (Exception ex)
+            {
+                status = ex.Message;
+            }
+
+            return "";
+
+        }
         public class selectdata
         {
             public int id { get; set; }

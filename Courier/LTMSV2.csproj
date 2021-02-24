@@ -3595,8 +3595,8 @@
     <Content Include="Views\SupplierPayment\_GetAllTradeSupplierByDate.cshtml" />
     <Content Include="Views\SupplierPayment\_Table.cshtml" />
     <Content Include="Views\SupplierInvoice\Create.cshtml" />
+    <Content Include="Views\DebitNote\Create.cshtml" />
     <Content Include="Views\DebitNote\Index.cshtml" />
-    <Content Include="Views\DebitNote\List.cshtml" />
     <Content Include="Views\SupplierInvoice\InvoiceList.cshtml" />
     <Content Include="Views\Accounts\AcOpeningInvoiceSearch.cshtml" />
     <Content Include="Views\Accounts\AcOpeningInvoiceIndex.cshtml" />
@@ -3615,6 +3615,7 @@
     <Content Include="Views\SupplierPayment\SupplierPayment - Copy.cshtml" />
     <Content Include="Views\Reports\CustomerAging.cshtml" />
     <Content Include="Views\Reports\SupplierAging.cshtml" />
+    <Content Include="Views\Reports\CustomerStatement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3656,7 +3657,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52057</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:1059/</IISUrl>
+          <IISUrl>http://localhost:1054/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

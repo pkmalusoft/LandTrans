@@ -59,7 +59,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CourierSchedule" Width="1.5" PointX="26.75" PointY="22.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CourierService" Width="1.5" PointX="25.5" PointY="54.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CourierStatu" Width="1.5" PointX="3" PointY="16" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNote" Width="1.5" PointX="27.75" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CurrencyMaster" Width="1.5" PointX="3" PointY="79.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerContract" Width="1.5" PointX="27.75" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerEnquiry" Width="1.5" PointX="26.75" PointY="77.375" IsExpanded="true" />
@@ -438,6 +437,7 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" Width="1.5" PointX="11.375" PointY="37.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" Width="1.5" PointX="42.375" PointY="33.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceConsignment" Width="1.5" PointX="42.375" PointY="38.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNote" Width="1.5" PointX="42.375" PointY="41.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

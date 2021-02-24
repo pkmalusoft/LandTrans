@@ -812,25 +812,6 @@
     <Property Name="StatusTypeID" Type="Int32" />
     <NavigationProperty Name="DRRConsignments" Relationship="Self.FK_DRSDetails_CourierStatus" FromRole="CourierStatus" ToRole="DRRConsignment" />
   </EntityType>
-  <EntityType Name="CreditNote">
-    <Key>
-      <PropertyRef Name="CreditNoteID" />
-    </Key>
-    <Property Name="CreditNoteID" Type="Int32" Nullable="false" />
-    <Property Name="CreditNoteNo" Type="Int32" />
-    <Property Name="InvoiceID" Type="Int32" />
-    <Property Name="CreditNoteDate" Type="DateTime" Precision="3" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="AcJournalID" Type="Int32" />
-    <Property Name="FYearID" Type="Int32" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="InvoiceType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="RecPayID" Type="Int32" />
-    <Property Name="AcHeadID" Type="Int32" />
-    <Property Name="CustomerID" Type="Int32" />
-    <Property Name="statusclose" Type="Boolean" />
-    <Property Name="IsShipping" Type="Boolean" />
-  </EntityType>
   <EntityType Name="CurrencyMaster">
     <Key>
       <PropertyRef Name="CurrencyID" />
@@ -5166,7 +5147,6 @@
     <EntitySet Name="CourierSchedules" EntityType="Self.CourierSchedule" />
     <EntitySet Name="CourierServices" EntityType="Self.CourierService" />
     <EntitySet Name="CourierStatus" EntityType="Self.CourierStatu" />
-    <EntitySet Name="CreditNotes" EntityType="Self.CreditNote" />
     <EntitySet Name="CurrencyMasters" EntityType="Self.CurrencyMaster" />
     <EntitySet Name="CustomerContracts" EntityType="Self.CustomerContract" />
     <EntitySet Name="CustomerEnquiries" EntityType="Self.CustomerEnquiry" />
@@ -8600,6 +8580,7 @@
     <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
     <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
     <EntitySet Name="SupplierInvoiceConsignments" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceConsignment" />
+    <EntitySet Name="CreditNotes" EntityType="DB_9F57C4_couriertest_newModel.CreditNote" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -13533,5 +13514,25 @@
     <Property Name="AcHeadId" Type="Int32" Nullable="false" />
     <Property Name="InScanID" Type="Int32" Nullable="false" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+  </EntityType>
+  <EntityType Name="CreditNote">
+    <Key>
+      <PropertyRef Name="CreditNoteID" />
+    </Key>
+    <Property Name="CreditNoteID" Type="Int32" Nullable="false" />
+    <Property Name="CreditNoteNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="InvoiceID" Type="Int32" />
+    <Property Name="CreditNoteDate" Type="DateTime" Precision="3" />
+    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="FYearID" Type="Int32" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="InvoiceType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="RecPayID" Type="Int32" />
+    <Property Name="AcHeadID" Type="Int32" />
+    <Property Name="CustomerID" Type="Int32" />
+    <Property Name="statusclose" Type="Boolean" />
+    <Property Name="IsShipping" Type="Boolean" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

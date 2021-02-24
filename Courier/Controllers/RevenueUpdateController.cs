@@ -343,7 +343,7 @@ namespace LTMSV2.Controllers
             if (!String.IsNullOrEmpty(term))
             {
                 List<CustmorVM> supplierlist = new List<CustmorVM>();
-                supplierlist = (from c in db.CustomerMasters where c.CustomerName.ToLower().StartsWith(term.ToLower()) orderby c.CustomerName select new CustmorVM { CustomerID = c.CustomerID, CustomerName = c.CustomerName    + "( " + c.VATTRN + ")" }).ToList();
+                supplierlist = (from c in db.CustomerMasters where c.CustomerType=="CR" && c.CustomerName.ToLower().StartsWith(term.ToLower()) orderby c.CustomerName select new CustmorVM { CustomerID = c.CustomerID, CustomerName = c.CustomerName    + "( " + c.VATTRN + ")" }).ToList();
 
                 return Json(supplierlist, JsonRequestBehavior.AllowGet);
 
@@ -352,7 +352,7 @@ namespace LTMSV2.Controllers
             else
             {
                 List<CustmorVM> supplierlist = new List<CustmorVM>();
-                supplierlist =  (from c in db.CustomerMasters orderby c.CustomerName select new CustmorVM { CustomerID = c.CustomerID, CustomerName = c.CustomerName + "( " + c.VATTRN + ")" }).ToList();
+                supplierlist =  (from c in db.CustomerMasters where c.CustomerType=="CR"  orderby c.CustomerName select new CustmorVM { CustomerID = c.CustomerID, CustomerName = c.CustomerName + "( " + c.VATTRN + ")" }).ToList();
                 return Json(supplierlist, JsonRequestBehavior.AllowGet);
             }
         }
@@ -372,16 +372,30 @@ namespace LTMSV2.Controllers
             string consignorname = "";
             int consigneeid = 0;
             string consigneename = "";
-            
+            string errormessage = "";
+            bool status = true;
             if (cust != null)
             {
                 consignorid = cust.CustomerID;
                 consignorname = cust.CustomerName;
+                if  (paymentModeid==3 && InvoiceTo == "Shipper" && cust.CustomerType!="CR")
+                {
+                    status = false;
+                    errormessage = "Invoiced Customer is not a Credit Customer";
+                }
+               
+                    
             }
             if (receiver != null)
             {
                 consigneeid = receiver.CustomerID;
                 consigneename = receiver.CustomerName;
+                if (paymentModeid==3 && InvoiceTo == "Consignee" && receiver.CustomerType != "CR")
+                {
+                    status = false;
+                    errormessage = "Invoiced Customer is not a Credit Customer";
+                }
+                
             }
             if (paymentModeid==1 && customer!=null)
             {
@@ -401,7 +415,13 @@ namespace LTMSV2.Controllers
                     list[i].DebitAccountName = db.AcHeads.Find(list[i].AcHeadDebitId).AcHead1;
                     if (list[i].AcHeadCreditId != null)
                     { list[i].CreditAccountName = db.AcHeads.Find(list[i].AcHeadCreditId).AcHead1; }
-                    list[i].CustomerName = db.CustomerMasters.Find(list[i].CustomerId).CustomerName;
+                    
+                    var customer1 = db.CustomerMasters.Find(list[i].CustomerId);
+
+                    if (customer1!=null)
+                        list[i].CustomerName = customer1.CustomerName + "(" + customer.CustomerType + ")";
+
+
                     if (list[i].RevenueCost!=null)
                     list[i].RevenueCost = db.RevenueCostMasters.Find(list[i].RevenueCostMasterID).RevenueComponent;
                 }
@@ -412,7 +432,7 @@ namespace LTMSV2.Controllers
             }
 
             Session["CreateRevenueUpdate"] = null;
-            return Json(new {Remarks=inscan.Remarks, PaymentModeId=paymentModeid,InvoiceTo=InvoiceTo, ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename ,revenuedetail=list }, JsonRequestBehavior.AllowGet);
+            return Json(new {Remarks=inscan.Remarks, PaymentModeId=paymentModeid,InvoiceTo=InvoiceTo, ConsignorId = consignorid, ConsignorName = consignorname, ConsigneeId = consigneeid, ConsigneeName = consigneename , Status=status,Errormessage=errormessage, revenuedetail=list }, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -490,7 +510,7 @@ namespace LTMSV2.Controllers
                 DebitAccountName=dh.AcHead1,
                 CreditAccountName=ch.AcHead1,
                 Amount=s.Amount,
-                CustomerName=cust.CustomerName,
+                CustomerName=cust.CustomerName + "(" + cust.CustomerType + ")",
                 InvoiceTo=s.InvoiceTo,
                 InvoiceNo= subpet.CustomerInvoiceNo  ?? string.Empty                
                }).ToList();

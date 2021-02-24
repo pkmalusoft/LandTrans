@@ -267,7 +267,16 @@
             data: { id: $('#InScanID').val() },
             success: function (response) {
                 debugger;
-                $('#elemError').html("")
+                var status = response.Status;
+                var errormesasge = response.Errormessage;
+                $('#elemError').html(errormesasge);
+                if (status == false) {
+                    $('#btnAdd').attr('disabled', 'disabled');
+                    return;
+                }
+                else {
+                    $('#btnAdd').removeAttr('disabled');
+                }
                 $('#Remarks').val(response.Remarks);
                 $('#ConsignorId').val(response.ConsignorId);
                 $('#ConsignorName').val(response.ConsignorName);
@@ -988,7 +997,7 @@
                       
                     </div>
             </div>
-            <div class="row no-margin">
+            <div class="row no-margin" style="padding:0 10px">
                 <div class="col-md-3">
                     <input type="hidden" id="hdndetailcount" value="0" />
                     @Html.HiddenFor(model => model.ID, new { })
@@ -1010,7 +1019,7 @@
 
                     @*@Html.HiddenFor(model => model.InScanID, new { })*@
                     <label class="headinglabel required">Transaction Date</label>
-                    @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control", @autocomplete = "off", @style = "text-align:right" })
+                    @Html.TextBoxFor(model => model.EntryDate, new { @class = "form-control text-right", @autocomplete = "off", @style = "text-align:right" })
                     @Html.ValidationMessageFor(model => model.EntryDate)
                 </div>
                 <div class="col-md-4 hidden">
@@ -1042,7 +1051,7 @@
                     <span id="spanerr" style="color:red"></span>
                 </div>
             </div>
-            <div class="row no-margin">
+            <div class="row">
                 <div class="col-md-8">
                 <div class="col-md-2">
                     <label class="headinglabel required">Payment Mode</label>
@@ -1116,7 +1125,7 @@
             </div>
             </div>
             </div>            
-            <div class="row no-margin" style="padding-top:3px">
+            <div class="row no-margin" style="padding:3px 10px 0 10px">
                 <table class="table table-bordered table-responsive">
                     <thead>
                         <tr>

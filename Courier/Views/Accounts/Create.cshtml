@@ -79,10 +79,10 @@
 
     #consignmentpopup h5 {
         border: 2px solid #35b8eb;
-        min-width: 350px;
-        height: 40px;
+        min-width: 150px;
+        height: 30px;
         border-radius: 5px;
-        line-height: 40px;
+        line-height: 30px;
         color: #35b8eb;
         text-align: center;
         font-weight: bold;
@@ -1706,7 +1706,9 @@
         </fieldset>
 
         <fieldset>
-            <h4 style="color:#07a7e3;padding-top:10px">Add Details</h4><hr style="margin-bottom:0px" />
+            <div class="sub_title_block">
+                <h4 style="color:#07a7e3;padding-top:10px">Add Details</h4><hr style="margin-bottom:0px" />
+        </div>
             <div class="row no-margin">
                 <div class="col-md-2">
                     <label class="headinglabel label1">Received From</label>
@@ -1744,17 +1746,17 @@
                 </div>
                 <div class="col-md-2 text-right">
                 
-                <div class="flex justify-between">
-                     <div class="">
-                      <button type="button" style="height: 35px !important; background: #07a7e3;color: #fff;border: 0; line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Add Consignments" onclick="ShowConsignmentPopup(-1)">...</button>
+                <div class="flex ">
+                     <div class="" style="padding-right:15px">
+                      <button type="button"  class="btn btn-primary small_btn btn-2 mt-0" title="Add Consignments" onclick="ShowConsignmentPopup(-1)"><i class=" fa fa-th"></i></button>
                     </div>
-                    <div class="">
-                        <label class="headinglabel">Exp. Allocation</label>
-                        <a href="javascript:void(0)" class="Allocate"><i class="fa fa-bars"></i></a>
+                    <div class="" >
+                        <!-- <label class="headinglabel">Exp. Allocation</label> -->
+                        <a title="Exp. Allocation" href="javascript:void(0)" class="Allocate"><i class="fa fa-sitemap icon-2" ></i></a>
                     </div>
                 </div>
-                <button type="button" style="height: 35px !important; background: #07a7e3;    color: #fff;border: 0; width:23px!important;line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Clear Data" onclick="ClearData()">-</button>&nbsp;&nbsp;
-                <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
+                <button type="button" class="btn btn-primary small_btn mt-0" title="Clear Data" onclick="ClearData()"><i class="fa fa-minus"></i></button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-primary small_btn mt-0" index="1" id="btnAdd" title="Add New" class="addmore"><i class="fa fa-plus"></i></button>
             </div>                           
                 
             </div>
@@ -1795,22 +1797,45 @@
         <div style="width:100%;height:3000px; color:black;opacity:0.6;z-index:5;display:none;background-color: black;position:absolute;top:0;left:0;" id="popupbackground">
 
         </div>
-        <div class="col-md-6 col-md-offset-3" data-keyboard="false" style="position:absolute;top:500px;z-index:10;display:none;background-color:white;border-radius: 5px;padding:20px" id="popup">
+        <div class="col-md-6 col-md-offset-3" data-keyboard="false" style="position:absolute;top:500px;z-index:10;display:none;background-color:white;border-radius: 5px;padding:0; width:600px" id="popup">
 
+                <div class="modal-header ">
+                <div class="flex justify-content-between">
+                <h4 class="modal-title" id="exampleModalLabel">
+                    Expense Allocation
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" id="AllocationClose" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+            <div class="row">
+                        <div class="col-md-11 flex justify-content-between">
+                            <h4 id="hAcHead" class="mt-0">Fuel Charges </h4>
+                        
+                        <div class="col-md-4">
+                            <input class="form-control" />
+                        </div>
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <button class="btn btn-primary small_btn btn-2 mt-0" onclick="autoallocation()" title="Auto Allocation" type="button" id="btnAllocate " ><i class="fa fa-sitemap" aria-hidden="true"></i></button>
+                        </div>
+
+                    </div>
             <div class="row">
                 <div class="col-md-5">
                     <label class="headinglabel">Analysis Head</label>
                     <input type="text" id="AcHeadAllocation" value="" class="form-control" autocomplete="off" style="height:27px;" />
                     <input type="hidden" id="SelectedAcHeadAllocation" value="" class="form-control" autocomplete="off" />
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <label class="headinglabel">Amount</label>
                     <input type="text" class="text-right form-control txtNum" id="ExpAmount" value="0" />
                 </div>
-                <div class="col-md-2">
-                    <button type="button" style="margin-top:32px;" index="1" id="AddExpAllocation" class="addmore small_btn btn btn-primary"><i style="font-size:21px" class="fa fa-plus"></i></button>
+                <div class="col-md-1 text-right">
+                    <button type="button" style="margin-top:32px;" index="1" id="AddExpAllocation" class="addmore small_btn btn btn-primary"><i class="fa fa-plus"></i></button>
 
-                    <button type="button" class="btn btn-danger" style="height: 40px !important;position: absolute;top:0;width:40px;right:10px; border-radius: 50%;min-width: 40px!important;top:-31px;right:-25px;" id="AllocationClose"><i style="font-size:21px" class="fa fa-times"></i></button>
+                    
 
 
                 </div>
@@ -1819,9 +1844,10 @@
             @*<div class="row">
                     <div class="col-md-12 text-right">
                         <input type="button" value="Add" class="btn btn-primary" style="margin:10px;" id="AddExpAllocation" />
-                        <button type="button" value="Close" class="btn btn-danger" style="height: 40px !important;position: absolute;top:0;width:40px;right:10px; border-radius: 50%;min-width: 40px!important;top:-11px;right:-10px;" id="AllocationClose" ><i style="font-size:21px" class="fa fa-times"></i></button>
+                        <button type="button" value="Close" class="btn btn-danger" style="height: 40px !important;position: absolute;top:0;width:40px;right:10px; border-radius: 50%;min-width: 40px!important;top:-11px;right:-10px;"  ><i style="font-size:21px" class="fa fa-times"></i></button>
                     </div>
                 </div>*@
+
             <div class="row">
                 <div class="col-md-12">
                     <input type="hidden" value="0" id="RowCount" />
@@ -1837,6 +1863,8 @@
             <div class="pull-right">
                 <button class="btn btn-secondary" style="background-color: #313030">Close</button>
             </div>
+        </div>
+    </div>
             <div class="clearfix"></div>
 
             <script type="text/javascript">
@@ -1989,11 +2017,11 @@
                 <div class="container-fluid" >
                     <div class="row">
                         <div class="col-md-11 flex justify-content-between">
-                            <h4 id="hAcHead"></h4>
+                            <h4 id="hAcHead">AcHead</h4>
                             <h5 id="hTotal">Total</h5>                            
                         </div>
-                        <div class="col-md-1">
-                            <button class="btn btn-primary small_btn"  onclick="autoallocation()"  title="Auto Allocation" type="button" id="btnAllocate" style="margin-top:10px;"><i class="fa fa-tasks" aria-hidden="true"></i></button>
+                        <div class="col-md-1 text-right">
+                            <button class="btn btn-primary small_btn btn-2"  onclick="autoallocation()"  title="Auto Allocation" type="button" id="btnAllocate" style="margin-top:10px;"><i class="fa fa-sitemap" aria-hidden="true"></i></button>
                         </div>
 
                     </div>
@@ -2008,7 +2036,7 @@
                             <input type="text" id="txtTruckDetail" class="form-control" />
                             <input type="hidden" id="txtTruckDetailID" class="form-control" />
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-1 text-right">
                             <button class="btn btn-primary small_btn" type="button" id="btnaddall" title="Add all Consignments of TD" style="margin-top:30px;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                         </div>
                         <div class="col-md-5">
@@ -2016,7 +2044,7 @@
                             <input type="text" id="txtConsignmentNo" class="form-control" />
                             <input type="hidden" id="txtInScanID" class="form-control" />
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-1 text-right">
                             <button class="btn btn-primary small_btn" type="button" id="btnaddConsignment" style="margin-top:30px;"><i class="fa fa-plus" aria-hidden="true"></i></button>
                         </div>
                     </div>

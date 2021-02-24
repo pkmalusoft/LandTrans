@@ -859,6 +859,151 @@ namespace LTMSV2.DAL
             return obj;
         }
 
+        //ac journal master
+        public static string GetMaxVoucherNo(string VoucherType, int yearid)
+        {
+            string voucherno="";
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "GetMaxVoucherNo";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@VoucherType", VoucherType);
+                cmd.Parameters.AddWithValue("@FYearId", yearid);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    voucherno= ds.Tables[0].Rows[0][0].ToString();                    
+                }
+            }
+            catch (Exception ex)
+            {
+                return voucherno;
+            }
+
+            return voucherno;
+        }
+        public static string GetMaxCreditNoteNo(int yearid)
+        {
+            string voucherno = "";
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "GetMaxCreditNoteNo";
+                cmd.CommandType = CommandType.StoredProcedure;                
+                cmd.Parameters.AddWithValue("@FYearId", yearid);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    voucherno = ds.Tables[0].Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return voucherno;
+            }
+
+            return voucherno;
+        }
+
+        public static string GetMaxDebiteNoteNo(int yearid)
+        {
+            string voucherno = "";
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "GetMaxDebitNoteNo";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@FYearId", yearid);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    voucherno = ds.Tables[0].Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return voucherno;
+            }
+
+            return voucherno;
+        }
+
+        public static string DeleteDebiteNote(int id)
+        {
+            string voucherno = "";
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "DeleteDebitNoteNo";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id",id);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    voucherno = ds.Tables[0].Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return voucherno;
+            }
+
+            return voucherno;
+        }
+
+        public static string DeleteCreditNote(int id)
+        {
+            string voucherno = "";
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+                cmd.CommandText = "DeleteCreditNote";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    voucherno = ds.Tables[0].Rows[0][0].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                return voucherno;
+            }
+
+            return voucherno;
+        }
     }
 }
     

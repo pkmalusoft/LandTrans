@@ -800,26 +800,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CreditNotes">
-      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CreditNote">
-        <MappingFragment StoreEntitySet="CreditNote">
-          <ScalarProperty Name="CreditNoteID" ColumnName="CreditNoteID" />
-          <ScalarProperty Name="CreditNoteNo" ColumnName="CreditNoteNo" />
-          <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
-          <ScalarProperty Name="CreditNoteDate" ColumnName="CreditNoteDate" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
-          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
-          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
-          <ScalarProperty Name="InvoiceType" ColumnName="InvoiceType" />
-          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
-          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
-          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-          <ScalarProperty Name="statusclose" ColumnName="statusclose" />
-          <ScalarProperty Name="IsShipping" ColumnName="IsShipping" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CurrencyMasters">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CurrencyMaster">
         <MappingFragment StoreEntitySet="CurrencyMaster">
@@ -6186,7 +6166,6 @@
     <FunctionImportMapping FunctionImportName="GetMaxInvoiceNo" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMaxInvoiceNo" />
     <FunctionImportMapping FunctionImportName="GetMaxNumber" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMaxNumber" />
     <FunctionImportMapping FunctionImportName="GetMaxPickupRequest" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMaxPickupRequest" />
-    <FunctionImportMapping FunctionImportName="GetMaxVouchrNo" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMaxVouchrNo" />
     <FunctionImportMapping FunctionImportName="GetMenu" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMenu" />
     <FunctionImportMapping FunctionImportName="GetMenuAccessLevel" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMenuAccessLevel" />
     <FunctionImportMapping FunctionImportName="GetMultipleAWBStatus" FunctionName="DB_9F57C4_couriertest_newModel.Store.GetMultipleAWBStatus" />
@@ -9115,6 +9094,27 @@
           <ScalarProperty Name="SupplierInvoiceDetailId" ColumnName="SupplierInvoiceDetailId" />
           <ScalarProperty Name="SupplierInvoiceId" ColumnName="SupplierInvoiceId" />
           <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CreditNotes">
+      <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CreditNote">
+        <MappingFragment StoreEntitySet="CreditNote">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IsShipping" ColumnName="IsShipping" />
+          <ScalarProperty Name="statusclose" ColumnName="statusclose" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="AcHeadID" ColumnName="AcHeadID" />
+          <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
+          <ScalarProperty Name="InvoiceType" ColumnName="InvoiceType" />
+          <ScalarProperty Name="AcCompanyID" ColumnName="AcCompanyID" />
+          <ScalarProperty Name="FYearID" ColumnName="FYearID" />
+          <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="CreditNoteDate" ColumnName="CreditNoteDate" />
+          <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+          <ScalarProperty Name="CreditNoteNo" ColumnName="CreditNoteNo" />
+          <ScalarProperty Name="CreditNoteID" ColumnName="CreditNoteID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

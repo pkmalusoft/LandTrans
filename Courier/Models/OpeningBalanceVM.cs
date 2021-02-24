@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using LTMSV2.Models;
-using LTMSV2.DAL;
-using System.ComponentModel.DataAnnotations;
-
 namespace LTMSV2.Models
 {
     public class OpeningBalanceVM

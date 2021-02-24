@@ -25,23 +25,25 @@ namespace LTMSV2.Controllers
             {
                 //var job = (from c in db.JInvoices where c.InvoiceID == item.InvoiceID select c).FirstOrDefault();
                 string jobcode = "";
-                //if (job != null)
-                //{
-                //    var jobid = job.JobID;
-                //     jobcode = (from j in db.JobGenerations where j.JobID == jobid select j.JobCode).FirstOrDefault();
 
-                //}
-                //else
-                //{
-                var purchaseinvoice = (from d in db.CustomerInvoices  where d.CustomerInvoiceID == item.InvoiceID  select d).FirstOrDefault();
-                jobcode = purchaseinvoice.CustomerInvoiceNo;
+                if (item.InvoiceType == "TR")
+                {
+                    var purchaseinvoice = (from d in db.CustomerInvoices where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
+                    jobcode = purchaseinvoice.CustomerInvoiceNo;
+                }
+                else
+                {
+                    var purchaseinvoice = (from d in db.AcOPInvoiceDetails where d.AcOPInvoiceDetailID == item.InvoiceID select d).FirstOrDefault();
+                    jobcode = purchaseinvoice.InvoiceNo;
 
-                //jobcode = item.InvoiceID.ToString();
-                //}
+                }
+                
                 string customer = (from c in db.CustomerMasters where c.CustomerID == item.CustomerID && c.CustomerType=="CR" select c.CustomerName).FirstOrDefault();
 
                 CreditNoteVM v = new CreditNoteVM();
                 v.JobNO = jobcode;
+                v.CreditNoteNo = item.CreditNoteNo;
+                v.CreditNoteID = item.CreditNoteID;
                 v.Date = item.CreditNoteDate.Value;
                 v.CustomerName = customer;
                 v.Amount = item.Amount.Value;
@@ -54,14 +56,58 @@ namespace LTMSV2.Controllers
         }
 
 
-        public ActionResult Create()
+        public ActionResult Create(int id=0)
         {
+            int fyearid=Convert.ToInt32(Session["fyearid"].ToString());
             ViewBag.customer = db.CustomerMasters.Where(d=>d.CustomerType=="CR").OrderBy(x => x.CustomerName).ToList();
             ViewBag.achead = db.AcHeads.ToList();
-            List<jobno> lst = new List<jobno>();
-            ViewBag.jobno = lst;
-            
-            return View();
+
+            if (id == 0)
+            {
+                ViewBag.Title = "Credit Note - Create";
+                CreditNoteVM vm = new CreditNoteVM();
+                vm.CreditNoteNo = AccountsDAO.GetMaxCreditNoteNo(fyearid);
+                vm.Date = CommanFunctions.GetLastDayofMonth().Date;
+                return View(vm);
+            }
+            else
+            {
+                ViewBag.Title = "Credit Note - Modify";
+                CreditNoteVM vm = new CreditNoteVM();
+                var v = db.CreditNotes.Find(id);
+                vm.CreditNoteID = v.CreditNoteID;
+                vm.CreditNoteNo = v.CreditNoteNo;
+                vm.AcJournalID =Convert.ToInt32(v.AcJournalID);
+                vm.CustomerID =Convert.ToInt32(v.CustomerID);
+                vm.AcHeadID = Convert.ToInt32(v.AcHeadID);
+                vm.Amount =Convert.ToDecimal(v.Amount);
+                vm.InvoiceID =Convert.ToInt32(v.InvoiceID);
+                if (v.InvoiceType=="TR")
+                {
+                    var invoice = db.CustomerInvoices.Find(vm.InvoiceID);
+                    if (invoice!=null)
+                    {
+                        vm.InvoiceNo = invoice.CustomerInvoiceNo;
+                        vm.InvoiceDate = invoice.InvoiceDate.ToString("dd/MM/yyyy");
+                        vm.InvoiceAmount =Convert.ToDecimal(invoice.InvoiceTotal);
+                    }
+                }
+                else if (v.InvoiceType == "OP")
+                {
+                    var invoice1 = db.AcOPInvoiceDetails.Where(cc=>cc.AcOPInvoiceDetailID ==vm.InvoiceID).FirstOrDefault();
+                    if (invoice1 != null)
+                    {
+                        vm.InvoiceNo = invoice1.InvoiceNo;
+                        vm.InvoiceDate = Convert.ToDateTime(invoice1.InvoiceDate).ToString("dd/MM/yyyy");
+                        vm.InvoiceAmount = Convert.ToDecimal(invoice1.Amount);
+                    }
+                }
+                SetTradeInvoiceOfCustomer(vm.CustomerID, 0, vm.CreditNoteID);
+                vm.Date =Convert.ToDateTime(v.CreditNoteDate);
+                //vm.
+                return View(vm);
+
+            }
 
 
         }
@@ -70,58 +116,92 @@ namespace LTMSV2.Controllers
         public ActionResult Create(CreditNoteVM v)
         {
             AcJournalMaster ajm = new AcJournalMaster();
+            int fyearid=Convert.ToInt32(Session["fyearid"].ToString());
+            if (v.CreditNoteID >0)
+            {
+                ajm = db.AcJournalMasters.Find(v.AcJournalID);
+            }
+            if (v.CreditNoteID == 0 || ajm != null)
+            {
+                int acjm = 0;
+                acjm = (from c in db.AcJournalMasters orderby c.AcJournalID descending select c.AcJournalID).FirstOrDefault();
 
-            int acjm = 0;
-            acjm = (from c in db.AcJournalMasters orderby c.AcJournalID descending select c.AcJournalID).FirstOrDefault();
+                ajm.AcJournalID = acjm + 1;
+                ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                ajm.AcFinancialYearID = fyearid;
+                ajm.PaymentType = 1;
+                var customer = db.CustomerMasters.Find(v.CustomerID).CustomerName;
+                ajm.Remarks = "Credit Note for " + customer + " invoice : " + v.InvoiceNo;
+                ajm.StatusDelete = false;
+                ajm.VoucherNo = AccountsDAO.GetMaxVoucherNo("CN", fyearid);
+                ajm.TransDate = v.Date;
 
-            ajm.AcJournalID = acjm + 1;
-            ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-            ajm.AcFinancialYearID = Convert.ToInt32(Session["fyearid"].ToString());
-            ajm.PaymentType = 1;
-            ajm.Remarks = "Credit Note";
-            ajm.StatusDelete = false;
-            ajm.TransDate = v.Date;
-            ajm.VoucherNo = "C-" + ajm.AcJournalID;
-            ajm.TransType = 2;
-            ajm.VoucherType = "";
-
-            db.AcJournalMasters.Add(ajm);
-            db.SaveChanges();
-
+                ajm.TransType = 2;
+                ajm.VoucherType = "CN";
+                db.AcJournalMasters.Add(ajm);
+                db.SaveChanges();
+            }
 
             AcJournalDetail b = new AcJournalDetail();
+            b = db.AcJournalDetails.Where(cc => cc.AcJournalID == ajm.AcJournalID && cc.Amount > 0).FirstOrDefault();
+            if (b==null)
+            {
+                b = new AcJournalDetail();
+                b.AcJournalDetailID = 0;
+            }
+            if (b.AcJournalDetailID == 0)
+            {
+                int maxacj = 0;
+                maxacj = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
 
-            int maxacj = 0;
-            maxacj = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
-
-            b.AcJournalDetailID = maxacj + 1;
-            b.AcJournalID = ajm.AcJournalID;
+                b.AcJournalDetailID = maxacj + 1;
+                b.AcJournalID = ajm.AcJournalID;
+            }
             b.AcHeadID = v.AcHeadID;
-            b.Amount = -v.Amount;
-            b.BranchID = Convert.ToInt32(Session["AcCompanyID"].ToString());
-            b.Remarks = "";
-
-            db.AcJournalDetails.Add(b);
-            db.SaveChanges();
-
+            b.Amount = v.Amount;
+            b.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            b.Remarks = "credit note";
+            if (b.ID == 0)
+            {
+                db.AcJournalDetails.Add(b);
+                db.SaveChanges();
+            }
+            else
+            {
+                db.Entry(b).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
             AcJournalDetail a = new AcJournalDetail();
-            maxacj = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
-            a.AcJournalDetailID = maxacj + 1;
-            a.AcJournalID = ajm.AcJournalID;
-            a.AcHeadID = v.AcHeadID;
-            a.Amount = v.Amount;
-            a.BranchID = Convert.ToInt32(Session["AcCompanyID"].ToString());
-            a.Remarks = "";
+            a = db.AcJournalDetails.Where(cc => cc.AcJournalID == ajm.AcJournalID && cc.Amount < 0).FirstOrDefault();
+            if (a == null)
+            {
+                a = new AcJournalDetail();
+                a.AcJournalDetailID = 0;
+            }
+            if (a.AcJournalDetailID == 0)
+            {
+                int maxacj = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
+                a.AcJournalDetailID = maxacj + 1;
+                a.AcJournalID = ajm.AcJournalID;
+                var customercon = db.AcHeads.Where(cc => cc.AcHead1 == "Customer Control A/c").FirstOrDefault();
+                a.AcHeadID = customercon.AcHeadID; ;
+            }            
             
+            a.Amount = -1*v.Amount;
+            a.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            a.Remarks = "";
 
-
-           
-
-
-
-            db.AcJournalDetails.Add(a);
-            db.SaveChanges();
+            if (a.ID == 0)
+            {
+                db.AcJournalDetails.Add(a);
+                db.SaveChanges();
+            }
+            else
+            {
+                db.Entry(a).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
             var invid = 0;
             int? recpayid = 0;
@@ -148,46 +228,56 @@ namespace LTMSV2.Controllers
             //        recpayid = recpay.RecPayID;
             //    }
             //}
-             invid = Convert.ToInt32(v.JobNO);
-            var ids = (from x in db.SalesInvoiceDetails where x.SalesInvoiceID == invid select (int?)x.SalesInvoiceDetailID).ToList();
+            // invid = Convert.ToInt32(v.JobNO);
+            //var ids = (from x in db.SalesInvoiceDetails where x.SalesInvoiceID == invid select (int?)x.SalesInvoiceDetailID).ToList();
 
-             recpayid = (from c in db.RecPayDetails where ids.Contains(c.InvoiceID) select c.RecPayID).FirstOrDefault().Value;
+            // recpayid = (from c in db.RecPayDetails where ids.Contains(c.InvoiceID) select c.RecPayID).FirstOrDefault().Value;
 
             CreditNote d = new CreditNote();
-
-            //int max = (from c in db.CreditNotes orderby c.CreditNoteNo descending select c.CreditNoteNo).FirstOrDefault().Value;
-            int maxid = 0;
-
-            var data = (from c in db.CreditNotes orderby c.CreditNoteID descending select c).FirstOrDefault();
-
-            if (data == null)
+            if (v.CreditNoteID == 0)
             {
-                maxid = 1;
-            }
-            else
-            {
-                maxid = data.CreditNoteID + 1;
-            }
+                int maxid = 0;
 
-            d.CreditNoteID = maxid;
-            d.CreditNoteNo = maxid;
-            d.InvoiceID = invid;
+                var data = (from c in db.CreditNotes orderby c.CreditNoteID descending select c).FirstOrDefault();
+
+                if (data == null)
+                {
+                    maxid = 1;
+                }
+                else
+                {
+                    maxid = data.CreditNoteID + 1;
+                }
+
+                d.CreditNoteID = maxid;
+                d.CreditNoteNo = AccountsDAO.GetMaxCreditNoteNo(fyearid);
+            }
+            d.InvoiceID = v.InvoiceID;
+            d.InvoiceType = v.InvoiceType;
             d.CreditNoteDate = v.Date;
             d.Amount = v.Amount;
             d.AcJournalID = ajm.AcJournalID;
             d.FYearID = Convert.ToInt32(Session["fyearid"].ToString());
-            d.AcCompanyID = Convert.ToInt32(Session["AcCompanyID"].ToString());
+            d.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             d.RecPayID = recpayid;
             d.AcHeadID = v.AcHeadID;
             d.CustomerID = v.CustomerID;
             d.statusclose = false;
-            d.InvoiceType = "C";
+            d.InvoiceType = v.InvoiceType;
             d.IsShipping = true;
+            if (v.CreditNoteID == 0)
+            {
+                db.CreditNotes.Add(d);
+                db.SaveChanges();
+                TempData["SuccessMsg"] = "Successfully Added Credit Note";
+            }
+            else
+            {
+                db.Entry(d).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                TempData["SuccessMsg"] = "Successfully Updated Credit Note";
+            }
 
-            db.CreditNotes.Add(d);
-            db.SaveChanges();
-
-            TempData["SuccessMsg"] = "Successfully Added Credit Note";
             return RedirectToAction("Index", "CreditNote");
 
             
@@ -209,41 +299,24 @@ namespace LTMSV2.Controllers
         //            lst.Add(obj);
         //        }
         //    }
-           
+
         //    return Json(lst,JsonRequestBehavior.AllowGet);
         //}
-        //public JsonResult GetJobNoAutocomp(int id,string term)
-        //{
-        //    List<jobno> lst = new List<jobno>();
-        //    //var jobs = (from c in db.JobGenerations where c.ShipperID == id  && c.JobCode.Contains(term) select c).ToList();
-        //    //if (jobs != null)
-        //    //{
-        //    //    foreach (var item in jobs)
-        //    //    {
-        //    //        jobno obj = new jobno();
-        //    //        obj.JobNo = item.JobCode;
-        //    //        obj.Istrading = false;
-        //    //        lst.Add(obj);
-        //    //    }
-        //    //}
-        //    var data1 = (from c in db.SalesInvoices where c.CustomerID == id && c.SalesInvoiceNo.Contains(term)  select c).ToList();
-        //    foreach (var item in data1)
-        //    {
-        //        var salesinvoicedetails = (from d in db.SalesInvoiceDetails where d.SalesInvoiceID == item.SalesInvoiceID select d).ToList();
-               
-        //            jobno s = new jobno();
-        //            s.JobNo = item.SalesInvoiceNo.ToString() + "/ " + salesinvoicedetails.Sum(d => d.NetValue); ;
-        //            s.Istrading = true;
-        //            s.JobNum = item.SalesInvoiceID;
-
-        //            lst.Add(s);
-                
-        //    }
-        //   // lst = lst.Where(d => d.JobNo.Contains(term)).ToList();
-
-
-        //    return Json(lst, JsonRequestBehavior.AllowGet);
-        //}
+        public JsonResult GetInvoiceNo(string term)
+        {
+            var salesinvoice = new List<CustomerTradeReceiptVM>();
+            var lst = new List<CustomerTradeReceiptVM>();
+            salesinvoice = (List<CustomerTradeReceiptVM>)Session["CustomerInvoice"];
+            if (term.Trim()!="")
+            {
+                lst = salesinvoice.Where(cc => cc.InvoiceNo.Contains(term)).OrderBy(cc => cc.InvoiceNo).ToList();
+            }
+            else
+            {
+                lst = salesinvoice.OrderBy(cc => cc.InvoiceNo).ToList();
+            }
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
         public class jobno
         {
           
@@ -252,27 +325,290 @@ namespace LTMSV2.Controllers
             public bool Istrading { get; set; }
          
         }
+        [HttpPost]
+        public JsonResult GetTradeInvoiceOfCustomer(int? ID, decimal? amountreceived, int? RecPayId)
+        {
+            int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
+            DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
+            DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
+            var AllInvoices = (from d in db.CustomerInvoices where d.CustomerID == ID select d).ToList();
+            List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
+            var salesinvoice = new List<CustomerTradeReceiptVM>();
+            var AllOPInvoices = (from d in db.AcOPInvoiceDetails join m in db.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where m.AcFinancialYearID == fyearid && m.StatusSDSC == "C" && m.PartyID == ID && d.RecPayDetailId == null && (d.RecPayStatus == null || d.RecPayStatus < 2) select d).ToList();
 
-        //public JsonResult GetAmount(string id)
-        //{
-        //    Getamtclass ob = new Getamtclass();
+            foreach (var item in AllOPInvoices)
+            {
+                decimal? totamt = 0;
+                decimal? totamtpaid = 0;
+                decimal? totadjust = 0;
+                decimal? CreditAmount = 0;
+                var allrecpay = (from d in db.RecPayDetails where d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();
+                totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
+                totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
+                totamt = totamtpaid + totadjust + CreditAmount;
+                var Invoice = new CustomerTradeReceiptVM();
+                Invoice.AcOPInvoiceDetailID = item.AcOPInvoiceDetailID;
+                Invoice.SalesInvoiceID = item.AcOPInvoiceDetailID;
+                Invoice.InvoiceType = "OP";
+                Invoice.InvoiceNo = item.InvoiceNo; ;
+                Invoice.InvoiceAmount = item.Amount;
+                Invoice.date = item.InvoiceDate;
+                Invoice.DateTime = Convert.ToDateTime(item.InvoiceDate).ToString("dd/MM/yyyy");
+                Invoice.AmountReceived = totamt;
+                Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
+                Invoice.AdjustmentAmount = totadjust;
 
-        //    int jobid=(from j in db.JobGenerations where j.JobCode==id select j.JobID).FirstOrDefault();
+                if (Invoice.Balance > 0)
+                {
+                    if (amountreceived != null)
+                    {
+                        if (amountreceived >= Invoice.Balance)
+                        {
+                            Invoice.Allocated = true;
+                            Invoice.Amount = Invoice.Balance;
+                            amountreceived = amountreceived - Invoice.Amount;
+                        }
+                        else if (amountreceived > 0)
+                        {
+                            Invoice.Amount = amountreceived;
+                            amountreceived = amountreceived - Invoice.Amount;
+                        }
+                        else
+                        {
+                            Invoice.Amount = 0;
+                        }
+                    }
+                    salesinvoice.Add(Invoice);
+                }
 
-        //   int invid=(from c in db.JInvoices where c.JobID==jobid select c.InvoiceID).FirstOrDefault();
+            }
+            foreach (var item in AllInvoices)
+            {
+                //var invoicedeails = (from d in db.SalesInvoiceDetails where d.SalesInvoiceID == item.SalesInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
+                var invoicedeails = (from d in db.CustomerInvoiceDetails where d.CustomerInvoiceID == item.CustomerInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
+                //where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
+                decimal? totamt = 0;
+                decimal? totamtpaid = 0;
+                decimal? totadjust = 0;
+                decimal? CreditAmount = 0;
+                //foreach (var det in invoicedeails)
+                //{
+                var allrecpay = (from d in db.RecPayDetails where d.InvoiceID == item.CustomerInvoiceID select d).ToList();
+                totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
+                totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
+                var CreditNote = (from d in db.CreditNotes where d.InvoiceID == item.CustomerInvoiceID && d.CustomerID == item.CustomerID select d).ToList();
+                //var CreditNote = (from d in db.CreditNotes where d.InvoiceID == det.CustomerInvoiceDetailID && d.CustomerID == item.CustomerID select d).ToList();
 
-        //    decimal invamt=(from c in db.JInvoices where c.InvoiceID==invid select c.SalesHome).FirstOrDefault().Value;
+                if (CreditNote.Count > 0)
+                {
+                    CreditAmount = CreditNote.Sum(d => d.Amount);
+                }
+                totamt = totamtpaid + totadjust + CreditAmount;
+                //}
 
-        //    decimal recamt=(from r in db.RecPayDetails where r.InvoiceID==invid select r.Amount).FirstOrDefault().Value;
+                var Invoice = new CustomerTradeReceiptVM();
+                //Invoice.JobID = det.JobID;
+                Invoice.InvoiceType = "TR";
+                Invoice.JobCode = "";
+                Invoice.SalesInvoiceID = item.CustomerInvoiceID; // SalesInvoiceID;
+                Invoice.InvoiceNo = item.CustomerInvoiceNo;
+                //Invoice.SalesInvoiceDetailID = det.CustomerInvoiceDetailID;
+                Invoice.InvoiceAmount = item.InvoiceTotal; // CourierCharge;
+                Invoice.date = item.InvoiceDate;
+                Invoice.DateTime = item.InvoiceDate.ToString("dd/MM/yyyy");
+                //var RecPay = (from d in db.RecPayDetails where d.RecPayDetailID == det.RecPayDetailId select d).FirstOrDefault();
 
+                Invoice.AmountReceived = totamt;
+                Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
+                Invoice.AdjustmentAmount = totadjust;
 
-        //    ob.invoiceamt = invamt;
-        //    ob.recamt = recamt;
+                if (Invoice.Balance > 0)
+                {
+                    if (amountreceived != null)
+                    {
+                        if (amountreceived >= Invoice.Balance)
+                        {
+                            Invoice.Allocated = true;
+                            Invoice.Amount = Invoice.Balance;
+                            amountreceived = amountreceived - Invoice.Amount;
+                        }
+                        else if (amountreceived > 0)
+                        {
+                            Invoice.Amount = amountreceived;
+                            amountreceived = amountreceived - Invoice.Amount;
+                        }
+                        else
+                        {
+                            Invoice.Amount = 0;
+                        }
+                    }
+                    salesinvoice.Add(Invoice);
+                    //if (RecPayId == null)
+                    //{
+                    //    AWBAllocation = ReceiptDAO.GetAWBAllocation(AWBAllocation, Convert.ToInt32(Invoice.SalesInvoiceID), Convert.ToDecimal(Invoice.Amount), 0); //customer invoiceid,amount
+                    //}
+                    //else
+                    //{
+                    //    AWBAllocation = ReceiptDAO.GetAWBAllocation(AWBAllocation, Convert.ToInt32(Invoice.SalesInvoiceID), Convert.ToDecimal(Invoice.Amount), Convert.ToInt32(RecPayId)); //customer invoiceid,amount
+                    //}
+                }
+            }
 
+            Session["CustomerInvoice"] = salesinvoice;
+            return Json(salesinvoice, JsonRequestBehavior.AllowGet);
+        }
 
         
-        //    return Json(ob, JsonRequestBehavior.AllowGet);
-        //}
+        public void SetTradeInvoiceOfCustomer(int? ID, decimal? amountreceived, int? CreditNoteId)
+        {
+            int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
+            DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
+            DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
+            var AllInvoices = (from d in db.CustomerInvoices where d.CustomerID == ID select d).ToList();
+            List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
+            var salesinvoice = new List<CustomerTradeReceiptVM>();
+            var AllOPInvoices = (from d in db.AcOPInvoiceDetails join m in db.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where m.AcFinancialYearID == fyearid && m.StatusSDSC == "C" && m.PartyID == ID && d.RecPayDetailId == null && (d.RecPayStatus == null || d.RecPayStatus < 2) select d).ToList();
+
+            foreach (var item in AllOPInvoices)
+            {
+                decimal? totamt = 0;
+                decimal? totamtpaid = 0;
+                decimal? totadjust = 0;
+                decimal? CreditAmount = 0;
+                var allrecpay = (from d in db.RecPayDetails where d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();
+                totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
+                totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
+                var CreditNote = (from d in db.CreditNotes where d.InvoiceID == item.AcOPInvoiceDetailID && d.CustomerID == ID && d.InvoiceType == "OP" && d.CreditNoteID != CreditNoteId select d).ToList();
+                if (CreditNote.Count > 0)
+                {
+                    CreditAmount = CreditNote.Sum(d => d.Amount);
+                }
+                totamt = totamtpaid + totadjust + CreditAmount;
+                var Invoice = new CustomerTradeReceiptVM();
+                Invoice.AcOPInvoiceDetailID = item.AcOPInvoiceDetailID;
+                Invoice.SalesInvoiceID = item.AcOPInvoiceDetailID;
+                Invoice.InvoiceType = "OP";
+                Invoice.InvoiceNo = item.InvoiceNo; ;
+                Invoice.InvoiceAmount = item.Amount;
+                Invoice.date = item.InvoiceDate;
+                Invoice.DateTime = Convert.ToDateTime(item.InvoiceDate).ToString("dd/MM/yyyy");
+                Invoice.AmountReceived = totamt;
+                Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
+                Invoice.AdjustmentAmount = totadjust;
+
+                if (Invoice.Balance > 0)
+                {
+                    if (amountreceived != null)
+                    {
+                        if (amountreceived >= Invoice.Balance)
+                        {
+                            Invoice.Allocated = true;
+                            Invoice.Amount = Invoice.Balance;
+                            amountreceived = amountreceived - Invoice.Amount;
+                        }
+                        else if (amountreceived > 0)
+                        {
+                            Invoice.Amount = amountreceived;
+                            amountreceived = amountreceived - Invoice.Amount;
+                        }
+                        else
+                        {
+                            Invoice.Amount = 0;
+                        }
+                    }
+                    salesinvoice.Add(Invoice);
+                }
+
+            }
+            foreach (var item in AllInvoices)
+            {
+                //var invoicedeails = (from d in db.SalesInvoiceDetails where d.SalesInvoiceID == item.SalesInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
+                var invoicedeails = (from d in db.CustomerInvoiceDetails where d.CustomerInvoiceID == item.CustomerInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
+                //where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
+                decimal? totamt = 0;
+                decimal? totamtpaid = 0;
+                decimal? totadjust = 0;
+                decimal? CreditAmount = 0;
+                //foreach (var det in invoicedeails)
+                //{
+                var allrecpay = (from d in db.RecPayDetails where d.InvoiceID == item.CustomerInvoiceID select d).ToList();
+                totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
+                totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
+                var CreditNote = (from d in db.CreditNotes where d.InvoiceID == item.CustomerInvoiceID && d.CustomerID == item.CustomerID && d.InvoiceType=="TR" &&  d.CreditNoteID!=CreditNoteId select d).ToList();
+                //var CreditNote = (from d in db.CreditNotes where d.InvoiceID == det.CustomerInvoiceDetailID && d.CustomerID == item.CustomerID select d).ToList();
+
+                if (CreditNote.Count > 0)
+                {
+                    CreditAmount = CreditNote.Sum(d => d.Amount);
+                }
+                totamt = totamtpaid + totadjust + CreditAmount;
+                //}
+
+                var Invoice = new CustomerTradeReceiptVM();
+                //Invoice.JobID = det.JobID;
+                Invoice.InvoiceType = "TR";
+                Invoice.JobCode = "";
+                Invoice.SalesInvoiceID = item.CustomerInvoiceID; // SalesInvoiceID;
+                Invoice.InvoiceNo = item.CustomerInvoiceNo;
+                //Invoice.SalesInvoiceDetailID = det.CustomerInvoiceDetailID;
+                Invoice.InvoiceAmount = item.InvoiceTotal; // CourierCharge;
+                Invoice.date = item.InvoiceDate;
+                Invoice.DateTime = item.InvoiceDate.ToString("dd/MM/yyyy");
+                //var RecPay = (from d in db.RecPayDetails where d.RecPayDetailID == det.RecPayDetailId select d).FirstOrDefault();
+
+                Invoice.AmountReceived = totamt;
+                Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
+                Invoice.AdjustmentAmount = totadjust;
+
+                if (Invoice.Balance > 0)
+                {
+                    if (amountreceived != null)
+                    {
+                        if (amountreceived >= Invoice.Balance)
+                        {
+                            Invoice.Allocated = true;
+                            Invoice.Amount = Invoice.Balance;
+                            amountreceived = amountreceived - Invoice.Amount;
+                        }
+                        else if (amountreceived > 0)
+                        {
+                            Invoice.Amount = amountreceived;
+                            amountreceived = amountreceived - Invoice.Amount;
+                        }
+                        else
+                        {
+                            Invoice.Amount = 0;
+                        }
+                    }
+                    salesinvoice.Add(Invoice);
+                    //if (RecPayId == null)
+                    //{
+                    //    AWBAllocation = ReceiptDAO.GetAWBAllocation(AWBAllocation, Convert.ToInt32(Invoice.SalesInvoiceID), Convert.ToDecimal(Invoice.Amount), 0); //customer invoiceid,amount
+                    //}
+                    //else
+                    //{
+                    //    AWBAllocation = ReceiptDAO.GetAWBAllocation(AWBAllocation, Convert.ToInt32(Invoice.SalesInvoiceID), Convert.ToDecimal(Invoice.Amount), Convert.ToInt32(RecPayId)); //customer invoiceid,amount
+                    //}
+                }
+            }
+
+            Session["CustomerInvoice"] = salesinvoice;
+           
+        }
+
+        public ActionResult DeleteCreditNote(int id)
+        {
+            //int k = 0;
+            if (id != 0)
+            {
+                string result = AccountsDAO.DeleteCreditNote(id);
+                TempData["SuccessMsg"] = result;
+
+            }
+
+            return RedirectToAction("Index", "CreditNote");
+
+        }
         public JsonResult GetAmountByinvono(int invno, bool IsTrading)
         {
             Getamtclass ob = new Getamtclass();
@@ -362,135 +698,135 @@ namespace LTMSV2.Controllers
 
         }
 
-        [HttpPost]
-        public ActionResult ServiceCreate(CreditNoteVM v)
-        {
-            AcJournalMaster ajm = new AcJournalMaster();
+        //[HttpPost]
+        //public ActionResult ServiceCreate(CreditNoteVM v)
+        //{
+        //    AcJournalMaster ajm = new AcJournalMaster();
 
-            int acjm = 0;
-            acjm = (from c in db.AcJournalMasters orderby c.AcJournalID descending select c.AcJournalID).FirstOrDefault();
+        //    int acjm = 0;
+        //    acjm = (from c in db.AcJournalMasters orderby c.AcJournalID descending select c.AcJournalID).FirstOrDefault();
 
-            ajm.AcJournalID = acjm + 1;
-            ajm.AcCompanyID = Convert.ToInt32(Session["AcCompanyID"].ToString());
-            ajm.AcFinancialYearID = Convert.ToInt32(Session["fyearid"].ToString());
-            ajm.PaymentType = 1;
-            ajm.Remarks = "Credit Note";
-            ajm.StatusDelete = false;
-            ajm.TransDate = v.Date;
-            ajm.VoucherNo = "C-" + ajm.AcJournalID;
-            ajm.TransType = 2;
-            ajm.VoucherType = "";
+        //    ajm.AcJournalID = acjm + 1;
+        //    ajm.AcCompanyID = Convert.ToInt32(Session["AcCompanyID"].ToString());
+        //    ajm.AcFinancialYearID = Convert.ToInt32(Session["fyearid"].ToString());
+        //    ajm.PaymentType = 1;
+        //    ajm.Remarks = "Credit Note";
+        //    ajm.StatusDelete = false;
+        //    ajm.TransDate = v.Date;
+        //    ajm.VoucherNo = "C-" + ajm.AcJournalID;
+        //    ajm.TransType = 2;
+        //    ajm.VoucherType = "";
 
-            db.AcJournalMasters.Add(ajm);
-            db.SaveChanges();
-
-
-            AcJournalDetail b = new AcJournalDetail();
-
-            int maxacj = 0;
-            maxacj = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
-
-            b.AcJournalDetailID = maxacj + 1;
-            b.AcJournalID = ajm.AcJournalID;
-            b.AcHeadID = v.AcHeadID;
-            b.Amount = -v.Amount;
-            b.BranchID = Convert.ToInt32(Session["AcCompanyID"].ToString());
-            b.Remarks = "";
-
-            db.AcJournalDetails.Add(b);
-            db.SaveChanges();
+        //    db.AcJournalMasters.Add(ajm);
+        //    db.SaveChanges();
 
 
-            AcJournalDetail a = new AcJournalDetail();
-            maxacj = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
-            a.AcJournalDetailID = maxacj + 1;
-            a.AcJournalID = ajm.AcJournalID;
-            a.AcHeadID = v.AcHeadID;
-            a.Amount = v.Amount;
-            a.BranchID = Convert.ToInt32(Session["AcCompanyID"].ToString());
-            a.Remarks = "";
+        //    AcJournalDetail b = new AcJournalDetail();
+
+        //    int maxacj = 0;
+        //    maxacj = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
+
+        //    b.AcJournalDetailID = maxacj + 1;
+        //    b.AcJournalID = ajm.AcJournalID;
+        //    b.AcHeadID = v.AcHeadID;
+        //    b.Amount = -v.Amount;
+        //    b.BranchID = Convert.ToInt32(Session["AcCompanyID"].ToString());
+        //    b.Remarks = "";
+
+        //    db.AcJournalDetails.Add(b);
+        //    db.SaveChanges();
 
 
+        //    AcJournalDetail a = new AcJournalDetail();
+        //    maxacj = (from c in db.AcJournalDetails orderby c.AcJournalDetailID descending select c.AcJournalDetailID).FirstOrDefault();
+        //    a.AcJournalDetailID = maxacj + 1;
+        //    a.AcJournalID = ajm.AcJournalID;
+        //    a.AcHeadID = v.AcHeadID;
+        //    a.Amount = v.Amount;
+        //    a.BranchID = Convert.ToInt32(Session["AcCompanyID"].ToString());
+        //    a.Remarks = "";
 
 
 
 
 
-            db.AcJournalDetails.Add(a);
-            db.SaveChanges();
-
-            var invid = 0;
-            int? recpayid = 0;
-            //if (v.TradingInvoice == false)
-            //{
-            //    int jobid = (from j in db.JobGenerations where j.JobCode == v.JobNO select j.JobID).FirstOrDefault();
-
-            //     invid = (from c in db.JInvoices where c.JobID == jobid select c.InvoiceID).FirstOrDefault();
 
 
-            //    var recpay = (from c in db.RecPayDetails where c.InvoiceID == invid select c).FirstOrDefault();
-            //    if (recpay != null)
-            //    {
-            //        recpayid = recpay.RecPayID;
-            //    }
-            //}
-            //else
-            //{
-            //    invid =Convert.ToInt32(v.JobNO);
+        //    db.AcJournalDetails.Add(a);
+        //    db.SaveChanges();
 
-            //  var  recpay = (from c in db.RecPayDetails where c.InvoiceID == invid select c).FirstOrDefault();
-            //    if(recpay != null)
-            //    {
-            //        recpayid = recpay.RecPayID;
-            //    }
-            //}
-            invid = Convert.ToInt32(v.JobNO);
-            var ids = (from x in db.SalesInvoiceDetails where x.SalesInvoiceID == invid select (int?)x.SalesInvoiceDetailID).ToList();
+        //    var invid = 0;
+        //    int? recpayid = 0;
+        //    //if (v.TradingInvoice == false)
+        //    //{
+        //    //    int jobid = (from j in db.JobGenerations where j.JobCode == v.JobNO select j.JobID).FirstOrDefault();
 
-            recpayid = (from c in db.RecPayDetails where ids.Contains(c.InvoiceID) select c.RecPayID).FirstOrDefault().Value;
-
-            CreditNote d = new CreditNote();
-
-            //int max = (from c in db.CreditNotes orderby c.CreditNoteNo descending select c.CreditNoteNo).FirstOrDefault().Value;
-            int maxid = 0;
-
-            var data = (from c in db.CreditNotes orderby c.CreditNoteID descending select c).FirstOrDefault();
-
-            if (data == null)
-            {
-                maxid = 1;
-            }
-            else
-            {
-                maxid = data.CreditNoteID + 1;
-            }
-
-            d.CreditNoteID = maxid;
-            d.CreditNoteNo = maxid;
-            d.InvoiceID = invid;
-            d.CreditNoteDate = v.Date;
-            d.Amount = v.Amount;
-            d.AcJournalID = ajm.AcJournalID;
-            d.FYearID = Convert.ToInt32(Session["fyearid"].ToString());
-            d.AcCompanyID = Convert.ToInt32(Session["AcCompanyID"].ToString());
-            d.RecPayID = recpayid;
-            d.AcHeadID = v.AcHeadID;
-            d.CustomerID = v.CustomerID;
-            d.statusclose = false;
-            d.InvoiceType = "C";
-            d.IsShipping = false;
-
-            db.CreditNotes.Add(d);
-            db.SaveChanges();
-
-            TempData["SuccessMsg"] = "Successfully Added Credit Note";
-            return RedirectToAction("ServiceIndex", "CreditNote");
+        //    //     invid = (from c in db.JInvoices where c.JobID == jobid select c.InvoiceID).FirstOrDefault();
 
 
+        //    //    var recpay = (from c in db.RecPayDetails where c.InvoiceID == invid select c).FirstOrDefault();
+        //    //    if (recpay != null)
+        //    //    {
+        //    //        recpayid = recpay.RecPayID;
+        //    //    }
+        //    //}
+        //    //else
+        //    //{
+        //    //    invid =Convert.ToInt32(v.JobNO);
+
+        //    //  var  recpay = (from c in db.RecPayDetails where c.InvoiceID == invid select c).FirstOrDefault();
+        //    //    if(recpay != null)
+        //    //    {
+        //    //        recpayid = recpay.RecPayID;
+        //    //    }
+        //    //}
+        //    invid = Convert.ToInt32(v.JobNO);
+        //    var ids = (from x in db.SalesInvoiceDetails where x.SalesInvoiceID == invid select (int?)x.SalesInvoiceDetailID).ToList();
+
+        //    recpayid = (from c in db.RecPayDetails where ids.Contains(c.InvoiceID) select c.RecPayID).FirstOrDefault().Value;
+
+        //    CreditNote d = new CreditNote();
+
+        //    //int max = (from c in db.CreditNotes orderby c.CreditNoteNo descending select c.CreditNoteNo).FirstOrDefault().Value;
+        //    int maxid = 0;
+
+        //    var data = (from c in db.CreditNotes orderby c.CreditNoteID descending select c).FirstOrDefault();
+
+        //    if (data == null)
+        //    {
+        //        maxid = 1;
+        //    }
+        //    else
+        //    {
+        //        maxid = data.CreditNoteID + 1;
+        //    }
+
+        //    d.CreditNoteID = maxid;
+        //    d.CreditNoteNo = maxid;
+        //    d.InvoiceID = invid;
+        //    d.CreditNoteDate = v.Date;
+        //    d.Amount = v.Amount;
+        //    d.AcJournalID = ajm.AcJournalID;
+        //    d.FYearID = Convert.ToInt32(Session["fyearid"].ToString());
+        //    d.AcCompanyID = Convert.ToInt32(Session["AcCompanyID"].ToString());
+        //    d.RecPayID = recpayid;
+        //    d.AcHeadID = v.AcHeadID;
+        //    d.CustomerID = v.CustomerID;
+        //    d.statusclose = false;
+        //    d.InvoiceType = "C";
+        //    d.IsShipping = false;
+
+        //    db.CreditNotes.Add(d);
+        //    db.SaveChanges();
+
+        //    TempData["SuccessMsg"] = "Successfully Added Credit Note";
+        //    return RedirectToAction("ServiceIndex", "CreditNote");
 
 
 
-        }
+
+
+        //}
 
         public class Getamtclass
         {
