@@ -313,7 +313,7 @@ namespace LTMSV2.Controllers
                 {
                     FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
                     ToDate = CommanFunctions.GetLastDayofMonth().Date,
-                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
                     CustomerId = 0,
                     CustomerName = "",
                     Output = "PDF",
@@ -480,6 +480,7 @@ namespace LTMSV2.Controllers
                 {
                     FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
                     ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
                     CustomerId = 0,
                     CustomerName = "",
                     Output = "PDF",

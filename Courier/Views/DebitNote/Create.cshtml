@@ -5,7 +5,7 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var isadd = true;
-
+    var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());
 
     string path = Request.Url.AbsolutePath.ToLower();
 
@@ -50,13 +50,19 @@
 </style>
 
 <script type="text/javascript">
+     function setTwoNumberDecimal(obj) {    
+       $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+    }
+
     $(document).ready(function () {
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
         $("#InvoiceAmount").attr("disabled", "disabled");
         $("#AmountPaid").attr("disabled", "disabled");
 
-
+        setTwoNumberDecimal($("#InvoiceAmount"));
+        setTwoNumberDecimal($("#AmountPaid"));
+        setTwoNumberDecimal($("#Amount"));
 
 
         $("#btnsave").click(function () {
@@ -160,6 +166,8 @@
                 $('#InvoiceType').val(i.item.Type);
                 $('#InvoiceAmount').val(i.item.InvoiceAmt);
                 $('#ReceivedAmount').val(i.item.Received);
+                setTwoNumberDecimal($("#InvoiceAmount"));
+                setTwoNumberDecimal($("#AmountPaid"));
 
             },
             select: function (e, i) {
@@ -170,10 +178,12 @@
                 $('#InvoiceType').val(i.item.Type);
                 $('#InvoiceAmount').val(i.item.InvoiceAmt);
                 $('#ReceivedAmount').val(i.item.Received);
+                setTwoNumberDecimal($("#InvoiceAmount"));
+                setTwoNumberDecimal($("#AmountPaid"));
             }
         });
 
-     
+
     });
     function getamt() {
 
@@ -257,13 +267,13 @@
                         <div class="col-md-12">
                             <div class="col-md-4">
 
-                                @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control" })
+                                @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right" })
                             </div>
                             <div class="col-md-4">
-                                @Html.TextBoxFor(model => model.InvoiceAmount, new { @class = "form-control" })
+                                @Html.TextBoxFor(model => model.InvoiceAmount, new { @class = "form-control text-right" })
                             </div>
                             <div class="col-md-4">
-                                @Html.TextBoxFor(model => model.AmountPaid, new { @class = "form-control" })
+                                @Html.TextBoxFor(model => model.AmountPaid, new { @class = "form-control text-right" })
                             </div>
                         </div>
                     </div>                    

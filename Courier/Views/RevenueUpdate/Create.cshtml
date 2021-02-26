@@ -284,16 +284,18 @@
                 $('#ConsigneeName').val(response.ConsigneeName);
                 $('#PaymentType').val(response.PaymentModeId);
                 $('#PaymentType').trigger('change');
-                $('#InvoiceTo').val(response.InvoiceTo);
-                $('#InvoiceTo').trigger('change')
-                if ($('#PaymentType').val()!=1 && ($('#InvoiceTo').val() == null || $('#InvoiceTo').val() == '')) {
-                    $('#InvoiceTo').focus();
-                }
-                else if ($('#InvoiceTo').val() == 'Others')
-                {
-                    $('#txtCustomer').focus();
-                }
-                else { $('#txtRevenueCost').focus(); }
+               
+                    $('#InvoiceTo').val(response.InvoiceTo);
+                    $('#InvoiceTo').trigger('change')
+                    if ($('#PaymentType').val() != 1 && ($('#InvoiceTo').val() == null || $('#InvoiceTo').val() == '')) {
+                        $('#InvoiceTo').focus();
+                    }
+                    else if ($('#InvoiceTo').val() == 'Others') {
+                        $('#txtCustomer').focus();
+                    }
+                    else { $('#txtRevenueCost').focus(); }
+               
+               
                 //AWBItems = [];
                 //if (response.revenuedetail != null && response.revenuedetail.length>0) {
                 //    AWBItems = response.revenuedetail;

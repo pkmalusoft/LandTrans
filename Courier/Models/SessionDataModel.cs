@@ -42,7 +42,23 @@ namespace LTMSV2.Models
         {
             System.Web.HttpContext.Current.Session["AccountsParam"] = reportparam;            
         }
+        public static AccountsReportParam1 GetAccountsParam1()
+        {
+            return (AccountsReportParam1)System.Web.HttpContext.Current.Session["AccountsParam1"];
+        }
+        public static void SetAccountsParam1(AccountsReportParam1 reportparam)
+        {
+            System.Web.HttpContext.Current.Session["AccountsParam1"] = reportparam;
+        }
 
+        public static AccountsReportParam GetAccountsParam2()
+        {
+            return (AccountsReportParam)System.Web.HttpContext.Current.Session["AccountsParam2"];
+        }
+        public static void SetAccountsParam2(AccountsReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["AccountsParam2"] = reportparam;
+        }
         public static AWBReportParam GetAWBReportParam()
         {
             return (AWBReportParam)System.Web.HttpContext.Current.Session["AWBReportParam"];

@@ -130,6 +130,8 @@ namespace LTMSV2.Models
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
 
+        public DateTime AsOnDate { get; set; }
+
         public int AcTypeId { get; set; }
         public int AcGroupId { get; set; }
         public string Output { get; set; } //printer ,pdf,word,excel
@@ -140,7 +142,23 @@ namespace LTMSV2.Models
         public int[] SelectedValues { get; set; }
 
     }
+    public class AccountsReportParam1
+    {
+        public int AcHeadId { get; set; }
+        public string AcHeadName { get; set; }
+        
+        public DateTime AsOnDate { get; set; }
 
+        public int AcTypeId { get; set; }
+        public int AcGroupId { get; set; }
+        public string Output { get; set; } //printer ,pdf,word,excel
+        public string ReportType { get; set; } //sumary details
+        public string ReportFileName { get; set; }
+        public string Filters { get; set; }
+        public string VoucherTypeId { get; set; }
+        public int[] SelectedValues { get; set; }
+
+    }
     public class AWBReportParam
     {
         public DateTime FromDate { get; set; }

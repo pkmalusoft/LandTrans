@@ -3616,6 +3616,8 @@
     <Content Include="Views\Reports\CustomerAging.cshtml" />
     <Content Include="Views\Reports\SupplierAging.cshtml" />
     <Content Include="Views\Reports\CustomerStatement.cshtml" />
+    <Content Include="Views\Accounts\PLTradingReport.cshtml" />
+    <Content Include="Views\Accounts\TrialBalance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -128,7 +128,7 @@ namespace LTMSV2.Controllers
                     vm.DebitCashAccountId = pacc.AcHeadID;
 
                 }
-                var customer = db.CustomerMasters.Where(cc => cc.CustomerName == "Cod Customer").FirstOrDefault();
+                var customer = db.CustomerMasters.Where(cc => cc.CustomerType == "COD").FirstOrDefault();
                 if (customer != null)
                 {
                     vm.DebitCODCustomerId = customer.CustomerID;
@@ -367,7 +367,7 @@ namespace LTMSV2.Controllers
                        
             var cust = (from c in db.CustomerMasters where c.CustomerName == inscan.Consignor select c).FirstOrDefault();
             var receiver = (from c in db.CustomerMasters where c.CustomerName == inscan.Consignee select c).FirstOrDefault();
-            var customer = (from c in db.CustomerMasters where c.CustomerName == "Pickupcash Customer" select c).FirstOrDefault();
+            var customer = (from c in db.CustomerMasters where c.CustomerType == "PKP" select c).FirstOrDefault();
             int consignorid = 0;
             string consignorname = "";
             int consigneeid = 0;

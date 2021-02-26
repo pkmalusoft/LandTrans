@@ -33,7 +33,7 @@ namespace LTMSV2.Controllers
                     var purchaseinvoice = (from d in db.SupplierInvoices where d.SupplierInvoiceID == item.InvoiceID select d).FirstOrDefault();
                     jobcode = purchaseinvoice.InvoiceNo;
                 }
-                else
+                else if(item.InvoiceType=="OP")
                 {
                     var purchaseinvoice = (from d in db.AcOPInvoiceDetails where d.AcOPInvoiceDetailID == item.InvoiceID select d).FirstOrDefault();
                     jobcode = purchaseinvoice.InvoiceNo;
@@ -84,36 +84,44 @@ namespace LTMSV2.Controllers
                 DebitNoteVM vm = new DebitNoteVM();
                 var v = db.DebitNotes.Find(id);
                 vm.DebitNoteId = v.DebitNoteID;
+                vm.Date = v.DebitNoteDate;
                 vm.AcJournalID = Convert.ToInt32(v.AcJournalID);
                 vm.DebitNoteNo = v.DebitNoteNo;
                 vm.SupplierID = Convert.ToInt32(v.SupplierID);
                 vm.AcHeadID = Convert.ToInt32(v.AcHeadID);
                 vm.Amount = Convert.ToDecimal(v.Amount);
+                vm.InvoiceType = v.InvoiceType;
                 vm.Remarks = v.Remarks;
                 vm.InvoiceID = Convert.ToInt32(v.InvoiceID);
+                SetTradeInvoiceOfSupplier(vm.SupplierID, 0, vm.DebitNoteId);
+                List<CustomerTradeReceiptVM> lst = (List<CustomerTradeReceiptVM>)Session["SupplierInvoice"];
                 if (v.InvoiceType == "TR")
                 {
-                    var invoice = db.SupplierInvoices.Find(vm.InvoiceID);
+                    var invoice = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID).FirstOrDefault();
+                    //var invoice = db.SupplierInvoices.Find(vm.InvoiceID);
                     if (invoice != null)
                     {
                         vm.InvoiceNo = invoice.InvoiceNo;
-                        vm.InvoiceDate = invoice.InvoiceDate.ToString("dd/MM/yyyy");
-                        vm.InvoiceAmount = Convert.ToDecimal(invoice.InvoiceTotal);
+                        vm.InvoiceDate = invoice.DateTime;
+                        vm.InvoiceAmount = Convert.ToDecimal(invoice.InvoiceAmount);
+                        vm.AmountPaid = Convert.ToDecimal(invoice.AmountReceived);
                     }
                 }
                 else if (v.InvoiceType == "OP")
                 {
-                    var invoice1 = db.AcOPInvoiceDetails.Where(cc => cc.AcOPInvoiceDetailID == vm.InvoiceID).FirstOrDefault();
+                    var invoice1 = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID).FirstOrDefault();
+                    //var invoice1 = db.AcOPInvoiceDetails.Where(cc => cc.AcOPInvoiceDetailID == vm.InvoiceID).FirstOrDefault();
                     if (invoice1 != null)
                     {
                         vm.InvoiceNo = invoice1.InvoiceNo;
-                        vm.InvoiceDate = Convert.ToDateTime(invoice1.InvoiceDate).ToString("dd/MM/yyyy");
-                        vm.InvoiceAmount = Convert.ToDecimal(invoice1.Amount);
+                        vm.InvoiceDate = invoice1.DateTime;
+                        vm.InvoiceAmount = Convert.ToDecimal(invoice1.InvoiceAmount);
+                        vm.AmountPaid = Convert.ToDecimal(invoice1.AmountReceived);
                     }
                 }
                 //SetTradeInvoiceOfCustomer(vm.CustomerID, 0, vm.CreditNoteID);
                 vm.Date = Convert.ToDateTime(v.DebitNoteDate);
-                SetTradeInvoiceOfSupplier(vm.SupplierID, 0, vm.DebitNoteId);
+               
                 return View(vm);
             }
         }
@@ -127,17 +135,18 @@ namespace LTMSV2.Controllers
             {
                 ajm = db.AcJournalMasters.Find(v.AcJournalID);
             }
-            if (v.DebitNoteId == 0 || ajm != null)
+            if (v.AcJournalID == 0)
             {
                 int acjm = 0;
                 acjm = (from c in db.AcJournalMasters orderby c.AcJournalID descending select c.AcJournalID).FirstOrDefault();
 
                 ajm.AcJournalID = acjm + 1;
                 ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                ajm.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 ajm.AcFinancialYearID = fyearid;
                 ajm.PaymentType = 1;
                 var customer = db.SupplierMasters.Find(v.SupplierID).SupplierName;
-                ajm.Remarks = v.Remarks +"DN: for " + customer + " invoice : " + v.InvoiceNo;
+                ajm.Remarks = v.Remarks + " DN: for " + customer + " invoice : " + v.InvoiceNo;
                 ajm.StatusDelete = false;
                 ajm.VoucherNo = AccountsDAO.GetMaxVoucherNo("DN", fyearid);
                 ajm.TransDate = v.Date;
@@ -146,9 +155,16 @@ namespace LTMSV2.Controllers
                 db.AcJournalMasters.Add(ajm);
                 db.SaveChanges();
             }
+            else
+            {
+                var customer = db.SupplierMasters.Find(v.SupplierID).SupplierName;
+                ajm.Remarks = v.Remarks + "DN: for " + customer + " invoice : " + v.InvoiceNo;
+                db.Entry(ajm).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
             AcJournalDetail b = new AcJournalDetail();
-            b = db.AcJournalDetails.Where(cc => cc.AcJournalID == ajm.AcJournalID && cc.Amount > 0).FirstOrDefault();
+            b = db.AcJournalDetails.Where(cc => cc.AcJournalID == ajm.AcJournalID && cc.Amount < 0).FirstOrDefault();
             if (b == null)
             {
                 b = new AcJournalDetail();
@@ -178,7 +194,7 @@ namespace LTMSV2.Controllers
             }
 
             AcJournalDetail a = new AcJournalDetail();
-            a = db.AcJournalDetails.Where(cc => cc.AcJournalID == ajm.AcJournalID && cc.Amount < 0).FirstOrDefault();
+            a = db.AcJournalDetails.Where(cc => cc.AcJournalID == ajm.AcJournalID && cc.Amount > 0).FirstOrDefault();
             if (a == null)
             {
                 a = new AcJournalDetail();
@@ -257,6 +273,10 @@ namespace LTMSV2.Controllers
                 d.DebitNoteID=maxid;
                 d.DebitNoteNo = AccountsDAO.GetMaxDebiteNoteNo(fyearid);
             }
+            else
+            {
+                d = db.DebitNotes.Find(v.DebitNoteId);
+            }
             d.InvoiceID = v.InvoiceID;
             d.InvoiceType = v.InvoiceType;
             d.DebitNoteDate = v.Date;
@@ -318,7 +338,7 @@ namespace LTMSV2.Controllers
                 totamt = totamtpaid + totadjust + CreditAmount;
                 var Invoice = new CustomerTradeReceiptVM();
                 Invoice.AcOPInvoiceDetailID = item.AcOPInvoiceDetailID;
-                Invoice.SalesInvoiceID = 0;
+                Invoice.SalesInvoiceID = item.AcOPInvoiceDetailID;
                 Invoice.InvoiceType = "OP";
                 Invoice.JobCode = "OP" + item.AcOPInvoiceDetailID.ToString();
                 Invoice.InvoiceNo = item.InvoiceNo; ;
@@ -448,7 +468,7 @@ namespace LTMSV2.Controllers
                 totamt = totamtpaid + totadjust + CreditAmount;
                 var Invoice = new CustomerTradeReceiptVM();
                 Invoice.AcOPInvoiceDetailID = item.AcOPInvoiceDetailID;
-                Invoice.SalesInvoiceID = 0;
+                Invoice.SalesInvoiceID = item.AcOPInvoiceDetailID;
                 Invoice.InvoiceType = "OP";
                 Invoice.JobCode = "OP" + item.AcOPInvoiceDetailID.ToString();
                 Invoice.InvoiceNo = item.InvoiceNo; ;

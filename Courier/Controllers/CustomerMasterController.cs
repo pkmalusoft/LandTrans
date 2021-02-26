@@ -62,7 +62,7 @@ namespace LTMSV2.Controllers
         public ActionResult Index()
         {
             List<CustmorVM> lst = new List<CustmorVM>();
-            var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).ToList();
+            var data = db.CustomerMasters.Where(ite => ite.StatusActive.HasValue ? ite.StatusActive == true : false).Where(ite=>ite.CustomerType=="CS" || ite.CustomerType=="CR").ToList();
 
             foreach (var item in data)
             {

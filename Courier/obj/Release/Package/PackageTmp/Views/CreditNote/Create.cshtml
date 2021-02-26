@@ -4,7 +4,7 @@
 
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var isadd = true;
-
+    var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());
 
     string path = Request.Url.AbsolutePath.ToLower();
 
@@ -48,6 +48,10 @@
     }
 </style>
 <script type="text/javascript">
+    function setTwoNumberDecimal(obj) {
+         debugger;
+       $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+    }
     $(document).ready(function () {
 
         var startdate = '@Session["FyearFrom"].ToString()';
@@ -102,8 +106,6 @@
 
 
         });
-
-
 
 
 
@@ -170,6 +172,8 @@
                 $('#InvoiceType').val(i.item.Type);
                 $('#InvoiceAmount').val(i.item.InvoiceAmt);
                 $('#ReceivedAmount').val(i.item.Received);
+                setTwoNumberDecimal($("#InvoiceAmount"));
+                setTwoNumberDecimal($("#ReceivedAmount"));
 
             },
             select: function (e, i) {
@@ -180,6 +184,8 @@
                 $('#InvoiceType').val(i.item.Type);
                 $('#InvoiceAmount').val(i.item.InvoiceAmt);
                 $('#ReceivedAmount').val(i.item.Received);
+                setTwoNumberDecimal($("#InvoiceAmount"));
+                setTwoNumberDecimal($("#ReceivedAmount"));
             }
         });
 
@@ -188,32 +194,35 @@
             $("#CustomerID").attr('readonly', 'readonly');
 
         }
-        //$("#JobNO").change(function () {
-
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "/CreditNote/GetAmount",
-        //        datatype: "Json",
-        //        data: { id: $('#JobNO option:selected').val() },
-        //        success: function (data) {
-
-        //            $("#InvoiceAmount").val(data.invoiceamt);
-        //            $("#ReceivedAmount").val(data.recamt);
-
-        //        }
-
-
-
-        //    });
-        //});
+     
         $("#Amount").on('change', function () {
             var value = $(this).val();
             if (value == null || value == "") {
-                $(this).val("0.00");
+                $(this).val("0.000");
             } else {
-                $(this).val(parseFloat(value).toFixed(2));
+                $(this).val(parseFloat(value).toFixed(@_decimal));
             }
         });
+
+        $("#InvoiceAmount").on('change', function () {
+            var value = $(this).val();
+            if (value == null || value == "") {
+                $(this).val("0.000");
+            } else {
+                $(this).val(parseFloat(value).toFixed(@_decimal));
+            }
+        });
+        $("#ReceivedAmount").on('change', function () {
+            var value = $(this).val();
+            if (value == null || value == "") {
+                $(this).val("0.000");
+            } else {
+                $(this).val(parseFloat(value).toFixed(@_decimal));
+            }
+        });
+        setTwoNumberDecimal($("#InvoiceAmount"));
+        setTwoNumberDecimal($("#ReceivedAmount"));
+        setTwoNumberDecimal($("#Amount"));
     });
     function getamt() {
         $.ajax({
@@ -308,10 +317,10 @@
                                 @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control" })
                             </div>
                             <div class="col-md-4">
-                                @Html.TextBoxFor(model => model.InvoiceAmount, new { @class = "form-control" })
+                                @Html.TextBoxFor(model => model.InvoiceAmount, new { @class = "form-control text-right" })
                             </div>
                             <div class="col-md-4">
-                                @Html.TextBoxFor(model => model.ReceivedAmount, new { @class = "form-control" })
+                                @Html.TextBoxFor(model => model.ReceivedAmount, new { @class = "form-control text-right" })
                             </div>
                         </div>
                     </div>

@@ -31,7 +31,7 @@ namespace LTMSV2.Controllers
                     var purchaseinvoice = (from d in db.CustomerInvoices where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
                     jobcode = purchaseinvoice.CustomerInvoiceNo;
                 }
-                else
+                else if(item.InvoiceType == "OP")
                 {
                     var purchaseinvoice = (from d in db.AcOPInvoiceDetails where d.AcOPInvoiceDetailID == item.InvoiceID select d).FirstOrDefault();
                     jobcode = purchaseinvoice.InvoiceNo;
@@ -58,7 +58,7 @@ namespace LTMSV2.Controllers
 
         public ActionResult Create(int id=0)
         {
-            int fyearid=Convert.ToInt32(Session["fyearid"].ToString());
+             int fyearid=Convert.ToInt32(Session["fyearid"].ToString());
             ViewBag.customer = db.CustomerMasters.Where(d=>d.CustomerType=="CR").OrderBy(x => x.CustomerName).ToList();
             ViewBag.achead = db.AcHeads.ToList();
 
@@ -77,32 +77,45 @@ namespace LTMSV2.Controllers
                 var v = db.CreditNotes.Find(id);
                 vm.CreditNoteID = v.CreditNoteID;
                 vm.CreditNoteNo = v.CreditNoteNo;
+                vm.Date = Convert.ToDateTime(v.CreditNoteDate);
                 vm.AcJournalID =Convert.ToInt32(v.AcJournalID);
                 vm.CustomerID =Convert.ToInt32(v.CustomerID);
                 vm.AcHeadID = Convert.ToInt32(v.AcHeadID);
                 vm.Amount =Convert.ToDecimal(v.Amount);
                 vm.InvoiceID =Convert.ToInt32(v.InvoiceID);
+                vm.InvoiceType = v.InvoiceType;
+                vm.Description = v.Description;
+                SetTradeInvoiceOfCustomer(vm.CustomerID, 0, vm.CreditNoteID);
+                List<CustomerTradeReceiptVM> lst = (List<CustomerTradeReceiptVM>)Session["CustomerInvoice"];
                 if (v.InvoiceType=="TR")
                 {
-                    var invoice = db.CustomerInvoices.Find(vm.InvoiceID);
+                    var invoice = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID).FirstOrDefault();
                     if (invoice!=null)
                     {
-                        vm.InvoiceNo = invoice.CustomerInvoiceNo;
-                        vm.InvoiceDate = invoice.InvoiceDate.ToString("dd/MM/yyyy");
-                        vm.InvoiceAmount =Convert.ToDecimal(invoice.InvoiceTotal);
+                        vm.InvoiceNo = invoice.InvoiceNo;
+                        vm.InvoiceDate = invoice.DateTime;
+                        vm.InvoiceAmount =Convert.ToDecimal(invoice.InvoiceAmount);
+                        vm.ReceivedAmount =Convert.ToDecimal(invoice.AmountReceived);
                     }
                 }
                 else if (v.InvoiceType == "OP")
                 {
-                    var invoice1 = db.AcOPInvoiceDetails.Where(cc=>cc.AcOPInvoiceDetailID ==vm.InvoiceID).FirstOrDefault();
-                    if (invoice1 != null)
-                    {
-                        vm.InvoiceNo = invoice1.InvoiceNo;
-                        vm.InvoiceDate = Convert.ToDateTime(invoice1.InvoiceDate).ToString("dd/MM/yyyy");
-                        vm.InvoiceAmount = Convert.ToDecimal(invoice1.Amount);
-                    }
+                    //var invoice1 = db.AcOPInvoiceDetails.Where(cc=>cc.AcOPInvoiceDetailID ==vm.InvoiceID).FirstOrDefault();
+                    //if (invoice1 != null)
+                    //{
+                    //    vm.InvoiceNo = invoice1.InvoiceNo;
+                    //    vm.InvoiceDate = Convert.ToDateTime(invoice1.InvoiceDate).ToString("dd/MM/yyyy");
+                    //    vm.InvoiceAmount = Convert.ToDecimal(invoice1.Amount);
+                    //}
+                    var invoice = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID).FirstOrDefault();
+                    vm.InvoiceNo = invoice.InvoiceNo;
+                    vm.InvoiceDate = invoice.DateTime;
+                    vm.InvoiceAmount = Convert.ToDecimal(invoice.InvoiceAmount);
+                    vm.ReceivedAmount = Convert.ToDecimal(invoice.AmountReceived);
                 }
-                SetTradeInvoiceOfCustomer(vm.CustomerID, 0, vm.CreditNoteID);
+                
+                
+                
                 vm.Date =Convert.ToDateTime(v.CreditNoteDate);
                 //vm.
                 return View(vm);
@@ -117,17 +130,18 @@ namespace LTMSV2.Controllers
         {
             AcJournalMaster ajm = new AcJournalMaster();
             int fyearid=Convert.ToInt32(Session["fyearid"].ToString());
-            if (v.CreditNoteID >0)
+            if (v.AcJournalID >0)
             {
                 ajm = db.AcJournalMasters.Find(v.AcJournalID);
             }
-            if (v.CreditNoteID == 0 || ajm != null)
+            if (v.CreditNoteID == 0 && v.AcJournalID==0)
             {
                 int acjm = 0;
                 acjm = (from c in db.AcJournalMasters orderby c.AcJournalID descending select c.AcJournalID).FirstOrDefault();
 
                 ajm.AcJournalID = acjm + 1;
                 ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                ajm.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 ajm.AcFinancialYearID = fyearid;
                 ajm.PaymentType = 1;
                 var customer = db.CustomerMasters.Find(v.CustomerID).CustomerName;
@@ -140,6 +154,14 @@ namespace LTMSV2.Controllers
                 ajm.VoucherType = "CN";
                 db.AcJournalMasters.Add(ajm);
                 db.SaveChanges();
+            }
+            else
+            {
+                var customer = db.CustomerMasters.Find(v.CustomerID).CustomerName;
+                ajm.Remarks = "Credit Note for " + customer + " invoice : " + v.InvoiceNo;
+                db.Entry(ajm).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
             }
 
             AcJournalDetail b = new AcJournalDetail();
@@ -251,18 +273,23 @@ namespace LTMSV2.Controllers
 
                 d.CreditNoteID = maxid;
                 d.CreditNoteNo = AccountsDAO.GetMaxCreditNoteNo(fyearid);
+                d.FYearID = Convert.ToInt32(Session["fyearid"].ToString());
+                d.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                d.statusclose = false;
+            }
+            else
+            {
+                d = db.CreditNotes.Find(v.CreditNoteID);
             }
             d.InvoiceID = v.InvoiceID;
             d.InvoiceType = v.InvoiceType;
             d.CreditNoteDate = v.Date;
             d.Amount = v.Amount;
-            d.AcJournalID = ajm.AcJournalID;
-            d.FYearID = Convert.ToInt32(Session["fyearid"].ToString());
-            d.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+            d.AcJournalID = ajm.AcJournalID;           
             d.RecPayID = recpayid;
             d.AcHeadID = v.AcHeadID;
-            d.CustomerID = v.CustomerID;
-            d.statusclose = false;
+            d.CustomerID = v.CustomerID;           
+            d.Description = v.Description;
             d.InvoiceType = v.InvoiceType;
             d.IsShipping = true;
             if (v.CreditNoteID == 0)
