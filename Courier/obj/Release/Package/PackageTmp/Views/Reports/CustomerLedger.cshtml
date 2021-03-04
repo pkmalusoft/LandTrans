@@ -20,7 +20,18 @@
     });
 
     $(document).ready(function () {
-
+        $("#AllCustomer").click(function () {
+            if ($("#AllCustomer").is(':checked')) {
+                $('#CustomerName').attr('readonly', 'readonly');
+                $('#CustomerName').val('');
+                $('#CustomerId').val(0);
+                $('#CustomerName').removeAttr('required');
+            }
+            else {
+                $('#CustomerName').removeAttr('readonly');
+                $('#CustomerName').attr('required', 'required');
+            }
+        });
         @*if (@ViewBag.ReportId == '1') {
             $("#divreport3").addClass('hide');
             $("#divreport2").addClass('hide');
@@ -98,6 +109,16 @@
 
         });
         $('#ReportType').trigger('change');
+        if ($('#CustomerId').val() != 0) {
+
+            $("#AllCustomer").prop('checked', 'false');
+            $("#AllCustomer").attr('value', false);
+            $("#AllCustomer").trigger('click');
+        }
+        else {
+            $("#AllCustomer").prop('checked', 'checked');
+            //$("#AllCustomer").trigger('click');
+        }
     });
 </script>
 
@@ -122,8 +143,14 @@
                 </div>
                 <div class="col-md-4">
                     <div id="divachead">
-                        <label class="headinglabel required" id="lblcustomername">Customer Name</label>
-                        @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off", @required = "true" })
+                        <div class="flexTitle">
+                            <label class="headinglabel required">Customer</label>
+                            <div class="checkboxdesign no-padding text-right" style="float:right">
+                                @Html.CheckBox("AllCustomer", new { @name = "AllCustomer", @checked = "checked" }) &nbsp
+                                <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">All Customer</label>
+                            </div>
+                        </div>
+                        @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off", @readonly = "readonly" })
                         @Html.HiddenFor(model => model.CustomerId)
                     </div>
                 </div>

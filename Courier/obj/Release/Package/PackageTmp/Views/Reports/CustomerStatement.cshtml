@@ -112,6 +112,16 @@
 
         });
         $('#ReportType').trigger('change');
+        if ($('#CustomerId').val() != 0) {
+
+            $("#AllCustomer").prop('checked', 'false');
+            $("#AllCustomer").attr('value', false);
+            $("#AllCustomer").trigger('click');
+        }
+        else {
+            $("#AllCustomer").prop('checked', 'checked');
+            //$("#AllCustomer").trigger('click');
+        }
     });
 </script>
 

@@ -366,6 +366,7 @@ namespace LTMSV2.Controllers
             {
                 RecP.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
             }
+            decimal TotalAmount = 0;
             //Adding Entry in Rec PAY
 
             ///Insert Entry For RecPay Details 
@@ -384,7 +385,7 @@ namespace LTMSV2.Controllers
                 RPID = ReceiptDAO.AddCustomerRecieptPayment(RecP, Session["UserID"].ToString());
 
                 RecP.RecPayID = (from c in Context1.RecPays orderby c.RecPayID descending select c.RecPayID).FirstOrDefault();
-                decimal TotalAmount = 0;
+                
                 foreach (var item in RecP.CustomerRcieptChildVM)
                 {
                     decimal Advance = 0;
@@ -1419,9 +1420,9 @@ namespace LTMSV2.Controllers
                     //RP.InsertJournalOfCustomer(RecP.RecPayID, fyaerId);
                 }
                 //To Balance Invoice AMount
-                if (TotalAmount > 0)
+                if (RecP.FMoney > 0)
                 {
-                    int l = ReceiptDAO.InsertRecpayDetailsForCust(RecP.RecPayID, 0, 0, TotalAmount, null, "C", false, null, null, null, Convert.ToInt32(RecP.CurrencyId), 4, 0);
+                    int l = ReceiptDAO.InsertRecpayDetailsForCust(RecP.RecPayID, 0, 0, Convert.ToDecimal(RecP.FMoney), null, "C", false, null, null, null, Convert.ToInt32(RecP.CurrencyId), 4, 0);
                     int fyaerId = Convert.ToInt32(Session["fyearid"].ToString());
                     ReceiptDAO.InsertJournalOfCustomer(RecP.RecPayID, fyaerId);
 

@@ -26,6 +26,7 @@
 
     $(document).ready(function () {
         $("#AllCustomer").click(function () {
+            
             if ($("#AllCustomer").is(':checked')) {
                 $('#CustomerName').attr('readonly', 'readonly');
                 $('#CustomerName').val('');
@@ -126,6 +127,17 @@
 
         });
         $('#ReportType').trigger('change');
+       
+        if ($('#CustomerId').val() != 0) {
+            
+            $("#AllCustomer").prop('checked','false');
+            $("#AllCustomer").attr('value', false);
+            $("#AllCustomer").trigger('click');
+        }
+        else {            
+            $("#AllCustomer").prop('checked', 'checked');
+            //$("#AllCustomer").trigger('click');
+        }
     });
 </script>
 
@@ -171,7 +183,7 @@
 
                          </div>
 
-
+                         <div class="clearfix"></div>
                          <div class="col-md-2">
                              <label class="headinglabel  required">Output</label>
                              @Html.DropDownList("Output", new List<SelectListItem>

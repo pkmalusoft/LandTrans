@@ -338,14 +338,14 @@ namespace LTMSV2.Controllers
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("CustomerLedger") && model.ReportType == "Ledger")
+                if (!currentreport.Contains("CustomerLedger"))
                 {
                     Session["ReportOutput"] = null;
                 }
-                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
-                {
-                    Session["ReportOutput"] = null;
-                }
+                //else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
+                //{
+                //    Session["ReportOutput"] = null;
+                //}
             }
 
             return View(model);
@@ -363,7 +363,7 @@ namespace LTMSV2.Controllers
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
                 Output = "PDF",
-                ReportType = picker.ReportType,
+                ReportType = "Ledger",
                 AsonDate=picker.AsonDate
             };
 
@@ -372,14 +372,10 @@ namespace LTMSV2.Controllers
             Response.Buffer = false;
             Response.ClearContent();
             Response.ClearHeaders();
-            if (model.ReportType == "Ledger")            {
+           
             
                 AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
-            }
-            else if (model.ReportType == "Statement")
-            {
-                AccountsReportsDAO.GenerateCustomerStatementReport();
-            }
+           
             
             return RedirectToAction("CustomerLedger", "Reports");
 
@@ -422,8 +418,8 @@ namespace LTMSV2.Controllers
             SessionDataModel.SetCustomerLedgerParam(model);
 
             
-            model.AsonDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
-            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+            model.AsonDate = AccountsDAO.CheckParamDate(model.AsonDate, yearid).Date;
+            //model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
 
             ViewBag.ReportName = "Customer Statement";
             if (Session["ReportOutput"] != null)
@@ -505,14 +501,19 @@ namespace LTMSV2.Controllers
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("CustomerLedger") && model.ReportType == "Ledger")
+               if (!currentreport.Contains("CustomerOutStanding") && model.ReportType=="OutStanding")
+                {                    
+                    Session["ReportOutput"] = null;
+                }
+                else if (!currentreport.Contains("AWBOutStanding") && model.ReportType == "AWBUnAllocated")
                 {
                     Session["ReportOutput"] = null;
                 }
-                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
+                else if (!currentreport.Contains("AWBUnInvoiced") && model.ReportType == "AWBOutStanding")
                 {
                     Session["ReportOutput"] = null;
                 }
+
             }
 
             return View(model);

@@ -114,11 +114,11 @@ namespace LTMSV2.DAL
             int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
             string usertype = HttpContext.Current.Session["UserType"].ToString();
 
-            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            AccountsReportParam1 reportparam = SessionDataModel.GetAccountsParam1();
             string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
             SqlConnection sqlConn = new SqlConnection(strConnString);
             SqlCommand comd;
-            string paramdate= reportparam.ToDate.ToString("MM/dd/yyyy");
+            string paramdate= reportparam.AsOnDate.ToString("MM/dd/yyyy");
             paramdate = paramdate.Replace('-', '/');
             comd = new SqlCommand();
             comd.Connection = sqlConn;
@@ -154,7 +154,7 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             string reporttile = "Trial Balance";
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reporttile);
-            string period = "As on :" + reportparam.ToDate.Date.ToString("dd MMMM yyyy");
+            string period = "As on :" + reportparam.AsOnDate.Date.ToString("dd MMMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
@@ -254,7 +254,7 @@ namespace LTMSV2.DAL
             int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
             string usertype = HttpContext.Current.Session["UserType"].ToString();
 
-            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam2();
             string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
             SqlConnection sqlConn = new SqlConnection(strConnString);
             SqlCommand comd;
