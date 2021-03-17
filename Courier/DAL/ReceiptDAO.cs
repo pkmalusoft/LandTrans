@@ -283,7 +283,102 @@ namespace LTMSV2.DAL
             return crecs;
         }
 
-       
+        public static decimal SP_GetCustomerAdvance(int CustomerId,int RecPayId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerAdvance";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return  Convert.ToDecimal(ds.Tables[0].Rows[0][0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+        public static decimal SP_GetCustomerInvoiceReceived(int CustomerId,int InvoiceId, int RecPayId,string Type)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerInvoiceReceived";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
+            cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            cmd.Parameters.AddWithValue("@Type", Type);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return Convert.ToDecimal(ds.Tables[0].Rows[0][0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+        public static decimal SP_GetSupplierAdvance(int SupplierId, int RecPayId,int FyearId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetSupplierAdvance";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@SupplierId", SupplierId);
+            cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            cmd.Parameters.AddWithValue("@FYearId", FyearId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return Convert.ToDecimal(ds.Tables[0].Rows[0][0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+        public static decimal SP_GetSupplierInvoicePaid(int SupplierId, int InvoiceId, int RecPayId, string Type)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetSupplierInvoicePaid";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@SupplierId", SupplierId);
+            cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
+            cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            cmd.Parameters.AddWithValue("@Type", Type);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return Convert.ToDecimal(ds.Tables[0].Rows[0][0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
         //public static CustomerRcieptVM GetRecPayByRecpayID(int RecpayID)
         //{
         //    SqlCommand cmd = new SqlCommand();
@@ -627,12 +722,13 @@ namespace LTMSV2.DAL
 
 
         }
-        public static string SP_GetMaxSINo()
+        public static string SP_GetMaxSINo(int TypeId)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_GetMaxSupplierInvoiceNo";
             cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@TypeId", TypeId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);

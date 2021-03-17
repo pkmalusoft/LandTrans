@@ -3618,6 +3618,8 @@
     <Content Include="Views\Reports\CustomerStatement.cshtml" />
     <Content Include="Views\Accounts\PLTradingReport.cshtml" />
     <Content Include="Views\Accounts\TrialBalance.cshtml" />
+    <Content Include="Views\Reports\SupplierStatement.cshtml" />
+    <Content Include="Views\SupplierPayment\SupplierPayment - Copy %282%29.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

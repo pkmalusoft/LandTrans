@@ -8776,6 +8776,7 @@
     <EntitySetMapping Name="SupplierInvoices">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoice">
         <MappingFragment StoreEntitySet="SupplierInvoice">
+          <ScalarProperty Name="SupplierTypeId" ColumnName="SupplierTypeId" />
           <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
           <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
           <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />

@@ -14,7 +14,7 @@ namespace LTMSV2.Controllers
     {
         Entities1 db = new Entities1();
         // GET: SupplierInvoice
-        public ActionResult Index(string FromDate, string ToDate)
+        public ActionResult Index(int? id,string FromDate, string ToDate)
         {
                         
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -22,7 +22,12 @@ namespace LTMSV2.Controllers
 
             DateTime pFromDate;
             DateTime pToDate;
-                     
+            int suppliertypeid = 0;
+            if (id == null | id == 0)
+                suppliertypeid = 4;
+            else
+                suppliertypeid =Convert.ToInt32(id);
+
             if (FromDate == null || ToDate == null)
             {
                 pFromDate = CommanFunctions.GetFirstDayofMonth().Date;//.AddDays(-1); // FromDate = DateTime.Now;
@@ -35,18 +40,21 @@ namespace LTMSV2.Controllers
 
             }
 
-            var lst = (from c in db.SupplierInvoices                       
+            var lst = (from c in db.SupplierInvoices
                        join s in db.SupplierMasters on c.SupplierID equals s.SupplierID orderby c.InvoiceDate descending
-                       where c.InvoiceNo.StartsWith("SI")
-                       select new SupplierInvoiceVM {SupplierInvoiceID=c.SupplierInvoiceID, InvoiceNo = c.InvoiceNo, InvoiceDate = c.InvoiceDate, SupplierName = s.SupplierName, Amount = 0,SupplierType=s.SupplierType.SupplierType1,Remarks=s.Remarks }).ToList();
+                       where s.SupplierTypeID== suppliertypeid
+                       where c.InvoiceDate >= pFromDate && c.InvoiceDate < pToDate
+                       select new SupplierInvoiceVM { SupplierInvoiceID = c.SupplierInvoiceID, InvoiceNo = c.InvoiceNo, InvoiceDate = c.InvoiceDate, SupplierName = s.SupplierName, Amount = 0, SupplierType = s.SupplierType.SupplierType1, Remarks = s.Remarks }).ToList();
             lst.ForEach(d => d.Amount = (from s in db.SupplierInvoiceDetails where s.SupplierInvoiceID == d.SupplierInvoiceID select s).ToList().Sum(a => a.Value));
+
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
-
+            ViewBag.SupplierType = db.SupplierTypes.ToList();
+            ViewBag.SupplierTypeId = suppliertypeid;
             return View(lst);
         }
 
-        public ActionResult Create(int id)
+        public ActionResult Create(int id=0)
         {
            var suppliers = db.SupplierMasters.ToList();
             ViewBag.Supplier = suppliers;
@@ -56,6 +64,7 @@ namespace LTMSV2.Controllers
             ViewBag.CurrencyId = Convert.ToInt32(Session["CurrencyId"].ToString());
             if (id > 0)
             {
+                Session["SIAWBAllocation"] = null;
                 ViewBag.Title = "Supplier Invoice -Modify";
                 var _invoice = db.SupplierInvoices.Find(id);
                 _supinvoice.SupplierInvoiceID = _invoice.SupplierInvoiceID;
@@ -63,6 +72,7 @@ namespace LTMSV2.Controllers
                 _supinvoice.InvoiceNo = _invoice.InvoiceNo;
                 _supinvoice.SupplierID = _invoice.SupplierID;
                 _supinvoice.Remarks = _invoice.Remarks;
+                _supinvoice.SupplierTypeId =Convert.ToInt32(_invoice.SupplierTypeId);
                 var supplier = suppliers.Where(d => d.SupplierID == _invoice.SupplierID).FirstOrDefault();
                 if (supplier != null)
                 {
@@ -90,11 +100,20 @@ namespace LTMSV2.Controllers
             else
             {
                 ViewBag.Title = "Supplier Invoice - Create";
+
                 var Maxnumber = db.SupplierInvoices.ToList().LastOrDefault();
-                _supinvoice.InvoiceNo = ReceiptDAO.SP_GetMaxSINo();
+                _supinvoice.SupplierTypeId = 4;
+                _supinvoice.InvoiceNo = "";
+                Session["SIAWBAllocation"] = null;
+
             }
             return View(_supinvoice);
 
+        }
+        public JsonResult getMaxInvoiceNo(int TypeId)
+        {
+            var InvoiceNo = ReceiptDAO.SP_GetMaxSINo(TypeId);
+            return Json(new { InvoiceNo = InvoiceNo }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult SetSupplierInvDetails(int acheadid,string achead, string invno,string Particulars, decimal Rate, int Qty,decimal amount,int currency, decimal Taxpercent,decimal netvalue)
         {
@@ -164,7 +183,7 @@ namespace LTMSV2.Controllers
             return Json(new { InvoiceDetails = _details1 }, JsonRequestBehavior.AllowGet);
         }
         //SaveSupplierInvoice
-        public JsonResult SaveSupplierInvoice(int Id, int SupplierID, string InvoiceDate, string InvoiceNo, string Remarks, string Details)
+        public JsonResult SaveSupplierInvoice(int Id, int SupplierID, string InvoiceDate, string InvoiceNo, string Remarks,int SupplierTypeId, string Details)
         {
             try
             {
@@ -198,6 +217,7 @@ namespace LTMSV2.Controllers
                 Supplierinvoice.StatusClose = false;
                 Supplierinvoice.IsDeleted = false;
                 Supplierinvoice.Remarks = Remarks;
+                Supplierinvoice.SupplierTypeId = SupplierTypeId;
                 if (Supplierinvoice.SupplierInvoiceID == 0)
                 {
                     db.SupplierInvoices.Add(Supplierinvoice);

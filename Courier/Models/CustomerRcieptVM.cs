@@ -48,6 +48,7 @@ namespace  LTMSV2.Models
 
         public string ConsignmentNo { get; set; }
         public int InScanID { get; set; }
+
         public Nullable<System.DateTime> InvoiceDate { get; set; }
 
         public List<CustomerRcieptChildVM> CustomerRcieptChildVM { get; set; }

@@ -15,7 +15,18 @@
     });
     $(document).ready(function () {
         var url = '/Accounts/GetSupplierName';
-
+        $("#AllSupplier").click(function () {
+            if ($("#AllSupplier").is(':checked')) {
+                $('#SupplierName').attr('readonly', 'readonly');
+                $('#SupplierName').val('');
+                $('#SupplierId').val(0);
+                $('#SupplierName').removeAttr('required');
+            }
+            else {
+                $('#SupplierName').removeAttr('readonly');
+                $('#SupplierName').attr('required', 'required');
+            }
+        });
         $("#SupplierName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -166,7 +177,7 @@
                         <label class="headinglabel required ">As on date</label>
                         @Html.TextBoxFor(model => model.AsonDate, new { @class = "form-control text-right" })
                     </div>
-                    <div class="col-md-2 text-right">
+                    @*<div class="col-md-2 text-right">
                         <label class="headinglabel required ">Option</label>
                         <div class="innerCheckbox">
                             <div class="field checkboxdesign verticalcheckbox">
@@ -176,18 +187,31 @@
                                 <label class="headinglabel"><input type="radio" id="chkSelected" name="roptions" />Selected</label>
                             </div>
                         </div>
+                    </div>*@
+                    <div class="col-md-2">
+                        <label class="headinglabel required">Report Type</label>
+                        @Html.DropDownList("ReportType", new List<SelectListItem>
+                       {
+                           new SelectListItem{ Text="Summary", Value = "Summary"},
+                           new SelectListItem{ Text="Detail", Value = "Detail" }
+                        }, "Select", new { @class = "form-control", @required = "true" })
                     </div>
-
-                     <div class="col-md-2">
+                    <div class="col-md-2">
                         <label class="required headinglabel">Supplier Type</label>
                         @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(ViewBag.SupplierType, "SupplierTypeID", "SupplierType1"), new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.SupplierTypeId)
-                  </div>
+                    </div>
 
-                       <div class="col-md-6">
-                            <label class="headinglabel required" id="lblsuppliername">Supplier Name</label>
-                            @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", @autocomplete = "off", @required = "true" ,@readonly="true" })
-                            @Html.HiddenFor(model => model.SupplierId)
+                    <div class="col-md-6">
+                        <div class="flexTitle">
+                            <label class="headinglabel required" id="lblsuppliername">Supplier</label>
+                            <div class="checkboxdesign no-padding text-right" style="float:right">
+                                @Html.CheckBox("AllSupplier", new { @name = "AllSupplier", @checked = "checked" }) &nbsp
+                                <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">All Supplier</label>
+                            </div>
+                        </div>                        
+                        @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", @autocomplete = "off", @required = "true", @readonly = "true" })
+                        @Html.HiddenFor(model => model.SupplierId)
                     </div>
 
                 </div>

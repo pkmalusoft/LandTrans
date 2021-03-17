@@ -3187,6 +3187,7 @@
     <Property Name="StatusClose" Type="bit" />
     <Property Name="InvoiceTotal" Type="money" />
     <Property Name="IsDeleted" Type="bit" />
+    <Property Name="SupplierTypeId" Type="int" />
   </EntityType>
   <EntityType Name="SupplierInvoiceConsignment">
     <Key>

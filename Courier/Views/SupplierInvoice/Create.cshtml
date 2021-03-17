@@ -112,15 +112,15 @@
         $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
         $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY' });
+SupplierTypeId
+        //var d = new Date();
+        //var curr_date = d.getDate();
+        //var curr_month = d.getMonth() + 1;
+        //var curr_year = d.getFullYear();
 
-        var d = new Date();
-        var curr_date = d.getDate();
-        var curr_month = d.getMonth() + 1;
-        var curr_year = d.getFullYear();
+        //var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
 
-        var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
-
-        $('#InvoiceDate').val(reqdate);
+        //$('#InvoiceDate').val(reqdate);
     });
 
     function checkduplicateachead(oacheadid) {
@@ -218,17 +218,31 @@
 
             if ($('#SupplierTypeId').val() == 4) {
                 $('#InvoiceNo').removeAttr('readonly');
+                $('#InvoiceNo').val('')
             }
             else {
+                //getMaxInvoiceNo
+                $.ajax({
+                    type: "Get",
+                    url: '/SupplierInvoice/getMaxInvoiceNo',
+                    datatype: "json",
+                    data: {TypeId:$('#SupplierTypeId').val() },
+                    success: function (response) {
+                        alert(response.InvoiceNo);
+                        $('#InvoiceNo').val(response.InvoiceNo);
+                    }
+                });
+            
                 $('#InvoiceNo').attr('readonly', 'readonly');
             }
         });
         $('#currency').val(@ViewBag.CurrencyId);
 
-         if ('@Model.SupplierInvoiceID' > 0) {
-             $.ajax({
+        if ('@Model.SupplierInvoiceID' > 0) {
+            $('#SupplierTypeId').attr('readonly', 'readonly');
+            $.ajax({
                 type: "POST",
-                 url: "/SupplierInvoice/GetSupplierInvDetails",
+                url: "/SupplierInvoice/GetSupplierInvDetails",
                 datatype: "Json",
                 data: { Id: '@Model.SupplierInvoiceID' },
                 success: function (response) {
@@ -248,7 +262,7 @@
                         var netvalue = item.Value;
                         //AWBItems.push(value);
                         //$("#detailsbody").append('<tr awbno="' + value.InvNo + '"><td>' + value.AcHeadName + '</td><td>' + value.Particulars + '</td><td class="text-right" >' + parseFloat(value.Rate).toFixed(3) + '</td><td class="text-right" >' + value.Quantity + '</td><td>' + value.Currency + '</td><td class="text-right" >' + parseFloat(value.CurrencyAmount).toFixed(3) + '</td><td class="text-right" >' + parseFloat(value.Amount).toFixed(3) + '</td><td class="text-right" >' + value.TaxPercentage + '</td><td class="text-right">' + parseFloat(value.Value).toFixed(3) + '</td><td><a awbno="' + value.InvNo + '" href="javascript:void(0);" class="rem">Remove</a></td></tr>');
-                          var i = $('#detailsbody > tbody > tr').length;
+                        var i = $('#detailsbody >  tr').length;
 
                         //<td>' + AcHead + '<input type="hidden" id="hdnacheadid_' + AcHeadId + ' />
                         var acheadid = AcHeadId;
@@ -261,9 +275,9 @@
                         var amounthtml = '<td><input type="text" class="text-right" readonly id="txtAmt_' + i + '" value="' + parseFloat(amount).toFixed(3) + '" /></td>';
 
                         var taxhtml = '<td> <input type="text"  class="text-right"  onchange="calculatevalue(' + i + ')"  id="txttax_' + i + '" value="' + Taxpercent + '" /> </td>';
-                        var netvaluehtml = '<td> <input type="text" class="text-right" readonly id="txtnetval_' + i + '" value="' + parseFloat(netvalue).toFixed(3)  + '" /> </td>';
-                    var delHtml = '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
-                    var ConsignmentHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Add Consignments" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-eye" ></i></a ></td> ';
+                        var netvaluehtml = '<td> <input type="text" class="text-right" readonly id="txtnetval_' + i + '" value="' + parseFloat(netvalue).toFixed(3) + '" /> </td>';
+                        var delHtml = '<td><a href="javascript:void(0)" id="DeleteNewRow"><i class="fa fa-times"></i></a></td>';
+                        var ConsignmentHTML = '<td><a href="Javascript:void(0)" style="float:right" title="Add Consignments" onclick="EditConsignmentPopup(' + i + ')"><i class="fa fa-eye" ></i></a ></td> ';
                         var html = '<tr><td><input type="hidden" id="hdndetailid_' + i + '" value="' + detailid + '" /><input type="hidden" id="hdncurrency_' + i + '" value="' + CurrencyID + '" />' + currency + '</td><td><input type = "hidden" id = "hdnexrate_' + exchangereate + '" />' + parseFloat(exchangereate).toFixed(@_decimal) + '</td>';
                         html = html + headhtml + particularshtml + qtyhtml + ratehtml + amounthtml + taxhtml + netvaluehtml + ConsignmentHTML + delHtml + '</tr>';
 
@@ -274,11 +288,12 @@
 
                 }
             });
-
-
-
-
         }
+        else {
+
+            $('#SupplierTypeId').attr('readonly', 'readonly');
+        }
+               
 
         $("#SupplierName").autocomplete({
             source: function (request, response) {
@@ -402,7 +417,7 @@
         });
         $("#btnsave").click(function () {
             var itemcount = $('#detailsbody > tr').length;
-            alert(itemcount);
+            
             var supplier = $("#SupplierName").val();
             var SupplierID = $("#SupplierID").val();
             var InvoiceDate = $("#InvoiceDate").val();
@@ -446,7 +461,7 @@
                             type: "POST",
                             url: "/SupplierInvoice/SaveSupplierInvoice",
                             datatype: "Json",
-                            data: { Id: Id, SupplierID: SupplierID, InvoiceDate: InvoiceDate, InvoiceNo: $("#InvoiceNo").val(), Remarks: $('#Remarks').val(), Details: JSON.stringify(AWBItems) },
+                            data: { Id: Id, SupplierID: SupplierID, InvoiceDate: InvoiceDate, InvoiceNo: $("#InvoiceNo").val(), Remarks: $('#Remarks').val(), SupplierTypeId: $('#SupplierTypeId').val(), Details: JSON.stringify(AWBItems) },
                             success: function (response) {
                                 if (response.status == "ok") {
 
@@ -691,14 +706,14 @@
 
 
     }
-    function ShowConsignmentPopup(index) {
-        debugger;
-
-        $('#hdnEditAcHeadId').val($('#txtachead').attr('accountid'));
-        var acheadname = 'AcHead : ' + $('#txtachead').val();
+    function ShowConsignmentPopup() {
+        
+        $('#hdnEditAcHeadId').val($('#txtAcHeadId').val());
+        var acheadname = 'AcHead : ' + $('#txtAcHead').val();
+        var acheadid = $("#hdnEditAcHeadId").val();
         $('#hAcHead').html(acheadname);
         $('#hdnEditRowIndex').val(-1);
-        var amount = $("#txtAmount").val();
+        var amount = $("#NetValue").val();
         $("#hdnEditAmount").val(amount);
         $('#hTotal').html(parseFloat(amount).toFixed(@_decimal));
         $("#consignmentdetailsbody").html('');
@@ -977,8 +992,12 @@
             <input type="hidden" id="Id" name="Id" value="@Model.SupplierInvoiceID" />
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-2">
+                    <label class=" required headinglabel">Supplier Type</label>
+                    @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(@ViewBag.Suppliertype, "SupplierTypeID", "SupplierType1"), "Select", new { @class = "form-control" })
+                </div>
+                <div class="col-md-2">
                     <label class="headinglabel required"> Invoice No</label>
-                    @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control txttarget", @required = "true", @readonly = "true" })
+                    @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control txttarget", @required = "true"})
                     @Html.ValidationMessageFor(model => model.InvoiceNo)
                 </div>
                 <div class="col-md-2">
@@ -987,10 +1006,6 @@
                     @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right txttarget", @required = "true" })
                     @Html.ValidationMessageFor(model => model.InvoiceDate)
                 </div>
-                <div class="col-md-2">
-                    <label class=" required headinglabel">Supplier Type</label>
-                    @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(@ViewBag.Suppliertype, "SupplierTypeID", "SupplierType1"), "Select", new { @class = "form-control" })
-                </div>
                 <div class="col-md-6">
                     <label class="headinglabel required ">Supplier</label>
                     @Html.HiddenFor(model => model.SupplierID)
@@ -998,7 +1013,7 @@
                     @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", @required = "true" })
                     @Html.ValidationMessageFor(model => model.SupplierName)
                 </div>
-                
+
             </div>
             <div class="row no-margin" style="padding-top:10px">
                 <div class="col-md-12">
@@ -1057,7 +1072,7 @@
                         <input type="text" class="form-control text-right" readonly id="NetValue"   />
                     </div>
                     <div class="col-md-1">
-                        <button type="button" style="height: 35px !important; background: #07a7e3;color: #fff;border: 0; line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Add Consignments" onclick="ShowConsignmentPopup(-1)">...</button>
+                        <button type="button" style="height: 35px !important; background: #07a7e3;color: #fff;border: 0; line-height:35px!important;vertical-align: middle;font-size: 23px!Important;" title="Add Consignments" onclick="ShowConsignmentPopup()">...</button>
                         <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnadd" title="Add New" class="addmore">+</button>
                     </div>
                     <!--<div class="col-md-1" style="padding-top:10px">-->

@@ -3192,6 +3192,7 @@
           <Property Name="StatusClose" Type="bit" />
           <Property Name="InvoiceTotal" Type="money" />
           <Property Name="IsDeleted" Type="bit" />
+          <Property Name="SupplierTypeId" Type="int" />
         </EntityType>
         <EntityType Name="SupplierInvoiceConsignment">
           <Key>
@@ -22636,6 +22637,7 @@
           <Property Name="IsDeleted" Type="Boolean" />
           <NavigationProperty Name="SupplierMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoice_SupplierMaster" FromRole="SupplierInvoice" ToRole="SupplierMaster" />
           <NavigationProperty Name="SupplierInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_SupplierInvoiceDetails_SupplierInvoice" FromRole="SupplierInvoice" ToRole="SupplierInvoiceDetail" />
+          <Property Name="SupplierTypeId" Type="Int32" />
         </EntityType>
         <EntityType Name="SupplierInvoiceDetail">
           <Key>
@@ -31955,6 +31957,7 @@
           <EntitySetMapping Name="SupplierInvoices">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.SupplierInvoice">
               <MappingFragment StoreEntitySet="SupplierInvoice">
+                <ScalarProperty Name="SupplierTypeId" ColumnName="SupplierTypeId" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="InvoiceTotal" ColumnName="InvoiceTotal" />
                 <ScalarProperty Name="StatusClose" ColumnName="StatusClose" />

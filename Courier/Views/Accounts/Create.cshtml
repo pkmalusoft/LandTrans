@@ -1279,7 +1279,7 @@
 
         var acheadname = 'AcHead : ' + $('#ReceivedFrom_' + index).val();
         var acheadid = $("#hdnEditAcHeadId").val();
-        $('#hAcHead').html(acheadname);
+        $('#hCAcHead').html(acheadname);
         $('#hTotal').html(parseFloat(amount).toFixed(@_decimal));
         $("#consignmentdetailsbody").html('');
         $.ajax({
@@ -1334,12 +1334,11 @@
 
 
     }
-    function ShowConsignmentPopup(index) {
-        
-
+    function ShowConsignmentPopup(index) {        
+        debugger;
         $('#hdnEditAcHeadId').val($('#SelectedReceivedFrom').val());
         var acheadname = 'AcHead : ' + $('#ReceivedFrom').val();
-        $('#hAcHead').html(acheadname);
+        $('#hCAcHead').html(acheadname);
         $('#hdnEditRowIndex').val(-1);
         var amount = $("#amount").val();
         $("#hdnEditAmount").val(amount);
@@ -1348,6 +1347,7 @@
       //  $('#consignmentpopup').modal('show');
         $.ajax({
             url: '/Accounts/GetAWBAllocation',
+            datatype: "json",
             datatype: "json",
             data: {
                 AcHeadId: $('#hdnEditAcHeadId').val()
@@ -2017,7 +2017,7 @@
                 <div class="container-fluid" >
                     <div class="row">
                         <div class="col-md-11 flex justify-content-between">
-                            <h4 id="hAcHead">AcHead</h4>
+                            <h4 id="hCAcHead">AcHead</h4>
                             <h5 id="hTotal">Total</h5>                            
                         </div>
                         <div class="col-md-1 text-right">

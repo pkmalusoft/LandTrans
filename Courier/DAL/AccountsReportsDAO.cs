@@ -2170,7 +2170,7 @@ namespace LTMSV2.DAL
             comd.Parameters.AddWithValue("@AsonDate", reportparam.AsonDate.ToString("MM/dd/yyyy"));
             //comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@FYearId", yearid);
-            comd.Parameters.AddWithValue("@ReportOption", reportparam.ReportType);
+            comd.Parameters.AddWithValue("@ReportOption", reportparam.ReportType);            
 
             SqlDataAdapter sqlAdapter = new SqlDataAdapter();
             sqlAdapter.SelectCommand = comd;

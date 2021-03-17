@@ -660,7 +660,7 @@ namespace LTMSV2.Controllers
                 model = new SupplierLedgerReportParam
                 {
                     FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
-                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
                     ToDate = CommanFunctions.GetLastDayofMonth().Date,
                     SupplierTypeId = 1,
                     SupplierId = 0,
@@ -671,7 +671,7 @@ namespace LTMSV2.Controllers
             }
             if (model.AsonDate.ToString() == "01-01-0001 00:00:00")
             {
-                model.AsonDate = CommanFunctions.GetFirstDayofMonth().Date;
+                model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
             }
             if (model.FromDate.ToString() == "01-01-0001 00:00:00")
             {
@@ -682,23 +682,20 @@ namespace LTMSV2.Controllers
             {
                 model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
             }
-            SessionDataModel.SetSupplierLedgerParam(model);
+            
 
             model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
             model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
 
+            SessionDataModel.SetSupplierLedgerParam(model);
             ViewBag.ReportName = "Supplier Ledger";
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("SupplierLedger") && model.ReportType == "Ledger")
+                if (!currentreport.Contains("SupplierLedger") )
                 {
                     Session["ReportOutput"] = null;
-                }
-                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
-                {
-                    Session["ReportOutput"] = null;
-                }
+                }                
             }
 
             return View(model);
@@ -712,12 +709,13 @@ namespace LTMSV2.Controllers
             SupplierLedgerReportParam model = new SupplierLedgerReportParam
             {
                 FromDate = picker.FromDate,
-                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                ToDate = picker.ToDate,
                 AsonDate=picker.AsonDate,
                 SupplierId = picker.SupplierId,
                 SupplierName = picker.SupplierName,
-                Output = "PDF",
-                ReportType = picker.ReportType
+                SupplierTypeId=picker.SupplierTypeId,
+                Output = picker.Output,
+                ReportType = "Ledger"
             };
 
             ViewBag.Token = model;
@@ -736,6 +734,92 @@ namespace LTMSV2.Controllers
             }            
 
             return RedirectToAction("SupplierLedger", "Reports");
+
+
+        }
+        #endregion
+
+        #region supplierStatement
+        public ActionResult SupplierStatement()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            var supplierMasterTypes = (from d in db.SupplierTypes select d).ToList();
+            ViewBag.SupplierType = supplierMasterTypes;
+            SupplierLedgerReportParam model = SessionDataModel.GetSupplierLedgerReportParam();
+            if (model == null)
+            {
+                model = new SupplierLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    SupplierTypeId = 1,
+                    SupplierId = 0,
+                    SupplierName = "",
+                    Output = "PDF",
+                    ReportType = "Statement"
+                };
+            }
+            if (model.AsonDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+           
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            SessionDataModel.SetSupplierLedgerParam(model);
+            ViewBag.ReportName = "Supplier Statement";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("SupplierStatement"))
+                {
+                    Session["ReportOutput"] = null;
+                }                
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult SupplierStatement(SupplierLedgerReportParam picker)
+        {
+            SupplierLedgerReportParam model = SessionDataModel.GetSupplierLedgerReportParam();        
+            model = new SupplierLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                AsonDate = picker.AsonDate,
+                SupplierId = picker.SupplierId,
+                SupplierName = picker.SupplierName,
+                SupplierTypeId = picker.SupplierTypeId,
+                Output = picker.Output,
+                ReportType = "Statement"
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetSupplierLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+           
+           
+                AccountsReportsDAO.GenerateSupplierStatementDetailReport();
+           
+
+            return RedirectToAction("SupplierStatement", "Reports");
 
 
         }
@@ -921,9 +1005,10 @@ namespace LTMSV2.Controllers
                 model = new SupplierLedgerReportParam
                 {
 
-                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
                     SupplierId = 0,
                     SupplierName = "",
+                    SupplierTypeId=1,
                     Output = "PDF",
                     ReportType = "Summary"
                 };
@@ -932,10 +1017,9 @@ namespace LTMSV2.Controllers
             {
                 model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
             }
-
+            model.AsonDate = AccountsDAO.CheckParamDate(model.AsonDate, yearid).Date;
             SessionDataModel.SetSupplierLedgerParam(model);
-
-            model.AsonDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+                        
             ViewBag.ReportName = "Supplier Aging Report";
             if (Session["ReportOutput"] != null)
             {
@@ -958,6 +1042,7 @@ namespace LTMSV2.Controllers
             {
                 SupplierId = picker.SupplierId,
                 SupplierName = picker.SupplierName,
+                SupplierTypeId=picker.SupplierTypeId,
                 Output = picker.Output,
                 ReportType = picker.ReportType,
                 AsonDate = picker.AsonDate
