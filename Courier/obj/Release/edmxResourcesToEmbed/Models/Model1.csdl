@@ -2694,6 +2694,7 @@
     <Property Name="FMoney" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="UserID" Type="Int32" />
     <Property Name="IsTradingReceipt" Type="Boolean" />
+    <Property Name="TruckDetailId" Type="Int32" />
   </EntityType>
   <EntityType Name="RequestType">
     <Key>
@@ -8578,9 +8579,9 @@
     <EntitySet Name="RecPayAllocationDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayAllocationDetail" />
     <EntitySet Name="CostUpdateConsignments" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateConsignment" />
     <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
-    <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
     <EntitySet Name="SupplierInvoiceConsignments" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceConsignment" />
     <EntitySet Name="CreditNotes" EntityType="DB_9F57C4_couriertest_newModel.CreditNote" />
+    <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -13484,27 +13485,6 @@
     <Property Name="AcHeadID" Type="Int32" Nullable="false" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
-  <EntityType Name="RecPayDetail">
-    <Key>
-      <PropertyRef Name="RecPayDetailID" />
-    </Key>
-    <Property Name="RecPayDetailID" Type="Int32" Nullable="false" />
-    <Property Name="RecPayID" Type="Int32" />
-    <Property Name="InvoiceID" Type="Int32" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
-    <Property Name="StatusInvoice" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-    <Property Name="StatusAdvance" Type="Boolean" />
-    <Property Name="statusReceipt" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="InvDate" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="InvNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="CurrencyID" Type="Int32" />
-    <Property Name="Lock" Type="Boolean" />
-    <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="TruckDetailID" Type="Int32" />
-    <Property Name="AcOPInvoiceDetailID" Type="Int32" />
-    <Property Name="InScanID" Type="Int32" />
-  </EntityType>
   <EntityType Name="SupplierInvoiceConsignment">
     <Key>
       <PropertyRef Name="ID" />
@@ -13535,5 +13515,26 @@
     <Property Name="statusclose" Type="Boolean" />
     <Property Name="IsShipping" Type="Boolean" />
     <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="RecPayDetail">
+    <Key>
+      <PropertyRef Name="RecPayDetailID" />
+    </Key>
+    <Property Name="RecPayDetailID" Type="Int32" Nullable="false" />
+    <Property Name="RecPayID" Type="Int32" />
+    <Property Name="InvoiceID" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Remarks" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+    <Property Name="StatusInvoice" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="StatusAdvance" Type="Boolean" />
+    <Property Name="statusReceipt" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="InvDate" Type="DateTime" Precision="3" />
+    <Property Name="InvNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CurrencyID" Type="Int32" />
+    <Property Name="Lock" Type="Boolean" />
+    <Property Name="AdjustmentAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TruckDetailID" Type="Int32" />
+    <Property Name="AcOPInvoiceDetailID" Type="Int32" />
+    <Property Name="InScanID" Type="Int32" />
   </EntityType>
 </Schema>

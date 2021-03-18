@@ -898,7 +898,7 @@ namespace LTMSV2.Controllers
                     cust.recPayDetail = Context1.RecPayDetails.Where(item => item.RecPayID == id).ToList();
 
                     decimal Advance = 0;
-                    Advance = ReceiptDAO.SP_GetCustomerAdvance(Convert.ToInt32(cust.CustomerID), Convert.ToInt32(id));
+                    Advance = ReceiptDAO.SP_GetCustomerAdvance(Convert.ToInt32(cust.CustomerID), Convert.ToInt32(id),FyearId);
                     cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
                     cust.Balance = Advance;
                     foreach (var item in cust.recPayDetail)
@@ -1054,12 +1054,12 @@ namespace LTMSV2.Controllers
             int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
             DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
             DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
-            var AllInvoices = (from d in Context1.CustomerInvoices where d.CustomerID == ID select d).ToList();
+            var AllInvoices = (from d in Context1.CustomerInvoices where d.CustomerID == ID select d).OrderBy(cc=>cc.InvoiceDate).ToList();
             List<ReceiptAllocationDetailVM> AWBAllocation = new List<ReceiptAllocationDetailVM>();
             var salesinvoice = new List<CustomerTradeReceiptVM>();
-            var AllOPInvoices = (from d in Context1.AcOPInvoiceDetails join m in Context1.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where m.AcFinancialYearID == fyearid && m.StatusSDSC == "C" && m.PartyID == ID select d).ToList();
+            var AllOPInvoices = (from d in Context1.AcOPInvoiceDetails join m in Context1.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where d.Amount > 0 &&  m.AcFinancialYearID == fyearid && m.StatusSDSC == "C" && m.PartyID == ID select d).OrderBy(cc=>cc.InvoiceDate).ToList();
             decimal Advance = 0;
-            Advance = ReceiptDAO.SP_GetCustomerAdvance(Convert.ToInt32(ID),Convert.ToInt32(RecPayId));
+            Advance = ReceiptDAO.SP_GetCustomerAdvance(Convert.ToInt32(ID),Convert.ToInt32(RecPayId),fyearid);
             if (amountreceived>0)
             amountreceived = amountreceived + Advance;
             foreach (var item in AllOPInvoices)
@@ -1076,7 +1076,7 @@ namespace LTMSV2.Controllers
                 var Invoice = new CustomerTradeReceiptVM();
                 Invoice.AcOPInvoiceDetailID = item.AcOPInvoiceDetailID;
                 Invoice.InvoiceType = "OP";
-                Invoice.InvoiceNo = item.InvoiceNo; ;                
+                Invoice.InvoiceNo = item.InvoiceNo;                
                 Invoice.InvoiceAmount = item.Amount;
                 Invoice.date = item.InvoiceDate;
                 Invoice.DateTime = Convert.ToDateTime(item.InvoiceDate).ToString("dd/MM/yyyy");                

@@ -2943,6 +2943,7 @@
     <Property Name="FMoney" Type="money" />
     <Property Name="UserID" Type="int" />
     <Property Name="IsTradingReceipt" Type="bit" />
+    <Property Name="TruckDetailId" Type="int" />
   </EntityType>
   <EntityType Name="RecPayAllocationDetails">
     <Key>
@@ -2968,7 +2969,7 @@
     <Property Name="StatusInvoice" Type="varchar" MaxLength="1" />
     <Property Name="StatusAdvance" Type="bit" />
     <Property Name="statusReceipt" Type="char" MaxLength="1" />
-    <Property Name="InvDate" Type="varchar" MaxLength="100" />
+    <Property Name="InvDate" Type="datetime" />
     <Property Name="InvNo" Type="varchar" MaxLength="100" />
     <Property Name="CurrencyID" Type="int" />
     <Property Name="Lock" Type="bit" />

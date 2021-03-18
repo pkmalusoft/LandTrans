@@ -45,10 +45,11 @@ namespace  LTMSV2.Models
         public Nullable<System.DateTime> AmtPaidTillDate { get; set; }
         public decimal Balance { get; set; }
         public decimal Amount { get; set;}
-
+        public int SupplierTypeId { get; set; }
         public string ConsignmentNo { get; set; }
         public int InScanID { get; set; }
-
+        public int TruckDetailId { get; set; }
+        public string TDNo { get; set; }
         public Nullable<System.DateTime> InvoiceDate { get; set; }
 
         public List<CustomerRcieptChildVM> CustomerRcieptChildVM { get; set; }

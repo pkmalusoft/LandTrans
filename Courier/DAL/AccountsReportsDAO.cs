@@ -1620,9 +1620,9 @@ namespace LTMSV2.DAL
             sqlAdapter.Fill(ds, "SupplierLedger");
 
             //generate XSD to design report            
-            System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SupplierLedger.xsd"));
-            ds.WriteXmlSchema(writer);
-            writer.Close();
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "SupplierLedger.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
 
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "SupplierLedger.rpt"));
@@ -1989,6 +1989,7 @@ namespace LTMSV2.DAL
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "SP_SupplierStatement";
             comd.Parameters.AddWithValue("@SupplierId", reportparam.SupplierId);
+            comd.Parameters.AddWithValue("@SupplierTypeId", reportparam.SupplierTypeId);
             comd.Parameters.AddWithValue("@AsonDate", reportparam.AsonDate.ToString("MM/dd/yyyy"));
             //comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@FYearId", yearid);
@@ -2167,6 +2168,7 @@ namespace LTMSV2.DAL
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "SP_SupplierAging";
             comd.Parameters.AddWithValue("@SupplierId", reportparam.SupplierId);
+            comd.Parameters.AddWithValue("@SupplierTypeId", reportparam.SupplierTypeId);
             comd.Parameters.AddWithValue("@AsonDate", reportparam.AsonDate.ToString("MM/dd/yyyy"));
             //comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@FYearId", yearid);

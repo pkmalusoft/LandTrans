@@ -318,50 +318,61 @@ namespace LTMSV2.Controllers
                 }
 
                 db.SaveChanges();
+                if (data.TruckDetailID > 0)
+                {
+                    var details = (from d in db.TruckDetailOtherCharges where d.TruckDetailId == data.TruckDetailID select d).ToList();
+                    db.TruckDetailOtherCharges.RemoveRange(details);
+                    db.SaveChanges();
+                }
 
                 //Other charge data update into inscanothercharge table
                 if (data.otherchargesVM != null)
                 {
                     for (int j = 0; j < data.otherchargesVM.Count; j++)
                     {
-                        //InscanOtherCharge objOtherCharge = new InscanOtherCharge();
-                        int oid = Convert.ToInt32(data.otherchargesVM[j].OtherChargeID);
-                        TruckDetailOtherCharge objOtherCharge = db.TruckDetailOtherCharges.Where(cc => cc.TruckDetailId == TruckDetail.TruckDetailID && cc.OtherChargeID == oid).FirstOrDefault();
-                        if (objOtherCharge == null)
+                        if (data.otherchargesVM[j].deleted == false)
                         {
-                            objOtherCharge = new TruckDetailOtherCharge();
-                            var maxid = (from c in db.TruckDetailOtherCharges orderby c.TruckDetailOtherChargeID descending select c.TruckDetailOtherChargeID).FirstOrDefault();
-                            objOtherCharge.TruckDetailOtherChargeID = maxid + 1;
-                            objOtherCharge.TruckDetailId = TruckDetail.TruckDetailID;
-                            objOtherCharge.OtherChargeID = data.otherchargesVM[j].OtherChargeID;
-                            objOtherCharge.Amount = data.otherchargesVM[j].Amount;
-                            db.TruckDetailOtherCharges.Add(objOtherCharge);
-                            db.SaveChanges();
-                            db.Entry(objOtherCharge).State = EntityState.Detached;
-                        }
-                        else
-                        {
-                            //objOtherCharge.OtherChargeID = v.otherchargesVM[j].OtherChargeID;
-                            objOtherCharge.Amount = data.otherchargesVM[j].Amount;
-                            db.Entry(objOtherCharge).State = EntityState.Modified;
-                            db.SaveChanges();
-                            db.Entry(objOtherCharge).State = EntityState.Detached;
-                        }
-                    }
 
-                    var otherchargeitems = db.TruckDetailOtherCharges.Where(cc => cc.TruckDetailId==data.TruckDetailID);
-                    var exportdetailsid = data.otherchargesVM.Select(s => s.OtherChargeID).ToList();
-                    foreach (var e_details in otherchargeitems)
-                    {
-                        var _found = data.otherchargesVM.Where(cc => cc.OtherChargeID == e_details.OtherChargeID).FirstOrDefault();
-                        if (_found == null)
-                        {
-                            db.Entry(e_details).State = EntityState.Deleted;
-
+                            //InscanOtherCharge objOtherCharge = new InscanOtherCharge();
+                            int oid = Convert.ToInt32(data.otherchargesVM[j].OtherChargeID);
+                            TruckDetailOtherCharge objOtherCharge = db.TruckDetailOtherCharges.Where(cc => cc.TruckDetailId == TruckDetail.TruckDetailID && cc.OtherChargeID == oid).FirstOrDefault();
+                            if (objOtherCharge == null)
+                            {
+                                objOtherCharge = new TruckDetailOtherCharge();
+                                var maxid = (from c in db.TruckDetailOtherCharges orderby c.TruckDetailOtherChargeID descending select c.TruckDetailOtherChargeID).FirstOrDefault();
+                                objOtherCharge.TruckDetailOtherChargeID = maxid + 1;
+                                objOtherCharge.TruckDetailId = TruckDetail.TruckDetailID;
+                                objOtherCharge.OtherChargeID = data.otherchargesVM[j].OtherChargeID;
+                                objOtherCharge.Amount = data.otherchargesVM[j].Amount;
+                                db.TruckDetailOtherCharges.Add(objOtherCharge);
+                                db.SaveChanges();
+                                db.Entry(objOtherCharge).State = EntityState.Detached;
+                            }
+                            else
+                            {
+                                //objOtherCharge.OtherChargeID = v.otherchargesVM[j].OtherChargeID;
+                                objOtherCharge.Amount = data.otherchargesVM[j].Amount;
+                                db.Entry(objOtherCharge).State = EntityState.Modified;
+                                db.SaveChanges();
+                                db.Entry(objOtherCharge).State = EntityState.Detached;
+                            }
                         }
                     }
 
-                    db.SaveChanges();
+                    //var otherchargeitems = db.TruckDetailOtherCharges.Where(cc => cc.TruckDetailId==data.TruckDetailID);
+                    //var exportdetailsid = data.otherchargesVM.Select(s => s.OtherChargeID).ToList();
+                    //foreach (var e_details in otherchargeitems)
+                    //{
+                        
+                    //    var _found = data.otherchargesVM.Where(cc => cc.OtherChargeID == e_details.OtherChargeID).FirstOrDefault();
+                    //    if (_found == null)
+                    //    {
+                    //        db.Entry(e_details).State = EntityState.Deleted;
+
+                    //    }
+                    //}
+
+                    //db.SaveChanges();
 
                 }
                 /// other charges saving               
@@ -517,18 +528,25 @@ namespace LTMSV2.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-            TruckDetail a = db.TruckDetails.Find(id);
-            if (a == null)
-            {
-                return HttpNotFound();
-            }
-            else
-            {
-                a.IsDeleted = true;
-                db.Entry(a).State = EntityState.Modified;
-                db.SaveChanges();
+            //            TruckDetail a = db.TruckDetails.Find(id);
 
-            }
+            if (id != 0)
+            {
+                DataTable dt = ReceiptDAO.DeleteTruckDetail(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete!";
+                }
+            }                
            
             return RedirectToAction("Index");
         }

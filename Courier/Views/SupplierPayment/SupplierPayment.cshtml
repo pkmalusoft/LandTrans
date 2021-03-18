@@ -95,6 +95,8 @@
 
         } else {
             $('#customerName').attr('readonly', 'readonly');
+            $('#vendortype').val($('#SupplierTypeId').val()).trigger('change');
+            $('#vendortype').attr('readonly', 'readonly');
             $('#btnsearch').attr('disabled', 'disabled');
             if ('@Model.ChequeNo' == null || '@Model.ChequeNo' == '') {
                 $("#divCash").css({ "display": "block" });
@@ -204,6 +206,44 @@
         //        });
         //    }
         //});
+        $('#vendortype').change(function () {
+            if ($('#vendortype').val() == 1)
+                $('#TDNo').removeAttr('readonly');
+            else
+                $('#TDNo').attr('readonly', 'readonly')
+
+        });
+
+        $("#TDNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/SupplierPayment/GetTDNo',
+                    datatype: "json",
+                    data: {
+                        term: request.term, SupplierID: $("#SupplierID").val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.TDNo,
+                                value: val.TDID
+                                
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#TDNo").val(i.item.label);
+                $('#TruckDetailId').val(i.item.value);
+                
+
+            },
+
+        });
 
         $("#customerName").autocomplete({
             source: function (request, response) {
@@ -706,6 +746,7 @@
         @Html.HiddenFor(model => model.CustomerID)
         @Html.HiddenFor(model => model.RecPayDetailID)
         @Html.HiddenFor(model => model.AcJournalID)
+        @Html.HiddenFor(model => model.SupplierTypeId)
         @Html.HiddenFor(model => model.StatusEntry)
         @Html.HiddenFor(model => model.Balance, new { id = "hdnAdvance" })
 
@@ -739,12 +780,12 @@
                 <div id="divCash" style="padding-top:10px">
                     <label class=" required headinglabel">Cash</label>
                     @*  @Html.DropDownListFor(model => model.CashBank, new List<SelectListItem> {
-                new SelectListItem{Text="Cash Account",Value="Cash Account"},
-                new SelectListItem{Text="PETTY CASH",Value="PETTY CASH"},
-                new SelectListItem{Text="Cash ControlAccount",Value="Cash ControlAccount"},
-                new SelectListItem{Text="Petty Cash-Noora",Value="Petty Cash-Noora"},
-                new SelectListItem{Text="Petty Cash-Sreenithy",Value="Petty Cash-Sreenithy"}},
-                "Select", new { @class = "form-control" })*@
+                        new SelectListItem{Text="Cash Account",Value="Cash Account"},
+                        new SelectListItem{Text="PETTY CASH",Value="PETTY CASH"},
+                        new SelectListItem{Text="Cash ControlAccount",Value="Cash ControlAccount"},
+                        new SelectListItem{Text="Petty Cash-Noora",Value="Petty Cash-Noora"},
+                        new SelectListItem{Text="Petty Cash-Sreenithy",Value="Petty Cash-Sreenithy"}},
+                        "Select", new { @class = "form-control" })*@
                     @Html.DropDownListFor(model => model.CashBank, new SelectList(@ViewBag.achead, "AcHeadID", "AcHead"), "Select", new { @class = "form-control" })
 
                 </div>
@@ -830,26 +871,31 @@
             <button class="btn btn-primary small_btn" type="button" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
         </div>
 
-
         <div class="col-xs-12 col-sm-2">
-            <label class="headinglabel">Amount</label>
+            <label class="headinglabel">TD Adv. Ref.</label>
+            @Html.TextBoxFor(model => model.TDNo, new { @class = "form-control" })
+            @Html.HiddenFor(model => model.TruckDetailId, new { @class = "form-control" })
+
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <div class="flexTitle">
+                <label class="headinglabel required">Amount</label>
+                <div class="checkboxdesign no-padding text-right" style="float:right">
+                    @Html.CheckBox("AutoAllocate", new { @name = "AutoAllocate", @onchange = "autoallocation()" })
+                    <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">Auto Allocated</label>
+                </div>
+            </div>
             @Html.TextBoxFor(model => model.FMoney, new { @class = "form-control textright" })
         </div>
 
-        <div class="col-xs-12 col-sm-2 checkboxdesign">
-            @*<button type="button" class="btn btn-primary small_btn btn-2" onclick="autoallocation()" id="btnallocation" title="Add Consignments"><i class=" fa fa-th"></i></button>*@
 
-            @Html.CheckBox("AutoAllocate", new { @name = "AutoAllocate", @onchange = "autoallocation()" })
-            <label class="headinglabel">Auto Allocate</label>
-
-        </div>
 
         <div class="col-xs-3 col-sm-2">
             <label class="headinglabel">Allocated Amount</label>
             <input type="text" id="AllocatedAmount" class="form-control text-right" readonly />
         </div>
         <div class="col-xs-3 col-sm-2">
-            <label class="headinglabel">Balance Amount</label>
+            <label class="headinglabel">UnAllocated Amount</label>
             <input type="text" id="BalanceAmount" class="form-control text-right" readonly />
         </div>
         @Html.HiddenFor(model => model.AcCompanyID)
@@ -963,11 +1009,11 @@
                                                 </div>
                                             </td>
                                             @*<td>
-                                                @if (Model.CustomerRcieptChildVM[i].InvoiceID > 0)
-                                                {
-                                                    <a href="Javascript:void(0)" onclick="EditAWBAllocation('@Model.CustomerRcieptChildVM[i].JobCode',@Model.CustomerRcieptChildVM[i].Amount,'@Model.CustomerRcieptChildVM[i].SInvoiceNo')"><i class="fa fa-eye"></i></a>
-                                                }
-                                            </td>*@
+                                                    @if (Model.CustomerRcieptChildVM[i].InvoiceID > 0)
+                                                    {
+                                                        <a href="Javascript:void(0)" onclick="EditAWBAllocation('@Model.CustomerRcieptChildVM[i].JobCode',@Model.CustomerRcieptChildVM[i].Amount,'@Model.CustomerRcieptChildVM[i].SInvoiceNo')"><i class="fa fa-eye"></i></a>
+                                                    }
+                                                </td>*@
 
                                         </tr>
 

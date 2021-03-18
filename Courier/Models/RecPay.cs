@@ -34,5 +34,6 @@ namespace LTMSV2.Models
         public Nullable<decimal> FMoney { get; set; }
         public Nullable<int> UserID { get; set; }
         public Nullable<bool> IsTradingReceipt { get; set; }
+        public Nullable<int> TruckDetailId { get; set; }
     }
 }

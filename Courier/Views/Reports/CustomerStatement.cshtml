@@ -119,7 +119,9 @@
             $("#AllCustomer").trigger('click');
         }
         else {
-            $("#AllCustomer").prop('checked', 'checked');
+            $("#AllCustomer").prop('checked', true);
+            $('#CustomerName').removeAttr('required');
+            $('#CustomerName').attr('readonly', 'readonly');
             //$("#AllCustomer").trigger('click');
         }
     });

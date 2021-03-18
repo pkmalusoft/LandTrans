@@ -22,7 +22,7 @@ namespace LTMSV2.Models
         public string StatusInvoice { get; set; }
         public Nullable<bool> StatusAdvance { get; set; }
         public string statusReceipt { get; set; }
-        public string InvDate { get; set; }
+        public Nullable<System.DateTime> InvDate { get; set; }
         public string InvNo { get; set; }
         public Nullable<int> CurrencyID { get; set; }
         public Nullable<bool> Lock { get; set; }

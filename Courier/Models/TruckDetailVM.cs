@@ -67,6 +67,7 @@ namespace LTMSV2.Models
 
     public class TruckDetailOtherChargeVM:TruckDetailOtherCharge
     {
+        public bool deleted { get; set; }
         public string OtherChargeName { get; set; }
     }
 }

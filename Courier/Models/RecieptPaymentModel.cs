@@ -205,8 +205,9 @@ namespace LTMSV2.Models
                 cust.RecPayDate = item.RecPayDate;
                 cust.DocumentNo = item.DocumentNo;
                 cust.SupplierID = item.SupplierID;
-                cust.customerName = Context1.SupplierMasters.Find(item.SupplierID).SupplierName;
-
+                var supplier = Context1.SupplierMasters.Find(item.SupplierID);
+                cust.customerName = supplier.SupplierName;
+                cust.SupplierTypeId = Convert.ToInt32(supplier.SupplierTypeID);
                 var cashOrBankID = (from t in Context1.AcHeads where t.AcHead1 == item.BankName select t.AcHeadID).FirstOrDefault();
                 cust.CashBank = (cashOrBankID).ToString();
                 cust.ChequeBank = (cashOrBankID).ToString();
@@ -218,6 +219,18 @@ namespace LTMSV2.Models
                 cust.RecPayID = item.RecPayID;
                 cust.AcJournalID = item.AcJournalID;
                 cust.StatusEntry = item.StatusEntry;
+                
+                
+                if (item.TruckDetailId != null)
+                {
+                    cust.TruckDetailId = Convert.ToInt32(item.TruckDetailId);
+                    var td = Context1.TruckDetails.Find(cust.TruckDetailId);
+                    if (td!=null)
+                    {
+                        cust.TDNo = td.ReceiptNo;
+                    }
+                }
+
                 var a = (from t in Context1.RecPayDetails where t.RecPayID == RecpayID select t.CurrencyID).FirstOrDefault();
                 if (a.HasValue)
                     cust.CurrencyId = Convert.ToInt32(a.Value);

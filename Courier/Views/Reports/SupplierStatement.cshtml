@@ -25,6 +25,18 @@
     $(document).ready(function () {
         var url = '/Accounts/GetSupplierName';
 
+        $("#AllSupplier").click(function () {
+            if ($("#AllSupplier").is(':checked')) {
+                $('#SupplierName').attr('readonly', 'readonly');
+                $('#SupplierName').val('');
+                $('#SupplierId').val(0);
+                $('#SupplierName').removeAttr('required');
+            }
+            else {
+                $('#SupplierName').removeAttr('readonly');
+                $('#SupplierName').attr('required', 'required');
+            }
+        });
         $("#SupplierName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -56,6 +68,19 @@
                 $('#SupplierId').val(i.item.ID);
             },
         });
+
+        if ($('#SupplierId').val() > 0) {
+
+            $("#AllSupplier").prop('checked', 'false');
+            $("#AllSupplier").attr('value', false);
+            $("#AllSupplier").trigger('click');
+        }
+        else {           
+            $("#AllSupplier").prop('checked', true);
+            $("#SupplierName").removeAttr('required');
+            $("#SupplierName").attr('readonly', 'readonly');
+            //$("#AllCustomer").trigger('click');
+        }
         //$('#ReportType').change(function () {
         //    if ($('#ReportType').val() == "Ledger") {
         //        $('#divledger').removeClass('hide');
@@ -106,9 +131,15 @@
                 @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(ViewBag.SupplierType, "SupplierTypeID", "SupplierType1"), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SupplierTypeId)
             </div>
-            <div class="col-md-4">
-                <label class="headinglabel required" id="lblsuppliername">Supplier Name</label>
-                @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", @autocomplete = "off", @required = "true" })
+            <div class="col-md-4">                
+                <div class="flexTitle">
+                    <label class="headinglabel required" id="lblsuppliername">Supplier Name</label>
+                    <div class="checkboxdesign no-padding text-right" style="float:right">
+                        @Html.CheckBox("AllSupplier", new { @id = "AllSupplier", @checked = "checked" }) &nbsp
+                        <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">All Supplier</label>
+                    </div>
+                </div>
+                @Html.TextBoxFor(model => model.SupplierName, new { @class = "form-control", @autocomplete = "off"  })
                 @Html.HiddenFor(model => model.SupplierId)
             </div>
             <div class="col-md-2">

@@ -321,6 +321,7 @@
                                                     <tr>
                                                         <td>
                                                             @item.OtherChargeName
+                                                            <input type="hidden" class="hdndeleted" name="otherchargesVM[@otherchargecount].deleted" value="@item.deleted" />
                                                             <input type="hidden" class="OChargeID" name="otherchargesVM[@otherchargecount].OtherChargeID" value="@item.OtherChargeID" />
                                                         </td>
                                                         <td style="text-align:right">
@@ -416,7 +417,8 @@
 
                                         $('#OtherChargeTable').find('.OChargeID').each(function () {
                                             debugger;
-                                            if ($(this).val() === selectedval) {
+                                            var deleteobj = $(this).parent().parent().find('.hdndeleted');
+                                            if ($(this).val() === selectedval && deleteobj==false) {
                                                 exists = true;
                                                 alert('Already this charge added!');
                                                 return;
@@ -454,8 +456,8 @@
                                             $('#RowCount').val(@otherchargecount);*@
 
                                         var RowCount = parseInt($('#RowCount').val());
-                                        var RowHtml = '<tr><td>' + othercharngename + '<input type="hidden" class="OChargeID"  name="otherchargesVM[' + RowCount + '].OtherChargeID" value="' + $('#OtherChargeID').val() + '"/></td>';
-                                        RowHtml = RowHtml + '<td>' + $('#ExpAmount').val() + '<input type="hidden" id="' + RowCount + '_Amount" name="otherchargesVM[' + RowCount + '].Amount" class="ExpAllocatedAmountDetails" value="' + $('#ExpAmount').val() + '"/></td>';
+                                        var RowHtml = '<tr><td>' + othercharngename + '<input type="hidden" name="otherchargesVM[' + RowCount + '].deleted" value="false" class="hdndeleted" /> <input type="hidden" class="OChargeID"  name="otherchargesVM[' + RowCount + '].OtherChargeID" value="' + $('#OtherChargeID').val() + '"/></td>';
+                                        RowHtml = RowHtml + '<td class="text-right">' + parseFloat($('#ExpAmount').val()).toFixed(3) + '<input type="hidden" id="' + RowCount + '_Amount" name="otherchargesVM[' + RowCount + '].Amount" class="ExpAllocatedAmountDetails text-right" value="' + parseFloat($('#ExpAmount').val()).toFixed(3) + '"/></td>';
                                         RowHtml = RowHtml + '<td><a href="javascript:void(0)"  class="deleteallocrow" id="DeleteAllocationRow"><i class="fa fa-times"></i></a></td>';
                                         RowHtml = RowHtml + '</tr>';
                                         $('#OtherChargeTable').append(RowHtml);
@@ -469,22 +471,26 @@
 
                                     $('.txtNum').blur(function () {
                                         if (isNaN(parseInt($(this).val()))) {
-                                            $(this).val('0.00');
+                                            $(this).val('0.000');
                                         } else {
                                             var amt = parseFloat($(this).val());
-                                            $(this).val(amt.toFixed(2));
+                                            $(this).val(amt.toFixed(3));
                                         }
                                     });
 
                                     $('#OtherChargeTable').on("click", "#DeleteAllocationRow", function () {
 
-                                        $(this).parent().parent().remove();
+                                        $(this).parent().parent().addClass('hide');
+                                        var obj = $(this).parent().parent().find('.hdndeleted');
+                                        $(obj).val(true);
                                     });
 
-                                    $('#details').on("click", "#DeleteAllocationRow", function () {
-
-                                        $(this).parent().parent().remove();
-                                    });
+                                    //$('#details').on("click", "#DeleteAllocationRow", function () {
+                                    //    $(this).parent().parent().addClass('hide');
+                                    //    var obj = $(this).parent().parent().find('.hdndeleted');
+                                    //    $(obj).val(true);
+                                    //    //$(this).parent().parent().remove();
+                                    //});
                                 });
                                 function ClearData() {
                                     $("#ReceivedFrom").val('');

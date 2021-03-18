@@ -235,6 +235,7 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@AcCompanyID", RecPy.AcCompanyID);
             cmd.Parameters.AddWithValue("@EXRate", RecPy.EXRate);
             cmd.Parameters.AddWithValue("@FMoney", RecPy.FMoney);
+            cmd.Parameters.AddWithValue("@TruckDetailId", RecPy.TruckDetailId);
             cmd.Parameters.AddWithValue("@UserID", RecPy.UserID);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -283,7 +284,7 @@ namespace LTMSV2.DAL
             return crecs;
         }
 
-        public static decimal SP_GetCustomerAdvance(int CustomerId,int RecPayId)
+        public static decimal SP_GetCustomerAdvance(int CustomerId,int RecPayId,int FyearId)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
@@ -291,6 +292,7 @@ namespace LTMSV2.DAL
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
             cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            cmd.Parameters.AddWithValue("@FYearId", FyearId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -620,7 +622,30 @@ namespace LTMSV2.DAL
                 return null;
             }
         }
+        
+        //Delete  TruckDetails
+        public static DataTable DeleteTruckDetail(int TruckDetailId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteTruckDetail";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@TruckDetailId", TruckDetailId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
 
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
         //SP_DeleteSupplierPayments
         public static DataTable DeleteSupplierPayments(int RecPayID)
         {
