@@ -682,6 +682,8 @@
             $("#divBank").css({ "display": "block" });
             $("#ChequeNo").attr('required', 'required');
             $("#ChequeDate").attr('required', 'required');
+            $("#ChequeNo").removeAttr('readonly');
+            $("#ChequeDate").removeAttr('readonly')
             $('#CashBank').removeAttr('required', 'required');
             $('#ChequeBank').attr('required', 'required');
         } else {

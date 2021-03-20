@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using LTMSV2.Models;
-
+using LTMSV2.DAL;
 namespace LTMSV2.Controllers
 {
     [SessionExpire]
@@ -91,6 +91,7 @@ namespace LTMSV2.Controllers
                 //supplier.SupplierID = ObjectSourceModel.GetMaxNumberSupplier();
                 db.SupplierMasters.Add(supplier);
                 db.SaveChanges();
+                ReceiptDAO.ReSaveSupplierCode();
                 ViewBag.SuccessMsg = "You have successfully added Supplier.";
                 return RedirectToAction("Index");
             //}

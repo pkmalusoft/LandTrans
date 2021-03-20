@@ -57,9 +57,8 @@ namespace LTMSV2.DAL
             string companyaddress = SourceMastersModel.GetReportHeader2(branchid);
             string companyname = SourceMastersModel.GetReportHeader1(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
+            rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["AccountHead"].CurrentValues.AddValue(reportparam.AcHeadName);
             string period = "Period From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
@@ -996,8 +995,6 @@ namespace LTMSV2.DAL
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
             // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1085,9 +1082,7 @@ namespace LTMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
         //   rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1164,9 +1159,7 @@ namespace LTMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1256,9 +1249,7 @@ namespace LTMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1453,9 +1444,7 @@ namespace LTMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1543,9 +1532,7 @@ namespace LTMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1635,9 +1622,7 @@ namespace LTMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1730,9 +1715,7 @@ namespace LTMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1828,9 +1811,7 @@ namespace LTMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -1923,9 +1904,7 @@ namespace LTMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
@@ -2106,14 +2085,12 @@ namespace LTMSV2.DAL
             string companyname = SourceMastersModel.GetCompanyname(branchid);
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
-            // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            // Assign the params collection to the report viewer            
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
             rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("MANIFEST");
-            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
@@ -2209,8 +2186,8 @@ namespace LTMSV2.DAL
             string companylocation = SourceMastersModel.GetCompanyLocation(branchid);
 
             // Assign the params collection to the report viewer
-            rd.ParameterFields[0].DefaultValues.AddValue(companyname);
-            rd.ParameterFields[0].CurrentValues.AddValue(companyname);
+            //rd.ParameterFields[0].DefaultValues.AddValue(companyname);
+            //rd.ParameterFields[0].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);

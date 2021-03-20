@@ -112,15 +112,8 @@
         $('#ToDate').datetimepicker({ format: 'DD-MM-YYYY' });
 
         $('#InvoiceDate').datetimepicker({ format: 'DD-MM-YYYY' });
-SupplierTypeId
-        //var d = new Date();
-        //var curr_date = d.getDate();
-        //var curr_month = d.getMonth() + 1;
-        //var curr_year = d.getFullYear();
 
-        //var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
-
-        //$('#InvoiceDate').val(reqdate);
+       
     });
 
     function checkduplicateachead(oacheadid) {
@@ -290,7 +283,14 @@ SupplierTypeId
             });
         }
         else {
+            var d = new Date();
+            var curr_date = d.getDate();
+            var curr_month = d.getMonth() + 1;
+            var curr_year = d.getFullYear();
 
+            var reqdate = curr_date + "-" + curr_month + "-" + curr_year; // + ' ' + d.getHours() + ':' + d.getMinutes();
+
+            $('#InvoiceDate').val(reqdate);
             $('#SupplierTypeId').attr('readonly', 'readonly');
         }
                
@@ -996,8 +996,8 @@ SupplierTypeId
                     @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(@ViewBag.Suppliertype, "SupplierTypeID", "SupplierType1"), "Select", new { @class = "form-control" })
                 </div>
                 <div class="col-md-2">
-                    <label class="headinglabel required"> Invoice No</label>
-                    @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control txttarget", @required = "true"})
+                    <label class="headinglabel required"> Invoice No.</label>
+                    @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control", @required = "true"})
                     @Html.ValidationMessageFor(model => model.InvoiceNo)
                 </div>
                 <div class="col-md-2">

@@ -1093,7 +1093,7 @@ namespace LTMSV2.Controllers
             //{
 
             //}
-            var result = customerlist.OrderByDescending(cc => cc.TDNo).ToList();
+            var result = customerlist.OrderByDescending(cc => cc.TDNo).Distinct().ToList();
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
