@@ -5,8 +5,9 @@
     var isadd = true;
     var ismodify = true;
     var isdelete = true;
+    var isprint = true;
 
-    string path = "/Accounts/IndexAcBook"; 
+    string path = "/Accounts/IndexAcBook";
 
     if (Convert.ToInt32(Session["UserRoleID"]) > 1)
     {
@@ -14,7 +15,7 @@
         isadd = obj.GetAddpermission(Convert.ToInt32(Session["UserRoleID"]), path);
         ismodify = obj.GetModifypermission(Convert.ToInt32(Session["UserRoleID"]), path);
         isdelete = obj.GetDeletepermission(Convert.ToInt32(Session["UserRoleID"]), path);
-
+        isprint = obj.GetPrintpermission(Convert.ToInt32(Session["UserRoleID"]), path);
     }
 }
 <script src="~/Content/NewCSS/plugins/jQuery/moment.js"></script>
@@ -258,7 +259,7 @@
                         <td class="tdtarget">
                             @Html.DisplayFor(modelItem => item.Remarks)
                         </td>
-                        <td>                            
+                        <td>
                             @if (ismodify)
                             {
                                 <a href="@Url.Action("Create", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
@@ -268,7 +269,11 @@
                             {
                                 <a onclick="Delete(ID=@item.AcJournalID)" href="#"><i class="fa fa-times"></i></a>
                             }
-                            
+                            @if (isprint)
+                            {
+                                <a onclick="funExportToPDF(@item.AcJournalID)" href="#"><i class="fa fa-print"></i></a>
+                            }
+
                         </td>
                         <td style="display:none;">
                             @item.AcJournalID
@@ -284,5 +289,37 @@
         if (confirm("Are you sure, You want to Delete this Voucher?")) {
             window.location.href = "/Accounts/DeleteAcBook/?id=" + ID;
         }
+    }
+</script>
+
+<script type="text/javascript">
+      function funExportToPDF(id) {
+          //showLoading();
+        $.ajax({
+             url: '@Url.Action("AcReceipPaymenttVoucher", "Accounts")',
+
+            type: "GET",
+            data: { id:id},
+                    dataType: "json",
+            success: function (response) {
+                if (response.result == "ok") {
+                    $('#frmPDF').attr('src', @Url.Content("~/ReportsPDF/") + response.path); //''
+
+                    setTimeout(function () {
+                        //hideLoading();
+                        window.open('@Url.Content("~/ReportsPDF/")' + response.path);
+                        //frame = document.getElementById("frmPDF");
+                        //framedoc = frame.contentWindow;
+                        //framedoc.focus();
+                        //framedoc.print();
+                    }, 500);
+                } else {
+                    alert(resuponse.message);
+                    //hideLoading();
+                }
+            },
+        });
+
+        return false;
     }
 </script>

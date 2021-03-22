@@ -81,7 +81,7 @@ namespace LTMSV2.Controllers
             //int k = 0;
             if (id != 0)
             {
-                reportpath = AccountsReportsDAO.GenerateCustomerReceipt(id);
+                reportpath = AccountsReportsDAO.GenerateSupplierPayment(id);
 
             }
 

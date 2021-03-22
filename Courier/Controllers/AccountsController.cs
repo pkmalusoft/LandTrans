@@ -2856,6 +2856,36 @@ new AcGroupModel()
         //}
 
 
+        #region VoucherPrint
+        public JsonResult AcReceipPaymenttVoucher(int id)
+        {
+            string reportpath = "";
+            //int k = 0;
+            if (id != 0)
+            {
+                reportpath = AccountsReportsDAO.GenerateReceiptPaymentVoucherPrint(id);
+
+            }
+
+            return Json(new { path = reportpath, result = "ok" }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public JsonResult AcJournalVoucher(int id)
+        {
+            string reportpath = "";
+            //int k = 0;
+            if (id != 0)
+            {
+                reportpath = AccountsReportsDAO.GenerateJournalVoucherPrint(id);
+
+            }
+
+            return Json(new { path = reportpath, result = "ok" }, JsonRequestBehavior.AllowGet);
+
+        }
+        #endregion
+
 
 
         public ActionResult YearEndProcess()

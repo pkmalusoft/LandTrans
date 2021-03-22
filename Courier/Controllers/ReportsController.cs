@@ -1060,5 +1060,65 @@ namespace LTMSV2.Controllers
 
         }
         #endregion
+
+
+        //#region "VoucherPrint"
+        //public ActionResult VoucherPrint(string type,int id = 0)
+        //{
+        //    int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+        //    if (id > 0  && type!="")
+        //    {                               
+                                
+        //        ViewBag.ReportOption = "Receipt Voucher";
+        //        ViewBag.ReportName = "Receipt Voucher";
+
+
+        //        AccountsReportsDAO.GenerateCustomerReceiptPrint(id);           
+        //    }
+            
+        //    return View();
+
+        //}
+
+        //[HttpPost]
+        //public ActionResult ManifestReport(ManifestReportParam picker)
+        //{
+
+        //    ManifestReportParam model = new ManifestReportParam
+        //    {
+        //        FromDate = picker.FromDate,
+        //        ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+        //        Output = picker.Output,
+        //        TDID = picker.TDID,
+        //        TDNo = picker.TDNo
+        //    };
+
+
+        //    SessionDataModel.SetManifestReportParam(model);
+        //    Response.Buffer = false;
+        //    Response.ClearContent();
+        //    Response.ClearHeaders();
+
+
+        //    AccountsReportsDAO.GenerateManifestReport();
+        //    //if (id > 0)
+        //    //{
+        //    //    model.TDID = id;
+        //    //    var td = db.TruckDetails.Find(model.TDID);//
+        //    //    model.TDNo = td.ReceiptNo + "-" + td.RegNo + "-" + td.DriverName;
+        //    //    ViewBag.ReportOption = "1";
+        //    //}
+        //    //else
+        //    //{
+        //    //    ViewBag.ReportOption = "0";
+        //    //}
+        //    return View(model);
+        //    //return RedirectToAction("ManifestReport", "Accounts");
+
+
+        //}
+
+        //#endregion
     }
 }
