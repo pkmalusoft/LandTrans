@@ -97,7 +97,7 @@ namespace LTMSV2.Controllers
                 List<CustomerTradeReceiptVM> lst = (List<CustomerTradeReceiptVM>)Session["SupplierInvoice"];
                 if (v.InvoiceType == "TR")
                 {
-                    var invoice = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID).FirstOrDefault();
+                    var invoice = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID && cc.InvoiceType=="TR").FirstOrDefault();
                     //var invoice = db.SupplierInvoices.Find(vm.InvoiceID);
                     if (invoice != null)
                     {
@@ -109,10 +109,10 @@ namespace LTMSV2.Controllers
                 }
                 else if (v.InvoiceType == "OP")
                 {
-                    var invoice1 = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID).FirstOrDefault();
+                    var invoice1 = lst.Where(cc => cc.SalesInvoiceID == vm.InvoiceID && cc.InvoiceType=="OP").FirstOrDefault();
                     //var invoice1 = db.AcOPInvoiceDetails.Where(cc => cc.AcOPInvoiceDetailID == vm.InvoiceID).FirstOrDefault();
                     if (invoice1 != null)
-                    {
+                    {                    
                         vm.InvoiceNo = invoice1.InvoiceNo;
                         vm.InvoiceDate = invoice1.DateTime;
                         vm.InvoiceAmount = Convert.ToDecimal(invoice1.InvoiceAmount);
@@ -225,35 +225,7 @@ namespace LTMSV2.Controllers
             }
 
             var invid = 0;
-            int? recpayid = 0;
-            //if (v.TradingInvoice == false)
-            //{
-            //    int jobid = (from j in db.JobGenerations where j.JobCode == v.JobNO select j.JobID).FirstOrDefault();
-
-            //     invid = (from c in db.JInvoices where c.JobID == jobid select c.InvoiceID).FirstOrDefault();
-
-
-            //    var recpay = (from c in db.RecPayDetails where c.InvoiceID == invid select c).FirstOrDefault();
-            //    if (recpay != null)
-            //    {
-            //        recpayid = recpay.RecPayID;
-            //    }
-            //}
-            //else
-            //{
-            //    invid =Convert.ToInt32(v.JobNO);
-
-            //  var  recpay = (from c in db.RecPayDetails where c.InvoiceID == invid select c).FirstOrDefault();
-            //    if(recpay != null)
-            //    {
-            //        recpayid = recpay.RecPayID;
-            //    }
-            //}
-            // invid = Convert.ToInt32(v.JobNO);
-            //var ids = (from x in db.SalesInvoiceDetails where x.SalesInvoiceID == invid select (int?)x.SalesInvoiceDetailID).ToList();
-
-            // recpayid = (from c in db.RecPayDetails where ids.Contains(c.InvoiceID) select c.RecPayID).FirstOrDefault().Value;
-
+            int? recpayid = 0;           
             DebitNote d = new DebitNote();
             if (v.DebitNoteId == 0)
             {
@@ -287,8 +259,7 @@ namespace LTMSV2.Controllers
             d.RecPayID = recpayid;
             d.AcHeadID = v.AcHeadID;
             d.SupplierID = v.SupplierID;
-            //d.statusclose = false;
-            d.InvoiceType = v.InvoiceType;
+            //d.statusclose = false;            
             d.Remarks = v.Remarks;
             d.IsShipping = true;
             if (v.DebitNoteId== 0)
@@ -311,43 +282,41 @@ namespace LTMSV2.Controllers
 
 
         }
-             [HttpPost]
-        public JsonResult GetTradeInvoiceOfSupplier(int? ID, decimal? amountreceived)
+        [HttpPost]
+        public JsonResult GetTradeInvoiceOfSupplier(int? ID, decimal? amountreceived, int? RecPayId)
         {
-            int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
+                int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
 
             DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
             DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
-            var receipts = (from d in db.RecPays where d.FYearID == fyearid && d.SupplierID == ID select d.FMoney).Sum();
-            var receiptdetails = (from d in db.RecPays join c in db.RecPayDetails on d.RecPayID equals c.RecPayID where d.FYearID == fyearid && d.SupplierID == ID && c.InvoiceID > 0 && c.Amount < 0 select (-1 * c.Amount)).Sum();
-
-            var advance = receipts - receiptdetails;
+            decimal Advance = 0;
+            Advance = ReceiptDAO.SP_GetSupplierAdvance(Convert.ToInt32(ID), Convert.ToInt32(RecPayId), fyearid);
+            if (amountreceived > 0)
+                amountreceived = amountreceived + Advance;          
             var salesinvoice = new List<CustomerTradeReceiptVM>();
 
-            var AllOPInvoices = (from d in db.AcOPInvoiceDetails join m in db.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where m.AcFinancialYearID == fyearid && m.StatusSDSC != "C" && m.PartyID == ID && d.RecPayDetailId == null && (d.RecPayStatus == null || d.RecPayStatus < 2) select d).ToList();
+            var AllOPInvoices = (from d in db.AcOPInvoiceDetails join m in db.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where m.AcFinancialYearID == fyearid && d.Amount < 0 && m.StatusSDSC != "C" && m.PartyID == ID select d).OrderBy(cc => cc.InvoiceDate).ToList();
 
             foreach (var item in AllOPInvoices)
             {
-                decimal? totamt = 0;
-                decimal? totamtpaid = 0;
-                decimal? totadjust = 0;
-                decimal? CreditAmount = 0;
+               
+                decimal? totamtpaid = 0;               
                 var allrecpay = (from d in db.RecPayDetails where d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();
-                totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
-                totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
-                totamt = totamtpaid + totadjust + CreditAmount;
+                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(ID), item.AcOPInvoiceDetailID, 0,0,"OP");
+               
                 var Invoice = new CustomerTradeReceiptVM();
                 Invoice.AcOPInvoiceDetailID = item.AcOPInvoiceDetailID;
-                Invoice.SalesInvoiceID = item.AcOPInvoiceDetailID;
+                Invoice.SalesInvoiceID = 0;
                 Invoice.InvoiceType = "OP";
                 Invoice.JobCode = "OP" + item.AcOPInvoiceDetailID.ToString();
                 Invoice.InvoiceNo = item.InvoiceNo; ;
+
                 Invoice.InvoiceAmount = item.Amount * -1;
                 Invoice.date = item.InvoiceDate;
                 Invoice.DateTime = Convert.ToDateTime(item.InvoiceDate).ToString("dd/MM/yyyy");
-                Invoice.AmountReceived = totamt;
+                Invoice.AmountReceived = totamtpaid;
                 Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
-                Invoice.AdjustmentAmount = totadjust;
+                Invoice.AdjustmentAmount = 0;
                 Invoice.Amount = 0;
                 if (Invoice.Balance > 0)
                 {
@@ -374,45 +343,29 @@ namespace LTMSV2.Controllers
             }
 
             //transaction
-            var AllInvoices = (from d in db.SupplierInvoices where d.SupplierID == ID select d).ToList();
+            var AllInvoices = (from d in db.SupplierInvoices where (d.IsDeleted == null || d.IsDeleted == false) && d.SupplierID == ID select d).OrderBy(cc => cc.InvoiceDate).ToList();
             foreach (var item in AllInvoices)
             {
-                //var invoicedeails = (from d in db.SalesInvoiceDetails where d.SalesInvoiceID == item.SalesInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
-                var invoicedeails = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == item.SupplierInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
-                //where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
-                decimal? totamt = 0;
+               
+                var invoicedeails = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == item.SupplierInvoiceID select d).ToList();
+                              
                 decimal? totamtpaid = 0;
-                decimal? totadjust = 0;
-                decimal? CreditAmount = 0;
-                //foreach (var det in invoicedeails)
-                //{
-                var allrecpay = (from d in db.RecPayDetails where d.InvoiceID == item.SupplierInvoiceID select d).ToList();
-                totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
-                totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
-                //var CreditNote = (from d in db.CreditNotes where d.InvoiceID == det.SalesInvoiceDetailID && d.CustomerID == item.CustomerID select d).ToList();
-                //var CreditNote = (from d in db.CreditNotes where d.InvoiceID == det.CustomerInvoiceDetailID && d.CustomerID == item.CustomerID select d).ToList();
+                decimal? totadjust = 0;               
+                
 
-                //if (CreditNote.Count > 0)
-                //{
-                //    CreditAmount = CreditNote.Sum(d => d.Amount);
-                //}
-                totamt = totamtpaid + totadjust + CreditAmount;
-                //}
-
-                var Invoice = new CustomerTradeReceiptVM();
-                //Invoice.JobID = det.JobID;
+                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(ID), item.SupplierInvoiceID,0,0, "TR");                
+                var Invoice = new CustomerTradeReceiptVM();                
                 Invoice.JobCode = "TR" + item.SupplierInvoiceID.ToString();
                 Invoice.SalesInvoiceID = item.SupplierInvoiceID; // SalesInvoiceID;
                 Invoice.InvoiceNo = item.InvoiceNo;
                 Invoice.InvoiceType = "TR";
-                //Invoice.SalesInvoiceDetailID = det.CustomerInvoiceDetailID;
                 Invoice.InvoiceAmount = item.InvoiceTotal; // CourierCharge;
                 Invoice.date = item.InvoiceDate;
                 Invoice.DateTime = item.InvoiceDate.ToString("dd/MM/yyyy");
                 //var RecPay = (from d in db.RecPayDetails where d.RecPayDetailID == det.RecPayDetailId select d).FirstOrDefault();
 
-                Invoice.AmountReceived = totamt;
-                Invoice.Balance = Invoice.InvoiceAmount - totamt;
+                Invoice.AmountReceived = totamtpaid;
+                Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
                 Invoice.AdjustmentAmount = totadjust;
                 Invoice.Amount = 0;
                 if (Invoice.Balance > 0)
@@ -438,10 +391,10 @@ namespace LTMSV2.Controllers
                 }
             }
             Session["SupplierInvoice"] = salesinvoice;
-            return Json(salesinvoice, JsonRequestBehavior.AllowGet);
+            return Json(new { advance = Advance, salesinvoice = salesinvoice }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public JsonResult SetTradeInvoiceOfSupplier(int? ID, decimal? amountreceived, int DebitNoteID)
         {
             int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
@@ -451,21 +404,20 @@ namespace LTMSV2.Controllers
             var receipts = (from d in db.RecPays where d.FYearID == fyearid && d.SupplierID == ID select d.FMoney).Sum();
             var receiptdetails = (from d in db.RecPays join c in db.RecPayDetails on d.RecPayID equals c.RecPayID where d.FYearID == fyearid && d.SupplierID == ID && c.InvoiceID > 0 && c.Amount < 0 select (-1 * c.Amount)).Sum();
 
-            var advance = receipts - receiptdetails;
+//            decimal Advance = 0;
+//            Advance = ReceiptDAO.SP_GetSupplierAdvance(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(id), fyearid);
+
+////            var advance = receipts - receiptdetails;
             var salesinvoice = new List<CustomerTradeReceiptVM>();
 
-            var AllOPInvoices = (from d in db.AcOPInvoiceDetails join m in db.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where m.AcFinancialYearID == fyearid && m.StatusSDSC != "C" && m.PartyID == ID && d.RecPayDetailId == null && (d.RecPayStatus == null || d.RecPayStatus < 2) select d).ToList();
+            var AllOPInvoices = (from d in db.AcOPInvoiceDetails join m in db.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where m.AcFinancialYearID == fyearid && m.StatusSDSC != "C" && m.PartyID == ID select d).ToList();
 
             foreach (var item in AllOPInvoices)
             {
                 decimal? totamt = 0;
                 decimal? totamtpaid = 0;
                 decimal? totadjust = 0;
-                decimal? CreditAmount = 0;
-                var allrecpay = (from d in db.RecPayDetails where d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();
-                totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
-                totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
-                totamt = totamtpaid + totadjust + CreditAmount;
+                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(item.AcOPInvoiceDetailID), 0,DebitNoteID, "OP");               
                 var Invoice = new CustomerTradeReceiptVM();
                 Invoice.AcOPInvoiceDetailID = item.AcOPInvoiceDetailID;
                 Invoice.SalesInvoiceID = item.AcOPInvoiceDetailID;
@@ -475,7 +427,7 @@ namespace LTMSV2.Controllers
                 Invoice.InvoiceAmount = item.Amount * -1;
                 Invoice.date = item.InvoiceDate;
                 Invoice.DateTime = Convert.ToDateTime(item.InvoiceDate).ToString("dd/MM/yyyy");
-                Invoice.AmountReceived = totamt;
+                Invoice.AmountReceived = totamtpaid;
                 Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
                 Invoice.AdjustmentAmount = totadjust;
                 Invoice.Amount = 0;
@@ -504,45 +456,25 @@ namespace LTMSV2.Controllers
             }
 
             //transaction
-            var AllInvoices = (from d in db.SupplierInvoices where d.SupplierID == ID select d).ToList();
+            var AllInvoices = (from d in db.SupplierInvoices where d.SupplierID == ID && (d.IsDeleted==false || d.IsDeleted==null) select d).ToList();
             foreach (var item in AllInvoices)
-            {
-                //var invoicedeails = (from d in db.SalesInvoiceDetails where d.SalesInvoiceID == item.SalesInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
-                var invoicedeails = (from d in db.SupplierInvoiceDetails where d.SupplierInvoiceID == item.SupplierInvoiceID where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
-                //where (d.RecPayStatus < 2 || d.RecPayStatus == null) select d).ToList();
-                decimal? totamt = 0;
+            {                   
                 decimal? totamtpaid = 0;
                 decimal? totadjust = 0;
-                decimal? CreditAmount = 0;
-                //foreach (var det in invoicedeails)
-                //{
-                var allrecpay = (from d in db.RecPayDetails where d.InvoiceID == item.SupplierInvoiceID select d).ToList();
-                totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
-                totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
-                var DebitNote = (from d in db.DebitNotes where d.InvoiceID == item.SupplierInvoiceID && d.SupplierID == item.SupplierID select d).ToList();
-                //var CreditNote = (from d in db.CreditNotes where d.InvoiceID == det.CustomerInvoiceDetailID && d.CustomerID == item.CustomerID select d).ToList();
-
-                if (DebitNote.Count > 0)
-                {
-                    CreditAmount = DebitNote.Sum(d => d.Amount);
-                }
-                totamt = totamtpaid + totadjust + CreditAmount;
-                //}
-
+                
+                totamtpaid = ReceiptDAO.SP_GetSupplierInvoicePaid(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(item.SupplierInvoiceID), 0,DebitNoteID,"TR");
+                               
                 var Invoice = new CustomerTradeReceiptVM();
-                //Invoice.JobID = det.JobID;
+                
                 Invoice.JobCode = "TR" + item.SupplierInvoiceID.ToString();
                 Invoice.SalesInvoiceID = item.SupplierInvoiceID; // SalesInvoiceID;
                 Invoice.InvoiceNo = item.InvoiceNo;
-                Invoice.InvoiceType = "TR";
-                //Invoice.SalesInvoiceDetailID = det.CustomerInvoiceDetailID;
+                Invoice.InvoiceType = "TR";                
                 Invoice.InvoiceAmount = item.InvoiceTotal; // CourierCharge;
                 Invoice.date = item.InvoiceDate;
-                Invoice.DateTime = item.InvoiceDate.ToString("dd/MM/yyyy");
-                //var RecPay = (from d in db.RecPayDetails where d.RecPayDetailID == det.RecPayDetailId select d).FirstOrDefault();
-
-                Invoice.AmountReceived = totamt;
-                Invoice.Balance = Invoice.InvoiceAmount - totamt;
+                Invoice.DateTime = item.InvoiceDate.ToString("dd/MM/yyyy");                
+                Invoice.AmountReceived = totamtpaid;
+                Invoice.Balance = Invoice.InvoiceAmount - totamtpaid;
                 Invoice.AdjustmentAmount = totadjust;
                 Invoice.Amount = 0;
                 if (Invoice.Balance > 0)
@@ -584,18 +516,34 @@ namespace LTMSV2.Controllers
             return RedirectToAction("Index", "DebitNote");
 
         }
+
+        public JsonResult DebitNoteVoucher(int id)
+        {
+            string reportpath = "";
+            if (id != 0)
+            {
+                reportpath = AccountsReportsDAO.GenerateDebitNoteVoucherPrint(id);
+
+            }
+
+            return Json(new { path = reportpath, result = "ok" }, JsonRequestBehavior.AllowGet);
+
+        }
         public JsonResult GetInvoiceNo(string term)
         {
             var salesinvoice = new List<CustomerTradeReceiptVM>();
             var lst = new List<CustomerTradeReceiptVM>();
             salesinvoice = (List<CustomerTradeReceiptVM>)Session["SupplierInvoice"];
-            if (term.Trim() != "")
+            if (salesinvoice != null)
             {
-                lst = salesinvoice.Where(cc => cc.InvoiceNo.Contains(term)).OrderBy(cc => cc.InvoiceNo).ToList();
-            }
-            else
-            {
-                lst = salesinvoice.OrderBy(cc => cc.InvoiceNo).ToList();
+                if (term.Trim() != "")
+                {
+                    lst = salesinvoice.Where(cc => cc.InvoiceNo.Contains(term.Trim())).OrderBy(cc => cc.InvoiceNo).ToList();
+                }
+                else
+                {
+                    lst = salesinvoice.OrderBy(cc => cc.InvoiceNo).ToList();
+                }
             }
             return Json(lst, JsonRequestBehavior.AllowGet);
         }

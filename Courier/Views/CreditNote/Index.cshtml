@@ -144,7 +144,11 @@
             |
             @if (isdelete)
             {
-                <a href="#" onclick="Delete(id=@item.CreditNoteID)"><i class="fa fa-times-circle"></i></a>
+                <a href="#" onclick="Delete(id=@item.CreditNoteID)"><i class="fa fa-times"></i></a>
+            }
+            @if (isprint)
+            {
+                <a onclick="funExportToPDF(@item.CreditNoteID)" href="#"><i class="fa fa-print"></i></a>
             }
         </td>
 
@@ -160,5 +164,37 @@
         if (confirm("Are you sure, You want to Delete Credit Note?")) {
             window.location.href = "/CreditNote/DeleteCreditNote/?id=" + id;
         }
+    }
+</script>
+
+<script type="text/javascript">
+      function funExportToPDF(id) {
+          //showLoading();
+        $.ajax({
+             url: '@Url.Action("CreditNoteVoucher", "CreditNote")',
+
+            type: "GET",
+            data: { id:id},
+                    dataType: "json",
+            success: function (response) {
+                if (response.result == "ok") {
+                    $('#frmPDF').attr('src', @Url.Content("~/ReportsPDF/") + response.path); //''
+
+                    setTimeout(function () {
+                        //hideLoading();
+                        window.open('@Url.Content("~/ReportsPDF/")' + response.path);
+                        //frame = document.getElementById("frmPDF");
+                        //framedoc = frame.contentWindow;
+                        //framedoc.focus();
+                        //framedoc.print();
+                    }, 500);
+                } else {
+                    alert(resuponse.message);
+                    //hideLoading();
+                }
+            },
+        });
+
+        return false;
     }
 </script>

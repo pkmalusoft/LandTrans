@@ -840,7 +840,7 @@ namespace LTMSV2.Controllers
                 {
                     var itemlist = (from c in db.TruckDetails
                                     join v in db.VehicleMasters on c.VehicleID equals v.VehicleID
-                                    where c.IsDeleted == false
+                                    where (c.IsDeleted == false || c.TruckDetailID==inscan.TruckDetailID)
                             && c.TruckDetailID == inscan.TruckDetailID
                                     select new TruckDetailVM1 { TruckDetailID = c.TruckDetailID, RegNo = c.RegNo + "-" + c.DriverName }).FirstOrDefault();
                     inscan.VehicleRegNo = itemlist.RegNo;

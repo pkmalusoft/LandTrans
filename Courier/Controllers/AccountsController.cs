@@ -777,7 +777,7 @@ new AcGroupModel()
                 pToDate = Convert.ToDateTime(ToDate).AddDays(1);
 
             }
-            List<AcJournalMaster> lst = AccountsDAO.AcJournalMasterSelect(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentBranchID"].ToString()), pFromDate.Date, pToDate.Date);
+            List<AcJournalMasterVM> lst = AccountsDAO.AcJournalMasterSelect(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentBranchID"].ToString()), pFromDate.Date, pToDate.Date);
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
             return View(lst);
@@ -786,7 +786,7 @@ new AcGroupModel()
 //            return View(db.AcJournalMasterSelectAllJV(Convert.ToInt32(Session["fyearid"].ToString()), Convert.ToInt32(Session["CurrentBranchID"].ToString())));
         }
 
-        public ActionResult AcJournalVoucherCreate()
+        public ActionResult AcJournalVoucherCreate(int id=0)
         {
             var DebitAndCr = new SelectList(new[]
                                         {
@@ -796,30 +796,90 @@ new AcGroupModel()
                                         },
                                       "ID", "trans", 1);
             ViewBag.Achead = db.AcHeads.ToList();
-            return View();
+
+            AcJournalMasterVoucherVM obj = new AcJournalMasterVoucherVM();
+            if (id > 0)
+            {
+                ViewBag.Title = "Journal Voucher - Modify";
+                var data = (from d in db.AcJournalMasters where d.AcJournalID == id select d).FirstOrDefault();
+
+
+                if (data == null)
+                {
+                    return HttpNotFound();
+                }
+                else
+                {
+                    obj.AcFinancialYearID = Convert.ToInt32(Session["fyearid"].ToString());
+                    obj.AcJournalID = data.AcJournalID;
+                    obj.VoucherType = "JV";
+                    obj.VoucherNo = data.VoucherNo;
+                    obj.userId = Convert.ToInt32(Session["UserID"].ToString());
+                    obj.TransDate = data.TransDate.Value;
+                    obj.statusDelete = false;
+                    //obj.ShiftID = null;
+                    obj.Remark = data.Remarks;
+                    obj.AcCompanyID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+                    obj.Refference = data.Reference;
+
+                }
+            }
+            else
+            {
+                ViewBag.Title = "Journal Voucher - Create";
+                obj.AcJournalID = 0;
+            }
+            return View(obj);
+            
         }
         [HttpPost]
         public ActionResult AcJournalVoucherCreate(AcJournalMasterVoucherVM data)
         {
-
             AcJournalMaster acJournalMaster = new AcJournalMaster();
-            acJournalMaster.AcFinancialYearID = Convert.ToInt32(Session["fyearid"].ToString());
-            acJournalMaster.AcJournalID = objectSourceModel.GetMaxNumberAcJournalMasters();
-            acJournalMaster.VoucherType = "JV";
+            if (data.AcJournalID == 0)
+            {
 
-            int max = (from c in db.AcJournalMasters select c).ToList().Count();
+                acJournalMaster.AcFinancialYearID = Convert.ToInt32(Session["fyearid"].ToString());
+                acJournalMaster.AcJournalID = objectSourceModel.GetMaxNumberAcJournalMasters();
+                acJournalMaster.VoucherType = "JV";
 
-            acJournalMaster.VoucherNo = (max + 1).ToString();
-            acJournalMaster.UserID = Convert.ToInt32(Session["UserID"].ToString());
-            acJournalMaster.TransDate = data.TransDate;
-            acJournalMaster.StatusDelete = false;
-            acJournalMaster.ShiftID = null;
+                int max = (from c in db.AcJournalMasters select c).ToList().Count();
+
+                acJournalMaster.VoucherNo = (max + 1).ToString();
+                acJournalMaster.UserID = Convert.ToInt32(Session["UserID"].ToString());
+                acJournalMaster.TransDate = data.TransDate;
+                acJournalMaster.StatusDelete = false;
+                acJournalMaster.ShiftID = null;
+                acJournalMaster.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                acJournalMaster.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            }
+            else
+            {
+                acJournalMaster = db.AcJournalMasters.Find(data.AcJournalID);
+            }
+            
+            
             acJournalMaster.Remarks = data.Remark;
-            acJournalMaster.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
-            acJournalMaster.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            
             acJournalMaster.Reference = data.Refference;
-            db.AcJournalMasters.Add(acJournalMaster);
-            db.SaveChanges();
+            if (data.AcJournalID == 0)
+            {
+                db.AcJournalMasters.Add(acJournalMaster);
+                db.SaveChanges();
+            }
+            else
+            {
+                db.Entry(acJournalMaster).State = EntityState.Modified;
+                db.SaveChanges();
+
+                var x = (from c in db.AcJournalDetails where c.AcJournalID == data.AcJournalID select c).ToList();
+
+                foreach (var i in x)
+                {
+                    db.AcJournalDetails.Remove(i);
+                    db.SaveChanges();
+                }
+            }
 
 
             for (int i = 0; i < data.acJournalDetailsList.Count; i++)
@@ -848,9 +908,16 @@ new AcGroupModel()
                     db.SaveChanges();
                 }
             }
-            ViewBag.SuccessMsg = "You have successfully added Journal Voucher.";
-            return RedirectToAction("AcJournalVoucherIndex");
+            if (data.AcJournalID == 0)
+            {
+                ViewBag.SuccessMsg = "You have successfully added Journal Voucher.";
+            }
+            else
+            {
+                ViewBag.SuccessMsg = "You have successfully Updated Journal Voucher.";
+            }
 
+            return RedirectToAction("AcJournalVoucherIndex");
 
 
         }

@@ -527,7 +527,7 @@ namespace LTMSV2.DAL
         }
 
         //index jv voucher book
-        public static List<AcJournalMaster> AcJournalMasterSelect(int FYearId, int BranchID,DateTime FromDate,DateTime ToDate)
+        public static List<AcJournalMasterVM> AcJournalMasterSelect(int FYearId, int BranchID,DateTime FromDate,DateTime ToDate)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
@@ -549,18 +549,14 @@ namespace LTMSV2.DAL
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
-            List<AcJournalMaster> objList = new List<AcJournalMaster>();
-            AcJournalMaster obj;
+            List<AcJournalMasterVM> objList = new List<AcJournalMasterVM>();
+            AcJournalMasterVM obj;
             
-
-
-
-
             if (ds != null && ds.Tables.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    obj = new AcJournalMaster();
+                    obj = new AcJournalMasterVM();
                     obj.AcJournalID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcJournalID"].ToString());
                     obj.ID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ID"].ToString());
                     obj.VoucherNo = ds.Tables[0].Rows[i]["VoucherNo"].ToString();
@@ -569,6 +565,7 @@ namespace LTMSV2.DAL
                     obj.TransactionNo = ds.Tables[0].Rows[i]["TransactionNo"].ToString();
                     obj.Reference= ds.Tables[0].Rows[i]["Reference"].ToString();
                     obj.VoucherType= ds.Tables[0].Rows[i]["VoucherType"].ToString();
+                    obj.Amount = Convert.ToDecimal(ds.Tables[0].Rows[i]["JournalAmount"].ToString());
                     objList.Add(obj);
                 }
             }

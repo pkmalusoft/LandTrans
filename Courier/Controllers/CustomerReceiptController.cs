@@ -191,133 +191,7 @@ namespace LTMSV2.Controllers
 
         }
 
-        //[HttpPost]
-        //public ActionResult CustomerReciept(CustomerRcieptVM RecP, string Command, string Currency)
-        //{
-        //    List<SP_GetCustomerInvoiceDetailsForReciept_Result> AllInvoices = new List<SP_GetCustomerInvoiceDetailsForReciept_Result>();
-        //    List<SP_GetJInvoiceDetailsByInvoiceID_Result> InvDetails = new List<SP_GetJInvoiceDetailsByInvoiceID_Result>();
-
-        //    int RPID = 0;
-        //    int i = 0;
-        //    RecP.FYearID = Convert.ToInt32(Session["fyearid"]);
-        //    RecP.UserID = Convert.ToInt32(Session["UserID"]);
-
-        //    if (RecP.RecPayID > 0)
-        //    {
-        //        RP.EditCustomerRecPay(RecP, Session["UserID"].ToString());
-        //        RP.EditCustomerRecieptDetails(RecP.recPayDetail, RecP.RecPayID);
-        //    }
-        //    else
-        //    {
-        //        if (Session["UserID"] != null)
-        //        {
-        //            if (RecP.CashBank != null)
-        //            {
-        //                RecP.BankName = RecP.CashBank;
-        //            }
-        //            else
-        //            {
-        //                RecP.BankName = RecP.ChequeBank;
-
-        //            }
-        //            i = RP.AddCustomerRecieptPayment(RecP, Session["UserID"].ToString());
-
-        //            if (i > 0)
-        //            {
-        //                RPID = RP.GetMaxRecPayID();
-        //            }
-
-        //            if (RPID > 0)
-        //            {
-        //                //RecPayDetails Records Inserting Logic
-
-        //                //Total Amount calculating using ExRate and enterted Amount
-        //                decimal TotalAmount = Convert.ToDecimal(RecP.EXRate * RecP.FMoney);
-        //                decimal AdvanceAmtToinsert = TotalAmount;
-
-        //                //Advance Amount getting for customer
-        //                decimal AdvanceAmount = RP.GetAdvanceAmount(Convert.ToInt32(RecP.CustomerID));
-
-        //                //All Pending Invoices getting
-        //                AllInvoices = RP.GetCustomerInvoiceDetails(Convert.ToInt32(RecP.CustomerID));
-
-        //                decimal InvoiceAmt = 0;
-
-        //                foreach (var item in AllInvoices)
-        //                {
-        //                    DateTime dateTime = Convert.ToDateTime(item.InvoiceDate);
-        //                    string newd = Convert.ToDateTime(dateTime).ToString("yyyy-MM-dd h:mm tt");
-        //                    InvDetails = RP.InvDtls(item.InvoiceID);
-
-        //                    foreach (var item1 in InvDetails)
-        //                    {
-        //                        InvoiceAmt = Convert.ToDecimal(item1.SalesHome);
-        //                    }
-
-        //                    if (item.AmtPaidTillDate == 0)
-        //                    {
-        //                        if (AdvanceAmtToinsert >= item.AmountToBeRecieved)
-        //                        {
-
-        //                            int k = RP.InsertRecpayDetailsForCust(RPID, item.InvoiceID, Convert.ToDecimal(-item.AmountToBeRecieved), "", "C", false, "", newd, item.InvoiceNo.ToString(), Convert.ToInt32(RecP.CurrencyId), 3);
-
-        //                            AdvanceAmtToinsert = AdvanceAmtToinsert - Convert.ToDecimal(item.AmountToBeRecieved);
-
-        //                        }
-        //                        else if (item.AmountToBeRecieved > AdvanceAmtToinsert)
-        //                        {
-        //                            int k = RP.InsertRecpayDetailsForCust(RPID, item.InvoiceID, Convert.ToDecimal(-AdvanceAmtToinsert), "", "C", false, "", newd, item.InvoiceNo.ToString(), Convert.ToInt32(RecP.CurrencyId), 2);
-
-        //                            AdvanceAmtToinsert = AdvanceAmtToinsert - Convert.ToDecimal(AdvanceAmtToinsert);
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        if (AdvanceAmtToinsert >= item.Balance)
-        //                        {
-
-        //                            int k = RP.InsertRecpayDetailsForCust(RPID, item.InvoiceID, Convert.ToDecimal(-item.Balance), "", "C", false, "", newd, item.InvoiceNo.ToString(), Convert.ToInt32(RecP.CurrencyId), 3);
-
-        //                            AdvanceAmtToinsert = AdvanceAmtToinsert - Convert.ToDecimal(item.Balance);
-
-        //                        }
-        //                        else if (item.Balance > AdvanceAmtToinsert)
-        //                        {
-        //                            int k = RP.InsertRecpayDetailsForCust(RPID, item.InvoiceID, Convert.ToDecimal(-AdvanceAmtToinsert), "", "C", false, "", newd, item.InvoiceNo.ToString(), Convert.ToInt32(RecP.CurrencyId), 2);
-
-        //                            AdvanceAmtToinsert = AdvanceAmtToinsert - Convert.ToDecimal(AdvanceAmtToinsert);
-        //                        }
-        //                    }
-
-        //                }
-
-
-        //                int l = RP.InsertRecpayDetailsForCust(RPID, 0, TotalAmount, null, "C", false, null, null, null, Convert.ToInt32(RecP.CurrencyId), 4);
-
-        //                //Advance Amount entry
-        //                if (AdvanceAmtToinsert > 0)
-        //                {
-        //                    int k = RP.InsertRecpayDetailsForCust(RPID, 0, AdvanceAmtToinsert, null, "C", true, null, null, null, Convert.ToInt32(RecP.CurrencyId), 4);
-        //                }
-
-        //                int fyaerId = Convert.ToInt32(Session["fyearid"].ToString());
-
-        //                RP.InsertJournalOfCustomer(RPID, fyaerId);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            return RedirectToAction("Login", "Login");
-        //        }
-        //    }
-
-        //    BindAllMasters();
-
-
-        //    return RedirectToAction("CustomerRecieptDetails", "CustomerReciept", new { ID = RPID });
-
-
-        //}
+       
 
         [HttpPost]
         public ActionResult CustomerReciept(CustomerRcieptVM RecP, string Command, string Currency)
@@ -909,17 +783,8 @@ namespace LTMSV2.Controllers
                             if (sInvoiceDetail != null)
                             {
                                 var invoicetotal = sInvoiceDetail.Sum(d => d.Amount); //  sInvoiceDetail.Sum(d=>d.OtherCharge);                                                                
-                                //var allrecpay = (from d in Context1.RecPayDetails where d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();
-                                //var allrecpay = (from d in Context1.RecPayDetails join c in Context1.RecPays on d.RecPayID equals c.RecPayID where c.RecPayDate.Value < cust.RecPayDate && d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();
-                                var totamtpaid = ReceiptDAO.SP_GetCustomerInvoiceReceived(Convert.ToInt32(cust.CustomerID), Convert.ToInt32(item.AcOPInvoiceDetailID), Convert.ToInt32(id), "OP");
-                                //var totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
-                                //var totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
-                                //var CreditNote = (from d in Context1.CreditNotes where d.InvoiceID == item.InvoiceID && d.CustomerID == Sinvoice.CustomerID select d).ToList();
-                                //decimal? CreditAmount = 0;
-                                //if (CreditNote.Count > 0)
-                                //{
-                                //    CreditAmount = CreditNote.Sum(d => d.Amount);
-                                //}
+                                var totamtpaid = ReceiptDAO.SP_GetCustomerInvoiceReceived(Convert.ToInt32(cust.CustomerID), Convert.ToInt32(item.AcOPInvoiceDetailID), Convert.ToInt32(id),0, "OP");
+                               
                                 var totamt = totamtpaid;// + totadjust;// + CreditAmount;
                                 var customerinvoice = new CustomerRcieptChildVM();
                                 customerinvoice.InvoiceID = 0;
@@ -950,7 +815,7 @@ namespace LTMSV2.Controllers
                                 var awbtotal = awbDetail.Sum(d => d.AllocatedAmount);
                                 var Sinvoice = (from d in Context1.CustomerInvoices where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
                                 //var allrecpay = (from d in Context1.RecPayDetails join c in Context1.RecPays on d.RecPayID equals c.RecPayID where c.RecPayDate.Value<cust.RecPayDate &&  d.InvoiceID == item.InvoiceID select d).ToList();
-                                var totamtpaid = ReceiptDAO.SP_GetCustomerInvoiceReceived(Convert.ToInt32(cust.CustomerID), Convert.ToInt32(item.InvoiceID), Convert.ToInt32(id), "TR");
+                                var totamtpaid = ReceiptDAO.SP_GetCustomerInvoiceReceived(Convert.ToInt32(cust.CustomerID), Convert.ToInt32(item.InvoiceID), Convert.ToInt32(id),0, "TR");
                                 //var totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
                                 //var totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
                                 //var CreditNote = (from d in Context1.CreditNotes where d.InvoiceID == item.InvoiceID && d.CustomerID == Sinvoice.CustomerID select d).ToList();
@@ -1069,7 +934,7 @@ namespace LTMSV2.Controllers
                 decimal? totadjust = 0;
                 decimal? CreditAmount = 0;
                 //var allrecpay = (from d in Context1.RecPayDetails where d.AcOPInvoiceDetailID== item.AcOPInvoiceDetailID select d).ToList();
-                totamtpaid = ReceiptDAO.SP_GetCustomerInvoiceReceived(Convert.ToInt32(ID), item.AcOPInvoiceDetailID, Convert.ToInt32(RecPayId), "OP");
+                totamtpaid = ReceiptDAO.SP_GetCustomerInvoiceReceived(Convert.ToInt32(ID), item.AcOPInvoiceDetailID, Convert.ToInt32(RecPayId),0, "OP");
                 //totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
                 //totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
                 //totamt = totamtpaid + totadjust + CreditAmount;
@@ -1122,7 +987,7 @@ namespace LTMSV2.Controllers
                 //foreach (var det in invoicedeails)
                 //{
                     //var allrecpay = (from d in Context1.RecPayDetails where d.InvoiceID == item.CustomerInvoiceID  select d).ToList();
-                    totamtpaid = ReceiptDAO.SP_GetCustomerInvoiceReceived(Convert.ToInt32(ID), item.CustomerInvoiceID, Convert.ToInt32(RecPayId), "TR");
+                    totamtpaid = ReceiptDAO.SP_GetCustomerInvoiceReceived(Convert.ToInt32(ID), item.CustomerInvoiceID, Convert.ToInt32(RecPayId), 0,"TR");
             //            totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
             //          totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
                     //var CreditNote = (from d in Context1.CreditNotes where d.InvoiceID == det.SalesInvoiceDetailID && d.CustomerID == item.CustomerID select d).ToList();

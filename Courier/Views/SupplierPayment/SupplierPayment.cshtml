@@ -952,8 +952,8 @@
                                                     @*@Model.CostUpdationDetails[i].JobCode*@
                                                     @if (@Model.CustomerRcieptChildVM[i].InvoiceDate != null)
                                                     {
-                                                        @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.CustomerRcieptChildVM[i].strDate)
-                                                        @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].strDate)
+                                                        @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.CustomerRcieptChildVM[i].InvoiceDate)
+                                                        @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceDate)
                                                     }
                                                     else
                                                     {

@@ -321,15 +321,15 @@
                                                     <tr>
                                                         <td>
                                                             @item.OtherChargeName
-                                                            <input type="hidden" class="hdndeleted" name="otherchargesVM[@otherchargecount].deleted" value="@item.deleted" />
+                                                            <input type="hidden" class="hdndeleted" name="otherchargesVM[@otherchargecount].deleted" value="false"  />
                                                             <input type="hidden" class="OChargeID" name="otherchargesVM[@otherchargecount].OtherChargeID" value="@item.OtherChargeID" />
                                                         </td>
                                                         <td style="text-align:right">
                                                             @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount, "3")
-                                                            <input type="hidden" id="Amount_@otherchargecount" name="otherchargesVM[@otherchargecount].Amount" class="ExpAllocatedAmountDetails" value="@item.Amount" />
+                                                            <input type="hidden" id="OAmount_@otherchargecount" name="otherchargesVM[@otherchargecount].Amount" class="ExpAllocatedAmountDetails" value="@item.Amount" />
                                                         </td>
                                                         <td style="text-align: center;">
-                                                            <a href="javascript:void(0)" id="DeleteAllocationRow"><i class="fa fa-times"></i></a>
+                                                            <a href="javascript:void(0)"  onclick="deleteotherchargerow(@otherchargecount)"  id="DeleteAllocationRow"><i class="fa fa-times"></i></a>
                                                         </td>
                                                     </tr>
                                                     otherchargecount++;
@@ -386,7 +386,8 @@
             }
         });
  }
-                         $(document).ready(function () {
+    $(document).ready(function () {
+
                                     $(".Allocate").on("click", function () {
 
                                         $('#popup').modal('show');
@@ -410,17 +411,19 @@
                                         }
                                         $('#OtherChargeTable').find('.ExpAllocatedAmountDetails').each(function () {
                                             debugger;
-                                            if (isNaN(parseFloat($(this).val())) === false) {
+
+                                            var deleteobj = $(this).parent().parent().find('.hdndeleted');
+                                            if (isNaN(parseFloat($(this).val())) === false && deleteobj==false) {
                                                 Total += parseFloat($(this).val());
                                             }
                                         });
 
                                         $('#OtherChargeTable').find('.OChargeID').each(function () {
                                             debugger;
-                                            var deleteobj = $(this).parent().parent().find('.hdndeleted');
-                                            if ($(this).val() === selectedval && deleteobj==false) {
+                                            var deleteobj = $(this).parent().parent().find('.hdndeleted').val();
+                                            if ($(this).val() === selectedval && deleteobj !="true") {
                                                 exists = true;
-                                                alert('Already this charge added!');
+                                                alert('Duplicate Charge Name not allowed!');
                                                 return;
                                             }
                                         });
@@ -457,8 +460,8 @@
 
                                         var RowCount = parseInt($('#RowCount').val());
                                         var RowHtml = '<tr><td>' + othercharngename + '<input type="hidden" name="otherchargesVM[' + RowCount + '].deleted" value="false" class="hdndeleted" /> <input type="hidden" class="OChargeID"  name="otherchargesVM[' + RowCount + '].OtherChargeID" value="' + $('#OtherChargeID').val() + '"/></td>';
-                                        RowHtml = RowHtml + '<td class="text-right">' + parseFloat($('#ExpAmount').val()).toFixed(3) + '<input type="hidden" id="' + RowCount + '_Amount" name="otherchargesVM[' + RowCount + '].Amount" class="ExpAllocatedAmountDetails text-right" value="' + parseFloat($('#ExpAmount').val()).toFixed(3) + '"/></td>';
-                                        RowHtml = RowHtml + '<td><a href="javascript:void(0)"  class="deleteallocrow" id="DeleteAllocationRow"><i class="fa fa-times"></i></a></td>';
+                                        RowHtml = RowHtml + '<td class="text-right">' + parseFloat($('#ExpAmount').val()).toFixed(3) + '<input type="hidden" id="OAmount_' + RowCount+ '" name="otherchargesVM[' + RowCount + '].Amount" class="ExpAllocatedAmountDetails text-right" value="' + parseFloat($('#ExpAmount').val()).toFixed(3) + '"/></td>';
+                                        RowHtml = RowHtml + '<td><a href="javascript:void(0)"  class="deleteallocrow" onclick="deleteotherchargerow(' + RowCount + ')" id="DeleteAllocationRow"><i class="fa fa-times"></i></a></td>';
                                         RowHtml = RowHtml + '</tr>';
                                         $('#OtherChargeTable').append(RowHtml);
                                         $('#RowCount').val(RowCount + 1);
@@ -467,6 +470,7 @@
                                         $("#OtherChargeID").val(0);
                                         $("#ExpAmount").val(0);
                                         $('#OtherChargeName').focus()
+                                        OtherTotal();
                                     });
 
                                     $('.txtNum').blur(function () {
@@ -478,12 +482,13 @@
                                         }
                                     });
 
-                                    $('#OtherChargeTable').on("click", "#DeleteAllocationRow", function () {
+                                    //$('#OtherChargeTable').on("click", "#DeleteAllocationRow", function () {
 
-                                        $(this).parent().parent().addClass('hide');
-                                        var obj = $(this).parent().parent().find('.hdndeleted');
-                                        $(obj).val(true);
-                                    });
+                                    //    $(this).parent().parent().addClass('hide');
+                                    //    var obj = $(this).parent().parent().find('.hdndeleted');
+                                    //    $(obj).val(true);
+                                    //    OtherTotal();
+                                    //});
 
                                     //$('#details').on("click", "#DeleteAllocationRow", function () {
                                     //    $(this).parent().parent().addClass('hide');
@@ -501,7 +506,29 @@
                                     $("#SelectedAcHeadAllocation").val(0);
                                     $("#ExpAmount").val('');
                                     $("#ExpAllocationTable").find("tr:gt(0)").remove();
-                                }
+    }
+    function OtherTotal() {
+        debugger;
+        var maxrow = $('#OtherChargeTable > tr').length;
+        Total = 0;
+        for (i = 0; i < maxrow; i++) {
+            var item = $('#OAmount_' + i);
+            var deleteobj = $(item).parent().parent().find('.hdndeleted').val();
+            if (deleteobj != "true") {
+                Total += parseFloat($(item).val());
+            }
+        }
+        $('#OtherCharges').val(parseFloat(Total).toFixed(3));
+
+    }
+    function deleteotherchargerow(i) {
+        debugger;
+        var item = $('#OAmount_' + i);
+        $(item).parent().parent().addClass('hide');
+        var obj = $(item).parent().parent().find('.hdndeleted');
+        $(obj).val(true);
+        OtherTotal();
+    }
 </script>
 <script type="text/javascript">
     function isNumberKey(evt) {

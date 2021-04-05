@@ -308,7 +308,7 @@ namespace LTMSV2.DAL
 
         }
 
-        public static decimal SP_GetCustomerInvoiceReceived(int CustomerId,int InvoiceId, int RecPayId,string Type)
+        public static decimal SP_GetCustomerInvoiceReceived(int CustomerId,int InvoiceId, int RecPayId,int CreditNoteId, string Type)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
@@ -317,6 +317,7 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
             cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
             cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            cmd.Parameters.AddWithValue("@CreditNoteId", CreditNoteId);             
             cmd.Parameters.AddWithValue("@Type", Type);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -357,7 +358,7 @@ namespace LTMSV2.DAL
 
         }
 
-        public static decimal SP_GetSupplierInvoicePaid(int SupplierId, int InvoiceId, int RecPayId, string Type)
+        public static decimal SP_GetSupplierInvoicePaid(int SupplierId, int InvoiceId, int RecPayId, int DebitNoteId, string Type)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
@@ -366,6 +367,7 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@SupplierId", SupplierId);
             cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
             cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            cmd.Parameters.AddWithValue("@DebitNoteId", DebitNoteId);            
             cmd.Parameters.AddWithValue("@Type", Type);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();

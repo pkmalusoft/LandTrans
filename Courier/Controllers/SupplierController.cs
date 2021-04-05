@@ -123,8 +123,12 @@ namespace LTMSV2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(SupplierMaster supplier)
         {
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int companyid = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             if (ModelState.IsValid)
             {
+                supplier.AcCompanyID = companyid;
+                supplier.BranchID = branchid;
                 db.Entry(supplier).State = EntityState.Modified;
                 db.SaveChanges();
                 ViewBag.SuccessMsg = "You have successfully updated Supplier.";

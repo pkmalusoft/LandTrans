@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LTMSV2.Models.AcJournalMaster>
+﻿@model IEnumerable<LTMSV2.Models.AcJournalMasterVM>
 
 @{
     ViewBag.Title = "AcJournalVoucherIndex";
@@ -175,7 +175,7 @@
                 <tr>
                     <th>Voucher No</th>
                     <th>Transaction Date </th>
-                    <th>Voucher Type</th>
+                    <th>Amount</th>
                     <th>Remarks</th>
                     <th>Action</th>
                     <th style="display:none;"></th>
@@ -186,7 +186,7 @@
                 <tr>
                     <th>Voucher No</th>
                     <th>Transaction Date </th>
-                    <th>Voucher Type</th>
+                    <th>Amount</th>
                     <th>Remark</th>
                     <th>Action</th>
                     <th style="display:none"></th>
@@ -207,17 +207,14 @@
                             <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;width:10px;margin:1px;" />
                             @LTMSV2.Models.CommanFunctions.GetShortDateFormat((item.TransDate))
                         </td>
-                        <td>@item.VoucherType</td>
+                        <td class="text-right">@LTMSV2.Models.CommanFunctions.GetDecimalFormat(item.Amount,"3")</td>
                         <td>@item.Remarks</td>
 
 
-                        <td>
-                            @*  @Html.ActionLink("Edit", "Edit", new { id=item.CountryID }) |
-        @Html.ActionLink("Details", "Details", new { id=item.CountryID }) |
-        @Html.ActionLink("Delete", "Delete", new { id=item.CountryID })*@
+                        <td>                            
                             @if (ismodify)
                             {
-                                <a href="@Url.Action("AcJournalVoucherEdit", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
+                                <a href="@Url.Action("AcJournalVoucherCreate", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
                             }
                             @if (isdelete)
                             {
