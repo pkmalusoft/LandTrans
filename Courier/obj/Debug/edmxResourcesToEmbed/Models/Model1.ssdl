@@ -3044,6 +3044,9 @@
     <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="3" />
     <Property Name="PaymentModeId" Type="int" />
     <Property Name="InvoiceTo" Type="varchar" MaxLength="50" />
+    <Property Name="TaxPercent" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="TaxAmount" Type="decimal" Precision="18" Scale="3" />
+    <Property Name="TotalCharge" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="RevenueUpdateMaster">
     <Key>

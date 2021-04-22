@@ -69,9 +69,44 @@
         return true;
     }
     function setNumberDecimal(obj) {
-       $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
+        calculatevalue1();
+    }
+    function calculatevalue1() {
+
+        //checknumvalid($('#Rate'));
+        //checknumvalid($('#Taxpercent'));
+        if ($('#txtAmount').val() == '')
+            $('#txtAmount').val(0);
+        var rate = $('#txtAmount').val();
+        $('#txtAmount').val(parseFloat(rate).toFixed(@_decimal))
+        var Amount = parseFloat(rate);
+        if ($('#txtTaxPercent').val() == '')
+            $('#txtTaxPercent').val(0);
+        var taxper = $('#txtTaxPercent').val();
+        $('#txtTaxPercent').val(parseFloat(taxper).toFixed(@_decimal));
+        var tax = parseFloat(Amount) * (parseFloat(taxper) / 100.0);
+        $('#txtTaxAmount').val(parseFloat(tax).toFixed(@_decimal));
+        var netvalue = Amount + tax;
+        $('#txtTotalCharge').val(parseFloat(netvalue).toFixed(@_decimal));
     }
 
+     function calculatevalue2(index) {
+
+        //checknumvalid($('#Rate'));
+        //checknumvalid($('#Taxpercent'));
+         var rate = $('#txtrevenueamt_' + index).val();
+         //$('#txtrevenue_' + i).val(parseFloat(rate).toFixed(@_decimal))
+        var Amount = parseFloat(rate);
+         var taxper = $('#hdntaxpercent_' + index).val();
+        //$('#txtTaxPercent').val(parseFloat(taxper).toFixed(@_decimal));
+        var tax = parseFloat(Amount) * (parseFloat(taxper) / 100.0);
+        $('#hdntaxamount_' + index).val(parseFloat(tax).toFixed(@_decimal));
+        $('#spantaxamount_' + index).html(parseFloat(tax).toFixed(@_decimal))
+        var netvalue = Amount + tax;
+         $('#hdntotalcharge_' + index).val(parseFloat(netvalue).toFixed(@_decimal));
+         $('#spantotalcharge_' + index).html(parseFloat(netvalue).toFixed(@_decimal))
+    }
     function checkdetailcount() {
         var i = $('#details >  tr').length;
         var idtext = 'hdndel_';
@@ -82,7 +117,7 @@
             if ($(item).val() != "true") {
                 totalcount = parseFloat(totalcount) + 1;
                 $('#hdndetailcount').val(totalcount);
-                totalamount = parseFloat(totalamount) + parseFloat($('#txtrevenueamt_' + index).val());
+                totalamount = parseFloat(totalamount) + parseFloat($('#hdntotalcharge_' + index).val());
                 $('#txtTotalAmount').val(totalamount.toFixed(3));
 
             }
@@ -132,6 +167,9 @@
                         var revenuecostid = item.RevenueCostMasterID;
                         var amount = item.Amount;
                         var famount = parseFloat(amount * exchangerate).toFixed(3);
+                        var taxpercent = parseFloat(item.TaxPercent).toFixed(2);
+                        var taxamount = parseFloat(item.TaxAmount).toFixed(@_decimal);
+                        var totalcharge = parseFloat(item.TotalCharge).toFixed(@_decimal);
                         var customername = item.CustomerName;
                         var customerid = item.CustomerId;
                         var DebitHead = item.DebitAccountName;
@@ -149,11 +187,13 @@
                         objHtml = objHtml + '<td style="padding-left:10px">' + currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
                         objHtml = objHtml + '<td class="textright" style="padding-right:10px">' + exchangerate + '<input type="hidden" class="JAcAmt" id="txtex_' + i +'" value=' + exchangerate + ' name="DetailVM[' + i + '].ExchangeRate"></td>';
                         var revenuehtml = '<input type="text" class="form-control" ' + readonly + ' id="txtrevenue_' + i + '" value="' + revenuecost + '" />';
-                        objHtml = objHtml + '<td  style="padding-right:10px">' + revenuehtml + '<input type="hidden" class="JAcAmt" id="txtrevenueid_' + i + '" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
-                        var revenueamthtml = '<input type="text" class="form-control text-right" ' + readonly + ' id="txtrevenueamt_' + i + '" value="' + amount + '" name="DetailVM[' + i + '].Amount" />';
+                        objHtml = objHtml + '<td  style="padding-right:10px">' + revenuehtml + '<input type="hidden" class="JAcAmt"  id="txtrevenueid_' + i + '" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
+                        var revenueamthtml = '<input type="text" onchange="calculatevalue2(' + i + ')" class="form-control text-right" ' + readonly + ' id="txtrevenueamt_' + i + '" value="' + amount + '" name="DetailVM[' + i + '].Amount" />';
                         objHtml = objHtml + '<td class class="textright" style="padding-right:10px">' + revenueamthtml + '</td>'; //'<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount">
                         var frevenueamthtml = '<span class="text-right" id="spanfamt_' + i + '">' + famount + ' </span>';
                         objHtml = objHtml + '<td class="text-right" style="padding-right:10px">' + frevenueamthtml + '<input type="hidden"id="txtfrevenueamt_' + i + '"  class="JAcAmt" value=' + famount + '"></td>';
+                        var taxhtml = '<input name="DetailVM[' + i + '].TaxPercent" type="hidden" id="hdntaxpercent_' + i + '" value="' + taxpercent + '" /><input type="hidden" name="DetailVM[' + i + '].TaxAmount" id="hdntaxamount_' + i + '" value="' + taxamount + '" /><input type="hidden" name="DetailVM[' + i + '].TotalCharge" readonly id="hdntotalcharge_' + i + '" value="' + totalcharge + '" />'
+                        objHtml = objHtml + '<td><span class="text-right" id = "spantaxpercent_' + i + '" > ' + taxpercent + ' </span ></td><td><span class="text-right" id = "spantaxamount_' + i + '">' + taxamount + '</span></td><td><span class="text-right" id="spantotalcharge_' + i + '">' +  totalcharge + '</span>' + taxhtml;
                         //objHtml = objHtml + '<td  class=textright style="padding-right:10px">' + famount + '</td>';
                         objHtml = objHtml + '<td style="padding-left:10px">' + customername + '<input type="hidden" value=' + customerid + ' name="DetailVM[' + i + '].CustomerId"></td>'
                         objHtml = objHtml + '<td style="padding-left:10px">' + DebitHead + '<input type="hidden" value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
@@ -284,7 +324,7 @@
                 $('#ConsigneeName').val(response.ConsigneeName);
                 $('#PaymentType').val(response.PaymentModeId);
                 $('#PaymentType').trigger('change');
-               
+
                     $('#InvoiceTo').val(response.InvoiceTo);
                     $('#InvoiceTo').trigger('change')
                     if ($('#PaymentType').val() != 1 && ($('#InvoiceTo').val() == null || $('#InvoiceTo').val() == '')) {
@@ -294,8 +334,8 @@
                         $('#txtCustomer').focus();
                     }
                     else { $('#txtRevenueCost').focus(); }
-               
-               
+
+
                 //AWBItems = [];
                 //if (response.revenuedetail != null && response.revenuedetail.length>0) {
                 //    AWBItems = response.revenuedetail;
@@ -344,13 +384,13 @@
             }
         });
     }
-    
+
     $(document).ready(function () {
         AWBItems = [];
 
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
-     
+
         $('#PaymentType').change(function () {
             var modeid = $('#PaymentType').val();
             if (modeid == 1) { //PKP
@@ -383,7 +423,7 @@
 
         });
 
-    
+
 
         $("#txtDebitHead").autocomplete({
             source: function (request, response) {
@@ -658,8 +698,8 @@
                 $('#txtDebitHeadId').val($('#DebitAccountId').val());
             }
 
-            else if ($('#InvoiceTo').val() == "Others") {       
-                $('#txtCustomer').removeAttr('readonly');                
+            else if ($('#InvoiceTo').val() == "Others") {
+                $('#txtCustomer').removeAttr('readonly');
                 $('#txtDebitHead').val($('#DebitAccountName').val());
                 $('#txtDebitHeadId').val($('#DebitAccountId').val());
                 $('#txtCustomer').removeAttr('readonly', 'readonly');
@@ -795,7 +835,10 @@
                 var revenuecost = $('#txtRevenueCost').val();
                 var revenuecostid = $('#txtRevenueCostId').val();
                 var amount = $('#txtAmount').val();
-                var famount =parseFloat(amount * exchangerate).toFixed(3);
+                var famount = parseFloat(amount * exchangerate).toFixed(3);
+                var taxpercent = $('#txtTaxPercent').val();
+                var taxamount = $('#txtTaxAmount').val();
+                var totalcharge = $('#txtTotalCharge').val();
                 var invoicedto = $('#txtCustomer').val();
                 var customerid = $('#txtCustomerId').val();
                 var DebitHead = $('#txtDebitHead').val();
@@ -808,12 +851,16 @@
                 objHtml = objHtml + '<td style="padding-left:10px">' + invoiceto + '<input type="hidden" value="' + invoiceto + '" name="DetailVM[' + i + '].InvoiceTo"></td>';
                 objHtml = objHtml + '<td style="padding-left:10px">' + currencyname + '<input type="hidden" value=' + currencyid + ' name="DetailVM[' + i + '].CurrencyId"></td>';
                 objHtml = objHtml + '<td class="textright" style="padding-right:10px">' + exchangerate + '<input type="hidden" class="JAcAmt" id="txtex_' + i +'" value=' + exchangerate + ' name="DetailVM[' + i + '].ExchangeRate"></td>';
-                var revenuehtml = '<input type="text" class="form-control" id="txtrevenue_' + i + '" value="' + revenuecost + '" />';
+                var revenuehtml = '<input type="text" class="form-control"  id="txtrevenue_' + i + '" value="' + revenuecost + '" />';
                 objHtml = objHtml + '<td  style="padding-right:10px">' + revenuehtml + '<input type="hidden" class="JAcAmt" id="txtrevenueid_' + i + '" value=' + revenuecostid + ' name="DetailVM[' + i + '].RevenueCostMasterID"></td>';
-                var revenueamthtml = '<input type="text" class="form-control text-right" id="txtrevenueamt_' + i + '" value="' + amount + '" name="DetailVM[' + i + '].Amount" />';
+                var revenueamthtml = '<input type="text" onchange="calculatevalue2(' + i + ')"  class="form-control text-right" id="txtrevenueamt_' + i + '" value="' + amount + '" name="DetailVM[' + i + '].Amount" />';
                 objHtml = objHtml + '<td class class="text-right" style="padding-right:10px">' + revenueamthtml + '</td>'; //'<input type="hidden" class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount">
                 var frevenueamthtml = '<span class="text-right" id="spanfamt_' + i + '">' + famount + '<span/>';
                 objHtml = objHtml + '<td  class="text-right" style="padding-right:10px">' + frevenueamthtml + '<input type="hidden"id="txtfrevenueamt_' + i + '"  class="JAcAmt" value=' + famount + '"></td>';
+               // var taxhtml = '<td><input name="DetailVM[' + i + '].TaxPercent" type="text" id="hdntaxpercent_' + i + '" value="' + taxpercent + '" /></td><td><input type="text" name="DetailVM[' + i + '].TaxAmount" id="hdntaxamount_' + i + '" value="' + taxamount + '" /> </td><td><input type="text" name="DetailVM[' + i + '].TotalCharge" readonly id="hdntotalchrge_' + i + '" value="' + totalcharge + '" /> </td>'
+                //objHtml = objHtml + taxhtml;
+                var taxhtml = '<input name="DetailVM[' + i + '].TaxPercent" type="hidden" id="hdntaxpercent_' + i + '" value="' + taxpercent + '" /><input type="hidden" name="DetailVM[' + i + '].TaxAmount" id="hdntaxamount_' + i + '" value="' + taxamount + '" /><input type="hidden" name="DetailVM[' + i + '].TotalCharge" readonly id="hdntotalcharge_' + i + '" value="' + totalcharge + '" />'
+                objHtml = objHtml + '<td><span class="text-right" id = "spantaxpercent_' + i + '" > ' + taxpercent + ' </span ></td><td><span class="text-right" id = "spantaxamount_' + i + '">' + taxamount + '</span></td><td><span class="text-right" id="spantotalcharge_' + i + '">' + totalcharge + '</span>' + taxhtml;
                 //objHtml = objHtml + '<td class class="textright" style="padding-right:10px">' + famount + '<input type="hidden"id="txtfrevenueamt_' + i + '"  class="JAcAmt" value=' + amount + ' name="DetailVM[' + i + '].Amount"></td>';
                 objHtml = objHtml + '<td style="padding-left:10px">' + invoicedto + '<input type="hidden" value=' + customerid + ' name="DetailVM[' + i + '].CustomerId"></td>'
                 objHtml = objHtml + '<td style="padding-left:10px">' + DebitHead + '<input type="hidden" value="' + DebitHeadId + '" name="DetailVM[' + i + '].AcHeadDebitId"></td>';
@@ -912,7 +959,7 @@
         //    DisplayCostItems();
         //}
         $('#btnsave').click(function () {
-            
+
             var totalcount = $('#hdndetailcount').val();
             if (totalcount == 0) {
                 $('#elemError').html("Add Revenue Detail to Save!");
@@ -943,7 +990,7 @@
                 getrevenuecost();
             }
             $("#ConsignmentNo").focus();
-            
+
         }
 
         $('#EntryDate').datetimepicker({ format: 'DD-MM-YYYY' });
@@ -1054,73 +1101,85 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8">
-                <div class="col-md-2">
-                    <label class="headinglabel required">Payment Mode</label>
-                    @Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentType, "ID", "PaymentModeText", 0), "Select", new { @class = "form-control", @id = "PaymentType" })
-                </div>
-                <div class="col-md-2">
-                    <label class="headinglabel required">Invoice To</label>
-                    @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "Select", new { @class = "form-control", @id = "InvoiceTo" })
-                </div>
-                <div class="col-md-5">
-                    <label class="headinglabel required">Remarks</label>
-                    @Html.TextBoxFor(model=>model.Remarks , new { @class = "form-control" })
-                </div>
-                <div class="col-md-2">
-                    <label class="headinglabel required">Currency</label>
-                    @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyCode", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
-                    @Html.HiddenFor(model => model.ExchangeRate)
-                </div>
+                <div class="col-md-9">
+                    <div class="col-md-2">
+                        <label class="headinglabel required">Payment Mode</label>
+                        @Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentType, "ID", "PaymentModeText", 0), "Select", new { @class = "form-control", @id = "PaymentType" })
+                    </div>
+                    <div class="col-md-2">
+                        <label class="headinglabel required">Invoice To</label>
+                        @Html.DropDownList("InvoiceTo", new SelectList(ViewBag.InvoiceTo, "TypeName", "TypeName"), "Select", new { @class = "form-control", @id = "InvoiceTo" })
+                    </div>
+                    <div class="col-md-4">
+                        <label class="headinglabel required">Remarks</label>
+                        @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-2">
+                        <label class="headinglabel required">Currency</label>
+                        @Html.DropDownList("CurrencyID", new SelectList(ViewBag.Currency, "CurrencyID", "CurrencyCode", 0), "Select", new { @class = "form-control", @id = "CurrencyId" })
+                        @Html.HiddenFor(model => model.ExchangeRate)
+                    </div>
 
-                
 
-                <div class="col-md-4">
-                    <label class="headinglabel">Customer</label>
-                    <input type="text" id="txtCustomer" class="form-control" autocomplete="off" />
-                    <input type="hidden" id="txtCustomerId" class="form-control" autocomplete="off" />
-                </div>
 
-                <div class="col-md-5">
-                    <label class="headinglabel label1">Revenue Head</label>
-                    <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
-                    <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
+                    <div class="col-md-4">
+                        <label class="headinglabel">Customer</label>
+                        <input type="text" id="txtCustomer" class="form-control" autocomplete="off" />
+                        <input type="hidden" id="txtCustomerId" class="form-control" autocomplete="off" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="headinglabel label1">Revenue Head</label>
+                        <input type="text" id="txtRevenueCost" class="form-control" autocomplete="off" />
+                        <input type="hidden" id="txtRevenueCostId" class="form-control" autocomplete="off" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="headinglabel">Charge</label>
+                        <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
+                    </div>
+                    <div class="col-md-1">
+                        <label class="headinglabel">Tax %</label>
+                        <input type="text" id="txtTaxPercent" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
+                    </div>
+                    <div class="col-md-1">
+                        <label class="headinglabel">Tax Amt</label>
+                        <input type="text" id="txtTaxAmount" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
+                    </div>
+                    <div class="col-md-1">
+                        <label class="headinglabel">T. Charge</label>
+                        <input type="text" id="txtTotalCharge" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
+                    </div>
+                    <div class="col-md-1" style="padding-top:30px">
+                        <button type="button" style="height: 33px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:33px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
+                    </div>
+
                 </div>
-                <div class="col-md-2">
-                    <label class="headinglabel">Amount</label>
-                    <input type="text" id="txtAmount" class="form-control text-right" autocomplete="off" onkeypress="return isNumberKey(event)" onchange="setNumberDecimal(this)" />
-                </div>
-                <div class="col-md-1" style="padding-top:30px">                    
-                    <button type="button" style="height: 35px !important;vertical-align: middle; background: #07a7e3; width:23px!important;line-height:35px!important;    color: #fff;border: 0;font-size: 23px!Important;" index="1" id="btnAdd" title="Add New" class="addmore">+</button>
-                </div>
-                
-            </div>
-            <div class="col-md-4" style="margin-top:32px">
+            <div class="col-md-3" style="margin-top:32px">
                 <div class="col-md-12 flex align-center">
-                    <div class="col-md-5">
+                    <div class="col-md-7">
                     <label class="headinglabel">Receivable Account(Dr.)</label>
                 </div>
-                    <div class="col-md-7">
+                    <div class="col-md-5">
 
                     <input type="text" id="txtDebitHead" class="form-control" autocomplete="off" />
                     <input type="hidden" id="txtDebitHeadId" class="form-control" autocomplete="off" />
                 </div>
                 </div>
                 <div class="col-md-12 flex align-center">
-                    <div class="col-md-5">
+                    <div class="col-md-7">
                     <label class="headinglabel">Revenue Account (Cr.)</label>
                 </div>
-                    <div class="col-md-7">
+                    <div class="col-md-5">
 
                     <input type="text" id="txtCreditHead" class="form-control" autocomplete="off" />
                     <input type="hidden" id="txtCreditHeadId" class="form-control" autocomplete="off" />
                 </div>
             </div>
             <div class="col-md-12 flex align-center">
-            <div class="col-md-5">
+            <div class="col-md-7">
                     <label class="headinglabel">Total Amount</label>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-5">
                     <input type="text" class="form-control text-right" readonly id="txtTotalAmount" value="0" />
                 </div>
 
@@ -1136,10 +1195,12 @@
                             <th style="width:1%">Currency</th>
                             <th style="width:2%">Ex.Rate</th>
                             <th style="width:10%">Revenue Head</th>
-                            <th style="width:6%">Amount</th>
+                            <th style="width:8%">Amount</th>
                             <th style="width:5%">Amount(F.C)</th>
-                            <th style="width:10%">Customer</th>
-                            <th style="width:10%">Receivable Account</th>
+                            <th style="width:5%">Tax %</th>
+                            <th style="width:5%">Tax Amt</th>
+                            <th style="width:5%">Total Charge</th>                            
+                            <th style="width:15%">Receivable Account</th>
                             <th style="width:10%">Revenue Account</th>
                             <th style="width:10%">Invoice</th>
                             <th style="width:2%"></th>

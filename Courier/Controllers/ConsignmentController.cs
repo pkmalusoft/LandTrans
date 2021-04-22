@@ -1424,7 +1424,7 @@ namespace LTMSV2.Controllers
             }
             ViewBag.Token = model;
             SessionDataModel.SetTableVariable(model);
-            return RedirectToAction("PrintAWBRegister", "QuickAWB");
+            return RedirectToAction("PrintAWBRegister", "Consignment");
             //return PartialView("InvoiceSearch",model);
 
         }

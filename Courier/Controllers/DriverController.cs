@@ -30,10 +30,30 @@ namespace LTMSV2.Controllers
             ViewBag.Vehicletype = db.VehicleTypes.ToList();
             ViewBag.Title = "Driver Master - Create";
             DriverMaster vm = new DriverMaster();
-            if (id>0)
+            if (id > 0)
             {
                 ViewBag.Title = "DriverMaster - Modify";
                 vm = db.DriverMasters.Find(id);
+                if (vm.SupplierID != null)
+                {   var supplier = db.SupplierMasters.Find(vm.SupplierID);
+                    if (supplier!=null)
+                        ViewBag.SupplierName = supplier.SupplierName;
+                }
+
+                if (vm.VehicleID!=null)
+                {
+                    var vechicle = db.VehicleMasters.Find(vm.VehicleID);
+                    if (vechicle!=null)
+                    {
+                        ViewBag.RegNo = vechicle.RegistrationNo;
+                    }
+                }
+
+            }
+            else
+            {
+
+                ViewBag.SupplierName = "";
             }
 
             return View(vm);
@@ -54,6 +74,26 @@ namespace LTMSV2.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+
+        public ActionResult VehicleRegNo(string term)
+        {
+            if (!String.IsNullOrEmpty(term.Trim()))
+            {
+                List<VehicleVM> list = new List<VehicleVM>();
+                //list = (from c in db.VehicleMasters join s in db.SupplierMasters on c.SupplierID equals s.SupplierID where c.RegistrationNo.ToLower().Contains(term.ToLower()) orderby c.RegistrationNo select new VehicleVM { VehicleID = c.VehicleID, RegistrationNo = c.RegistrationNo + "-" + s.SupplierName, VehicleOwner = s.SupplierName }).ToList();
+                list = (from c in db.VehicleMasters where c.RegistrationNo.ToLower().Contains(term.ToLower()) orderby c.RegistrationNo 
+                        select new VehicleVM { VehicleID = c.VehicleID, RegistrationNo = c.RegistrationNo}).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                List<VehicleVM> list = new List<VehicleVM>();
+                //list = (from c in db.VehicleMasters join s in db.SupplierMasters on c.SupplierID equals s.SupplierID orderby c.RegistrationNo select new VehicleVM { VehicleID = c.VehicleID, RegistrationNo = c.RegistrationNo + "-" + s.SupplierName, VehicleOwner = s.SupplierName }).ToList();
+                list = (from c in db.VehicleMasters  orderby c.RegistrationNo select new VehicleVM { VehicleID = c.VehicleID, RegistrationNo = c.RegistrationNo }).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

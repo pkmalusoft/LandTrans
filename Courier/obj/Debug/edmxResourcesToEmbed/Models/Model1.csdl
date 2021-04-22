@@ -13271,6 +13271,9 @@
     <NavigationProperty Name="RevenueCostMaster" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueCostMaster" FromRole="RevenueUpdateDetail" ToRole="RevenueCostMaster" />
     <NavigationProperty Name="RevenueUpdateMaster" Relationship="DB_9F57C4_couriertest_newModel.FK__RevenueUp__Maste__6DA2FB28" FromRole="RevenueUpdateDetail" ToRole="RevenueUpdateMaster" />
     <NavigationProperty Name="RevenueUpdateMaster1" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" FromRole="RevenueUpdateDetail" ToRole="RevenueUpdateMaster" />
+    <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="TaxAmount" Type="Decimal" Precision="18" Scale="3" />
+    <Property Name="TotalCharge" Type="Decimal" Precision="18" Scale="2" />
   </EntityType>
   <Association Name="FK_RevenueUpdateDetail_RevenueCostMaster">
     <End Type="DB_9F57C4_couriertest_newModel.RevenueCostMaster" Role="RevenueCostMaster" Multiplicity="1" />

@@ -265,7 +265,7 @@ namespace LTMSV2.Controllers
             if (!String.IsNullOrEmpty(term.Trim()))
             {
                 List<SupplierMasterVM> supplierlist = new List<SupplierMasterVM>();
-                supplierlist = (from c in db.SupplierMasters where c.SupplierTypeID==suppliertypeid && c.SupplierName.ToLower().StartsWith(term.ToLower()) orderby c.SupplierName select new SupplierMasterVM { SupplierID = c.SupplierID, SupplierName = c.SupplierName }).ToList();
+                supplierlist = (from c in db.SupplierMasters where c.SupplierTypeID==suppliertypeid && c.SupplierName.ToLower().Contains(term.ToLower()) orderby c.SupplierName select new SupplierMasterVM { SupplierID = c.SupplierID, SupplierName = c.SupplierName }).ToList();
 
                 return Json(supplierlist, JsonRequestBehavior.AllowGet);
 

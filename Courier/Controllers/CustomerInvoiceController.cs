@@ -14,9 +14,6 @@ namespace LTMSV2.Controllers
     public class CustomerInvoiceController : Controller
     {
         Entities1 db = new Entities1();
-
-
-
         public ActionResult Index()
         {
           DatePicker model = SessionDataModel.GetTableVariable();
@@ -32,6 +29,17 @@ namespace LTMSV2.Controllers
                 };
             }
             ViewBag.Token = model;
+            string dd = ReceiptDAO.GetSupplierInvoiceTotal(model.FromDate, model.ToDate);
+            if (dd != "")
+            {
+                decimal value = Convert.ToDecimal(dd);
+                Console.WriteLine(value.ToString("F3"));
+                ViewBag.NetTotal = value.ToString("F3");
+            }
+            else
+            {
+                ViewBag.NetTotal = "0.000";
+            }
             SessionDataModel.SetTableVariable(model);
             return View(model);
 
@@ -42,7 +50,7 @@ namespace LTMSV2.Controllers
         public ActionResult Index([Bind(Include = "FromDate,ToDate")] DatePicker picker)
         {
 
-            DatePicker model = new DatePicker
+            DatePicker model = new DatePicker 
             {
                 FromDate = picker.FromDate,
                 ToDate = picker.ToDate.Date, //picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
@@ -50,8 +58,17 @@ namespace LTMSV2.Controllers
                 Update = true, //(bool)Token.Permissions.Updation,
                 Create = true //.ToStrin//(bool)Token.Permissions.Creation
             };
-
-            ViewBag.Token = model;
+            string dd = ReceiptDAO.GetSupplierInvoiceTotal(model.FromDate, model.ToDate);
+            if (dd != "")
+            {
+                decimal value = Convert.ToDecimal(dd);
+                //Console.WriteLine(value.ToString("F3"));
+                ViewBag.NetTotal = value.ToString("F3");
+            }
+            else
+            {
+                ViewBag.NetTotal = "0.000";
+            }
             SessionDataModel.SetTableVariable(model);
             return View(model);
 
@@ -157,6 +174,8 @@ namespace LTMSV2.Controllers
 
                                                  }).ToList();
 
+            
+            //ViewBag.NetTotal = 999;
             return View("Table", _Invoices);
 
         }
@@ -433,9 +452,16 @@ namespace LTMSV2.Controllers
                             db.SaveChanges();
 
                             RevenueUpdateMaster _revenueupdate = db.RevenueUpdateMasters.Where(cc => cc.InScanID == e_details.InScanID).FirstOrDefault();
-                            _revenueupdate.InvoiceId = null;
-                            db.Entry(_revenueupdate).State = EntityState.Modified;
-                            db.SaveChanges();
+                            List<RevenueUpdateDetail> revenueUpdateDetails = db.RevenueUpdateDetails.Where(cc => cc.MasterID == _revenueupdate.ID).ToList();
+                            foreach(RevenueUpdateDetail item in revenueUpdateDetails)
+                            {
+                                item.InvoiceId = null;
+                                db.Entry(item).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                            //_revenueupdate.InvoiceId = null;
+                            //db.Entry(_revenueupdate).State = EntityState.Modified;
+                            //db.SaveChanges();
                         }
                     }
                 }
@@ -695,6 +721,12 @@ namespace LTMSV2.Controllers
 
         }
 
+        [HttpGet]
+        public JsonResult GetCourierType()
+        {
+            var lstcourier = db.CourierMovements.ToList();
+            return Json(new { data = lstcourier }, JsonRequestBehavior.AllowGet);
+        }
         //[HttpPost]
         ////[ValidateAntiForgeryToken]
         //public ActionResult AddOrRemoveAWBNo(CustomerInvoiceVM _CustomerInvoice, int? i)

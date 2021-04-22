@@ -737,7 +737,29 @@ namespace LTMSV2.DAL
         }
 
         #region "supplierInvoice"
+        public static string GetSupplierInvoiceTotal(DateTime FromDate, DateTime ToDate)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetSupplierInvoiceTotal";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
 
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0].Rows[0][0].ToString();
+            }
+            else
+            {
+                return "";
+            }
+
+
+        }
         public static DataTable DeleteSupplierInvoice(int InvoiceId)
         {
             SqlCommand cmd = new SqlCommand();

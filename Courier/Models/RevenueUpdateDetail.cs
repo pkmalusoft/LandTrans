@@ -29,6 +29,9 @@ namespace LTMSV2.Models
         public Nullable<decimal> ExchangeRate { get; set; }
         public Nullable<int> PaymentModeId { get; set; }
         public string InvoiceTo { get; set; }
+        public Nullable<decimal> TaxPercent { get; set; }
+        public Nullable<decimal> TaxAmount { get; set; }
+        public Nullable<decimal> TotalCharge { get; set; }
     
         public virtual RevenueCostMaster RevenueCostMaster { get; set; }
         public virtual RevenueUpdateMaster RevenueUpdateMaster { get; set; }

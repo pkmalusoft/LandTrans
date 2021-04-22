@@ -270,7 +270,10 @@ namespace LTMSV2.Controllers
                             detail.CurrencyId = vm.DetailVM[i].CurrencyId;
                             detail.CustomerId = vm.DetailVM[i].CustomerId;
                             detail.ExchangeRate = vm.DetailVM[i].ExchangeRate;
-                            detail.PaymentModeId = vm.DetailVM[i].PaymentModeId;
+                        detail.TaxPercent = vm.DetailVM[i].TaxPercent;
+                        detail.TaxAmount = vm.DetailVM[i].TaxAmount;
+                        detail.TotalCharge = vm.DetailVM[i].TotalCharge;
+                        detail.PaymentModeId = vm.DetailVM[i].PaymentModeId;
                             detail.InvoiceTo= vm.DetailVM[i].InvoiceTo;
 
                         db.RevenueUpdateDetails.Add(detail);

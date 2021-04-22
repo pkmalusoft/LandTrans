@@ -3627,6 +3627,7 @@
     <Content Include="Views\Reports\SupplierStatement.cshtml" />
     <Content Include="Views\SupplierPayment\SupplierPayment - Copy %282%29.cshtml" />
     <Content Include="Views\Reports\VoucherPrint.cshtml" />
+    <Content Include="Views\Reports\ConsignmentUnAllocate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

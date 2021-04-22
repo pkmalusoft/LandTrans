@@ -125,6 +125,9 @@ namespace LTMSV2.DAL
                     obj.RevenueCost = ds.Tables[0].Rows[i]["RevenueComponent"].ToString();
                     obj.CustomerId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerId"].ToString());
                     obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
+                    obj.TaxPercent = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["TaxPercent"].ToString());
+                    obj.TaxAmount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["TaxAmount"].ToString());
+                    obj.TotalCharge = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["TotalCharge"].ToString());
                     obj.AcHeadDebitId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadDebitId"].ToString());
                     obj.AcHeadCreditId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["AcHeadCreditId"].ToString());
                     obj.PaymentModeId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["PaymentModeId"].ToString());

@@ -8958,6 +8958,9 @@
     <EntitySetMapping Name="RevenueUpdateDetails">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateDetail">
         <MappingFragment StoreEntitySet="RevenueUpdateDetail">
+          <ScalarProperty Name="TotalCharge" ColumnName="TotalCharge" />
+          <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
+          <ScalarProperty Name="TaxPercent" ColumnName="TaxPercent" />
           <ScalarProperty Name="InvoiceTo" ColumnName="InvoiceTo" />
           <ScalarProperty Name="PaymentModeId" ColumnName="PaymentModeId" />
           <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />

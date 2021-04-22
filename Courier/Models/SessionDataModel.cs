@@ -104,6 +104,16 @@ namespace LTMSV2.Models
         {
             System.Web.HttpContext.Current.Session["CustomerLedgerReportParam"] = reportparam;
         }
+        public static CustomerLedgerReportParam GetCustomerStatementReportParam()
+        {
+            return (CustomerLedgerReportParam)System.Web.HttpContext.Current.Session["CustomerStatementReportParam"];
+        }
+
+
+        public static void SetCustomerStatementParam(CustomerLedgerReportParam reportparam)
+        {
+            System.Web.HttpContext.Current.Session["CustomerStatementReportParam"] = reportparam;
+        }
 
         public static void SetSupplierLedgerParam(SupplierLedgerReportParam reportparam)
         {

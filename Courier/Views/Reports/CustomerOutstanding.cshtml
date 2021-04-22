@@ -149,61 +149,58 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="row no-margin">
-      
-          
-               
-                    <div class="col-md-2">
-                        <label class="headinglabel required ">From Date</label>
-                        @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
-                    </div>
-                    <div class="col-md-2">
-                        <label class="headinglabel required">To Date</label>
-                        @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
-                    </div>
-                     <div class="col-md-2">
-                        <label class="headinglabel required">Report Type</label>
-                        @Html.DropDownList("ReportType", new List<SelectListItem>
-                       {                   
-                           new SelectListItem{ Text="OutStanding", Value = "OutStanding" },                   
-                           new SelectListItem{ Text="CN Note Unallocated", Value = "AWBUnAllocated" },
-                           new SelectListItem{ Text="CN Note OutStanding", Value = "AWBOutStanding" },
-                        }, "Select", new { @class = "form-control", @required = "true" })
-                    </div>
-                     <div class="col-md-6" id="divachead1">
-                         <div class="flexTitle">
-                             <label class="headinglabel required">Customer</label>
-                             <div class="checkboxdesign no-padding text-right" style="float:right; ">
-                                 @Html.CheckBox("AllCustomer", new { @name = "AllCustomer", @checked="checked" }) &nbsp
-                                 <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">All Customer</label>
-                             </div>
-                         </div>                             
-                             @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off",@readonly="readonly" })
-                             @Html.HiddenFor(model => model.CustomerId)
-
-                         </div>
-
-                         <div class="clearfix"></div>
-                         <div class="col-md-2">
-                             <label class="headinglabel  required">Output</label>
-                             @Html.DropDownList("Output", new List<SelectListItem>
-                             {
-                                 new SelectListItem{ Text="PDF", Value = "PDF" },
-                                 new SelectListItem{ Text="EXCEL", Value = "EXCEL" },
-                                 new SelectListItem{ Text="WORD", Value = "WORD" },
-
-                              }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
-                         </div>
-
-                         <div class="col-md-2">
-                             <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                         </div>
-
-                     </div>
+<div class="row no-margin">
 
 
-}
-<div class="row no-margin" style="padding-top:10px">
-    @{ Html.RenderAction("ReportFrame", "Accounts");}
 
-</div>
+    <div class="col-md-2">
+        <label class="headinglabel required ">From Date</label>
+        @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
+    </div>
+    <div class="col-md-2">
+        <label class="headinglabel required">To Date</label>
+        @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
+    </div>
+    @*<div class="col-md-2 hide">
+            <label class="headinglabel required">Report Type</label>
+            @Html.DropDownList("ReportType", new List<SelectListItem>
+           {
+               new SelectListItem{ Text="OutStanding", Value = "OutStanding" },
+               new SelectListItem{ Text="CN Note Unallocated", Value = "AWBUnAllocated" },
+               new SelectListItem{ Text="CN Note OutStanding", Value = "AWBOutStanding" },
+            }, "Select", new { @class = "form-control", @required = "true" })
+        </div>*@
+    <div class="col-md-4">
+        <div class="flexTitle">
+            <label class="headinglabel required">Customer</label>
+            <div class="checkboxdesign no-padding text-right" style="float:right; ">
+                @Html.CheckBox("AllCustomer", new { @name = "AllCustomer", @checked = "checked" }) &nbsp
+                <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important">All Customer</label>
+            </div>
+        </div>
+        @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @autocomplete = "off", @readonly = "readonly" })
+        @Html.HiddenFor(model => model.CustomerId)
+        </div>    
+        <div class="col-md-2">
+            <label class="headinglabel  required">Output</label>
+            @Html.DropDownList("Output", new List<SelectListItem>
+            {
+                new SelectListItem{ Text="PDF", Value = "PDF" },
+                new SelectListItem{ Text="EXCEL", Value = "EXCEL" },
+                new SelectListItem{ Text="WORD", Value = "WORD" },
+
+             }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+        </div>
+
+    </div>
+
+
+    }
+    <div class="row no-margin" style="padding-top:10px">
+        @{ Html.RenderAction("ReportFrame", "Accounts");}
+
+    </div>

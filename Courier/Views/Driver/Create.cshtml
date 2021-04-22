@@ -82,9 +82,38 @@
 
         $("#CityID").empty();
         $("#LocationID").empty();
+        $("#SupplierName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/VehicleMaster/Supplier',
+                    datatype: "json",
+                    data: {
+                        term: request.term, suppliertypeid: 1
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.SupplierName,
+                                value: val.SupplierName,
+                                SupplierID: val.SupplierID
 
-                      
-      
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: true,
+            select: function (e, i) {
+                e.preventDefault();
+                $("#SupplierName").val(i.item.label);
+                $('#SupplierID').val(i.item.SupplierID);
+
+            },
+
+        });
+
+
         $("#LocationName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -124,11 +153,43 @@
             },
 
         });
-  
+        $('#SupplierName').val('@ViewBag.SupplierName');
+        $('#RegNo').val('@ViewBag.RegNo');
+        $("#RegNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Driver/VehicleRegNo',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.RegistrationNo,
+                                value: val.RegistrationNo,
+                                Id: val.VehicleID,
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 1,
+            autoFocus: false,
+            focus: function (event, ui) {
+                $("#RegNo").val(ui.item.label);
+                $('#VehicleID').val(ui.item.Id);
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#RegNo").val(i.item.label);
+                $('#VehicleID').val(i.item.Id);
+            },
 
+        });
         $("#btnsave").click(function () {
             debugger;
-         
+
         });
     });
 </script>
@@ -184,7 +245,10 @@
 
                 <div class="col-md-3 ">
                     <label class="headinglabel required">Vehicle RegNo.</label>
-                    @Html.DropDownListFor(model => model.VehicleID, new SelectList(@ViewBag.Vehicles, "VehicleID", "RegistrationNo"), "Select", new { @class = "form-control" })
+                    @*@Html.TextBoxFor("RegNo" new { @class = "form-control", @required = "true" })*@
+                    <input type="text" id="RegNo" value="" class="form-control" required />
+                    @Html.HiddenFor(model => model.VehicleID)
+                    @*@Html.DropDownListFor(model => model.VehicleID, new SelectList(@ViewBag.Vehicles, "VehicleID", "RegistrationNo"), "Select", new { @class = "form-control" })*@
                     @Html.ValidationMessageFor(model => model.VehicleID)
                 </div>
 
@@ -282,17 +346,21 @@
                     @Html.TextBoxFor(model => model.PhoneNo2, new { @class = "form-control textright", @maxlength = 25, @placeholder = "XXX-XXX-XXXX" })
                     @Html.ValidationMessageFor(model => model.PhoneNo2)
                 </div>
-                  <div class="col-md-3 ">
+                <div class="col-md-3 ">
                     <div class="flex justify-between">
-                    <label class="headinglabel required">Supplier</label>
-                    <div class=" checkboxdesign verticalcheckbox">
-                    @Html.CheckBox("IsOwner", new { @name = "IsOwner", @checked = "checked" }) &nbsp
-                    <label class="headinglabel">Is Owner</label>
-                    @Html.ValidationMessageFor(model => model.IsOwner)
-                </div>
-            </div>
-                    @Html.DropDownListFor(model => model.SupplierID, new SelectList(@ViewBag.Supplier, "SupplierID", "SupplierName"), "Select", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.SupplierID)
+                        <label class="headinglabel required">Supplier</label>
+                        <div class=" checkboxdesign verticalcheckbox">
+                            @Html.CheckBox("IsOwner", new { @name = "IsOwner", @checked = "checked" }) &nbsp
+                            <label class="headinglabel">Is Owner</label>
+                            @Html.ValidationMessageFor(model => model.IsOwner)
+                        </div>
+                    </div>
+                    
+                    @*@Html.TextBox("SupplierName", new { @class = "form-control"})*@              
+                    <input type="text" id="SupplierName"  class="form-control" />
+                    @Html.HiddenFor(model => model.SupplierID)
+                    @*//@Html.DropDownListFor(model => model.SupplierID, new SelectList(@ViewBag.Supplier, "SupplierID", "SupplierName"), "Select", new { @class = "form-control" })*@
+                    
                 </div>
             </div>
 

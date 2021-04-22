@@ -388,7 +388,7 @@ namespace LTMSV2.Controllers
         {
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
 
-            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            CustomerLedgerReportParam model = SessionDataModel.GetCustomerStatementReportParam();
             if (model == null)
             {
                 model = new CustomerLedgerReportParam
@@ -415,7 +415,7 @@ namespace LTMSV2.Controllers
             {
                 model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
             }
-            SessionDataModel.SetCustomerLedgerParam(model);
+            SessionDataModel.SetCustomerStatementParam(model);
 
             
             model.AsonDate = AccountsDAO.CheckParamDate(model.AsonDate, yearid).Date;
@@ -446,13 +446,13 @@ namespace LTMSV2.Controllers
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),                                
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
-                Output = "PDF",
+                Output = picker.Output,
                 ReportType = picker.ReportType,
                 AsonDate = picker.AsonDate
             };
 
             ViewBag.Token = model;
-            SessionDataModel.SetCustomerLedgerParam(model);
+            SessionDataModel.SetCustomerStatementParam(model);
             Response.Buffer = false;
             Response.ClearContent();
             Response.ClearHeaders();           
@@ -531,7 +531,7 @@ namespace LTMSV2.Controllers
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
                 Output = picker.Output,
-                ReportType = picker.ReportType
+                ReportType = "OutStanding"
             };
 
             ViewBag.Token = model;
@@ -558,6 +558,105 @@ namespace LTMSV2.Controllers
             }
 
             return RedirectToAction("CustomerOutstanding", "Reports");
+
+
+        }
+        #endregion
+
+        #region "ConsignmentUnAllocated"
+        public ActionResult ConsignmentUnAllocate()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = SessionDataModel.GetCustomerLedgerReportParam();
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "OutStanding"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetCustomerLedgerParam(model);
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Consignment Allocation Pending";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
+                {
+                    Session["ReportOutput"] = null;
+                }
+                else if (!currentreport.Contains("AWBOutStanding") && model.ReportType == "AWBUnAllocated")
+                {
+                    Session["ReportOutput"] = null;
+                }
+                else if (!currentreport.Contains("AWBUnInvoiced") && model.ReportType == "AWBOutStanding")
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult ConsignmentUnAllocate(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = picker.Output,
+                ReportType = picker.ReportType
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetCustomerLedgerParam(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            if (model.ReportType == "Ledger")
+            {
+                //AccountsReportsDAO.GenerateCustomerLedgerReport();
+                AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
+            }
+            else if (model.ReportType == "OutStanding")
+            {
+                AccountsReportsDAO.GenerateCustomerOutStandingReport();
+            }
+            else if (model.ReportType == "AWBUnAllocated")
+            {
+                AccountsReportsDAO.GenerateAWBOutStandingReport();
+            }
+            else if (model.ReportType == "AWBOutStanding")
+            {
+                AccountsReportsDAO.GenerateAWBUnInvoiced();
+            }
+
+            return RedirectToAction("ConsignmentUnAllocate", "Reports");
 
 
         }
@@ -936,7 +1035,7 @@ namespace LTMSV2.Controllers
             {
                 model = new CustomerLedgerReportParam                {
                     
-                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
                     CustomerId = 0,
                     CustomerName = "",
                     Output = "PDF",
@@ -950,7 +1049,7 @@ namespace LTMSV2.Controllers
 
             SessionDataModel.SetCustomerLedgerParam(model);
 
-            model.AsonDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;            
+            model.AsonDate = AccountsDAO.CheckParamDate(model.AsonDate, yearid).Date;            
             ViewBag.ReportName = "Customer Aging Report";
             if (Session["ReportOutput"] != null)
             {
