@@ -591,7 +591,30 @@ namespace LTMSV2.DAL
 
 
         }
+        //SP_DeleteCODCustomerReciepts
 
+        public static DataTable DeleteCOdCustomerReceipt(int RecPayID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteCODCustomerReciepts";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RecPayID", RecPayID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
         public static DataTable DeleteInvoice(int InvoiceId)
         {
             SqlCommand cmd = new SqlCommand();
@@ -897,6 +920,7 @@ namespace LTMSV2.DAL
                     obj.InvoiceAmount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["InvoiceAmount"].ToString());
                     obj.AmountReceived = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["ReceivedAmount"].ToString());
                     obj.Balance = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["PendingAmount"].ToString());
+                    obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
                     custreceipt.Add(obj);
                 }
             }

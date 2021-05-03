@@ -126,7 +126,7 @@
             $("#EXRate").val('1.00');
 
         } else {
-            $('#btnsearch').attr('disabled', 'disabled');
+            //$('#btnsearch').attr('disabled', 'disabled');
             if ('@Model.ChequeNo' == null || '@Model.ChequeNo' == '') {
                 $("#divCash").css({ "display": "block" });
                 $("#divBank").css({ "display": "none" });
@@ -200,7 +200,7 @@
                         response($.map(data, function (val, item) {
                             return {
                                 label: val.ConsignmentNo,
-                                value: val.InScanID                                
+                                value: val.InScanID
                             }
                         }))
                     }
@@ -223,15 +223,15 @@
 
         });
         $('#btnsearch').click(function () {
-                        
+
             if ($('#FMoney').val() == "") {
-                $('#FMoney').val(0);                
+                $('#FMoney').val(0);
             }
             var ID = $('#CustomerID').val();
             $.ajax({
                 type: "POST",
                 url: '/CODReceipt/GetCODItems/' + ID,
-                data: { 'amountreceived': $('#FMoney').val() },
+                data: { 'amountreceived': $('#FMoney').val(), RecPayId:$('#RecPayID').val() },
                 success: function (data) {
                     $('#tbl1').html('');
                     //$scope.Orders = data;
@@ -246,9 +246,8 @@
                             '<td>' + data[i].DateTime + '<input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceDate" value=' + data[i].DateTime + ' type="hidden"></td>' +
                             '<td class="text-right">' + parseFloat(data[i].InvoiceAmount).toFixed(@_decimal) + '<input id="" name="CustomerRcieptChildVM[' + i + '].AmountToBeRecieved" value=' + data[i].InvoiceAmount + ' type="hidden" class="AmountToBeRecieved"></td>' +
                             '<td class="text-right">' + parseFloat(data[i].AmountReceived).toFixed(@_decimal) + '<input id="" name="CustomerRcieptChildVM[' + i + '].AmtPaidTillDate" value=' + data[i].AmountReceived + ' type="hidden"></td>' +
-                            '<td class="text-right">' + parseFloat(data[i].Balance).toFixed(@_decimal) + '<input id="" name="CustomerRcieptChildVM[' + i + '].Balance" value=' + data[i].Balance + ' type="hidden"><input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceNo" value=' + data[i].InvoiceNo + ' type="hidden"></td>' +
-                            //'<td>' + data[i].Amount + '<input id="" name="customerRcieptVM[' + i + '].Amount" value=' + data[i].Amount + ' type="hidden"></td>' +
-                            '<td> <input type="text" onchange="CheckAmt(this)"  id="txtinvoice_' + data[i].SalesInvoiceID  + '" class="amt txtNum text-right AmountReceived" name="CustomerRcieptChildVM[' + i + '].Amount"  value="' + parseFloat(data[i].Amount).toFixed(@_decimal) + '" />' +                                                        
+                            '<td class="text-right">' + parseFloat(data[i].Balance).toFixed(@_decimal) + '<input id="" name="CustomerRcieptChildVM[' + i + '].Balance" value=' + data[i].Balance + ' type="hidden"><input id="" name="CustomerRcieptChildVM[' + i + '].InvoiceNo" value=' + data[i].InvoiceNo + ' type="hidden"></td>' +                            
+                            '<td> <input type="text" onchange="CheckAmt(this)"  id="txtinvoice_' + data[i].SalesInvoiceID  + '" class="amt txtNum text-right AmountReceived" name="CustomerRcieptChildVM[' + i + '].Amount"  value="' + parseFloat(data[i].Amount).toFixed(@_decimal) + '" />' +
                             '</tr>');
                         //hideLoading();
                     }
@@ -905,7 +904,7 @@
                     @Html.HiddenFor(model => model.FMoney)
                     @Html.HiddenFor(model => model.FYearID)
                     @Html.HiddenFor(model => model.RecPayDate)
-                    @Html.HiddenFor(model => model.RecPayID)
+                    
                     @Html.HiddenFor(model => model.Remarks)
                     @Html.HiddenFor(model => model.SupplierID)
                     @Html.HiddenFor(model => model.CurrencyId)
@@ -1031,7 +1030,7 @@
                 {
                     <input type="submit" class="btn btn-primary  btnwidth" value="Save" name="Command" />
                 }
-                <a href='@Url.Action("CustomerTradeReceiptDetails", "CustomerReceipt", new { id = 0 })' class="btn btn-danger  btnwidth">Cancel</a>
+                <a href='@Url.Action("Index", "CODReceipt")' class="btn btn-danger  btnwidth">Cancel</a>
             </div>
         </div>
 

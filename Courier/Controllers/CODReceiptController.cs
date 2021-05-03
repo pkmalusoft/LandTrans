@@ -118,7 +118,7 @@ namespace LTMSV2.Controllers
                     cust.recPayDetail = db.RecPayDetails.Where(item => item.RecPayID == id).ToList();
                     int fyearid = Convert.ToInt32(Session["fyearid"].ToString());
                     var salesinvoice = new List<CustomerTradeReceiptVM>();
-                    salesinvoice = ReceiptDAO.GetCODPending(fyearid, 0);
+                    salesinvoice = ReceiptDAO.GetCODPending(fyearid, id);
                     Session["CODAWBList"] = salesinvoice;
                     cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
                     foreach (var item in cust.recPayDetail)
@@ -489,29 +489,26 @@ namespace LTMSV2.Controllers
 
         public ActionResult DeleteConfirmed(int id)
         {
-            CODReceipt a = db.CODReceipts.Find(id);
-            if (a == null)
+            //int k = 0;
+            if (id != 0)
             {
-                return HttpNotFound();
+                DataTable dt = ReceiptDAO.DeleteCOdCustomerReceipt(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
             }
-            else
-            {
 
-                //var _inscans = db.InScanMasters.Where(cc => cc.InvoiceID == id).ToList();
-                //foreach (InScanMaster _inscan in _inscans)
-                //{
-                //    _inscan.InvoiceID = null;
-                //    db.Entry(_inscan).State = EntityState.Modified;
-                //    db.SaveChanges();
-                //}
-                a.Deleted = true;
-                db.Entry(a).State = EntityState.Modified;
-                db.SaveChanges();
-                TempData["SuccessMsg"] = "You have successfully deleted COD Receipt.";
-
-
-                return RedirectToAction("Index");
-            }
+            return RedirectToAction("Index", "CODReceipt");
         }
 
         public ActionResult Details(int id)
