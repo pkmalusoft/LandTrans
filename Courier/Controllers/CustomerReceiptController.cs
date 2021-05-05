@@ -1336,6 +1336,8 @@ namespace LTMSV2.Controllers
                 recpay.StatusEntry = RecP.StatusEntry;
                 recpay.IsTradingReceipt = true;
                 recpay.Remarks = RecP.Remarks;
+                recpay.ModifiedDate = DateTime.Now;
+                recpay.ModifiedBy = RecP.UserID;
                 Context1.Entry(recpay).State = EntityState.Modified;
                 Context1.SaveChanges();
                 

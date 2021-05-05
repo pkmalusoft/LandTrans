@@ -109,7 +109,19 @@ namespace LTMSV2.Models
                 return false;
             return true;
         }
+        public static DateTime GetCurrentDateTime()
+        {
+            Entities1 db = new Entities1();
 
+            int fyearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            DateTime startdate = Convert.ToDateTime(db.AcFinancialYears.Find(fyearid).AcFYearFrom);
+            DateTime enddate = Convert.ToDateTime(db.AcFinancialYears.Find(fyearid).AcFYearTo);
+            double hours = Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["GMTHours"].ToString());
+
+            DateTime todaydate = DateTime.UtcNow.AddHours(hours);// DateTimeOffset.Now.Date; // DateTime.Now.Date;            
+            return todaydate;
+
+        }
         public static DateTime GetFirstDayofMonth()
         {
             Entities1 db = new Entities1();

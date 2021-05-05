@@ -496,7 +496,7 @@
                 $("#amount").focus();
                 return false;
             }
-            else if (parseInt($("#amount").val()) == 0) {
+            else if (parseFloat($("#amount").val()) == 0) {
                 alert("Please Enter The Amount");
                 $("#amount").focus();
                 return false;
@@ -1102,7 +1102,13 @@
                 $('#SelectedAcHead').val(i.item.AcHeadID);
             }
         });
+        $("#AcHead").change(function () {
+            if ($("#AcHead").val() != "" && $("#AcHead").val() != $('#SelectedAcHead').attr('label')) {
+                $("#AcHead").val('');
+                $('#SelectedAcHead').val(0);
+            }
 
+        })
         $("#AcHeadAllocation").autocomplete({
             source: function (request, response) {
                 $.ajax({

@@ -197,6 +197,8 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@EXRate", RecPy.EXRate);
             cmd.Parameters.AddWithValue("@FMoney", RecPy.FMoney);
             cmd.Parameters.AddWithValue("@UserID", RecPy.UserID);
+            cmd.Parameters.AddWithValue("@EntryTime", CommanFunctions.GetCurrentDateTime());
+            
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);

@@ -29,6 +29,10 @@ namespace LTMSV2.Models
         public Nullable<int> AcFinancialYearID { get; set; }
         public Nullable<int> InvoiceId { get; set; }
         public Nullable<int> AcJournalID { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
     
         public virtual BranchMaster BranchMaster { get; set; }
         public virtual InScan InScan { get; set; }

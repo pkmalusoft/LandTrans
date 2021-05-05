@@ -1096,6 +1096,10 @@
           <Property Name="AcFinancialYearID" Type="int" />
           <Property Name="BranchID" Type="int" />
           <Property Name="Remarks" Type="varchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
         </EntityType>
         <EntityType Name="CustomerInvoiceDetails">
           <Key>
@@ -2949,6 +2953,10 @@
           <Property Name="UserID" Type="int" />
           <Property Name="IsTradingReceipt" Type="bit" />
           <Property Name="TruckDetailId" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
         </EntityType>
         <EntityType Name="RecPayAllocationDetails">
           <Key>
@@ -3065,6 +3073,10 @@
           <Property Name="AcFinancialYearID" Type="int" />
           <Property Name="InvoiceId" Type="int" />
           <Property Name="AcJournalID" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
         </EntityType>
         <EntityType Name="RoleMaster">
           <Key>
@@ -12339,6 +12351,10 @@
           <Property Name="UserID" Type="Int32" />
           <Property Name="IsTradingReceipt" Type="Boolean" />
           <Property Name="TruckDetailId" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
         </EntityType>
         <EntityType Name="RequestType">
           <Key>
@@ -22297,6 +22313,10 @@
           <NavigationProperty Name="RevenueUpdateDetails1" Relationship="DB_9F57C4_couriertest_newModel.FK_RevenueUpdateDetail_RevenueUpdateMaster" FromRole="RevenueUpdateMaster" ToRole="RevenueUpdateDetail" />
           <Property Name="InvoiceId" Type="Int32" />
           <Property Name="AcJournalID" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
           </EntityType>
         <Association Name="FK_RevenueUpdateMaster_BranchMaster">
           <End Type="DB_9F57C4_couriertest_newModel.BranchMaster" Role="BranchMaster" Multiplicity="1" />
@@ -22479,6 +22499,10 @@
           <Property Name="BranchID" Type="Int32" />
           <NavigationProperty Name="CustomerInvoiceDetails" Relationship="DB_9F57C4_couriertest_newModel.FK_CustomerInvoiceDetails_CustomerInvoice" FromRole="CustomerInvoice" ToRole="CustomerInvoiceDetail" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
         </EntityType>
         <EntityType Name="CustomerInvoiceDetail">
           <Key>
@@ -25761,6 +25785,10 @@
           <EntitySetMapping Name="RecPays">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RecPay">
               <MappingFragment StoreEntitySet="RecPay">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="TruckDetailId" ColumnName="TruckDetailId" />
                 <ScalarProperty Name="RecPayID" ColumnName="RecPayID" />
                 <ScalarProperty Name="RecPayDate" ColumnName="RecPayDate" />
@@ -31740,6 +31768,10 @@
           <EntitySetMapping Name="RevenueUpdateMasters">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.RevenueUpdateMaster">
               <MappingFragment StoreEntitySet="RevenueUpdateMaster">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="AcJournalID" ColumnName="AcJournalID" />
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
                 <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />
@@ -31871,6 +31903,10 @@
           <EntitySetMapping Name="CustomerInvoices">
             <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.CustomerInvoice">
               <MappingFragment StoreEntitySet="CustomerInvoice">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="AcFinancialYearID" ColumnName="AcFinancialYearID" />

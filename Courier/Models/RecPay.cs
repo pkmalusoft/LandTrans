@@ -35,5 +35,9 @@ namespace LTMSV2.Models
         public Nullable<int> UserID { get; set; }
         public Nullable<bool> IsTradingReceipt { get; set; }
         public Nullable<int> TruckDetailId { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
     }
 }

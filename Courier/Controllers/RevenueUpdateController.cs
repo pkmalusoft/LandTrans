@@ -238,6 +238,10 @@ namespace LTMSV2.Controllers
                 v.InScanID = vm.InScanID;
                 v.BranchID = branchid;
                 v.AcFinancialYearID = fyearid;
+                v.CreatedBy = userId;
+                v.CreatedDate = CommanFunctions.GetCurrentDateTime();
+                v.ModifiedBy = userId;
+                v.ModifiedDate = CommanFunctions.GetCurrentDateTime();
                 db.RevenueUpdateMasters.Add(v);
                 db.SaveChanges();
             }
@@ -250,6 +254,8 @@ namespace LTMSV2.Controllers
                 v.InScanID = vm.InScanID;
                 v.BranchID = branchid;
                 v.AcFinancialYearID = fyearid;
+                v.ModifiedBy = userId;
+                v.ModifiedDate = CommanFunctions.GetCurrentDateTime();
                 db.Entry(v).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 

@@ -3087,6 +3087,7 @@
     <Content Include="Reports\BankReceiptPaymentVoucherPrint.rpt" />
     <Content Include="Reports\AcJournalVoucherPrint_A5.rpt" />
     <Content Include="Reports\CreditNoteVoucherPrint.rpt" />
+    <Content Include="Reports\AWBTimeLine.rpt" />
     <None Include="Reports\Customer.xsd" />
     <Content Include="Reports\Customer.xss">
       <DependentUpon>Customer.xsd</DependentUpon>
@@ -3628,6 +3629,7 @@
     <Content Include="Views\SupplierPayment\SupplierPayment - Copy %282%29.cshtml" />
     <Content Include="Views\Reports\VoucherPrint.cshtml" />
     <Content Include="Views\Reports\ConsignmentUnAllocate.cshtml" />
+    <Content Include="Views\Reports\ConsignmentTimeLine.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

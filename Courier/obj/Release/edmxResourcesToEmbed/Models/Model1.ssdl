@@ -1091,6 +1091,10 @@
     <Property Name="AcFinancialYearID" Type="int" />
     <Property Name="BranchID" Type="int" />
     <Property Name="Remarks" Type="varchar(max)" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
   </EntityType>
   <EntityType Name="CustomerInvoiceDetails">
     <Key>
@@ -2944,6 +2948,10 @@
     <Property Name="UserID" Type="int" />
     <Property Name="IsTradingReceipt" Type="bit" />
     <Property Name="TruckDetailId" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
   </EntityType>
   <EntityType Name="RecPayAllocationDetails">
     <Key>
@@ -3060,6 +3068,10 @@
     <Property Name="AcFinancialYearID" Type="int" />
     <Property Name="InvoiceId" Type="int" />
     <Property Name="AcJournalID" Type="int" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="ModifiedBy" Type="int" />
   </EntityType>
   <EntityType Name="RoleMaster">
     <Key>

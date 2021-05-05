@@ -225,12 +225,13 @@ namespace LTMSV2.Controllers
                         inscan.StatusTypeId = 1;
                         inscan.CourierStatusID = 4;
                         inscan.CreatedBy = userid;
-                        DateTime univDateTime = DateTime.Now;
-                        DateTime localDateTime = DateTime.SpecifyKind(univDateTime, DateTimeKind.Local);
-                        inscan.CreatedDate = localDateTime;
+                        //DateTime univDateTime = DateTime.Now;
+                        //DateTime localDateTime = DateTime.SpecifyKind(univDateTime, DateTimeKind.Local);
+                        inscan.CreatedDate = CommanFunctions.GetCurrentDateTime();
                         inscan.LastModifiedBy = userid;
-                        inscan.LastModifiedDate = localDateTime;
-                        
+                        inscan.LastModifiedDate = CommanFunctions.GetCurrentDateTime();
+
+
                         int _customerid = SaveShipper(v);
                         SaveReceiver(v);
                         customersavemessage = "New Customer - Customer saved as 'Cash Customer' in the system";
@@ -254,9 +255,9 @@ namespace LTMSV2.Controllers
                             }
                         }
                         inscan.TransactionDate = v.TransactionDate;
-                        DateTime localDateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);                        
+                        //DateTime localDateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);                        
                         inscan.LastModifiedBy = userid;
-                        inscan.LastModifiedDate = localDateTime1;
+                        inscan.LastModifiedDate = CommanFunctions.GetCurrentDateTime();
                     }
                     inscan.PickupLocationID = v.PickUpLocationID;
                     inscan.DeliveryLocationID = v.DeliveryLocationID;

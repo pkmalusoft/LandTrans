@@ -1160,6 +1160,73 @@ namespace LTMSV2.Controllers
         }
         #endregion
 
+        public ActionResult ConsignmentTimeLine()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            AWBTimeLineReportParam model = (AWBTimeLineReportParam)Session["AWBTimeLineParam"];
+            if (model == null)
+            {
+                model = new AWBTimeLineReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    Output = "PDF"                    
+                };
+            }
+
+
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            ViewBag.ReportName = "Consignment TimeLine Report ";
+            Session["AWBTimeLineParam"] = model;
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("AWBTimeLine"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+                
+            }
+            return View(model);                               
+
+        }
+
+        [HttpPost]
+        public ActionResult ConsignmentTimeLine(AWBTimeLineReportParam picker)
+        {
+
+        AWBTimeLineReportParam model = new AWBTimeLineReportParam
+        {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                Output = picker.Output
+                
+            };
+
+
+         Session["AWBTimeLineParam"] = model;
+         Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+
+            AccountsReportsDAO.GenerateAWBTimeLineReport();
+
+            //return View(model);
+            return RedirectToAction("ConsignmentTimeLine", "Reports");
+
+
+        }
 
         //#region "VoucherPrint"
         //public ActionResult VoucherPrint(string type,int id = 0)
@@ -1168,14 +1235,14 @@ namespace LTMSV2.Controllers
 
         //    if (id > 0  && type!="")
         //    {                               
-                                
+
         //        ViewBag.ReportOption = "Receipt Voucher";
         //        ViewBag.ReportName = "Receipt Voucher";
 
 
         //        AccountsReportsDAO.GenerateCustomerReceiptPrint(id);           
         //    }
-            
+
         //    return View();
 
         //}

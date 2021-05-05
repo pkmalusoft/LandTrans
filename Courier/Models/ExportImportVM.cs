@@ -237,7 +237,18 @@ namespace LTMSV2.Models
         public string Filters { get; set; }
 
     }
+    public class AWBTimeLineReportParam
+    {
+        public int EmployeeId { get; set; }
+        public string EmployeeName { get; set; }        
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public string Output { get; set; } //printer ,pdf,word,excel
+        public string ReportType { get; set; } //sumary details
+        public string ReportFileName { get; set; }
+        public string Filters { get; set; }
 
+    }
     public class SupplierLedgerReportParam
     {
         public int SupplierTypeId { get; set; }
