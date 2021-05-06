@@ -16,64 +16,54 @@ namespace LTMSV2.Controllers
         Entities1 db = new Entities1();
         public ActionResult Index()
         {
-          DatePicker model = SessionDataModel.GetTableVariable();
-            if (model == null)
+
+            CustomerInvoiceSearch obj = (CustomerInvoiceSearch)Session["CustomerInvoiceSearch"];
+            CustomerInvoiceSearch model = new CustomerInvoiceSearch();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            if (obj == null)
             {
-                model = new DatePicker
-                {
-                    FromDate = CommanFunctions.GetFirstDayofMonth().Date,
-                    ToDate = CommanFunctions.GetLastDayofMonth().Date
-                    //      Delete = (bool)Token.Permissions.Deletion,
-                    //    Update = (bool)Token.Permissions.Updation,
-                    //  Create = (bool)Token.Permissions.Creation
-                };
-            }
-            ViewBag.Token = model;
-            string dd = ReceiptDAO.GetSupplierInvoiceTotal(model.FromDate, model.ToDate);
-            if (dd != "")
-            {
-                decimal value = Convert.ToDecimal(dd);
-                Console.WriteLine(value.ToString("F3"));
-                ViewBag.NetTotal = value.ToString("F3");
+                DateTime pFromDate;
+                DateTime pToDate;
+                //int pStatusId = 0;
+                pFromDate = CommanFunctions.GetFirstDayofMonth().Date;
+                pToDate = CommanFunctions.GetLastDayofMonth().Date;
+                obj = new CustomerInvoiceSearch();
+                obj.FromDate = pFromDate;
+                obj.ToDate = pToDate;
+                obj.InvoiceNo = "";
+                Session["CustomerInvoiceSearch"] = obj;
+                model.FromDate = pFromDate;
+                model.ToDate = pToDate;
+                model.InvoiceNo = "";
             }
             else
             {
-                ViewBag.NetTotal = "0.000";
+                model = obj;
             }
-            SessionDataModel.SetTableVariable(model);
+            List<CustomerInvoiceVM> lst = PickupRequestDAO.GetInvoiceList(obj.FromDate, obj.ToDate, model.InvoiceNo, yearid);
+            if (lst != null)
+            {
+                model.InvoiceTotal = Convert.ToDecimal(lst.Sum(cc => cc.InvoiceTotal).ToString()); // ReceiptDAO.GetCustomerInvoiceTotal(obj.FromDate, obj.ToDate);
+            }
+            model.Details = lst;
+
             return View(model);
 
 
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Index([Bind(Include = "FromDate,ToDate")] DatePicker picker)
+        public ActionResult Index(CustomerInvoiceSearch obj)
         {
-
-            DatePicker model = new DatePicker 
-            {
-                FromDate = picker.FromDate,
-                ToDate = picker.ToDate.Date, //picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
-                Delete = true, // (bool)Token.Permissions.Deletion,
-                Update = true, //(bool)Token.Permissions.Updation,
-                Create = true //.ToStrin//(bool)Token.Permissions.Creation
-            };
-            string dd = ReceiptDAO.GetSupplierInvoiceTotal(model.FromDate, model.ToDate);
-            if (dd != "")
-            {
-                decimal value = Convert.ToDecimal(dd);
-                //Console.WriteLine(value.ToString("F3"));
-                ViewBag.NetTotal = value.ToString("F3");
-            }
-            else
-            {
-                ViewBag.NetTotal = "0.000";
-            }
-            SessionDataModel.SetTableVariable(model);
-            return View(model);
-
+            Session["CustomerInvoiceSearch"] = obj;
+            return RedirectToAction("Index");
         }
-        public ActionResult InvoiceSearch()
+        public ActionResult Table(CustomerInvoiceSearch model)
+        {
+            return PartialView("Table", model);
+        }
+            public ActionResult InvoiceSearch()
         {
 
             DatePicker datePicker = SessionDataModel.GetTableVariable();
@@ -149,36 +139,7 @@ namespace LTMSV2.Controllers
             //return PartialView("InvoiceSearch",model);
 
         }
-        public ActionResult Table()
-        {
-            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
-            int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
-
-            DatePicker datePicker = SessionDataModel.GetTableVariable();
-            ViewBag.Token = datePicker;
-            datePicker.ToDate=Convert.ToDateTime(datePicker.ToDate).AddDays(1);
-
-            List<CustomerInvoiceVM> _Invoices = (from c in db.CustomerInvoices
-                                                 join cust in db.CustomerMasters on c.CustomerID equals cust.CustomerID
-                                                 where (c.InvoiceDate >= datePicker.FromDate && c.InvoiceDate < datePicker.ToDate)
-                                                 && c.IsDeleted==false
-                                                 orderby c.InvoiceDate descending
-                                                 select new CustomerInvoiceVM
-                                                 {
-                                                     CustomerInvoiceID = c.CustomerInvoiceID,
-                                                     CustomerInvoiceNo = c.CustomerInvoiceNo,
-                                                     InvoiceDate = c.InvoiceDate,
-                                                     CustomerID = c.CustomerID,
-                                                     CustomerName = cust.CustomerName,
-                                                     InvoiceTotal=c.InvoiceTotal
-
-                                                 }).ToList();
-
-            
-            //ViewBag.NetTotal = 999;
-            return View("Table", _Invoices);
-
-        }
+      
         public ActionResult Create()
         {
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());

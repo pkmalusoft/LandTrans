@@ -1,4 +1,4 @@
-﻿@model LTMSV2.Models.DatePicker
+﻿@model LTMSV2.Models.CustomerInvoiceSearch
 @{
     //Layout = null;
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
@@ -60,8 +60,8 @@
         $('#dataTables-example tfoot th').each(function () {
                 var title = $(this).text();
                 $(this).html('<input type="text" style="width:100%" />');
-            });       
-                          
+            });
+
         var table = $('#dataTables-example').DataTable({ "aaSorting": [] });
              table.draw();
             table.columns().every(function () {
@@ -125,78 +125,82 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-<div class="row d-flex">
 
-    <div class=" col-md-1  search_field">
-        <label for="" class="col-3 control-label">Total Invoice</label>
-        <input type="text" class="col-9 form-control text-right" readonly placeholder="Invoice Total" value="@ViewBag.NetTotal" />
-    </div>
-    <div class=" col-md-1  search_field">
-        <label for="FromDate" class="col-3 control-label">From</label>
-        <input type="text" class="col-9 form-control text-right datecontrol datepick" name="FromDate" id="FromDate" placeholder="From Date" value="@Model.FromDate.ToString("dd-MM-yyyy")" />
-    </div>
-    <div class=" col-md-1 search_field">
-        <label for="FromDate" class="col-3 control-label">To</label>
-        <input type="text" class="col-9 form-control datecontrol text-right datepick" name="ToDate" id="ToDate" placeholder="To Date" value="@Model.ToDate.ToString("dd-MM-yyyy")" />
-    </div>
-    <div class="col-md-2 m-top">
-        @*<input type="submit" value="Filter" class="btn btn-primary btn-gradient btn-block waves-effect waves-light" />*@
-        <button type="submit" class="btn btn-primary" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-    </div>
-    @*<div>
-            <a href="@Url.Action("ExportCustomers")"> Report PDF </a>
-        </div>*@
+    <div class="row d-flex">
+        <div class="col-md-1 search_field">
+            <label for="" class="col-3 control-label">Total Invoice</label>
+            @Html.TextBoxFor(mode => mode.InvoiceTotal, string.Format("{0:n3}",Model.InvoiceTotal), new { @class = "form-control text-right",@readonly="readonly" })
+            @*<input type="text" class="col-9 form-control text-right" readonly placeholder="Invoice Total" value="@ViewBag.NetTotal" />*@
+        </div>
+        <div class="col-md-1 search_field">
+            <label for="FromDate" class="col-3 control-label">From Date</label>
+            @Html.TextBoxFor(mode => mode.FromDate, new { @class = "form-control text-right" })
+        </div>
+        <div class="col-md-1 search_field">
+            <label for="FromDate" class="col-3 control-label">To Date</label>
+            @Html.TextBoxFor(mode => mode.ToDate, new { @class = "form-control text-right" })
+        </div>
+        <div class="col-md-1 search_field">
+            <label for="FromDate" class="col-3 control-label">Invoice No.</label>
+            @Html.TextBoxFor(mode => mode.InvoiceNo, new { @class = "form-control text-right" })
+        </div>
+        <div class="col-md-2 m-top">
+            @*<input type="submit" value="Filter" class="btn btn-primary btn-gradient btn-block waves-effect waves-light" />*@
+            <button type="submit" class="btn btn-primary" style="min-width:50px!Important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+        </div>
+        @*<div>
+                <a href="@Url.Action("ExportCustomers")"> Report PDF </a>
+            </div>*@
 
-    <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
-        @if (@LTMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
-        {
-            @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btn-sm waves-effect waves-light" })
-        }
-        else
-        {
-            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-sm waves-effect waves-light" })
-        }
+        <div class="m-top text-md-right text-right m-top" style="margin-bottom:10px;">
+            @if (@LTMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
+            {
+                @Html.ActionLink("Create New", "Create", null, new { @disabled = "disabled", @class = "btn btn-primary btn-sm waves-effect waves-light" })
+            }
+            else
+            {
+                @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-sm waves-effect waves-light" })
+            }
 
 
+        </div>
     </div>
-</div>
-            <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
-                <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
-                    <thead>
-                        <tr>
-                            <th>
-                                Invoice No.
-                            </th>
-                            <th>
-                                Invoice Date
-                            </th>
-                            <th>
-                                Customer Name
-                            </th>
-                            <th>Invoice Amount</th>
-                            <th width="15%"></th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>
-                                Invoice No.
-                            </th>
-                            <th>
-                                Invoice Date
-                            </th>
-                            <th>
-                                Customer Name
-                            </th>
-                            <th>Invoice Amount</th>
-                            <th width="15%"></th>
-                        </tr>
-                    </tfoot>
-                    @{ Html.RenderAction("Table", "CustomerInvoice");}
-                </table>
-            </div>
-     
+    <div class="table-responsive tblbackground" style="padding:15px;margin-top:20px">
+        <table class="table table-responsive table-bordered tblfont" id="dataTables-example">
+            <thead>
+                <tr>
+                    <th>
+                        Invoice No.
+                    </th>
+                    <th>
+                        Invoice Date
+                    </th>
+                    <th>
+                        Customer Name
+                    </th>
+                    <th>Invoice Amount</th>
+                    <th width="15%"></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>
+                        Invoice No.
+                    </th>
+                    <th>
+                        Invoice Date
+                    </th>
+                    <th>
+                        Customer Name
+                    </th>
+                    <th>Invoice Amount</th>
+                    <th width="15%"></th>
+                </tr>
+            </tfoot>
+            @{Html.RenderPartial("Table", Model);}
+        </table>
+    </div>
+
 }
 
 <script>

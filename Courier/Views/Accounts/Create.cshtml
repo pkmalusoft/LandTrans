@@ -1096,10 +1096,17 @@
                     }
                 })
             }, minLength: 1,
+            focus: function (e, i) {
+                e.preventDefault();
+                $("#AcHead").val(i.item.label);
+                $('#SelectedAcHead').val(i.item.AcHeadID);
+                $('#SelectedAcHead').attr('label', i.item.label);
+            },
             select: function (e, i) {
                 e.preventDefault();
                 $("#AcHead").val(i.item.label);
                 $('#SelectedAcHead').val(i.item.AcHeadID);
+                $('#SelectedAcHead').attr('label',i.item.label);
             }
         });
         $("#AcHead").change(function () {
@@ -1670,9 +1677,7 @@
                 <div class="col-md-3">
                     <label class="headinglabel">Cash/Bank Accounts</label>
                     @Html.TextBoxFor(model => model.AcHead, new { @id = "AcHead", @class = "form-control", autocomplete = "off" })
-                    @Html.HiddenFor(model => model.SelectedAcHead, new
-                    {@*Value = "0"*@id = "SelectedAcHead"
-                })
+                    @Html.HiddenFor(model => model.SelectedAcHead, new { id = "SelectedAcHead",@label=Model.AcHead  })
                 </div>
                 <div class="col-md-6">
                     <label class="headinglabel">Narration</label>

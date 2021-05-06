@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using LTMSV2.Models;
 
 namespace LTMSV2.DAL
 {
@@ -601,6 +602,43 @@ namespace LTMSV2.DAL
             }
             return "OK";
 
+        }
+
+
+        public static List<CustomerInvoiceVM> GetInvoiceList(DateTime FromDate, DateTime ToDate, string InvoiceNo, int FyearId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            string strConnString = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
+            cmd.Connection = new SqlConnection(strConnString);
+            cmd.CommandText = "SP_GetInvoiceList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FYearId", FyearId);
+            if (InvoiceNo == null)
+                InvoiceNo = "";
+            cmd.Parameters.AddWithValue("@InvoiceNo", @InvoiceNo);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<CustomerInvoiceVM> objList = new List<CustomerInvoiceVM>();
+            CustomerInvoiceVM obj;
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new CustomerInvoiceVM();
+                    obj.CustomerInvoiceID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerInvoiceID"].ToString());
+                    obj.CustomerInvoiceNo = ds.Tables[0].Rows[i]["CustomerInvoiceNo"].ToString();
+                    obj.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"].ToString());
+                    obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
+                    obj.CustomerID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerID"].ToString());
+                    obj.InvoiceTotal = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["InvoiceTotal"].ToString());
+                    objList.Add(obj);
+                }
+            }
+            return objList;
         }
     }
 

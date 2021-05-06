@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LTMSV2.Models.CustomerInvoiceVM>
+﻿@model LTMSV2.Models.CustomerInvoiceSearch
 @{
     int i = 0;
     var _decimal = @Session["Decimal"].ToString();  
@@ -6,7 +6,7 @@
 
 
 <tbody>
-    @foreach (var item in Model)
+    @foreach (var item in Model.Details)
     {
         <tr>
             <td>

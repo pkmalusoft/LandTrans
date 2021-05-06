@@ -571,6 +571,18 @@ namespace LTMSV2.DAL
 
             //Context1.SP_InsertJournalEntryForRecPay(RecpayID, fyaerId);
         }
+        public static void ReSaveEmployeeCode()
+        {
+            //SP_InsertJournalEntryForRecPay
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_ReSaveEmployeeCode";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+
+            //Context1.SP_InsertJournalEntryForRecPay(RecpayID, fyaerId);
+        }
         public static DataTable DeleteCustomerReceipt(int RecPayID)
         {
             SqlCommand cmd = new SqlCommand();
@@ -602,6 +614,72 @@ namespace LTMSV2.DAL
             cmd.CommandText = "SP_DeleteCODCustomerReciepts";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@RecPayID", RecPayID);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+        public static DataTable DeleteAccountHead(int AcheadId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteAcHead";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@AcHeadId", AcheadId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+        public static DataTable DeleteDriver(int DriverId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteDriver";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@DriverId", DriverId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+        public static DataTable DeleteCustomer(int CustomerId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteCustomer";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -760,7 +838,31 @@ namespace LTMSV2.DAL
 
             return list;
         }
+        #region "customerInvoice"
+        public static string GetCustomerInvoiceTotal(DateTime FromDate, DateTime ToDate)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerInvoiceTotal";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FromDate", FromDate.ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@ToDate", ToDate.ToString("MM/dd/yyyy"));
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
 
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0].Rows[0][0].ToString();
+            }
+            else
+            {
+                return "";
+            }
+
+
+        }
+        #endregion
         #region "supplierInvoice"
         public static string GetSupplierInvoiceTotal(DateTime FromDate, DateTime ToDate)
         {

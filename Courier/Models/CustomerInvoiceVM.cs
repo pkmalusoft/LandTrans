@@ -63,4 +63,15 @@ namespace LTMSV2.Models
         public int? StatusId { get; set; }
         public int? AgentId { get; set; }
     }
+
+    public class CustomerInvoiceSearch
+    {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+
+        public string InvoiceNo { get; set; }
+
+        public decimal InvoiceTotal { get; set; }
+        public List<CustomerInvoiceVM> Details { get; set; }
+    }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using LTMSV2.DAL;
 using LTMSV2.Models;
 namespace LTMSV2.Controllers
 {
@@ -75,7 +77,31 @@ namespace LTMSV2.Controllers
 
             return RedirectToAction("Index");
         }
+        public ActionResult DeleteConfirmed(int id)
+        {
+            //int k = 0;
+            if (id != 0)
+            {
+                DataTable dt = ReceiptDAO.DeleteDriver(id);
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
 
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
+            }
+
+            return RedirectToAction("Index");
+
+
+        }
 
         public ActionResult VehicleRegNo(string term)
         {

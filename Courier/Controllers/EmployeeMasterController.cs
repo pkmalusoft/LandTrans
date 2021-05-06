@@ -104,7 +104,7 @@ namespace LTMSV2.Controllers
 
                 a.EmployeeID = max + 1;
                 a.EmployeeName = v.EmployeeName;
-                a.EmployeeCode = v.EmployeeCode;
+            a.EmployeeCode = "";// v.EmployeeCode;
                 a.Address1 = v.Address1;
                 a.Address2 = v.Address2;
                 a.Address3 = v.Address3;
@@ -152,7 +152,7 @@ namespace LTMSV2.Controllers
 
                 db.EmployeeMasters.Add(a);
                 db.SaveChanges();
-
+                ReceiptDAO.ReSaveEmployeeCode();
 
 
                 TempData["SuccessMsg"] = "You have successfully added Employee.";
