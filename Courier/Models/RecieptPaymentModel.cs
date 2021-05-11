@@ -176,7 +176,7 @@ namespace LTMSV2.Models
                 cust.SupplierID = item.SupplierID;
                 cust.AcJournalID = item.AcJournalID;
                 cust.StatusEntry = item.StatusEntry;
-
+                cust.AcJournalID = item.AcJournalID;
                 var a = (from t in Context1.RecPayDetails where t.RecPayID == RecpayID select t.CurrencyID).FirstOrDefault();
                 cust.CurrencyId = Convert.ToInt32(a.HasValue ? a.Value : 0);
 

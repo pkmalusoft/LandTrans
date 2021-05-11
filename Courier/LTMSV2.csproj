@@ -3115,6 +3115,8 @@
     <Content Include="Reports\SupplierAgingSummary.rpt" />
     <Content Include="Reports\SupplierPaymentPrint.rpt" />
     <Content Include="Reports\DebitNoteVoucherPrint.rpt" />
+    <Content Include="Reports\CustomerTaxInvoicePrint.rpt" />
+    <Content Include="Reports\CustomerProfit.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3630,6 +3632,7 @@
     <Content Include="Views\Reports\VoucherPrint.cshtml" />
     <Content Include="Views\Reports\ConsignmentUnAllocate.cshtml" />
     <Content Include="Views\Reports\ConsignmentTimeLine.cshtml" />
+    <Content Include="Views\CustomerInvoice\TaxInvoicePrint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

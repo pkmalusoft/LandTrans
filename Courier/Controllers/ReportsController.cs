@@ -696,14 +696,10 @@ namespace LTMSV2.Controllers
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
-                if (!currentreport.Contains("CustomerLedger") && model.ReportType == "Ledger")
+                if (!currentreport.Contains("CustomerProfit"))
                 {
                     Session["ReportOutput"] = null;
-                }
-                else if (!currentreport.Contains("CustomerOutStanding") && model.ReportType == "OutStanding")
-                {
-                    Session["ReportOutput"] = null;
-                }
+                }                
             }
 
             return View(model);
@@ -729,20 +725,9 @@ namespace LTMSV2.Controllers
             Response.Buffer = false;
             Response.ClearContent();
             Response.ClearHeaders();
-            if (model.ReportType == "Ledger")
-            {
-                //AccountsReportsDAO.GenerateCustomerLedgerReport();
-                AccountsReportsDAO.GenerateCustomerLedgerDetailReport();
-            }
-            else if (model.ReportType == "OutStanding")
-            {
-                AccountsReportsDAO.GenerateCustomerOutStandingReport();
-            }
-            else if (model.ReportType == "AWBOutStanding")
-            {
-                AccountsReportsDAO.GenerateAWBOutStandingReport();
-            }
-
+           
+            AccountsReportsDAO.GenerateCustomerProfit();
+           
             return RedirectToAction("CustomerProfitAnalysis", "Reports");
 
 

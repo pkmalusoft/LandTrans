@@ -625,6 +625,17 @@ namespace LTMSV2.Controllers
             LabelPrintingParam picker = SessionDataModel.GetLabelPrintParam();
             string monetaryunit = Session["MonetaryUnit"].ToString();
             AccountsReportsDAO.CustomerInvoiceReport(id, monetaryunit);
+            //AccountsReportsDAO.CustomerTaxInvoiceReport(id, monetaryunit);
+            return View();
+        }
+
+        public ActionResult TaxInvoicePrint(int id)
+        {
+            ViewBag.ReportName = "Tax Invoice Printing";
+            LabelPrintingParam picker = SessionDataModel.GetLabelPrintParam();
+            string monetaryunit = Session["MonetaryUnit"].ToString();
+            //AccountsReportsDAO.CustomerInvoiceReport(id, monetaryunit);
+            AccountsReportsDAO.CustomerTaxInvoiceReport(id, monetaryunit);
             return View();
         }
         public ActionResult InvoicePrintold(int id)

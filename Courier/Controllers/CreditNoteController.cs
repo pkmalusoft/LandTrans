@@ -29,12 +29,18 @@ namespace LTMSV2.Controllers
                 if (item.InvoiceType == "TR")
                 {
                     var purchaseinvoice = (from d in db.CustomerInvoices where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
-                    jobcode = purchaseinvoice.CustomerInvoiceNo;
+                    if (purchaseinvoice != null)
+                    {
+                        jobcode = purchaseinvoice.CustomerInvoiceNo;
+                    }
                 }
                 else if(item.InvoiceType == "OP")
                 {
                     var purchaseinvoice = (from d in db.AcOPInvoiceDetails where d.AcOPInvoiceDetailID == item.InvoiceID select d).FirstOrDefault();
-                    jobcode = purchaseinvoice.InvoiceNo;
+                    if (purchaseinvoice != null)
+                    {
+                        jobcode = purchaseinvoice.InvoiceNo;
+                    }
 
                 }
                 

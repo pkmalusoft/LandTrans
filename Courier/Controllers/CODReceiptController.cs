@@ -142,6 +142,7 @@ namespace LTMSV2.Controllers
 
                                 if (inscan != null)
                                 {
+                                    customerinvoice.InScanID = inscan.InScanID;
                                     customerinvoice.ConsignmentNo = inscan.ConsignmentNo;
                                     customerinvoice.strDate = Convert.ToDateTime(inscan.TransactionDate).ToString("dd/MM/yyyy");
                                 }
@@ -293,16 +294,16 @@ namespace LTMSV2.Controllers
             if (RecP.RecPayID <= 0)
             {
                 decimal Fmoney = 0;
-                for (int j = 0; j < RecP.CustomerRcieptChildVM.Count; j++)
-                {
-                    Fmoney = Fmoney + Convert.ToDecimal(RecP.CustomerRcieptChildVM[j].Amount);
-                }
-                if (Fmoney > 0)
-                {
-                    RecP.FMoney = Fmoney;
-                }
+                //for (int j = 0; j < RecP.CustomerRcieptChildVM.Count; j++)
+                //{
+                //    Fmoney = Fmoney + Convert.ToDecimal(RecP.CustomerRcieptChildVM[j].Amount);
+                //}
+                //if (Fmoney > 0)
+                //{
+                //    RecP.FMoney = Fmoney;
+                //}
                 RecP.AcCompanyID = branchid;
-                
+
                 RPID = ReceiptDAO.AddCustomerRecieptPayment(RecP, Session["UserID"].ToString()); //.AddCustomerRecieptPayment(RecP, Session["UserID"].ToString());
 
                 RecP.RecPayID = (from c in db.RecPays orderby c.RecPayID descending select c.RecPayID).FirstOrDefault();
@@ -310,69 +311,60 @@ namespace LTMSV2.Controllers
 
                 foreach (var item in RecP.CustomerRcieptChildVM)
                 {
-                    decimal Advance = 0;
-                    //if (item.Amount > 0 && (item.AmountToBeRecieved < item.Amount || item.AmountToBeRecieved == item.Amount))///900<1000
-                    //{
-                    // item.Amount = Convert.ToDecimal(RecP.EXRate * item.Amount);
-                    //100=1000-900
-                    Advance = Convert.ToDecimal(item.Amount) - item.AmountToBeRecieved;
-                    DateTime vInvoiceDate = Convert.ToDateTime(item.InvoiceDate);
-                    string vInvoiceDate1 = Convert.ToDateTime(vInvoiceDate).ToString("yyyy-MM-dd h:mm tt");
                     if (item.Amount > 0)
                     {
-                        var maxrecpaydetailid = (from c in db.RecPayDetails orderby c.RecPayDetailID descending select c.RecPayDetailID).FirstOrDefault();
-                        string invoicetype = "D";                       
-                        
-                        ReceiptDAO.InsertRecpayDetailsForCust(RecP.RecPayID,0 ,0, Convert.ToDecimal(-item.Amount),RecP.Remarks, invoicetype, false, "", vInvoiceDate1, item.InvoiceNo.ToString(), Convert.ToInt32(RecP.CurrencyId), 3, item.InScanID);
-                        
-                        var recpaydetail = (from d in db.RecPayDetails where d.RecPayDetailID == maxrecpaydetailid + 1 select d).FirstOrDefault();
-                        var recpd = recpaydetail;
-                        recpaydetail.AdjustmentAmount = item.AdjustmentAmount;
-                        db.Entry(recpd).State = EntityState.Modified;
+                        RecPayDetail recpd = new RecPayDetail();
+                        int? maxrecpaydetailid = (from c in db.RecPayDetails orderby c.RecPayDetailID descending select c.RecPayDetailID).FirstOrDefault();
+                        if (maxrecpaydetailid == null)
+                            maxrecpaydetailid = 1;
+                        else
+                            maxrecpaydetailid = maxrecpaydetailid + 1;
+
+                        recpd.RecPayDetailID = Convert.ToInt32(maxrecpaydetailid);
+                        recpd.Amount = -(item.Amount);
+                        recpd.CurrencyID = item.CurrencyId;
+                        recpd.AdjustmentAmount = 0;
+                        recpd.InvDate = item.InvoiceDate.Value;
+                        recpd.RecPayID = RecP.RecPayID;
+                        recpd.Remarks = item.Remarks;
+                        recpd.InvoiceID = 0;
+                        recpd.InScanID = item.InScanID;
+                        recpd.AcOPInvoiceDetailID = 0;
+                        recpd.StatusInvoice = "D";
+                        db.RecPayDetails.Add(recpd);
                         db.SaveChanges();
-                        if (Advance > 0)
-                        {
-                            //   Advance Amount entry
-                            ReceiptDAO.InsertRecpayDetailsForCust(RecP.RecPayID, 0, 0, Advance, null, "C", true, null, null, null, Convert.ToInt32(RecP.CurrencyId), 4, item.JobID);
-                        }
-                     
-
-
                     }
-                    TotalAmount = TotalAmount + Convert.ToDecimal(item.Amount);
                 }
-                if (RecP.CustomerRcieptChildVM.Count == 0)
-                {
-                    //ReceiptDAO.AddCustomerRecieptPayment(rec)
-                    //RP.InsertRecpayDetailsForCust(RecP.RecPayID, 0, 0, Convert.ToInt32(RecP.FMoney), null, "C", true, null, null, null, Convert.ToInt32(RecP.CurrencyId), 4, 0);
-                    int fyaerId = Convert.ToInt32(Session["fyearid"].ToString());
-                    //RP.InsertJournalOfCustomer(RecP.RecPayID, fyaerId);
-                }
+
+
                 //To Balance Invoice AMount
-                if (TotalAmount > 0)
+                if (RecP.FMoney > 0)
                 {
-                    int l = ReceiptDAO.InsertRecpayDetailsForCust(RecP.RecPayID, 0, 0, TotalAmount, null, "D", false, null, null, null, Convert.ToInt32(RecP.CurrencyId), 4, 0);
+                    //int l = ReceiptDAO.InsertRecpayDetailsForCust(RecP.RecPayID, 0, 0, Convert.ToDecimal(RecP.FMoney), null, "D", false, null, null, null, Convert.ToInt32(RecP.CurrencyId), 4, 0);
                     int fyaerId = Convert.ToInt32(Session["fyearid"].ToString());
                     ReceiptDAO.InsertJournalOfCustomer(RecP.RecPayID, fyaerId);
 
                 }
-                var Recpaydata = (from d in db.RecPays where d.RecPayID == RecP.RecPayID select d).FirstOrDefault();
+                // var Recpaydata = (from d in db.RecPays where d.RecPayID == RecP.RecPayID select d).FirstOrDefault();
 
-                Recpaydata.RecPayID = RecP.RecPayID;
-                Recpaydata.IsTradingReceipt = true;
-                db.Entry(Recpaydata).State = EntityState.Modified;
-                db.SaveChanges();
+                //Recpaydata.RecPayID = RecP.RecPayID;
+                //Recpaydata.IsTradingReceipt = true;
+                //db.Entry(Recpaydata).State = EntityState.Modified;
+                //db.SaveChanges();
 
             }
             else //edit mode
             {
-                decimal Fmoney = 0;
-                for (int j = 0; j < RecP.CustomerRcieptChildVM.Count; j++)
-                {
-                    Fmoney = Fmoney + Convert.ToDecimal(RecP.CustomerRcieptChildVM[j].Amount);
+
+
+                var details = (from d in db.RecPayDetails where d.RecPayID == RecP.RecPayID select d).ToList();
+                if (details != null)
+                { db.RecPayDetails.RemoveRange(details);
+                    db.SaveChanges();
                 }
 
                 RecPay recpay = new RecPay();
+                recpay = db.RecPays.Find(RecP.RecPayID);
                 recpay.RecPayDate = RecP.RecPayDate;
                 recpay.RecPayID = RecP.RecPayID;
                 recpay.AcJournalID = RecP.AcJournalID;
@@ -383,9 +375,10 @@ namespace LTMSV2.Controllers
                 recpay.DocumentNo = RecP.DocumentNo;
                 recpay.EXRate = RecP.EXRate;
                 recpay.FYearID = RecP.FYearID;
-                recpay.FMoney = Fmoney;
+                recpay.FMoney = RecP.FMoney;
                 recpay.StatusEntry = RecP.StatusEntry;
                 recpay.IsTradingReceipt = true;
+                recpay.FMoney = RecP.FMoney;
                 recpay.Remarks = RecP.Remarks;
                 recpay.ModifiedBy = RecP.UserID;
                 recpay.ModifiedDate = DateTime.Now;
@@ -394,26 +387,44 @@ namespace LTMSV2.Controllers
 
                 foreach (var item in RecP.CustomerRcieptChildVM)
                 {
-                    RecPayDetail recpd = new RecPayDetail();
-                    recpd.RecPayDetailID = item.RecPayDetailID;
-                    recpd.Amount = -(item.Amount);
-                    recpd.CurrencyID = item.CurrencyId;
-                    recpd.AdjustmentAmount = 0;
-                    //recpd.InvDate = item.InvoiceDate.Value;
-                    recpd.RecPayID = RecP.RecPayID;
-                    recpd.Remarks = item.Remarks;
-                    recpd.InvoiceID = 0;
-                    recpd.InScanID = item.InvoiceID;
-                    recpd.AcOPInvoiceDetailID = 0;
-                    recpd.StatusInvoice = "D";
-                    db.Entry(recpd).State = EntityState.Modified;
-                    db.SaveChanges();                            
+                    if (item.Amount > 0)
+                    {
+                        RecPayDetail recpd = new RecPayDetail();
 
+                        int? maxrecpaydetailid = (from c in db.RecPayDetails orderby c.RecPayDetailID descending select c.RecPayDetailID).FirstOrDefault();
+                        if (maxrecpaydetailid == null)
+                            maxrecpaydetailid = 1;
+                        else
+                            maxrecpaydetailid = maxrecpaydetailid + 1;
+
+                        recpd.RecPayDetailID = Convert.ToInt32(maxrecpaydetailid);
+                        recpd.Amount = -(item.Amount);
+                        recpd.CurrencyID = item.CurrencyId;
+                        recpd.AdjustmentAmount = 0;
+                        if (item.InvoiceDate != null)
+                            recpd.InvDate = item.InvoiceDate.Value;
+                        recpd.RecPayID = RecP.RecPayID;
+                        recpd.Remarks = item.Remarks;
+                        recpd.InvoiceID = 0;
+                        recpd.InScanID = item.InScanID;
+                        recpd.AcOPInvoiceDetailID = 0;
+                        recpd.StatusInvoice = "D";
+                        db.RecPayDetails.Add(recpd);
+                        db.SaveChanges();
+                    }
                 }
-                int editrecPay = 0;
-                var sumOfAmount = db.RecPayDetails.Where(m => m.RecPayID == RecP.RecPayID && m.InvoiceID != 0).Sum(c => c.Amount);
-                editrecPay = editfu.EditRecpayDetailsCustR(RecP.RecPayID, Convert.ToInt32(sumOfAmount));
-                int editAcJdetails = editfu.EditAcJDetails(RecP.AcJournalID.Value, Convert.ToInt32(sumOfAmount));
+                //int editrecPay = 0;
+                //var sumOfAmount = db.RecPayDetails.Where(m => m.RecPayID == RecP.RecPayID && m.InvoiceID != 0).Sum(c => c.Amount);
+                //editrecPay = editfu.EditRecpayDetailsCustR(RecP.RecPayID, Convert.ToInt32(sumOfAmount));
+                if (RecP.AcJournalID == null)
+                {
+                    ReceiptDAO.InsertJournalOfCustomer(RecP.RecPayID, fyearid);
+                }
+                else
+                {
+                    int editAcJdetails = editfu.EditAcJDetails(RecP.AcJournalID.Value, Convert.ToDecimal(RecP.FMoney));
+                }
+                
             }
 
                         
