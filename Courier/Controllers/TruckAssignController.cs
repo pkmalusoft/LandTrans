@@ -69,10 +69,31 @@ namespace LTMSV2.Controllers
 
         }
 
-        public ActionResult Create()
+        public ActionResult Create(int id=0)
         {
-            ViewBag.Title = "Truck Assign - Create";
-            return View();
+            TruckAssignVM VM = new TruckAssignVM();                                      
+
+            if (id>0)
+            {
+                var c=db.TruckDetails.Find(id);
+                VM.TruckDetailId = c.TruckDetailID;
+                VM.VehicleID = c.VehicleID;                
+                VM.VechicleName = db.VehicleMasters.Find(c.VehicleID).RegistrationNo + "-" + c.DriverName;
+                VM.ReceiptNo = c.ReceiptNo;
+                VM.TDDate = c.TDDate;
+                VM.RouteID =Convert.ToInt32(c.RouteID);
+                VM.RouteName = db.RouteMasters.Find(VM.RouteID).RouteName;
+                ViewBag.EditMode = "True";
+                ViewBag.Title = "Truck Assign - Modify";
+            }
+            else
+            {
+                ViewBag.EditMode = "False";
+                VM.TruckDetailId = 0;
+                ViewBag.Title = "Truck Assign - Create";
+            }
+            
+            return View(VM);
         }
 
         public ActionResult GetTripRouteData(string term, string TripDate)
@@ -197,6 +218,44 @@ namespace LTMSV2.Controllers
             {
                 return Json(new { status = "failed",message=e.Message.ToString() }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+
+        public JsonResult GetAWB(int id)
+        {
+
+            List<AWBList> obj = new List<AWBList>();
+
+            //QuickInscanMaster _qinscanvm = db.InScanMasters.Where(cc => cc.TruckDetailId == id).FirstOrDefault();
+            TruckDetailVM masterdata = new TruckDetailVM();
+            TruckDetail v = db.TruckDetails.Find(id);
+            masterdata.ReceiptNo = v.ReceiptNo;
+            masterdata.TruckDetailID = v.TruckDetailID;
+            masterdata.TDDate = v.TDDate;
+
+
+            obj = (from _inscan in db.InScanMasters
+                   where _inscan.TruckDetailId == id
+                   orderby _inscan.ConsignmentNo descending
+                   select new AWBList { InScanId = _inscan.InScanID, AWB = _inscan.ConsignmentNo, Origin = _inscan.ConsignorCountryName, Destination = _inscan.ConsigneeCountryName }).ToList();
+
+            if (obj != null)
+            {
+                return Json(new { status = "ok", masterdata = masterdata, data = obj, message = "Data Found" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = "failed", masterdata = masterdata, data = obj, message = "Data Not Found" }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public class AWBList
+        {
+            public int InScanId { get; set; }
+            public string AWB { get; set; }
+            public string Origin { get; set; }
+            public string Destination { get; set; }
         }
     }
 }

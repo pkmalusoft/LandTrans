@@ -263,4 +263,18 @@ namespace LTMSV2.Models
         public string Filters { get; set; }
 
     }
+
+    public class SalesReportParam
+    {
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public int EmployeeID { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public string Output { get; set; } //printer ,pdf,word,excel
+        public string ReportType { get; set; } //sumary details
+        public string ReportFileName { get; set; }
+        public string Filters { get; set; }
+
+    }
 }

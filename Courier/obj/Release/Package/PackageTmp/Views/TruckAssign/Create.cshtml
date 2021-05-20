@@ -181,24 +181,24 @@
           //  $('#details tr').slice(1).remove();
             $.ajax({
                 type: "POST",
-                url: "/InScan/GetAWB",
+                url: "/TruckAssign/GetAWB",
                 datatype: "Json",
-                data: { id: $("#QuickInscanID").val() },  //$("#CollectedByID option:selected").val()
+                data: { id: $("#TruckDetailId").val() },  //$("#CollectedByID option:selected").val()
                 success: function (response) {
                     debugger;
                     console.log(response);
                     if (response.status == "ok") {
                         var quickinscan = response.masterdata;
-                        $('#QuickInscanID').val(quickinscan.QuickInscanID);
-                        $('#DepotID').val(quickinscan.DepotId).trigger('change');
-                        $('#VehicleId').val(quickinscan.VehicleId).trigger('change');
-                        $('#DriverName').val(quickinscan.DriverName);
-                        $('#CollectedByID').val(quickinscan.CollectedByID).trigger('change');
-                        $('#ReceivedByID').val(quickinscan.ReceivedByID).trigger('change');
-                        var myDate = new Date(quickinscan.QuickInscanDateTime.match(/\d+/)[0] * 1);
+                        //$('#TruckDetailId').val(quickinscan.TruckDetailId);
+                        //$('#DepotID').val(quickinscan.DepotId).trigger('change');
+                        //$('#VehicleId').val(quickinscan.VehicleId).trigger('change');
+                        //$('#DriverName').val(quickinscan.DriverName);
+                        //$('#CollectedByID').val(quickinscan.CollectedByID).trigger('change');
+                        //$('#ReceivedByID').val(quickinscan.ReceivedByID).trigger('change');
+                        var myDate = new Date(quickinscan.TDDate.match(/\d+/)[0] * 1);
                         var cmon = myDate.getMonth() + 1;
                         var inscandate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
-                        $('#QuickInscanDateTime').val(inscandate);
+                        $('#TDDate').val(inscandate);
                         AWBItems = [];
                         AWBItems = response.data;
 
@@ -210,18 +210,18 @@
                     else {
                         AWBItems = [];
                           $("#detailsbody").html('');
-                        $('#QuickInscanID').val('');
-                        $('#DepotID').val('').trigger('change');
-                        $('#VehicleId').val(0).trigger('change');
-                        $('#DriverName').val('');
-                        $('#CollectedByID').val(0).trigger('change');
-                        $('#ReceivedByID').val(0).trigger('change');
+                        //$('#QuickInscanID').val('');
+                        //$('#DepotID').val('').trigger('change');
+                        //$('#VehicleId').val(0).trigger('change');
+                        //$('#DriverName').val('');
+                        //$('#CollectedByID').val(0).trigger('change');
+                        //$('#ReceivedByID').val(0).trigger('change');
                           var d = new Date();
                         var curr_date = d.getDate();
                         var curr_month = d.getMonth()+1;
                         var curr_year = d.getFullYear();
                         var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
-                         $('#QuickInscanDateTime').val(reqdate);
+                         $('#TDDate').val(reqdate);
 
                     }
 
@@ -264,84 +264,8 @@
                 });
             }
         });
-        $('#btnsave1').click(function () {
-            var lst1 = [];
-            var SelectedInScanId = '';
-            var RemovedAWB = '';
-             $.each(AWBItems, function (index, item) {
-
-                 //var awbitem = { InscanID: item.InScanId, AWB: item.AWB };
-                 if (SelectedInScanId != '')
-                     SelectedInScanId += ',';
-
-                 SelectedInScanId = SelectedInScanId + item.InScanId;
-                //lst1.push(awbitem);
-             });
-
-            $.each(RemoveAWBItems, function (index, item) {
-
-                 //var awbitem = { InscanID: item.InScanId, AWB: item.AWB };
-                 if (RemovedAWB != '')
-                     RemovedAWB += ',';
-
-                 RemovedAWB = RemovedAWB +item.InScanId;
-                //lst1.push(awbitem);
-            });
-
-            var saveobj = {
-                QuickInscanID:$('#QuickInscanID').val(),
-                DepotID: $('#DepotID').val(),
-                DepotName: "",
-                InScanSheetNo: $('#InScanSheetNo').val(),
-                VehicleId: $('#VehicleId').val(),
-                DriverName: $('#DriverName').val(),
-                BranchId: 0,
-                UserId: 0,
-                CollectedByID: $('#CollectedByID').val(),
-                ReceivedByID: $('#ReceivedByID').val(),
-                QuickInscanDateTime: $('#QuickInscanDateTime').val(),
-                SelectedInScanId: SelectedInScanId,
-                RemovedInScanId :RemovedAWB
-            }
-
-             $.ajax({
-                type: "POST",
-                url: "/InScan/SaveQuickInScan",
-                datatype: "Json",
-                data: saveobj,
-                success: function (response) {
-                    if (response.status == "ok") {
-                        $("#detailsbody").html('');
-                        $('#QuickInscanID').val(0);
-                        $('#DepotID').val(0);
-                        $('#VehicleId').val(0).trigger('change');
-                        $('#DriverName').val('');
-                        $('#CollectedByID').val(0).trigger('change');
-                        $('#ReceivedByID').val(0).trigger('change');
-                         var myDate = new Date(quickinscan.QuickInscanDateTime.match(/\d+/)[0] * 1);
-                        var cmon = myDate.getMonth() + 1;
-                        var inscandate = myDate.getDate() + "-" + cmon + "-" + myDate.getFullYear() + ' ' + myDate.getHours() + ':' + myDate.getMinutes();
-                        $('#QuickInscanDateTime').val(inscandate);
-
-                        $('#InScanSheetNo').val('');
-                        $("#txtawb").val('');
-                        $('#InScanSheetNo').focus();
-                        RemoveAWBItems = [];
-                        AWBItems = [];
-                        $.notify(response.message, "success");
-                        window.location = "/InScan/index";
-                    }
-                    else {
-
-                        $.notify(response.message, "warning");
-
-                    }
-                }
-            });
-
-
-        });
-     if ('@ViewBag.EditMode' == "true") {
+        
+     if ('@ViewBag.EditMode' == "True") {
             DisplayAWBItems();
         }
         else {
@@ -409,6 +333,7 @@
             <div class="row no-margin">
 
                 <div class="col-md-4">
+                    @Html.HiddenFor(model => model.TruckDetailId)
                     <label class="headinglabel required">Trip Date</label>
                     @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control text-right" })
                     @Html.ValidationMessageFor(model => model.TDDate)

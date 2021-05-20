@@ -1,6 +1,6 @@
 ﻿@model LTMSV2.Models.QuickAWBVM
 @{
-    
+
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());
     var _mindate = @LTMSV2.Models.CommanFunctions.GetMinFinancialDate(); //'2020/01/01',
@@ -15,16 +15,17 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
 <style>
     swal-button {
-        background-color: green!important;
+        background-color: green !important;
     }
-        /*.ui-autocomplete {
+    /*.ui-autocomplete {
     z-index: 100;
     }*/
-        .datefilters {
+    .datefilters {
         border: 1px solid #ccc;
         padding: 20px 10px;
         border-radius: 5px;
     }
+
     .deleteallocrow {
         color: red !important;
     }
@@ -32,7 +33,7 @@
     .fa fa-times {
     }
 
-   /* .ui-autocomplete {
+    /* .ui-autocomplete {
         position: absolute;
         cursor: default;
         z-index: 1001 !important
@@ -78,7 +79,7 @@
         justify-content: space-between;
     }
 
-  
+
 
     #DeleteAllocationRow {
         color: #dd4b39 !important;
@@ -118,11 +119,11 @@
             focus: function (event, ui) {
                 $('#PickUpLocationName').val(ui.item.value);
                 $('#PickUpLocationID').val(ui.item.ItemID);
-                $('#PickUpLocationID').attr('label',ui.item.value);
+                $('#PickUpLocationID').attr('label', ui.item.value);
             },
             select: function (e, i) {
                 e.preventDefault();
-                $('#PickUpLocationName').val(i.item.value);                
+                $('#PickUpLocationName').val(i.item.value);
                 $('#PickUpLocationID').val(i.item.ItemID);
                 $('#PickUpLocationID').attr('label', i.item.value);
             },
@@ -152,13 +153,13 @@
             focus: function (event, ui) {
                 $("#DeliveryLocationName").val(ui.item.label);
                 $("#DeliveryLocationID").val(ui.item.ItemID);
-                $("#DeliveryLocationID").attr('label',ui.item.label);
+                $("#DeliveryLocationID").attr('label', ui.item.label);
             },
             select: function (e, i) {
                 e.preventDefault();
                 $("#DeliveryLocationName").val(i.item.value);
                 $("#DeliveryLocationID").val(i.item.ItemID);
-                $("#DeliveryLocationID").attr('label',i.item.label);
+                $("#DeliveryLocationID").attr('label', i.item.label);
             },
 
         });
@@ -167,7 +168,7 @@
             if ($("#DeliveryLocationName").val().trim() == '') {
                 $("#DeliveryLocationID").val(0);
             }
-            else if ($("#DeliveryLocationName").val().trim()!="" && ($("#DeliveryLocationName").val().trim() != $("#DeliveryLocationID").attr('label').trim() )) {
+            else if ($("#DeliveryLocationName").val().trim() != "" && ($("#DeliveryLocationName").val().trim() != $("#DeliveryLocationID").attr('label').trim())) {
                 $("#DeliveryLocationName").val('');
                 $("#DeliveryLocationID").val(0);
                 $("#DeliveryLocationName").focus();
@@ -178,7 +179,7 @@
             if ($("#PickUpLocationName").val().trim() == '') {
                 $("#PickUpLocationID").val(0);
             }
-            else if ( $("#PickUpLocationName").val().trim()!="" && ($("#PickUpLocationName").val().trim() != $("#PickUpLocationID").attr('label').trim())) {
+            else if ($("#PickUpLocationName").val().trim() != "" && ($("#PickUpLocationName").val().trim() != $("#PickUpLocationID").attr('label').trim())) {
                 $("#PickUpLocationName").val('');
                 $("#PickUpLocationID").val(0);
                 $("#PickUpLocationName").focus();
@@ -197,9 +198,9 @@
                             return {
                                 label: val.Location,
                                 value: val.Location,
-                                LocationID:val.LocationID,
+                                LocationID: val.LocationID,
                                 CityID: val.CityID,
-                                CountryID: val.CountryID,                                
+                                CountryID: val.CountryID,
                                 CountryName: val.CountryName,
                                 CityName: val.CityName
                             }
@@ -222,14 +223,14 @@
                 $("#ConsignorLocationName").val(i.item.label);
                 $("#ConsignorLocationID").val(i.item.LocationID);
                 $("#ConsignorCountryName").val(i.item.CountryName);
-                $("#ConsignorCountryID").val(i.item.CountryID);               
+                $("#ConsignorCountryID").val(i.item.CountryID);
                 $("#ConsignorCityName").val(i.item.CityName);
                 $("#ConsignorCityID").val(i.item.CityID);
             },
 
         });
 
-        $("#ConsigneeLocationName").autocomplete( {
+        $("#ConsigneeLocationName").autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: '/LocationMaster/GetLocation',
@@ -491,7 +492,7 @@
 <script type="text/javascript">
     //customer and shipper autocomplete
     $(document).ready(function () {
-        
+
         function LoadCustomerDetail() {
             if ($('#CustomerID').val() > 0) {
                 $.ajax({
@@ -562,7 +563,7 @@
             }
 
         });
-        
+
         $("#DocumentSetupName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -577,7 +578,7 @@
                                 label: val.DocumentName,
                                 value: val.DocumentName,
                                 DocumentID: val.DocumentId,
-                                ImpExpCode:val.ImpExpCode
+                                ImpExpCode: val.ImpExpCode
                             }
                         }))
                     }
@@ -663,7 +664,7 @@
                     url: '/Consignment/GetShipperName',
                     datatype: "json",
                     data: {
-                        term: request.term,type:$('#hdnshippertype').val()
+                        term: request.term, type: $('#hdnshippertype').val()
                     },
                     success: function (data) {
                         response($.map(data, function (val, item) {
@@ -687,7 +688,7 @@
             },
             minLength: 0,
             autoFocus: false,
-            focus: function (event, i) {                
+            focus: function (event, i) {
                 $("#shippername").val(i.item.label);
                 $("#ConsignorContact").val(i.item.ContactPerson);
                 $("#ConsignorAddress1_Building").val(i.item.Address1);
@@ -790,7 +791,7 @@
                             return {
                                 label: val.ItemName,
                                 value: val.ItemName,
-                                ItemID:val.ItemID
+                                ItemID: val.ItemID
                             }
                         }))
                     }
@@ -854,7 +855,7 @@
         //        }
         //    });
 
-                   
+
         $("#VehicleRegNo").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -886,7 +887,7 @@
 
 
         });
-    
+
         $("#RouteName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -975,7 +976,7 @@
         $('#OtherChargesModal').modal('show');
     }
 
-   
+
     function ShowStatusModal() {
 
           $.ajax({
@@ -1074,11 +1075,11 @@
                 $('#txtLabelQty').val('');
                 $('#txtIncrement').val('');
                 $('#LabelPrintingModal').modal('show');
-                
+
 
             }
         });
-      
+
     }
     $("#LabelPrintingModal").on('shown.bs.modal', function (e) {
         $('#txtStartLabelNo').focus();
@@ -1189,7 +1190,7 @@
         $("select").css({ "border-radius": "5px" });
 
         $("#ConsignmentNo").focus();
-        
+
         $("#OtherChargeName").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -1274,7 +1275,7 @@
                 type: "POST",
                 url: "/Consignment/GenerateLabelPrinting",
                 data: printobj, // { 'LabelStart': $('#txtStartLabelNo').val(), 'LabelQty': $('#txtLabelQty').val(), 'LabelIncrement': $('#txtIncrement').val(), 'InscanId': $('#InScanID').val()},
-                datatype: "Json",                
+                datatype: "Json",
                 success: function (response) {
                     $('#LabelPrintingModal').modal('hide');
                     window.open("/Consignment/LabelPrinting?consignmentno=" + response.data, "_blank");
@@ -1287,11 +1288,11 @@
             debugger;
             var x = $("#Length").val();
             var y = $("#Width").val();
-            var z = $("#Height").val();            
+            var z = $("#Height").val();
             var tot = parseFloat(x) * parseFloat(y) * parseFloat(z);
             $('#Volume').val(tot);
             var w = $('#Weight').val();
-            var vw = tot / parseFloat(w);           
+            var vw = tot / parseFloat(w);
             $('#VolumeWeight').val(vw.toFixed(3));
 
         }
@@ -1520,7 +1521,7 @@
                 return false;
             }
             var fullform = $('#quickAWB').valid();
-            
+
             if ($("#ConsignmentNo").val() != "") {
                 $.ajax({
                     type: "POST",
@@ -1551,8 +1552,8 @@
             }
             else {
                 $("#validations").hide();
-                return true;               
-                
+                return true;
+
             }
                 //else {
                 //    $("#validations").hide();
@@ -1561,7 +1562,7 @@
 
         });
         $("#chkCBMInch").click(function () {
-            if ($("#chkCBMInch").is(':checked')) {                
+            if ($("#chkCBMInch").is(':checked')) {
                 $('#CBM_Unit').val('Inch');
             }
             else {
@@ -1682,12 +1683,12 @@
         var divitems = $('#divcustomer1').find('.form-control');
 
         if (@ViewBag.EditMode== true) {
-            
+
             $('#InvoiceTo1').val($('#InvoiceTo').val()).trigger('change');
-            
+
         }
         else {
-             $('#TransactionDate').val(reqdate);       
+             $('#TransactionDate').val(reqdate);
             $("#PaymentModeId").trigger('change');
 
         if ( $('#InScanID').val() == "0" || $('#InScanID').val() == 0 || $('#InScanID').val() == null) {
@@ -2033,37 +2034,37 @@
                             <div class="row no-margin">
                                 <div class="col-md-12">
                                     <label class="headinglabel required">Item</label>
-                                    @Html.TextAreaFor(model => model.CargoDescription, new { @class = "txttarget form-control", @required = "true", @style = "", @placeholder = "Item  Name", @rows = 2})
+                                    @Html.TextAreaFor(model => model.CargoDescription, new { @class = "txttarget form-control", @required = "true", @style = "", @placeholder = "Item  Name", @rows = 2 })
 
                                 </div>
                             </div>
-                                    <div class="row no-margin">
-                                        <div class="col-md-12">
-                                            
-                                            <div class="col-md-4">
-                                                <label class="headinglabel required">Package</label>
-                                                @Html.TextBoxFor(model => model.PackageName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Package Name" })
-                                                @Html.HiddenFor(model => model.PackageId)
+                            <div class="row no-margin">
+                                <div class="col-md-12">
+
+                                    <div class="col-md-4">
+                                        <label class="headinglabel required">Package</label>
+                                        @Html.TextBoxFor(model => model.PackageName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Package Name" })
+                                        @Html.HiddenFor(model => model.PackageId)
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="headinglabel required">No. of Package</label>
+                                        @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright", @onkeypress = "return isNumberKey1(event)", @required = "true", @maxlength = 13 })
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <div class="innerCheckbox">
+                                            @Html.HiddenFor(model => model.CBM_Unit)
+                                            <div class="field checkboxdesign verticalcheckbox justify-center">
+                                                <label class="headinglabel"><input type="radio" id="chkCBMInch" name="cbmUnit" />Inch</label>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label class="headinglabel required">No. of Package</label>
-                                                @Html.TextBoxFor(model => model.Pieces, new { @class = "form-control textright", @onkeypress = "return isNumberKey1(event)", @required = "true", @maxlength = 13 })
-                                            </div>
-                                            <div class="col-md-4 text-right">
-                                                <div class="innerCheckbox">
-                                                    @Html.HiddenFor(model => model.CBM_Unit)
-                                                    <div class="field checkboxdesign verticalcheckbox justify-center">
-                                                        <label class="headinglabel"><input type="radio" id="chkCBMInch" name="cbmUnit" />Inch</label>
-                                                    </div>
-                                                    <div class="field checkboxdesign justify-center" style="padding-top: 5px!important">
-                                                        <label class="headinglabel"><input type="radio" id="chkCBMCM" name="cbmUnit" />CM</label>
-                                                    </div>
-                                                </div>
+                                            <div class="field checkboxdesign justify-center" style="padding-top: 5px!important">
+                                                <label class="headinglabel"><input type="radio" id="chkCBMCM" name="cbmUnit" />CM</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row no-margin">
-                                        <div class="col-md-12">
+                                </div>
+                            </div>
+                            <div class="row no-margin">
+                                <div class="col-md-12">
 
                                     <div class="col-md-2">
                                         <label class="headinglabel required">Weight</label>
@@ -2126,23 +2127,23 @@
 
                                 </div>
                                 </div>*@
-                        <div class="row no-margin">
-                            <div class="col-md-3">
-                                <label class="headinglabel required">Despatch Date</label>
-                                @Html.TextBoxFor(model => model.DespatchDate, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.DespatchDate, "", new { @class = "text-danger" })
+                            <div class="row no-margin">
+                                <div class="col-md-3">
+                                    <label class="headinglabel required">Despatch Date</label>
+                                    @Html.TextBoxFor(model => model.DespatchDate, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DespatchDate, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="headinglabel required">Route</label>
+                                    @Html.TextBoxFor(model => model.RouteName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Route Name" })
+                                    @Html.HiddenFor(model => model.RouteID)
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="headinglabel required">Transit Depot</label>
+                                    @Html.DropDownListFor(model => model.TransitDepotId, new SelectList(@ViewBag.Depot, "ID", "Depot"), "Select", new { @class = "form-control", @required = "true" })
+                                    @Html.HiddenFor(model => model.RouteID)
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="headinglabel required">Route</label>
-                                @Html.TextBoxFor(model => model.RouteName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Route Name" })
-                                @Html.HiddenFor(model => model.RouteID)
-                            </div>
-                            <div class="col-md-3">
-                                <label class="headinglabel required">Transit Depot</label>
-                                @Html.DropDownListFor(model => model.TransitDepotId, new SelectList(@ViewBag.Depot, "ID", "Depot"), "Select", new { @class = "form-control", @required = "true" })                                
-                                @Html.HiddenFor(model => model.RouteID)
-                            </div>
-                        </div>
                             <div class="row-margin">
                                 <div class="col-md-12">
                                     <div class="col-md-6">
@@ -2165,9 +2166,9 @@
                                                 <label class="headinglabel">COM</label>
                                             </div>
                                             @*<div class="checkboxdesign verticalcheckbox">
-                                                @Html.CheckBox("FOC", new { @name = "FOC" }) &nbsp;
-                                                <label class="headinglabel">FOC</label>
-                                            </div>*@
+                                                    @Html.CheckBox("FOC", new { @name = "FOC" }) &nbsp;
+                                                    <label class="headinglabel">FOC</label>
+                                                </div>*@
                                         </div>
                                     </div>
                                 </div>
@@ -2649,4 +2650,4 @@
 
 </section>
 <script src="~/Scripts/sweetalert.min.js"></script>
-@*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCexhtncgr1cTUh0hzKOrK_GsS_tifAEns&libraries=places&callback=initAutocomplete" async defer></script>*@
+@*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKwJ15dRInM0Vi1IAvv6C4V4vVM5HVnMc&libraries=places&callback=initAutocomplete" async defer></script>*@
