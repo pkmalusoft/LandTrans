@@ -295,6 +295,7 @@ namespace LTMSV2.Controllers
                 {
                     db.CustomerMasters.Add(obj);
                     db.SaveChanges();
+                    ReceiptDAO.ReSaveCustomerCode();
                 }
                     
                     
@@ -339,44 +340,46 @@ namespace LTMSV2.Controllers
             //List<CourierStatu> _cstatus = new List<CourierStatu>();
             try
             {
-                string custform = "000000";
-                string maxcustomercode = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerCode).FirstOrDefault();
-                string last6digit = "";
-                if (maxcustomercode==null || maxcustomercode=="")
-                {
-                    //maxcustomercode="AA000000";
-                    last6digit = "0";
+
+                customercode = ReceiptDAO.GetMaxCustomerCode(custname);
+                //string custform = "000000";
+                //string maxcustomercode = (from d in db.CustomerMasters orderby d.CustomerID descending select d.CustomerCode).FirstOrDefault();
+                //string last6digit = "";
+                //if (maxcustomercode==null || maxcustomercode=="")
+                //{
+                //    //maxcustomercode="AA000000";
+                //    last6digit = "0";
                         
-                }
-                else
-                {
-                    last6digit = maxcustomercode.Substring(maxcustomercode.Length - 6); //, maxcustomercode.Length - 6);
-                }
-                if (last6digit !="")
-                {
+                //}
+                //else
+                //{
+                //    last6digit = maxcustomercode.Substring(maxcustomercode.Length - 6); //, maxcustomercode.Length - 6);
+                //}
+                //if (last6digit !="")
+                //{
                     
-                    string customerfirst = custname.Substring(0, 1);
-                    string customersecond = "";
-                    try
-                    {
-                        customersecond = custname.Split(' ')[1];
-                        customersecond = customersecond.Substring(0, 1);
-                    }
-                    catch(Exception ex)
-                    {
+                //    string customerfirst = custname.Substring(0, 1);
+                //    string customersecond = "";
+                //    try
+                //    {
+                //        customersecond = custname.Split(' ')[1];
+                //        customersecond = customersecond.Substring(0, 1);
+                //    }
+                //    catch(Exception ex)
+                //    {
 
-                    }
+                //    }
                     
-                    if (customerfirst !="" && customersecond!="") 
-                    {
-                        customercode = customerfirst + customersecond + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1); 
-                    }
-                    else
-                    {
-                        customercode = customerfirst + "C" + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1);
-                    }
+                //    if (customerfirst !="" && customersecond!="") 
+                //    {
+                //        customercode = customerfirst + customersecond + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1); 
+                //    }
+                //    else
+                //    {
+                //        customercode = customerfirst + "C" + String.Format("{0:000000}", Convert.ToInt32(last6digit) + 1);
+                //    }
 
-                }
+                //}
                                 
                 return Json(new { data = customercode, result = status }, JsonRequestBehavior.AllowGet);
             }

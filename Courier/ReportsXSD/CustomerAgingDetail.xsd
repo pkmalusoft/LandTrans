@@ -24,6 +24,7 @@
               <xs:element name="Ag3" type="xs:decimal" minOccurs="0" />
               <xs:element name="Ag4" type="xs:decimal" minOccurs="0" />
               <xs:element name="Ag5" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Ag6" type="xs:decimal" minOccurs="0" />
               <xs:element name="Advance" type="xs:decimal" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>

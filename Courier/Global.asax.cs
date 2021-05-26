@@ -42,7 +42,7 @@ namespace LTMSV2
         void Session_Start(object sender, EventArgs e)
         {
 
-            Session.Timeout = 20;
+            Session.Timeout = 600;
         }
     }
 }
