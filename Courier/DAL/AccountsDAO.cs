@@ -565,7 +565,7 @@ namespace LTMSV2.DAL
                     obj.TransactionNo = ds.Tables[0].Rows[i]["TransactionNo"].ToString();
                     obj.Reference= ds.Tables[0].Rows[i]["Reference"].ToString();
                     obj.VoucherType= ds.Tables[0].Rows[i]["VoucherType"].ToString();
-                    obj.Amount = Convert.ToDecimal(ds.Tables[0].Rows[i]["JournalAmount"].ToString());
+                    obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["JournalAmount"].ToString());
                     objList.Add(obj);
                 }
             }

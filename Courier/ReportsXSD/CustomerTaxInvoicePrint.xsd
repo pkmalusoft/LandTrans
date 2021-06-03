@@ -51,26 +51,14 @@
               <xs:element name="Address1" type="xs:string" minOccurs="0" />
               <xs:element name="Address2" type="xs:string" minOccurs="0" />
               <xs:element name="Address3" type="xs:string" minOccurs="0" />
+              <xs:element name="VATTRN" type="xs:string" minOccurs="0" />
               <xs:element name="CityName" type="xs:string" minOccurs="0" />
               <xs:element name="LocationName" type="xs:string" minOccurs="0" />
               <xs:element name="CountryName" type="xs:string" minOccurs="0" />
               <xs:element name="Remarks1" type="xs:string" minOccurs="0" />
               <xs:element name="PickUpLocation" type="xs:string" minOccurs="0" />
-              <xs:element name="ID" type="xs:int" minOccurs="0" />
-              <xs:element name="MasterID" type="xs:int" minOccurs="0" />
-              <xs:element name="RevenueCostMasterID" type="xs:int" minOccurs="0" />
+              <xs:element name="RevenueUpdateDetailId" type="xs:int" minOccurs="0" />
               <xs:element name="Amount" type="xs:decimal" minOccurs="0" />
-              <xs:element name="IsPerfomaInvoice" type="xs:boolean" minOccurs="0" />
-              <xs:element name="ExpectedAmount" type="xs:decimal" minOccurs="0" />
-              <xs:element name="InvoiceId" type="xs:int" minOccurs="0" />
-              <xs:element name="IsPerfomaCod" type="xs:boolean" minOccurs="0" />
-              <xs:element name="AcHeadDebitId" type="xs:int" minOccurs="0" />
-              <xs:element name="AcHeadCreditId" type="xs:int" minOccurs="0" />
-              <xs:element name="CustomerId1" type="xs:int" minOccurs="0" />
-              <xs:element name="CurrencyId" type="xs:int" minOccurs="0" />
-              <xs:element name="ExchangeRate" type="xs:decimal" minOccurs="0" />
-              <xs:element name="PaymentModeId" type="xs:int" minOccurs="0" />
-              <xs:element name="InvoiceTo" type="xs:string" minOccurs="0" />
               <xs:element name="TaxPercent1" type="xs:decimal" minOccurs="0" />
               <xs:element name="TaxAmount" type="xs:decimal" minOccurs="0" />
               <xs:element name="TotalCharge" type="xs:decimal" minOccurs="0" />
