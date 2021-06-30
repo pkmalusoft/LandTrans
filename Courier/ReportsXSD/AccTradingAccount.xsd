@@ -14,6 +14,8 @@
               <xs:element name="AcHeadName" type="xs:string" minOccurs="0" />
               <xs:element name="Debit" type="xs:decimal" minOccurs="0" />
               <xs:element name="Credit" type="xs:decimal" minOccurs="0" />
+              <xs:element name="GroupOrder" type="xs:int" minOccurs="0" />
+              <xs:element name="PLOrder" type="xs:int" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

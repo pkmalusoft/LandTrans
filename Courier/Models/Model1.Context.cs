@@ -7889,7 +7889,7 @@ namespace LTMSV2.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_InsertOrUpdateAcBankDetails", acBankDetailIDParameter, acJournalIDParameter, bankNameParameter, chequeNoParameter, chequeDateParameter, partyNameParameter, statusTransParameter, statusReconciledParameter, valueDateParameter, isUpdateParameter);
         }
     
-        public virtual ObjectResult<Nullable<int>> SP_InsertRecPay(Nullable<System.DateTime> recPayDate, string documentNo, Nullable<int> customerID, Nullable<int> businessCentreID, string bankName, string chequeNo, Nullable<System.DateTime> chequeDate, string remarks, Nullable<int> acJournalID, Nullable<bool> statusRec, string statusEntry, string statusOrigin, Nullable<int> fYearID, Nullable<int> acCompanyID, Nullable<decimal> eXRate, Nullable<decimal> fMoney, Nullable<int> userID)
+        public virtual ObjectResult<Nullable<int>> SP_InsertRecPay(Nullable<System.DateTime> recPayDate, string documentNo, Nullable<int> customerID, Nullable<int> businessCentreID, string bankName, string chequeNo, Nullable<System.DateTime> chequeDate, string remarks, Nullable<int> acJournalID, Nullable<bool> statusRec, string statusEntry, string statusOrigin, Nullable<int> fYearID, Nullable<int> acCompanyID, Nullable<decimal> eXRate, Nullable<decimal> fMoney, Nullable<int> userID, string entryTime)
         {
             var recPayDateParameter = recPayDate.HasValue ?
                 new ObjectParameter("RecPayDate", recPayDate) :
@@ -7959,7 +7959,11 @@ namespace LTMSV2.Models
                 new ObjectParameter("UserID", userID) :
                 new ObjectParameter("UserID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_InsertRecPay", recPayDateParameter, documentNoParameter, customerIDParameter, businessCentreIDParameter, bankNameParameter, chequeNoParameter, chequeDateParameter, remarksParameter, acJournalIDParameter, statusRecParameter, statusEntryParameter, statusOriginParameter, fYearIDParameter, acCompanyIDParameter, eXRateParameter, fMoneyParameter, userIDParameter);
+            var entryTimeParameter = entryTime != null ?
+                new ObjectParameter("EntryTime", entryTime) :
+                new ObjectParameter("EntryTime", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_InsertRecPay", recPayDateParameter, documentNoParameter, customerIDParameter, businessCentreIDParameter, bankNameParameter, chequeNoParameter, chequeDateParameter, remarksParameter, acJournalIDParameter, statusRecParameter, statusEntryParameter, statusOriginParameter, fYearIDParameter, acCompanyIDParameter, eXRateParameter, fMoneyParameter, userIDParameter, entryTimeParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> SP_InsertRecPayDetailsForCustomer(Nullable<int> recPayID, Nullable<int> invoiceID, Nullable<decimal> amount, string remarks, string statusInvoice, Nullable<bool> statusAdvance, string statusReceipt, string invDate, string invNo, Nullable<int> currencyID, Nullable<int> invoiceStatus, Nullable<int> inScanId)

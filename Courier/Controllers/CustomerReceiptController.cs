@@ -780,7 +780,7 @@ namespace LTMSV2.Controllers
                         if (item.AcOPInvoiceDetailID > 0)
                         {
                             var  sInvoiceDetail = (from d in Context1.AcOPInvoiceDetails where d.AcOPInvoiceDetailID == item.AcOPInvoiceDetailID select d).ToList();                            
-                            if (sInvoiceDetail != null)
+                            if (sInvoiceDetail != null && sInvoiceDetail.Count >0)
                             {
                                 var invoicetotal = sInvoiceDetail.Sum(d => d.Amount); //  sInvoiceDetail.Sum(d=>d.OtherCharge);                                                                
                                 var totamtpaid = ReceiptDAO.SP_GetCustomerInvoiceReceived(Convert.ToInt32(cust.CustomerID), Convert.ToInt32(item.AcOPInvoiceDetailID), Convert.ToInt32(id),0, "OP");
@@ -788,11 +788,14 @@ namespace LTMSV2.Controllers
                                 var totamt = totamtpaid;// + totadjust;// + CreditAmount;
                                 var customerinvoice = new CustomerRcieptChildVM();
                                 customerinvoice.InvoiceID = 0;
+                                customerinvoice.RecPayDetailID = item.RecPayDetailID;
+                                customerinvoice.RecPayID =Convert.ToInt32(item.RecPayID);
                                 customerinvoice.AcOPInvoiceDetailID = sInvoiceDetail[0].AcOPInvoiceDetailID;
                                 customerinvoice.InvoiceType = "OP";
                                 customerinvoice.JobCode = customerinvoice.InvoiceType + customerinvoice.AcOPInvoiceDetailID;
                                 customerinvoice.SInvoiceNo = sInvoiceDetail[0].InvoiceNo;
                                 customerinvoice.strDate = Convert.ToDateTime(item.InvDate).ToString("dd/MM/yyyy");
+                                customerinvoice.InvoiceDate = Convert.ToDateTime(item.InvDate); //.ToString("dd/MM/yyyy");
                                 customerinvoice.AmountToBeRecieved = Convert.ToDecimal(invoicetotal);// - Convert.ToDecimal(totamt) - Convert.ToDecimal(item.Amount);
                                 customerinvoice.AmountToBePaid =  Convert.ToDecimal(totamtpaid); // Convert.ToDecimal(totamtpaid) - Convert.ToDecimal(totadjust);// ;// customerinvoice.AmountToBeRecieved;
                                 customerinvoice.Amount = Convert.ToDecimal(item.Amount) * -1;
@@ -809,24 +812,19 @@ namespace LTMSV2.Controllers
                             cust.AWBAllocation = ReceiptDAO.GetAWBAllocation(cust.AWBAllocation,Convert.ToInt32(item.InvoiceID),Convert.ToDecimal(item.Amount), cust.RecPayID); //customer invoiceid,amount
                             var sInvoiceDetail = (from d in Context1.CustomerInvoiceDetails where d.CustomerInvoiceID == item.InvoiceID select d ).ToList();
                             var awbDetail = (from d in Context1.RecPayAllocationDetails where d.CustomerInvoiceID == item.InvoiceID && d.RecPayDetailID == item.RecPayDetailID select d).ToList();
-                            if (sInvoiceDetail != null)
+                            if (sInvoiceDetail != null && sInvoiceDetail.Count>0)
                             {
                                 var invoicetotal = sInvoiceDetail.Sum(d => d.NetValue); //  sInvoiceDetail.Sum(d=>d.OtherCharge);
                                 var awbtotal = awbDetail.Sum(d => d.AllocatedAmount);
                                 var Sinvoice = (from d in Context1.CustomerInvoices where d.CustomerInvoiceID == item.InvoiceID select d).FirstOrDefault();
                                 //var allrecpay = (from d in Context1.RecPayDetails join c in Context1.RecPays on d.RecPayID equals c.RecPayID where c.RecPayDate.Value<cust.RecPayDate &&  d.InvoiceID == item.InvoiceID select d).ToList();
                                 var totamtpaid = ReceiptDAO.SP_GetCustomerInvoiceReceived(Convert.ToInt32(cust.CustomerID), Convert.ToInt32(item.InvoiceID), Convert.ToInt32(id),0, "TR");
-                                //var totamtpaid = allrecpay.Sum(d => d.Amount) * -1;
-                                //var totadjust = allrecpay.Sum(d => d.AdjustmentAmount);
-                                //var CreditNote = (from d in Context1.CreditNotes where d.InvoiceID == item.InvoiceID && d.CustomerID == Sinvoice.CustomerID select d).ToList();
-                                //decimal? CreditAmount = 0;
-                                //if (CreditNote.Count > 0)
-                                //{
-                                //    CreditAmount = CreditNote.Sum(d => d.Amount);
-                                //}
-                                //var totamt = totamtpaid + totadjust + CreditAmount;
+                             
                                 var customerinvoice = new CustomerRcieptChildVM();
+                                customerinvoice.RecPayDetailID = item.RecPayDetailID;
+                                customerinvoice.RecPayID = Convert.ToInt32(item.RecPayID);
                                 customerinvoice.InvoiceID = Convert.ToInt32(item.InvoiceID);
+                                customerinvoice.InvoiceDate = Convert.ToDateTime(item.InvDate); //.ToString("dd/MM/yyyy");
                                 customerinvoice.AcOPInvoiceDetailID = 0;
                                 customerinvoice.InvoiceType = "TR";
                                 customerinvoice.JobCode = customerinvoice.InvoiceType + customerinvoice.InvoiceID;

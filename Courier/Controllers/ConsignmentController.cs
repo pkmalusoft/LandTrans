@@ -933,8 +933,13 @@ namespace LTMSV2.Controllers
                 inscan.MovementTypeID = data.MovementID;
                 inscan.ReceivedBy = data.DepotReceivedBy; // "tesT"; // data.ReceivedBy.Value;
                 inscan.PickedBy = data.PickedUpEmpID;// "test1"; //data.ReceivedBy.Value;
-
-
+            if (data.RevenueUpdate == null)
+                inscan.RevenueUpdate = false;
+            else
+            {
+                inscan.RevenueUpdate = Convert.ToBoolean(data.RevenueUpdate);
+            }
+            
             if (data.CreatedBy != null)
             {
                 inscan.CreatedByDate = Convert.ToDateTime(data.CreatedDate).ToString("dd-MMM-yyyy HH:mm"); ;

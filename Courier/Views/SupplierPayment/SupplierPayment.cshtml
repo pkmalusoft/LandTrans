@@ -98,7 +98,7 @@
             $('#vendortype').val($('#SupplierTypeId').val()).trigger('change');
             $('#vendortype').attr('readonly', 'readonly');
             $('#btnsearch').attr('disabled', 'disabled');
-            if ('@Model.ChequeNo' == null || '@Model.ChequeNo' == '') {
+            if ('@Model.StatusEntry' == 'CS') {
                 $("#divCash").css({ "display": "block" });
                 $("#divBank").css({ "display": "none" });
                 $("#ChequeNo").attr("readonly","readonly")
@@ -682,10 +682,13 @@
             $("#divBank").css({ "display": "block" });
             $("#ChequeNo").attr('required', 'required');
             $("#ChequeDate").attr('required', 'required');
+            $("#ChequeNo").val('');
+            $("#ChequeDate").val('');
             $("#ChequeNo").removeAttr('readonly');
             $("#ChequeDate").removeAttr('readonly')
             $('#CashBank').removeAttr('required', 'required');
             $('#ChequeBank').attr('required', 'required');
+            $('#ChequeBank').val('').trigger('change');
         } else {
             $("#divBank").css({ "display": "none" });
             $("#divCash").css({ "display": "block" });
@@ -694,8 +697,8 @@
             $("#ChequeNo").attr('readonly', 'readonly');
             $("#ChequeDate").attr('readonly','readonly')
             $('#CashBank').attr('required','required');
-
-            $('#ChequeBank').removeAttr('required')
+            $('#CashBank').val('').trigger('change');
+            $('#ChequeBank').removeAttr('required');
         }
 
     }

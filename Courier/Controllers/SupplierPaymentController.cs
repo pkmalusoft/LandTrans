@@ -783,6 +783,7 @@ namespace LTMSV2.Controllers
                 recpay.RecPayID = RecP.RecPayID;
                 recpay.AcJournalID = RecP.AcJournalID;
                 recpay.BankName = RecP.BankName;
+                recpay.StatusEntry = RecP.StatusEntry;
                 recpay.ChequeDate = RecP.ChequeDate;
                 recpay.ChequeNo = RecP.ChequeNo;
                 recpay.SupplierID = RecP.SupplierID;

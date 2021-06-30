@@ -190,7 +190,7 @@
     <Property Name="AcHeadID" Type="int" />
     <Property Name="AnalysisHeadID" Type="int" />
     <Property Name="Amount" Type="money" />
-    <Property Name="Remarks" Type="varchar(max)" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
     <Property Name="BranchID" Type="int" />
     <Property Name="PartyID" Type="int" />
     <Property Name="PartyType" Type="nchar" MaxLength="1" />
@@ -213,7 +213,7 @@
     <Property Name="VoucherType" Type="varchar" MaxLength="3" />
     <Property Name="TransType" Type="smallint" />
     <Property Name="StatusDelete" Type="bit" />
-    <Property Name="Remarks" Type="varchar" MaxLength="100" />
+    <Property Name="Remarks" Type="varchar" MaxLength="200" />
     <Property Name="UserID" Type="int" />
     <Property Name="ShiftID" Type="int" />
     <Property Name="AcCompanyID" Type="int" />
@@ -331,6 +331,9 @@
     <Property Name="AccountType" Type="varchar" MaxLength="100" />
     <Property Name="AcCategoryId" Type="int" />
     <Property Name="BranchId" Type="int" />
+    <Property Name="TBOrder" Type="int" />
+    <Property Name="PLOrder" Type="int" />
+    <Property Name="BSOrder" Type="int" />
   </EntityType>
   <EntityType Name="AgentMaster">
     <Key>
@@ -8389,6 +8392,7 @@
     <Parameter Name="EXRate" Type="money" Mode="In" />
     <Parameter Name="FMoney" Type="money" Mode="In" />
     <Parameter Name="UserID" Type="int" Mode="In" />
+    <Parameter Name="EntryTime" Type="varchar" Mode="In" />
   </Function>
   <Function Name="SP_InsertRecPayDetailsForCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="RecPayID" Type="int" Mode="In" />

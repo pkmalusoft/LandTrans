@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using LTMSV2.Models;
 using LTMSV2.DAL;
+using System.Data;
 namespace LTMSV2.Controllers
 {
     [SessionExpire]
@@ -545,32 +546,27 @@ namespace LTMSV2.Controllers
         }
         public ActionResult DeleteConfirmed(int id)
         {
-            RevenueUpdateMaster cenquery = db.RevenueUpdateMasters.Where(t => t.ID == id).FirstOrDefault();
-            if (cenquery != null)
+            //int k = 0;
+            if (id != 0)
             {
-                var detalist = db.RevenueUpdateDetails.Where(c => c.MasterID == id).ToList();
-                foreach(var item in detalist)
+                DataTable dt = ReceiptDAO.DeleteRevenueUpdate(id);
+                if (dt != null)
                 {
-                    db.RevenueUpdateDetails.Remove(item);
-                    db.SaveChanges();
+                    if (dt.Rows.Count > 0)
+                    {
+                        //if (dt.Rows[0][0] == "OK")
+                        TempData["SuccessMsg"] = dt.Rows[0][1].ToString();
+                    }
+
                 }
-                db.RevenueUpdateMasters.Remove(cenquery);
-                db.SaveChanges();
-
-                //update inscan revenue update status 
-                var inscan = db.InScanMasters.Find(cenquery.InScanID);
-                inscan.RevenueUpdate = false;
-                db.Entry(inscan).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-
-                TempData["SuccessMsg"] = "You have successfully Deleted the Revenue of Consignment!";
-                return RedirectToAction("Index");
+                else
+                {
+                    TempData["ErrorMsg"] = "Error at delete";
+                }
             }
-            else
-            {
 
-                return RedirectToAction("Index");
-            }
+            return RedirectToAction("Index");
+
         }
     }
 }

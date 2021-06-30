@@ -202,7 +202,7 @@
     <Property Name="AcHeadID" Type="Int32" />
     <Property Name="AnalysisHeadID" Type="Int32" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="BranchID" Type="Int32" />
     <Property Name="PartyID" Type="Int32" />
     <Property Name="PartyType" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
@@ -225,7 +225,7 @@
     <Property Name="VoucherType" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
     <Property Name="TransType" Type="Int16" />
     <Property Name="StatusDelete" Type="Boolean" />
-    <Property Name="Remarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="UserID" Type="Int32" />
     <Property Name="ShiftID" Type="Int32" />
     <Property Name="AcCompanyID" Type="Int32" />
@@ -300,6 +300,9 @@
     <Property Name="AccountType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="AcCategoryId" Type="Int32" />
     <Property Name="BranchId" Type="Int32" />
+    <Property Name="TBOrder" Type="Int32" />
+    <Property Name="PLOrder" Type="Int32" />
+    <Property Name="BSOrder" Type="Int32" />
   </EntityType>
   <EntityType Name="AgentMaster">
     <Key>
@@ -8101,6 +8104,7 @@
       <Parameter Name="EXRate" Mode="In" Type="Decimal" />
       <Parameter Name="FMoney" Mode="In" Type="Decimal" />
       <Parameter Name="UserID" Mode="In" Type="Int32" />
+      <Parameter Name="EntryTime" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="SP_InsertRecPayDetailsForCustomer" ReturnType="Collection(Int32)">
       <Parameter Name="RecPayID" Mode="In" Type="Int32" />

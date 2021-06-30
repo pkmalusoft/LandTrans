@@ -134,6 +134,7 @@ namespace LTMSV2.Controllers
                 reportparam.Output = "PDF";
                 reportparam.SortBy = "Date Wise";
                 reportparam.ReportType = "Date";
+                reportparam.RevenueUpdated = "True";
             }
             else
             {
@@ -165,7 +166,7 @@ namespace LTMSV2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AWBReportParam([Bind(Include = "FromDate,ToDate,PaymentModeId,SelectedValues,MovementId,ParcelTypeId,Output,ReportType,SortBy,InvoicedTo")] AWBReportParam picker)
+        public ActionResult AWBReportParam([Bind(Include = "FromDate,ToDate,PaymentModeId,SelectedValues,MovementId,ParcelTypeId,Output,ReportType,SortBy,InvoicedTo,RevenueUpdated")] AWBReportParam picker)
         {
             AWBReportParam model = new AWBReportParam
             {
@@ -177,7 +178,9 @@ namespace LTMSV2.Controllers
                 Output = picker.Output,
                 ReportType=picker.ReportType,
                 SortBy =picker.SortBy,
-                InvoicedTo=picker.InvoicedTo
+                InvoicedTo=picker.InvoicedTo,
+                RevenueUpdated =picker.RevenueUpdated
+                
 
             };
             model.MovementId = "";
@@ -921,7 +924,8 @@ namespace LTMSV2.Controllers
                     ToDate = CommanFunctions.GetLastDayofMonth().Date,
                     Output = "PDF",
                     TDNo = "",
-                    TDID = 0
+                    TDID = 0,
+                    ReportType="Detail"
                 };                
             }
 
@@ -982,7 +986,8 @@ namespace LTMSV2.Controllers
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 Output = picker.Output,
                 TDID = picker.TDID,
-                TDNo = picker.TDNo
+                TDNo = picker.TDNo,
+                ReportType=picker.ReportType
             };
 
 
@@ -991,8 +996,16 @@ namespace LTMSV2.Controllers
             Response.ClearContent();
             Response.ClearHeaders();
 
+            if (picker.ReportType=="Summary")
+            {
+                AccountsReportsDAO.GenerateManifestSummaryReport();
+            }
+            else
+            {
+                AccountsReportsDAO.GenerateManifestReport();
+            }
 
-            AccountsReportsDAO.GenerateManifestReport();
+            
             //if (id > 0)
             //{
             //    model.TDID = id;

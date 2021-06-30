@@ -1066,5 +1066,30 @@ namespace LTMSV2.DAL
             return custreceipt;
         }
         #endregion
+
+        #region "REvenueUpdate"
+        public static DataTable DeleteRevenueUpdate(int InvoiceId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_DeleteRevenueUpdate";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@RevenueUpdateMasterId", InvoiceId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0];
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+        #endregion
     }
 }

@@ -2292,11 +2292,9 @@ new AcGroupModel()
             {
                 List<AcHeadSelectAllVM> AccountHeadList = new List<AcHeadSelectAllVM>();
                 AccountHeadList = AccountsDAO.GetAcHeadSelectAll(branchID).Where(c => c.AcHead.ToLower().Contains(term.ToLower())).OrderBy(x => x.AcHead).ToList(); ;
-
-                //List<AcHeadSelectAll_Result> AccountHeadList = new List<AcHeadSelectAll_Result>();
-                //AccountHeadList =db.AcHeadSelectAll(branchID).Where(c => c.AcHead.ToLower().Contains(term.ToLower())).OrderBy(x => x.AcHead).ToList();
+                
                 return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
-
+                
                 //List<AcHeadSelectAll_Result> AccountHeadList = new List<AcHeadSelectAll_Result>();
                 //AccountHeadList = MM.AcHeadSelectAll(Common.ParseInt(Session["CurrentBranchID"].ToString()), term);
 
@@ -2305,8 +2303,7 @@ new AcGroupModel()
             {
                 List<AcHeadSelectAllVM> AccountHeadList = new List<AcHeadSelectAllVM>();
                 AccountHeadList = AccountsDAO.GetAcHeadSelectAll(branchID);
-                //List<AcHeadSelectAll_Result> AccountHeadList = new List<AcHeadSelectAll_Result>();
-                //AccountHeadList = db.AcHeadSelectAll(branchID).ToList();
+                
                 return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
             }
         }
@@ -2331,7 +2328,34 @@ new AcGroupModel()
             }
         }
 
-
+        public ActionResult VoucherType(string term)
+        {
+            int branchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int i = 0;
+            if (!String.IsNullOrEmpty(term.Trim()))
+            {
+                List<AcHeadSelectAllVM> AccountHeadList = new List<AcHeadSelectAllVM>();
+                AccountHeadList = AccountsDAO.GetAcVoucherType(branchID).Where(c => c.AcHead.ToLower().Contains(term.ToLower())).OrderBy(x => x.AcHead).ToList(); ;
+                foreach (var item in AccountHeadList)
+                {
+                    AccountHeadList[i].AcHeadID = i;
+                    i++;
+                }
+                return Json(AccountHeadList, JsonRequestBehavior.AllowGet);                
+            }
+            else
+            {
+                List<AcHeadSelectAllVM> AccountHeadList = new List<AcHeadSelectAllVM>();
+                AccountHeadList = AccountsDAO.GetAcVoucherType(branchID);
+                
+                foreach (var item in AccountHeadList)
+                {
+                    AccountHeadList[i].AcHeadID = i;
+                    i++;
+                }
+                return Json(AccountHeadList, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         #region BankReconciliation
 
@@ -3540,7 +3564,7 @@ new AcGroupModel()
                 return Json(AnalysisHeadSelectList, JsonRequestBehavior.AllowGet);
             }
         }
-        #region
+        #region "LedgerTBPL"
         public ActionResult Ledger()
         {
             AccountsReportParam reportparam = SessionDataModel.GetAccountsParam();
@@ -3563,6 +3587,7 @@ new AcGroupModel()
                 reportparam.AcHeadId = 0;
                 reportparam.AcHeadName = "";
                 reportparam.Output = "PDF";
+                reportparam.VoucherTypeId = "";
             }
             else
             {
@@ -3595,8 +3620,9 @@ new AcGroupModel()
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 AcHeadId = picker.AcHeadId,
                 AcHeadName = picker.AcHeadName,
-                Output = picker.Output
-            };
+                Output = picker.Output,
+                VoucherTypeId =picker.VoucherTypeId
+        };
 
             ViewBag.Token = model;
             SessionDataModel.SetAccountsParam(model);
@@ -3673,8 +3699,9 @@ new AcGroupModel()
 
 
             AccountsReportsDAO.GenerateTrialBalanceReport();
+            AccountsReportParam1 reportparam = SessionDataModel.GetAccountsParam1();
             if (model.Output != "PDF")
-                return RedirectToAction("Download", "Accounts", new { file = "a" });
+                return RedirectToAction("Download1", "Accounts", new {filetype=reportparam.Output,filename =reportparam.ReportFileName});
             else
                 return RedirectToAction("TrialBalance", "Accounts");
 
@@ -3723,7 +3750,7 @@ new AcGroupModel()
                     Session["ReportOutput"] = null;
                 }
             }
-            ViewBag.ReportName = "PL/Trading Report";
+            ViewBag.ReportName = "TRADING AND PROFIT & LOSS ACCOUNT";
             return View(reportparam);
         }
 
@@ -3745,12 +3772,78 @@ new AcGroupModel()
 
 
             AccountsReportsDAO.GenerateTradingAccountReport();
+            AccountsReportParam reportparam = SessionDataModel.GetAccountsParam2();
             if (model.Output != "PDF")
-                return RedirectToAction("Download", "Accounts", new { file = "a" });
+                return RedirectToAction("Download1", "Accounts", new { filetype = reportparam.Output,filename=reportparam.ReportFileName });
             else
                 return RedirectToAction("PLTradingReport", "Accounts");
 
           
+
+        }
+
+        public ActionResult BalanceSheetReport()
+        {
+            AccountsReportParam1 reportparam = SessionDataModel.GetAccountsParam1();
+            int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            //ViewBag.AccountType = (from d in db.AcTypes where d.BranchId == branchid select d).ToList();
+            //ViewBag.groups = GetAllAcGroupsByBranch(Convert.ToInt32(Session["CurrentBranchID"].ToString()));
+                        
+            DateTime pToDate;
+            if (reportparam == null)
+            {
+                
+                pToDate  = CommanFunctions.GetLastDayofMonth().Date;
+                reportparam = new AccountsReportParam1();
+                reportparam.AsOnDate = pToDate;
+                reportparam.Output = "PDF";
+            }
+            else
+            {
+                if (reportparam.AsOnDate.Date.ToString() == "01-01-0001 00:00:00" || reportparam.AsOnDate.Date.ToString() == "01-01-0001")
+                {
+                    pToDate = CommanFunctions.GetLastDayofMonth().Date; //.AddDays(-1);
+                    reportparam.AsOnDate = pToDate;
+                    reportparam.Output = "PDF";
+                }
+
+            }
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("AccBalanceSheet"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+            }
+            ViewBag.ReportName = "Balance Sheet Report";
+            return View(reportparam);
+        }
+        [HttpPost]
+        public ActionResult BalanceSheetReport(AccountsReportParam1 picker)
+        {
+            AccountsReportParam1 model = new AccountsReportParam1
+            {
+                AsOnDate = picker.AsOnDate,                
+                Output = picker.Output
+            };
+
+            ViewBag.Token = model;
+            SessionDataModel.SetAccountsParam1(model);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateBalanceSheetReport();
+            AccountsReportParam1 reportparam = SessionDataModel.GetAccountsParam1();
+            if (model.Output != "PDF")
+                return RedirectToAction("Download1", "Accounts", new { filetype = reportparam.Output,filename= reportparam.ReportFileName });
+            else
+                return RedirectToAction("BalanceSheetReport", "Accounts");
+
+
 
         }
         public ActionResult ReportFrame()
@@ -3910,6 +4003,35 @@ new AcGroupModel()
                 return File(fullPath, "application/pdf", file);
             }
             
+        }
+
+        public ActionResult Download1(string filetype,string filename)
+        {
+            //AccountsReportParam1 reportparam = SessionDataModel.GetAccountsParam1();
+            //string file = reportparam.ReportFileName;
+            string fullPath = "";
+            if (Session["ReportOutput"] != null)
+                fullPath = Server.MapPath(Session["ReportOutput"].ToString());
+            else
+                ViewBag.ReportOutput = null;// "~/Reports/DefaultReport.pdf";
+                                            //get the temp folder and file path in server
+
+            //return the file for download, this is an Excel 
+            //so I set the file content type to "application/vnd.ms-excel"
+
+            if (filetype == "EXCEL" || filetype == "WORD")
+            {
+                return File(fullPath, "application/vnd.ms-excel", filename);
+            }
+            //else if (reportparam.Output=="WORD")
+            //{
+            //    return File(fullPath, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", file);
+            //}
+            else
+            {
+                return File(fullPath, "application/pdf", filename);
+            }
+
         }
 
         public ActionResult ReportParamAsonDate()

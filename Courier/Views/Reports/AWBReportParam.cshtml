@@ -93,6 +93,14 @@
             $("#chkAWBWise").prop('checked', 'checked');
             $('#SortBy').val('AWB Wise');
         }
+
+        if ($('#RevenueUpdated').val()=='True') {
+            
+            $('#chkRevenueupdated').prop('checked', 'checked');
+        }
+        else {
+        $('#chkRevenueupdated').prop('checked', false);
+        }
         $("#chkRegister").click(function () {
             if ($("#chkRegister").is(':checked')) {
                 $("#ReportType").val('Date');
@@ -146,8 +154,15 @@
                     return false;
                 }
 
-                debugger;
+             
            
+            }
+          
+            if ($('#chkRevenueupdated').is(':checked')) {
+                $('#RevenueUpdated').val('True');
+            }
+            else {
+                $('#RevenueUpdated').val('False')
             }
             
          });
@@ -175,6 +190,7 @@
         @Html.HiddenFor(model => model.ParcelTypeId)
         @Html.HiddenFor(model => model.SortBy)
         @Html.HiddenFor(model => model.ReportType)
+        @Html.HiddenFor(model => model.RevenueUpdated)
         <label class="headinglabel">Load Type</label> <br />
         <select id="movementid" name="SelectedValues" multiple="multiple">
             <option value=""></option>
@@ -199,7 +215,11 @@
 
          }, "Select", new { @class = "form-control", @value = "" })
     </div>    
-   
+    <div class="col-md-4">
+        <div class="field" style="padding-top:30px" >
+            <label class="headinglabel"><input type="checkbox" id="chkRevenueupdated" name="chkRevenueupdated"/>Revenue Updated</label>
+        </div>
+    </div>
    
 </div>
 </div>

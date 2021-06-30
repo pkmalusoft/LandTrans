@@ -121,7 +121,7 @@ namespace LTMSV2.Models
         public int CustomerRateTypeID { get; set; }
 
         public int? PickedBy { get; set; }
-
+        public bool RevenueUpdate { get; set; }
         public int? ReceivedBy { get; set; }
 
         public int FagentID { get; set; }

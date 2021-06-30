@@ -177,6 +177,7 @@ namespace LTMSV2.Models
         public string ReportFileName { get; set; }
         public string Filters { get; set; }
         public string SortBy { get; set; }
+        public string RevenueUpdated { get; set; }
     }
 
     public class TaxReportParam

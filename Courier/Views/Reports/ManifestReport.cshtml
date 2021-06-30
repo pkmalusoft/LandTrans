@@ -22,7 +22,7 @@
     $(document).ready(function () {
         var url = '/Accounts/GetSupplierName';
 
-    
+
         $('#ReportType').change(function () {
             if ($('#ReportType').val() == "OutStanding") {
                 $("#CustomerName").val('');
@@ -41,7 +41,7 @@
                 $('#lblcustomername').addClass('required');
             }
         });
-      
+
         $('#ReportType').trigger('change');
 
         $("#TDNo").autocomplete({
@@ -76,10 +76,10 @@
 
         });
 
-        if (@ViewBag.ReportOption == "1") {
+        @*if (@ViewBag.ReportOption == "1") {
             $('#divreportoption').addClass('hide');
             //$('#btnreport').trigger('click');
-        }
+        }*@
     });
 </script>
 
@@ -91,7 +91,49 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="row no-margin d-flex" id="divreportoption">
+<div class="row ">
+
+    <div class="col-md-2">
+        <label class="headinglabel required ">From Date</label>
+        @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
+    </div>
+    <div class="col-md-2">
+        <label class="headinglabel required">To Date</label>
+        @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
+    </div>
+    <div class="col-md-2">
+        <label class="headinglabel required">Report Type</label>
+        @Html.DropDownList("ReportType", new List<SelectListItem>
+       {
+           new SelectListItem{ Text="Summary", Value = "Summary"},
+           new SelectListItem{ Text="Detail", Value = "Detail" }
+        }, "Select", new { @class = "form-control", @required = "true" })
+    </div>
+    @*<div class="col-md-2">
+        <label class="required headinglabel">Vehicle Type</label>
+        @Html.DropDownListFor(model => model.SupplierTypeId, new SelectList(ViewBag.SupplierType, "SupplierTypeID", "SupplierType1"), new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.SupplierTypeId)
+    </div>*@
+    <div class="col-md-3">
+        <label class="headinglabel" id="lblcustomername">Truck Detail No.</label>
+        @Html.TextBoxFor(model => model.TDNo, new { @class = "form-control", @autocomplete = "off" })
+        @Html.HiddenFor(model => model.TDID)
+    </div>
+    <div class="col-md-2">
+        <label class="headinglabel  required">Output</label>
+        @Html.DropDownList("Output", new List<SelectListItem>
+        {
+            new SelectListItem{ Text="PDF", Value = "PDF" },
+            new SelectListItem{ Text="EXCEL", Value = "EXCEL" },
+            new SelectListItem{ Text="WORD", Value = "WORD" },
+
+         }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+    </div>
+</div>
+    <div class="row no-margin d-flex hide" id="divreportoption">
         <div class="col-md-5 ">
             <div class="form-group">
                 <div class="row">
@@ -105,11 +147,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12" >
+            <div class="col-md-12">
                 <div id="divachead">
-                    <label class="headinglabel" id="lblcustomername">Truck Detail No.</label>
-                    @Html.TextBoxFor(model => model.TDNo, new { @class = "form-control", @autocomplete = "off" })
-                    @Html.HiddenFor(model => model.TDID)
+                   
                 </div>
             </div>
         </div>
@@ -124,12 +164,12 @@
                     new SelectListItem{ Text="WORD", Value = "WORD" },
 
                  }, "Select", new { @class = "form-control", @value = "PDF", @required = "true" })
-            </div>         
+            </div>
             <div class="col-md-2">
                 <button class="btn btn-primary" id="btnreport" type="submit" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-refresh" aria-hidden="true"></i></button>
             </div>
         </div>
-    </div>   
+    </div>
 }
 <div class="row no-margin" style="padding-top:10px">
     @{ Html.RenderAction("ReportFrame", "Accounts");}

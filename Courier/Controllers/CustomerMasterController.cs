@@ -127,7 +127,7 @@ namespace LTMSV2.Controllers
             {
                 ViewBag.Title = "Customer - Create";
                 PickupRequestDAO doa = new PickupRequestDAO();
-                ViewBag.CustomerNo = doa.GetMaxCustomerCode(branchid);
+                ViewBag.CustomerNo = "";// doa.GetMaxCustomerCode(branchid);
                 obj.CustomerID = 0;
                 obj.RoleID = 13;
                 obj.CustomerType = "CS";

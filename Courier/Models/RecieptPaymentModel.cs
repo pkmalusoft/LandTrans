@@ -165,8 +165,13 @@ namespace LTMSV2.Models
                 cust.CustomerID = item.CustomerID;
                 cust.customerName = Context1.CustomerMasters.Find(item.CustomerID).CustomerName;
                 var cashOrBankID = (from t in Context1.AcHeads where t.AcHead1 == item.BankName select t.AcHeadID).FirstOrDefault();
-                cust.CashBank = (cashOrBankID).ToString();
-                cust.ChequeBank = (cashOrBankID).ToString();
+                cust.StatusEntry = item.StatusEntry;
+                
+                if (cust.StatusEntry=="CS")
+                    cust.CashBank = (cashOrBankID).ToString();
+                else
+                    cust.ChequeBank = (cashOrBankID).ToString();
+
                 cust.ChequeNo = item.ChequeNo;
                 cust.ChequeDate = item.ChequeDate;
                 cust.Remarks = item.Remarks;
@@ -175,7 +180,7 @@ namespace LTMSV2.Models
                 cust.RecPayID = item.RecPayID;
                 cust.SupplierID = item.SupplierID;
                 cust.AcJournalID = item.AcJournalID;
-                cust.StatusEntry = item.StatusEntry;
+                
                 cust.AcJournalID = item.AcJournalID;
                 var a = (from t in Context1.RecPayDetails where t.RecPayID == RecpayID select t.CurrencyID).FirstOrDefault();
                 cust.CurrencyId = Convert.ToInt32(a.HasValue ? a.Value : 0);
@@ -208,9 +213,12 @@ namespace LTMSV2.Models
                 var supplier = Context1.SupplierMasters.Find(item.SupplierID);
                 cust.customerName = supplier.SupplierName;
                 cust.SupplierTypeId = Convert.ToInt32(supplier.SupplierTypeID);
+                cust.StatusEntry = item.StatusEntry;
                 var cashOrBankID = (from t in Context1.AcHeads where t.AcHead1 == item.BankName select t.AcHeadID).FirstOrDefault();
-                cust.CashBank = (cashOrBankID).ToString();
-                cust.ChequeBank = (cashOrBankID).ToString();
+                if (cust.StatusEntry=="CS")
+                    cust.CashBank = (cashOrBankID).ToString();
+                else
+                    cust.ChequeBank = (cashOrBankID).ToString();
                 cust.ChequeNo = item.ChequeNo;
                 cust.ChequeDate = item.ChequeDate;
                 cust.Remarks = item.Remarks;
@@ -218,7 +226,7 @@ namespace LTMSV2.Models
                 cust.FMoney = item.FMoney;
                 cust.RecPayID = item.RecPayID;
                 cust.AcJournalID = item.AcJournalID;
-                cust.StatusEntry = item.StatusEntry;
+                
                 
                 
                 if (item.TruckDetailId != null)

@@ -275,6 +275,9 @@
     <EntitySetMapping Name="AcTypes">
       <EntityTypeMapping TypeName="DB_9F57C4_couriertest_newModel.AcType">
         <MappingFragment StoreEntitySet="AcType">
+          <ScalarProperty Name="BSOrder" ColumnName="BSOrder" />
+          <ScalarProperty Name="PLOrder" ColumnName="PLOrder" />
+          <ScalarProperty Name="TBOrder" ColumnName="TBOrder" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="AccountType" ColumnName="AccountType" />
           <ScalarProperty Name="AcCategoryId" ColumnName="AcCategoryId" />

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="TripManifestSummaryreport">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="VType" type="xs:string" minOccurs="0" />
+              <xs:element name="TruckDetailID" type="xs:int" minOccurs="0" />
+              <xs:element name="ReceiptNo" type="xs:string" minOccurs="0" />
+              <xs:element name="RegNo" type="xs:string" minOccurs="0" />
+              <xs:element name="VehicleType" type="xs:string" minOccurs="0" />
+              <xs:element name="TDDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="OriginName" type="xs:string" minOccurs="0" />
+              <xs:element name="DestinationName" type="xs:string" minOccurs="0" />
+              <xs:element name="VehicleTypeID" type="xs:int" minOccurs="0" />
+              <xs:element name="Rent" type="xs:decimal" minOccurs="0" />
+              <xs:element name="OtherCharges" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Amount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Remarks" type="xs:string" minOccurs="0" />
+              <xs:element name="PayeeName" type="xs:string" minOccurs="0" />
+              <xs:element name="Reason" type="xs:string" minOccurs="0" />
+              <xs:element name="TDRemarks" type="xs:string" minOccurs="0" />
+              <xs:element name="BankName" type="xs:string" minOccurs="0" />
+              <xs:element name="ChequeNo" type="xs:string" minOccurs="0" />
+              <xs:element name="ChequeDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="OriginCountry" type="xs:string" minOccurs="0" />
+              <xs:element name="OriginCity" type="xs:string" minOccurs="0" />
+              <xs:element name="ConsignmentNoNote" type="xs:string" minOccurs="0" />
+              <xs:element name="DriverName" type="xs:string" minOccurs="0" />
+              <xs:element name="RegistrationNo" type="xs:string" minOccurs="0" />
+              <xs:element name="Manifest" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -468,7 +468,29 @@ namespace LTMSV2.DAL
             return objList;
         }
 
-
+        public static List<AcHeadSelectAllVM> GetAcVoucherType(int BranchID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "Select distinct VoucherType from AcJOurnalMaster Where isnull(Vouchertype,'')<>''";
+            cmd.CommandType = CommandType.Text;
+            
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<AcHeadSelectAllVM> objList = new List<AcHeadSelectAllVM>();
+            AcHeadSelectAllVM obj = new AcHeadSelectAllVM();
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    obj = new AcHeadSelectAllVM();
+                    obj.AcHead = ds.Tables[0].Rows[i]["VoucherType"].ToString();                                       
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
         public static List<AcJournalDetailVM> AcJournalDetailSelectByAcJournalID(int AcJournalID, string PaymentType)
         {
             SqlCommand cmd = new SqlCommand();

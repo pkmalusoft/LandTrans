@@ -164,18 +164,18 @@
         });
         $("#CustomerName").change(function () {
 
-            $.ajax({
-                type: "POST",
-                url: "/CustomerMaster/GetCustomerCode",
-                datatype: "Json",
-                data: { custname: $("#CustomerName").val() },
-                success: function (result) {
-                    debugger;
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/CustomerMaster/GetCustomerCode",
+            //    datatype: "Json",
+            //    data: { custname: $("#CustomerName").val() },
+            //    success: function (result) {
+            //        debugger;
                     
-                        $('#CustomerCode').val(result.data)
-                    // BindCity(data.CityID, data.LocationID);
-                }
-            });
+            //            $('#CustomerCode').val(result.data)
+            //        // BindCity(data.CityID, data.LocationID);
+            //    }
+            //});
 
         });
         $("#btnApprove").click(function () {
@@ -213,11 +213,11 @@
                 $("#CountryName").focus();
                 return false;
             }           
-            else if (code == "") {
-                $("#validations").show();
-                $("#CustomerCode").focus();
-                return false;
-            }
+            //else if (code == "") {
+            //    $("#validations").show();
+            //    $("#CustomerCode").focus();
+            //    return false;
+            //}
             else if (add1 == "") {
                 $("#validations").show();
                 $("#Address1").focus();
@@ -341,12 +341,12 @@
                 return true;
             }
             //for credit 
-            if (code == "") {
-                $("#validations").show();
-                $("#CustomerCode").focus();
-                return false;
-            }
-            else if (add1 == "") {
+            //if (code == "") {
+            //    $("#validations").show();
+            //    $("#CustomerCode").focus();
+            //    return false;
+            //}
+            if (add1 == "") {
                 $("#validations").show();
                 $("#Address1").focus();
                 return false;
@@ -527,6 +527,7 @@
                     @Html.HiddenFor(model => model.LocationID)
                     @Html.HiddenFor(model => model.LocationID)
                     @Html.HiddenFor(model => model.CustomerType)
+                    
                     <label class="headinglabel required">Customer Type</label>
                     @Html.DropDownList("CustomerType1", new List<SelectListItem>
                 {
@@ -548,9 +549,9 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label class="headinglabel required">Customer Code</label>
+                    <label class="headinglabel">Customer Code</label>
                     @*@Html.TextBoxFor(model => model.CustomerCode, new { @class = "form-control" })*@
-                    @Html.TextBox("CustomerCode", (string)ViewBag.CustomerNo, new { @class = "form-control",  @style = "font-weight:700;font-size:18px; " })
+                    @Html.TextBox("CustomerCode", (string)ViewBag.CustomerNo, new { @class = "form-control", @readonly="readonly",  @style = "font-weight:700;font-size:18px; " })
                     @Html.ValidationMessageFor(model => model.CustomerCode)
                 </div>
 

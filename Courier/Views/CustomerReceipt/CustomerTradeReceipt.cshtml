@@ -167,7 +167,27 @@
 
         } else {
             $('#btnsearch').attr('disabled', 'disabled');
-            if ('@Model.ChequeNo' == null || '@Model.ChequeNo' == '') {
+
+              if ($("#RecPayID").val() > 0) {
+            if ($("#StatusEntry").val() == "BK") {
+                $("#Bank").prop('checked', true);
+                $("#Cash").prop('checked', false);
+                $("#Bank").trigger("click");
+            }
+            else if ($("#StatusEntry").val() == "CS") {
+                $("#Cash").prop('checked', true);
+                $("#Bank").prop('checked', false);
+                $("#Cash").trigger("click");
+            }
+            PaymentModeChange();
+
+            var money = parseFloat($("#FMoney").val());
+            $("#FMoney").val(money.toFixed(@_decimal));
+
+            var exrate = parseFloat($("#EXRate").val());
+            $("#ExRate").val(exrate.toFixed(@_decimal));
+        }
+             if ('@Model.StatusEntry' == 'CS') {
                 $("#divCash").css({ "display": "block" });
                 $("#divBank").css({ "display": "none" });
                 $("#ChequeNo").attr("readonly","readonly")
@@ -462,25 +482,7 @@
 
 
 
-        if ($("#RecPayID").val() > 0) {
-            if ($("#StatusEntry").val() == "BK") {
-                $("#Bank").prop('checked', true);
-                $("#Cash").prop('checked', false);
-                $("#Bank").trigger("click");
-            }
-            else if ($("#StatusEntry").val() == "CS") {
-                $("#Cash").prop('checked', true);
-                $("#Bank").prop('checked', false);
-                $("#Cash").trigger("click");
-            }
-            PaymentModeChange();
 
-            var money = parseFloat($("#FMoney").val());
-            $("#FMoney").val(money.toFixed(@_decimal));
-
-            var exrate = parseFloat($("#EXRate").val());
-            $("#ExRate").val(exrate.toFixed(@_decimal));
-        }
 
         //Comma($(".aeamt").val());
 
@@ -711,8 +713,11 @@
             $("#ChequeDate").attr('required', 'required');
             $("#ChequeNo").removeAttr('readonly');
             $("#ChequeDate").removeAttr('readonly');
+            $("#ChequeNo").val('');
+            $("#ChequeDate").val('');
             $('#CashBank').removeAttr('required', 'required');
             $('#ChequeBank').attr('required', 'required');
+            $('#ChequeBank').val('').trigger('change');
         } else {
             $("#divBank").css({ "display": "none" });
             $("#divCash").css({ "display": "block" });
@@ -721,7 +726,7 @@
             $("#ChequeNo").attr('readonly', 'readonly');
             $("#ChequeDate").attr('readonly','readonly')
             $('#CashBank').attr('required','required');
-
+            $('#CashBank').val('').trigger('change');
             $('#ChequeBank').removeAttr('required')
         }
 
@@ -947,6 +952,7 @@
                                                     @*@Model.CostUpdationDetails[i].JobCode*@
                                                     @Model.CustomerRcieptChildVM[i].SInvoiceNo
                                                     @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceID)
+                                                    @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceDate)
                                                     @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceType)
                                                     @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].AcOPInvoiceDetailID)
                                                     @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].RecPayID)

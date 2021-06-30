@@ -1685,7 +1685,9 @@
         if (@ViewBag.EditMode== true) {
 
             $('#InvoiceTo1').val($('#InvoiceTo').val()).trigger('change');
-
+            if ($('#RevenueUpdate').val() == 'True' || $('#RevenueUpdate').val() == 'true' || $('#RevenueUpdate').val() == true) {
+                $('#TransactionDate').attr('readonly', 'readonly');
+            }
         }
         else {
              $('#TransactionDate').val(reqdate);
@@ -1797,6 +1799,7 @@
                 @Html.HiddenFor(model => model.ConsigneeCountryID)
                 @Html.HiddenFor(model => model.ConsigneeCityID)
                 @Html.HiddenFor(model => model.ConsigneeLocationID)
+                @Html.HiddenFor(model => model.RevenueUpdate)
                 <input type="hidden" id="hdnshippertype" value="" />
                 <input type="hidden" id="hdnconsigneetype" value="" />
 

@@ -374,7 +374,7 @@ namespace LTMSV2.Models
             var setuptype = db.GeneralSetupTypes.Where(cc => cc.TypeName == "ReportHeader2").FirstOrDefault();
             if (setuptype == null)
             {
-                reportheader = branch.CityName + branch.CountryName;
+                reportheader = branch.CityName + " - " +  branch.CountryName;
             }
             else
             {
@@ -386,7 +386,7 @@ namespace LTMSV2.Models
                 else
                 {
 
-                    reportheader = branch.CityName + branch.CountryName;
+                    reportheader = branch.CityName + " - " +  branch.CountryName;
                 }
             }
 
