@@ -16,7 +16,7 @@ namespace LTMSV2.Controllers
     {
         Entities1 db = new Entities1();
         // GET: TruckAssign
-        public ActionResult Index(int? StatusId, string FromDate, string ToDate)
+        public ActionResult Index(string TDHNo, string FromDate, string ToDate)
         {
             SessionDataModel.ClearTableVariable();
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
@@ -25,18 +25,18 @@ namespace LTMSV2.Controllers
 
             DateTime pFromDate;
             DateTime pToDate;
-            int pStatusId = 0;
-            if (StatusId == null)
+            string pTDHNo = "";
+            if (TDHNo == null)
             {
-                pStatusId = 0;
+                pTDHNo = "";
             }
             else
             {
-                pStatusId = Convert.ToInt32(StatusId);
+                pTDHNo = TDHNo;
             }
             if (FromDate == null || ToDate == null)
             {
-                DateTime localDateTime1 = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
+                DateTime localDateTime1 = CommanFunctions.GetCurrentDateTime();
                 pFromDate = localDateTime1.Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
                 pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
             }
@@ -47,24 +47,24 @@ namespace LTMSV2.Controllers
 
             }
 
-            List<TruckAssignVM> lst = (from truck in db.TruckDetails
-                                       join c in db.InScanMasters on truck.TruckDetailID equals c.TruckDetailId
+            //List<TruckAssignVM> lst = (from truck in db.TruckDetails
+            //                           join c in db.InScanMasters on truck.TruckDetailID equals c.TruckDetailId
 
-                                       where c.BranchID == branchid && c.DepotID == depotId
+            //                           where c.BranchID == branchid && c.DepotID == depotId
 
-                                       && (truck.TDDate >= pFromDate && c.TransactionDate < pToDate)
-                                       && (c.CourierStatusID == pStatusId || (pStatusId == 0))  //&& c.CourierStatusID >= 4)
-                                       && c.IsDeleted == false
-                                       orderby truck.TDDate descending, truck.ReceiptNo descending
-                                       select new TruckAssignVM { TruckDetailId = truck.TruckDetailID, TDDate = truck.TDDate, ReceiptNo = truck.ReceiptNo, VechileRegistrationNo = truck.RegNo, ConsignmentNo = c.ConsignmentNo, Consignor = c.Consignor, Consignee = c.Consignee, ConsignorCountryName = c.ConsignorCountryName, ConsigneeCountry = c.ConsigneeCountryName, InScanId = c.InScanID, InScanDate = c.TransactionDate }).ToList();  //, requestsource=subpet3.RequestTypeName 
-
+            //                           && (truck.TDDate >= pFromDate && c.TransactionDate < pToDate)
+            //                           && (c.CourierStatusID == pStatusId || (pStatusId == 0))  //&& c.CourierStatusID >= 4)
+            //                           && c.IsDeleted == false
+            //                           orderby truck.TDDate descending, truck.ReceiptNo descending
+            //                           select new TruckAssignVM { TruckDetailId = truck.TruckDetailID, TDDate = truck.TDDate, ReceiptNo = truck.ReceiptNo, VechileRegistrationNo = truck.RegNo, ConsignmentNo = c.ConsignmentNo, Consignor = c.Consignor, Consignee = c.Consignee, ConsignorCountryName = c.ConsignorCountryName, ConsigneeCountry = c.ConsigneeCountryName, InScanId = c.InScanID, InScanDate = c.TransactionDate }).ToList();  //, requestsource=subpet3.RequestTypeName 
+            List<TruckAssignVM> lst = RevenueDAO.GetTruckDetailConsignments(pTDHNo, "", pFromDate, pToDate);
             ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
             ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
             ViewBag.CourierStatus = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
             ViewBag.CourierStatusList = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
             ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
             ViewBag.CourierStatusId = 0;
-            ViewBag.StatusId = StatusId;
+            ViewBag.StatusId = pTDHNo;
             return View(lst);
 
         }
@@ -220,7 +220,33 @@ namespace LTMSV2.Controllers
             }
         }
 
+        public JsonResult GetAWBDetail(string id)
+        {
+            AWBList obj = new AWBList();
+            var lst = (from c in db.InScanMasters where c.ConsignmentNo == id  select c).FirstOrDefault();
+            if (lst == null)
+            {
+                return Json(new { status = "failed", data = obj, message = "Consignment No. Not found" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                if (lst.TruckDetailId == null || lst.TruckDetailId == 0)
+                {
+                    obj.Origin = lst.ConsignorCountryName;
+                    obj.Destination = lst.ConsigneeCountryName;
+                    obj.AWB = lst.ConsignmentNo;
+                    obj.InScanId = lst.InScanID;
 
+                    return Json(new { status = "ok", data = obj, message = "AWB NO.found" }, JsonRequestBehavior.AllowGet);
+
+                }
+                else
+                {
+                    return Json(new { status = "failed", data = obj, message = "Consignment already Truck Assigned !" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+        }
         public JsonResult GetAWB(int id)
         {
 

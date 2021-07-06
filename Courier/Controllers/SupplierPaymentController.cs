@@ -388,7 +388,8 @@ namespace LTMSV2.Controllers
             {
                 ViewBag.SuccessMsg = "You have successfully updated Supplier Payment.";
             }
-
+            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            ViewBag.ToDate = pToDate.Date.ToString("dd-MM-yyyy");
 
             Session["ID"] = ID;
 

@@ -106,13 +106,7 @@
             });
 
 
-            var table = $('#dataTables-example').DataTable({
-                "aaSorting": [],
-                //"dom": '<"top"i>rt<"top"flp><"clear">',
-                	//dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
-                 //       "<'row'<'col-sm-12'tr>>" +"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                 //"pagingType": "simple"
-            });
+            var table = $('#dataTables-example').DataTable({"aaSorting": [] });
             table.draw();
            table.columns().every(function () {
                 var that = this;
@@ -125,84 +119,9 @@
                     }
                 });
             });
+ 
 
-            //});
-               $('#ChangeStatusTypeId').change(function () {
-            debugger;
-            var pcourierstatusid = $('#CourierStatusId').val();
-            if (pcourierstatusid == null)
-                pcourierstatusid = 0;
-
-            $.ajax({
-                type: "POST",
-                url: "/QuickAWB/GetStatus",
-                datatype: "Json",
-                data: { 'StatusTypeId' : $('#ChangeStatusTypeId').val() },
-                success: function (response) {
-                    debugger;
-                    //$('#CourierStatusId').select2("destroy");
-                    $('#ChangeCourierStatusId').html('');
-                    var opthtml = '<option value="0">Select</option>';
-                    $(response.data).each(function (index, item) {
-                        if (item.id == pcourierstatusid) {
-                               opthtml += '<option selected value="' + item.id + '">' + item.text + '</option>';
-                        }
-                        else {
-                            opthtml += '<option value="' + item.id + '">' + item.text + '</option>';
-                        }
-                    });
-                    $('#ChangeCourierStatusId').html(opthtml);
-                     $('#ChangeCourierStatusId').val($('#CourierStatusId').val()).trigger('change');
-                    //$('#CourierStatusId').val(response.data[2].id);
-                    //$('#ChangeCourierStatusId').select2();
-                    //$('#CourierStatusId').val("2").trigger('change');
-                    //$('#CourierStatusId').select2('data', response.data[2]);
-                    //$('#CourierStatusId').val('2').text(response.data[2].text);
-
-
-                    // $('#ChangeCourierStatusId').select2({
-                    //        width: '100%',
-                    //        allowClear: true,
-                    //        multiple: false,
-                    //        maximumSelectionSize: 1,
-                    //        minimumResultsForSearch :-1,
-                    //        placeholder: "Select Status"
-                    //        });
-
-                    }
-              });
-           });
-
-           $('#btnsavestatus').click(function () {
-
-             var statusobj = {
-                InScanID: $('#InScanID').val(),
-                StatusTypeID: $('#ChangeStatusTypeId').val(),
-                CourierStatusID: $('#ChangeCourierStatusId').val(),
-                CourierStatusText: '' //$("#ChangeCourierStatusId option:selected").text()
-            };
-
-             $.ajax({
-                type: "POST",
-                url: "/QuickAWB/SaveStatus",
-                datatype: "Json",
-                data: statusobj,
-                success: function (response) {
-                    debugger;
-                    if (response.status == "ok") {
-                        $.notify("Status Updated Successfully!", "success");
-                        window.location.reload();
-                    }
-                    else
-                    { $.notify("Save Failed :" + response.message, "warning"); }
-
-
-                     $('#StatusModal').modal('hide');
-                }
-            });
-
-
-        });
+        
 
         });
 
@@ -217,10 +136,9 @@
     <div class=" d-flex">
         <div class="col-md-2">
             <input type="hidden" id="InScanID" />
-            <input type="hidden" id="CourierStatusId" />
-            <input type="hidden" id="StatusTypeId" />
-            <label class="headinglabel">Status</label>
-            @Html.DropDownList("StatusId", new SelectList(@ViewBag.CourierStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })
+            <label class="headinglabel">TDH No.</label>
+            @*@Html.DropDownList("StatusId", new SelectList(@ViewBag.CourierStatus, "CourierStatusID", "CourierStatus", @ViewBag.StatusId), "Select All", new { @class = "form-control", @value = 1, @id = "StatusId", @name = "StatusId" })*@
+            <input id="TDHNo" class="form-control text-right" name="TDHNo" type="text" value="@ViewBag.TDHNo" />
         </div>
         <div class="col-md-1">
             <label class="headinglabel">From </label>
@@ -233,10 +151,10 @@
         </div>
 
         <div class="pull-left" style="padding-top:32px; padding-right:15px;padding-left:15px;">
-            <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "TruckAssign")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+            <a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("Index", "TruckAssign")?TDHNo=' + $('#TDHNo').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
             @*<a class="btn btn-primary btnwidth" href="Javascript:void(0)" style="width: 60px!Important;min-width: 50px!important;" onclick="location.href='@Url.Action("PrintAWBRegister", "Consignment")?StatusId=' + $('#StatusId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val()"><i class="fa fa-print" aria-hidden="true"></i></a>*@
         </div>
-        <div class="pull-left" style="padding-top:32px;">
+        <div class="pull-left" style="padding-top:32px;display:none">
             <p class="indexbtnpadding">
                 @if (@LTMSV2.Models.CommanFunctions.CheckCreateEntryValid() == false || !isadd)
                 {
@@ -281,18 +199,17 @@
                     <th width="8%">
                         @Html.Label("Trip Date")
                     </th>
+                    <th width="15%">
+                        @Html.Label("Route")
+                    </th>
+                    <th width="15%">
+                        @Html.Label("Vehicle No")
+                    </th>
                     <th width="8%">
                         Consignment No.
                     </th>
-                    <th width="8%">
-                        @Html.Label("Consignment Date")
-                    </th>
-                    <th width="15%">
-                        @Html.Label("Shipper/Consignor")
-                    </th>
-                    <th width="15%">
-                        @Html.Label("Receiver/Consignee")
-                    </th>
+                    
+
                     <th width="15%">Action</th>
                 </tr>
             </thead>
@@ -314,12 +231,8 @@
                     <th>
 
                     </th>
-                    <th>
-
-                    </th>
-                    <th>
-
-                    </th>
+                   
+                 
                  
 
                     <th style="display:none"></th>
@@ -333,41 +246,38 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ReceiptNo)
                     </td>
-                    <td class="text-right">                        
+                    <td class="text-right">
                         @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.TDDate)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.RouteName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VechileRegistrationNo)
+                    </td>
+                    <td>                    
                         @Html.DisplayFor(modelItem => item.ConsignmentNo)
-                    </td>
-                    <td class="text-right">
-                        @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@item.InScanDate)
+                    
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Consignor)
-                        @Html.DisplayFor(modelItem => item.ConsignorCountryName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Consignee)
-                        @Html.DisplayFor(modelItem => item.ConsigneeCountry)
-                    </td>                                                                                                    
-                    <td>
-                       
+
+
                         @if (ismodify)
                         {
-                            <a href="@Url.Action("Create", new { id = item.TruckDetailId})"><i class="fa fa-pencil"></i>|</a>
+                            <a href="@Url.Action("Create", new { id = item.TruckDetailId})"><i class="fa fa-pencil"></i></a>
                         }
-                        @if (isview)
+                        @*@if (isview)
                         {
                             <a href="Details?id=@item.TruckDetailId"><i class="fa fa-eye"></i>|</a>
                         }
                         @if (isdelete)
                         {
                             <a href="#" onclick="Delete(ID=@item.TruckDetailId)"><i class="fa fa-times"></i>|</a>
-                        }
-                        @*@if (isprint)
-                        {
-                            <a href="@Url.Action("AWBPrint", "Consignment", new { id = item.InScanID })"><i class="fa fa-print"></i></a>
                         }*@
+                        @*@if (isprint)
+            {
+                <a href="@Url.Action("AWBPrint", "Consignment", new { id = item.InScanID })"><i class="fa fa-print"></i></a>
+            }*@
                     </td>
                 </tr>
                 }

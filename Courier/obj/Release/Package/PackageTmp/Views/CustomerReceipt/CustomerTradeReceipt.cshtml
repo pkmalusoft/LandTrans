@@ -168,7 +168,7 @@
         } else {
             $('#btnsearch').attr('disabled', 'disabled');
 
-              if ($("#RecPayID").val() > 0) {
+             if ($("#RecPayID").val() > 0) {
             if ($("#StatusEntry").val() == "BK") {
                 $("#Bank").prop('checked', true);
                 $("#Cash").prop('checked', false);
@@ -190,9 +190,9 @@
              if ('@Model.StatusEntry' == 'CS') {
                 $("#divCash").css({ "display": "block" });
                 $("#divBank").css({ "display": "none" });
-                $("#ChequeNo").attr("readonly","readonly")
-                $("#ChequeDate").attr("readonly","readonly")
-                $("#PaymentMode").val(2);
+                 $("#ChequeNo").attr("readonly", "readonly");
+                 $("#ChequeDate").attr("readonly", "readonly");
+                 $("#PaymentMode").val(2);
 
             } else {
                 $("#divCash").css({ "display": "none" });
@@ -705,28 +705,29 @@
         }
     }
     function PaymentModeChange() {
+        debugger;
         var val = $("#PaymentMode").val();
-        if (val == 1) {
+        if (val == 1) { //Bank
             $("#divCash").css({ "display": "none" });
             $("#divBank").css({ "display": "block" });
             $("#ChequeNo").attr('required', 'required');
             $("#ChequeDate").attr('required', 'required');
             $("#ChequeNo").removeAttr('readonly');
-            $("#ChequeDate").removeAttr('readonly');
-            $("#ChequeNo").val('');
-            $("#ChequeDate").val('');
+            $("#ChequeDate").removeAttr('readonly');          
             $('#CashBank').removeAttr('required', 'required');
-            $('#ChequeBank').attr('required', 'required');
-            $('#ChequeBank').val('').trigger('change');
-        } else {
+            $('#ChequeBank').attr('required', 'required');                        
+            $('#CashBank').val(0).trigger('change');
+        } else { //2 Cash
             $("#divBank").css({ "display": "none" });
             $("#divCash").css({ "display": "block" });
+            $("#ChequeNo").val('');
+            $("#ChequeDate").val('');
             $("#ChequeNo").removeAttr('required');
             $("#ChequeDate").removeAttr('required');
             $("#ChequeNo").attr('readonly', 'readonly');
             $("#ChequeDate").attr('readonly','readonly')
-            $('#CashBank').attr('required','required');
-            $('#CashBank').val('').trigger('change');
+            $('#CashBank').attr('required','required');            
+            $('#ChequeBank').val(0).trigger('change');
             $('#ChequeBank').removeAttr('required')
         }
 

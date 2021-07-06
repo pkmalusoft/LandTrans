@@ -227,6 +227,50 @@ namespace LTMSV2.DAL
         }
 
 
+        public static List<TruckAssignVM> GetTruckDetailConsignments(string TDHNo, string ConsignmentNote, DateTime FromDate, DateTime ToDate)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetTruckAssignList";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add("@FromDate", SqlDbType.VarChar);
+            cmd.Parameters["@FromDate"].Value = FromDate.ToString("MM/dd/yyyy");
+            cmd.Parameters.Add("@ToDate", SqlDbType.VarChar);
+            cmd.Parameters["@ToDate"].Value = ToDate.ToString("MM/dd/yyyy");
+            cmd.Parameters.Add("@ConsignmentNo", SqlDbType.VarChar);
+            if (ConsignmentNote == null)
+                ConsignmentNote = "";
+            cmd.Parameters["@ConsignmentNo"].Value = ConsignmentNote;
+
+            cmd.Parameters.Add("@TDHNo", SqlDbType.VarChar);
+            if (TDHNo == null)
+                TDHNo = "";
+            cmd.Parameters["@TDHNo"].Value = TDHNo;
+            
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<TruckAssignVM> objList = new List<TruckAssignVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    TruckAssignVM obj = new TruckAssignVM();
+                    obj.TruckDetailId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["TruckDetailId"].ToString());
+                    obj.ReceiptNo = ds.Tables[0].Rows[i]["ReceiptNo"].ToString();
+                    obj.ConsignmentNo= ds.Tables[0].Rows[i]["ConsignmentNo"].ToString();
+                    obj.TDDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TDDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.RouteName = ds.Tables[0].Rows[i]["RouteName"].ToString();
+                    obj.VechileRegistrationNo = ds.Tables[0].Rows[i]["RegNo"].ToString();                    
+                    
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
         public static List<CustomerInvoiceDetailVM> GenerateInvoice(DateTime FromDate,DateTime ToDate, int CustomerId,int FYearId,int InvoiceId)
         {
             SqlCommand cmd = new SqlCommand();

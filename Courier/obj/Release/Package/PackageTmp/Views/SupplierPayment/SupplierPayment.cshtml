@@ -677,27 +677,27 @@
     }
     function PaymentModeChange() {
         var val = $("#PaymentMode").val();
-        if (val == 1) {
+        if (val == 1) {//BAnk
             $("#divCash").css({ "display": "none" });
             $("#divBank").css({ "display": "block" });
             $("#ChequeNo").attr('required', 'required');
-            $("#ChequeDate").attr('required', 'required');
-            $("#ChequeNo").val('');
-            $("#ChequeDate").val('');
+            $("#ChequeDate").attr('required', 'required');            
             $("#ChequeNo").removeAttr('readonly');
             $("#ChequeDate").removeAttr('readonly')
             $('#CashBank').removeAttr('required', 'required');
-            $('#ChequeBank').attr('required', 'required');
-            $('#ChequeBank').val('').trigger('change');
-        } else {
+            $('#ChequeBank').attr('required', 'required');            
+            $('#CashBank').val('').trigger('change');
+        } else { //Cash
             $("#divBank").css({ "display": "none" });
             $("#divCash").css({ "display": "block" });
+            $("#ChequeNo").val('');
+            $("#ChequeDate").val('');
             $("#ChequeNo").removeAttr('required');
             $("#ChequeDate").removeAttr('required');
             $("#ChequeNo").attr('readonly', 'readonly');
             $("#ChequeDate").attr('readonly','readonly')
             $('#CashBank').attr('required','required');
-            $('#CashBank').val('').trigger('change');
+            $('#ChequeBank').val('').trigger('change');
             $('#ChequeBank').removeAttr('required');
         }
 

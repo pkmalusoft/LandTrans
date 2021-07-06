@@ -92,10 +92,11 @@
             $('#ToDate').datepicker("setDate", new Date());
         });
 
+       if ($("#FromDate").val()=="")
+                $("#FromDate").val('@ViewBag.FromDate');
 
-        $("#FromDate").val(GetCurrentDate());
-        $("#ToDate").val(GetEndDate());
-
+        if ($("#ToDate").val()=="")
+             $("#ToDate").val('@ViewBag.ToDate');
         function GetCurrentDate() {
             var m_names = new Array("Jan", "Feb", "Mar",
     "Apr", "May", "Jun", "Jul", "Aug", "Sep",

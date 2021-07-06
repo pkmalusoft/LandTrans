@@ -108,7 +108,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/InScan/GetAWBDetail",
+                url: "/TruckAssign/GetAWBDetail",
                 datatype: "Json",
                 data: { id: $("#txtawb").val() },
                 success: function (response) {
@@ -331,21 +331,26 @@
         <div id="validations" style="color:red;margin-left:7px;display:none">* Please fill mandatory fields</div>
         <fieldset>
             <div class="row no-margin">
-
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    @Html.HiddenFor(model => model.TruckDetailId)
+                    <label class="headinglabel required">TD No.</label>
+                    @Html.TextBoxFor(model => model.ReceiptNo, new { @class = "form-control text-right", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.ReceiptNo)
+                </div>
+                <div class="col-md-3">
                     @Html.HiddenFor(model => model.TruckDetailId)
                     <label class="headinglabel required">Trip Date</label>
-                    @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control text-right" })
+                    @Html.TextBoxFor(model => model.TDDate, new { @class = "form-control text-right" ,@readonly="readonly" })
                     @Html.ValidationMessageFor(model => model.TDDate)
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="headinglabel required">Route</label>
-                    @Html.TextBoxFor(model => model.RouteName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Route Name" })
+                    @Html.TextBoxFor(model => model.RouteName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Route Name", @readonly = "readonly" })
                     @Html.HiddenFor(model => model.RouteID)
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="headinglabel required">Vehicle</label>
-                    @Html.TextBoxFor(model => model.VechicleName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Vechile Name - Driver Name" })
+                    @Html.TextBoxFor(model => model.VechicleName, new { @class = "form-control txttarget", @required = "true", @style = "", @placeholder = "Vechile Name - Driver Name", @readonly = "readonly" })
                     @Html.HiddenFor(model => model.VehicleID)
                 </div>
 
