@@ -15,7 +15,9 @@ namespace LTMSV2.Models
         public int VehicleID { get; set; }
         public string VechicleName { get; set; }
         public string VechileRegistrationNo { get; set; }
-
+        public decimal Rent { get; set; }
+        public decimal OtherCharges { get; set; }
+        public decimal TotalCharge { get; set; }
         public int InScanId { get; set; }
         public DateTime InScanDate { get; set; }
         public string ConsignmentNo { get; set; }

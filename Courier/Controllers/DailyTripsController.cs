@@ -73,6 +73,9 @@ namespace LTMSV2.Controllers
                                              TDDate=c.TDDate,
                                              RegNo=c.RegNo,
                                              DriverID=c.DriverID,
+                                             Rent=c.Rent,
+                                             OtherCharges=c.OtherCharges,
+                                             TotalCharge=c.Rent+c.OtherCharges
                                          }).ToList();
 
 

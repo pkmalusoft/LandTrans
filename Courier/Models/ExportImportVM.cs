@@ -278,4 +278,19 @@ namespace LTMSV2.Models
         public string Filters { get; set; }
 
     }
+
+    public class AcInvoiceOpeningParam
+    {
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
+
+        public int SupplierTypeId { get; set; }
+        public int SupplierId { get; set; }
+        public string SupplierName { get; set; }
+        public string Output { get; set; } //printer ,pdf,word,excel
+        public string ReportType { get; set; } //sumary details
+        public string ReportFileName { get; set; }
+        public string Filters { get; set; }
+
+    }
 }

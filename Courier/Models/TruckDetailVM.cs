@@ -55,6 +55,7 @@ namespace LTMSV2.Models
         public IEnumerable<RouteMaster> routeMasters { get; set; }
         public string Origin { get; set; }
         public string Destination { get; set; }
+        public decimal? TotalCharge { get; set; }
     }
 
     public class TruckDetailVM1 : TruckDetail

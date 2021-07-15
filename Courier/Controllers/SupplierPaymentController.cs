@@ -422,7 +422,7 @@ namespace LTMSV2.Controllers
                     cust.recPayDetail = Context1.RecPayDetails.Where(item => item.RecPayID == id).OrderBy(cc => cc.InvDate).ToList();
                     cust.CustomerRcieptChildVM = new List<CustomerRcieptChildVM>();
                     decimal Advance = 0;
-                    Advance = ReceiptDAO.SP_GetSupplierAdvance(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(id), fyearid);
+                   // Advance = ReceiptDAO.SP_GetSupplierAdvance(Convert.ToInt32(cust.SupplierID), Convert.ToInt32(id), fyearid);
                     cust.Balance = Advance;
                     foreach (var item in cust.recPayDetail)
                     {
@@ -924,7 +924,7 @@ namespace LTMSV2.Controllers
             DateTime fromdate = Convert.ToDateTime(Session["FyearFrom"].ToString());
             DateTime todate = Convert.ToDateTime(Session["FyearTo"].ToString());
             decimal Advance = 0;
-            Advance = ReceiptDAO.SP_GetSupplierAdvance(Convert.ToInt32(ID), Convert.ToInt32(RecPayId), fyearid);
+          //  Advance = ReceiptDAO.SP_GetSupplierAdvance(Convert.ToInt32(ID), Convert.ToInt32(RecPayId), fyearid);
             if (amountreceived > 0)
                 amountreceived = amountreceived + Advance;
             //var openings = (from d in Context1.AcOPInvoiceDetails join m in Context1.AcOPInvoiceMasters on d.AcOPInvoiceMasterID equals m.AcOPInvoiceMasterID where m.AcFinancialYearID == fyearid && m.StatusSDSC != "C" && m.PartyID == ID  && d.Amount>0 select d).ToList();

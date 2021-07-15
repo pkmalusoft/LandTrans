@@ -69,7 +69,7 @@ namespace LTMSV2.Models
         public decimal Width { get; set; }
         public decimal Height { get; set; }
         public decimal Volume { get; set; }
-        public decimal VolumeWeight { get; set; }
+        public decimal? VolumeWeight { get; set; }
         public decimal CustomsInvoiceValue { get; set; }
         public int DocumentSetupId { get; set; }
         public string DocumentSetupName { get; set; }
@@ -197,5 +197,15 @@ namespace LTMSV2.Models
     public class OtherChargeDetailVM : InscanOtherCharge
     { 
         public string OtherChargeName { get; set; }
+    }
+
+    public class ConsignmentSearch
+    {
+        public string ConsignmentNo { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+
+        public List<QuickAWBVM> Details { get; set; }
+
     }
 }

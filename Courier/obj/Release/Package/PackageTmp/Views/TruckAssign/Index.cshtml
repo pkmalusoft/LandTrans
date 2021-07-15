@@ -205,10 +205,17 @@
                     <th width="15%">
                         @Html.Label("Vehicle No")
                     </th>
+                    <th>
+                        Rent
+                    </th>
+                    <th>
+                        Other Charge
+                    </th>
+                    <th>Total</th>
                     <th width="8%">
                         Consignment No.
                     </th>
-                    
+
 
                     <th width="15%">Action</th>
                 </tr>
@@ -229,11 +236,18 @@
 
                     </th>
                     <th>
+                        Rent
+                    </th>
+                    <th>
+                        Other Charge
+                    </th>
+                    <th>Total</th>
+                    <th>
 
                     </th>
-                   
-                 
-                 
+
+
+
 
                     <th style="display:none"></th>
                 </tr>
@@ -255,10 +269,21 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.VechileRegistrationNo)
                     </td>
-                    <td>                    
-                        @Html.DisplayFor(modelItem => item.ConsignmentNo)
-                    
+                    <td style="text-align:right">
+                        @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Rent, "3")
                     </td>
+                    <td style="text-align:right">
+
+                        @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.OtherCharges, "3")
+                    </td>
+                    <td style="text-align:right">
+                        @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.TotalCharge, "3")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConsignmentNo)
+
+                    </td>
+
                     <td>
 
 
@@ -267,13 +292,13 @@
                             <a href="@Url.Action("Create", new { id = item.TruckDetailId})"><i class="fa fa-pencil"></i></a>
                         }
                         @*@if (isview)
-                        {
-                            <a href="Details?id=@item.TruckDetailId"><i class="fa fa-eye"></i>|</a>
-                        }
-                        @if (isdelete)
-                        {
-                            <a href="#" onclick="Delete(ID=@item.TruckDetailId)"><i class="fa fa-times"></i>|</a>
-                        }*@
+            {
+                <a href="Details?id=@item.TruckDetailId"><i class="fa fa-eye"></i>|</a>
+            }
+            @if (isdelete)
+            {
+                <a href="#" onclick="Delete(ID=@item.TruckDetailId)"><i class="fa fa-times"></i>|</a>
+            }*@
                         @*@if (isprint)
             {
                 <a href="@Url.Action("AWBPrint", "Consignment", new { id = item.InScanID })"><i class="fa fa-print"></i></a>

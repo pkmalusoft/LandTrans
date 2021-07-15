@@ -263,8 +263,10 @@ namespace LTMSV2.DAL
                     obj.ConsignmentNo= ds.Tables[0].Rows[i]["ConsignmentNo"].ToString();
                     obj.TDDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TDDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
                     obj.RouteName = ds.Tables[0].Rows[i]["RouteName"].ToString();
-                    obj.VechileRegistrationNo = ds.Tables[0].Rows[i]["RegNo"].ToString();                    
-                    
+                    obj.VechileRegistrationNo = ds.Tables[0].Rows[i]["RegNo"].ToString();
+                    obj.Rent= Convert.ToDecimal(ds.Tables[0].Rows[i]["Rent"].ToString());
+                    obj.OtherCharges = Convert.ToDecimal(ds.Tables[0].Rows[i]["OtherCharge"].ToString());
+                    obj.TotalCharge = Convert.ToDecimal(ds.Tables[0].Rows[i]["TotalCharge"].ToString());
                     objList.Add(obj);
                 }
             }

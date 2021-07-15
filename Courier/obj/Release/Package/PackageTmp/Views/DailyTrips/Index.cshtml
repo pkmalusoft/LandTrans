@@ -455,6 +455,13 @@
                         <th>
                             @Html.Label("Destination")
                         </th>
+                        <th>
+                            Rent
+                        </th>
+                        <th>
+                            Other Charge
+                        </th>
+                        <th>Total</th>
                         
 
                         <th>Action</th>
@@ -487,7 +494,13 @@
                         <th>
                             @Html.Label("Destination")
                         </th>
-
+                        <th>
+                            Rent
+                        </th>
+                        <th>
+                            Other Charge
+                        </th>
+                        <th>Total</th>
 
                         <th style="display:none"></th>
                     </tr>
@@ -496,42 +509,51 @@
                     @foreach (var item in Model)
                     {
 
-                        <tr>
+                    <tr>
 
 
-                            <td>
-                                @LTMSV2.Models.CommanFunctions.GetShortDateFormat(item.TDDate)
-                            </td>
-                            <td style="text-align:right">
-                                @Html.DisplayFor(modelItem => item.ReceiptNo)
+                        <td>
+                            @LTMSV2.Models.CommanFunctions.GetShortDateFormat(item.TDDate)
+                        </td>
+                        <td style="text-align:right">
+                            @Html.DisplayFor(modelItem => item.ReceiptNo)
 
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DriverName)
-                            </td>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DriverName)
+                        </td>
 
-                            <td>
-                                @Html.DisplayFor(modelItem => item.RegNo)
-                            </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RegNo)
+                        </td>
 
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Origin)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Destination)
-                            </td>
-                           
-                            <td>
-                                <a href="@Url.Action("Create", new { Id = item.TruckDetailID })"><i class="fa fa-pencil"></i></a> |
-                                @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
-                                <a href="#" class="text-red" onclick="Delete(ID=@item.TruckDetailID)"><i class="fa fa-times"></i></a>
-                                @if (isprint)
-                                {
-                                    <a target="_blank" href="@Url.Action("ManifestReport", "Reports", new { id = item.TruckDetailID})"><i class="fa fa-print"></i></a>
-                                    @*<a href="#" title="Label Printing" onclick="ShowLabelPrinting('@item.InScanID')"><i class="fa fa-print"></i></a>*@
-                                }
-                            </td>
-                        </tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Origin)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Destination)
+                        </td>
+                        <td style="text-align:right">                            
+                            @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Rent, "3")
+                        </td>
+                        <td style="text-align:right">
+
+                            @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.OtherCharges, "3")
+                        </td>
+                        <td style="text-align:right">
+                            @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.TotalCharge, "3")
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Create", new { Id = item.TruckDetailID })"><i class="fa fa-pencil"></i></a> |
+                            @*<a href="@Url.Action("Delete", new { id = item.RoleID })"><i class="fa fa-times"></i></a>*@
+                            <a href="#" class="text-red" onclick="Delete(ID=@item.TruckDetailID)"><i class="fa fa-times"></i></a>
+                            @if (isprint)
+                            {
+                                <a target="_blank" href="@Url.Action("ManifestReport", "Reports", new { id = item.TruckDetailID})"><i class="fa fa-print"></i></a>
+                                @*<a href="#" title="Label Printing" onclick="ShowLabelPrinting('@item.InScanID')"><i class="fa fa-print"></i></a>*@
+                            }
+                        </td>
+                    </tr>
                     }
                 </tbody>
 

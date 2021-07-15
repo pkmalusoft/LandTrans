@@ -23,62 +23,117 @@ namespace LTMSV2.Controllers
             int branchid = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             int depotId = Convert.ToInt32(Session["CurrentDepotID"].ToString());
             int yearid = Convert.ToInt32(Session["fyearid"].ToString());
-
+            ConsignmentSearch obj = (ConsignmentSearch)Session["ConsignmentSearch"];
+            ConsignmentSearch model = new ConsignmentSearch();
             DateTime pFromDate;
             DateTime pToDate;
-            int pStatusId = 0;
-            if (StatusId == null)
-            {
-                pStatusId = 0;
-            }
-            else
-            {
-                pStatusId = Convert.ToInt32(StatusId);
-            }
-            if (FromDate == null || ToDate == null)
+
+            if (obj == null)
             {                
+                //int pStatusId = 0;
                 pFromDate = CommanFunctions.GetFirstDayofMonth().Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
-                pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
+                pToDate = CommanFunctions.GetLastDayofMonth().Date; // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
+
+                obj = new ConsignmentSearch();
+                obj.FromDate = pFromDate;
+                obj.ToDate = pToDate.AddDays(1);              
+                Session["ConsignmentSearch"] = obj;
+                model.FromDate = pFromDate;
+                model.ToDate = pToDate;
+                model.ConsignmentNo ="";
+                model.Details = new List<QuickAWBVM>();
             }
             else
             {
-                pFromDate = Convert.ToDateTime(FromDate).Date; //.AddDays(-1);
-                pToDate = Convert.ToDateTime(ToDate).AddDays(1);
-
+                model = obj;
+                if (model.ConsignmentNo == null)
+                    model.ConsignmentNo = "";
+                pFromDate = obj.FromDate;
+                pToDate = obj.ToDate.AddDays(1);
+                Session["ConsignmentSearch"] = obj;
             }
 
-            
-                //List<QuickAWBVM> lst = (from c in db.InScans join t1 in db.CityMasters on c.ConsignorCityID equals t1.CityID join t2 in db.CityMasters on c.ConsigneeCityID equals t2.CityID join t3 in db.CustomerMasters on c.CustomerID equals t3.CustomerID select new QuickAWBVM { ConsignmentNo = c.AWBNo, customer = t3.CustomerName, shippername = c.ConsignorContact, consigneename = c.Consignee, origin = t1.City, destination = t2.City,InScanID=c.InScanID,InScanDate=c.InScanDate }).ToList();
-                //List<QuickAWBVM> lst = (from c in db.InScans select new QuickAWBVM { ConsignmentNo = c.AWBNo,shippername = c.Consignor, consigneename = c.Consignee, destination = c.DestinationLocation, InScanID = c.InScanID, InScanDate = c.InScanDate }).ToList();
-            List<QuickAWBVM> lst = (from c in db.InScanMasters
-                                    join p in db.ParcelTypes on c.ParcelTypeId equals p.ID
-                                    join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
-                                    from subpet in gj.DefaultIfEmpty()
-                                    join pet1 in db.CourierStatus on c.CourierStatusID equals pet1.CourierStatusID into gj1
-                                    from subpet1 in  gj1.DefaultIfEmpty()
-                                    //join source in db.RequestTypes on c.RequestSource equals source.Id.ToString() into gj2
-                                    //from subpet3 in gj2.DefaultIfEmpty()
-                                    join pay in db.tblPaymentModes  on c.PaymentModeId equals pay.ID into gj2
-                                    from subpet2 in gj2.DefaultIfEmpty()
-                                    where c.BranchID == branchid   && c.DepotID==depotId 
-                                    //&& c.AcFinancialYearID==yearid                                
-                                    && (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)
-                                    && (c.CourierStatusID == pStatusId || (pStatusId == 0))  //&& c.CourierStatusID >= 4)
-                                    && c.IsDeleted==false 
-                                    orderby c.TransactionDate descending, c.ConsignmentNo descending
-                                    select new QuickAWBVM { ConsignmentNo = c.ConsignmentNo, shippername = c.Consignor, ConsignorCountryName=c.ConsignorCountryName,ConsigneeCountryName=c.ConsigneeCountryName,ConsignorPhone=c.ConsignorPhone, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate,CourierStatus= subpet1.CourierStatus ,StatusType=subpet.Name , totalCharge = c.NetTotal, paymentmode=subpet2.PaymentModeText,ConsigneePhone=c.ConsigneePhone,InvoiceTo=c.InvoiceTo ,PackageName=p.ParcelType1 }).ToList();  //, requestsource=subpet3.RequestTypeName 
+            //int pStatusId = 0;
+            //if (StatusId == null)
+            //{
+            //    pStatusId = 0;
+            //}
+            //else
+            //{
+            //    pStatusId = Convert.ToInt32(StatusId);
+            //}
+            //if (FromDate == null || ToDate == null)
+            //{
+            //    //pFromDate=Session["pConFromDate"] = pFromDate.ToString();
+            //    //Session["pConToDate"] = pToDate;
 
-            ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
-            ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
-            ViewBag.CourierStatus = db.CourierStatus.Where(cc=>cc.CourierStatusID>=4).ToList();
-            ViewBag.CourierStatusList = db.CourierStatus.Where(cc=>cc.CourierStatusID>=4).ToList();
+            //    pFromDate = CommanFunctions.GetFirstDayofMonth().Date; // DateTimeOffset.Now.Date;// CommanFunctions.GetFirstDayofMonth().Date; // DateTime.Now.Date; //.AddDays(-1) ; // FromDate = DateTime.Now;
+            //    pToDate = CommanFunctions.GetLastDayofMonth().Date.AddDays(1); // DateTime.Now.Date.AddDays(1); // // ToDate = DateTime.Now;
+            //    Session["pConFromDate"] = pFromDate;
+            //    Session["pConToDate"] = pToDate;
+            //}
+            //else
+            //{
+            //    pFromDate = Convert.ToDateTime(FromDate).Date; //.AddDays(-1);
+            //    pToDate = Convert.ToDateTime(ToDate).AddDays(1);
+
+            //}
+
+            if (model.ConsignmentNo != "")
+            {
+                List<QuickAWBVM> lst = (from c in db.InScanMasters
+                                        join p in db.ParcelTypes on c.ParcelTypeId equals p.ID
+                                        join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
+                                        from subpet in gj.DefaultIfEmpty()
+                                        join pet1 in db.CourierStatus on c.CourierStatusID equals pet1.CourierStatusID into gj1
+                                        from subpet1 in gj1.DefaultIfEmpty()                                            
+                                        join pay in db.tblPaymentModes on c.PaymentModeId equals pay.ID into gj2
+                                        from subpet2 in gj2.DefaultIfEmpty()
+                                        where c.BranchID == branchid && c.DepotID == depotId                                        
+                                        && (c.ConsignmentNo == model.ConsignmentNo || model.ConsignmentNo == "")                                        
+                                        && c.IsDeleted == false
+                                        orderby c.TransactionDate descending, c.ConsignmentNo descending
+                                        select new QuickAWBVM { ConsignmentNo = c.ConsignmentNo, shippername = c.Consignor, ConsignorCountryName = c.ConsignorCountryName, ConsigneeCountryName = c.ConsigneeCountryName, ConsignorPhone = c.ConsignorPhone, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate, CourierStatus = subpet1.CourierStatus, StatusType = subpet.Name, totalCharge = c.NetTotal, paymentmode = subpet2.PaymentModeText, ConsigneePhone = c.ConsigneePhone, InvoiceTo = c.InvoiceTo, PackageName = p.ParcelType1, Weight = c.Weight, VolumeWeight = c.VolumeWeight }).ToList();  //, requestsource=subpet3.RequestTypeName               
+                model.Details = lst;
+            }
+            else
+            {
+                List<QuickAWBVM> lst = (from c in db.InScanMasters
+                                        join p in db.ParcelTypes on c.ParcelTypeId equals p.ID
+                                        join pet in db.tblStatusTypes on c.StatusTypeId equals pet.ID into gj
+                                        from subpet in gj.DefaultIfEmpty()
+                                        join pet1 in db.CourierStatus on c.CourierStatusID equals pet1.CourierStatusID into gj1
+                                        from subpet1 in gj1.DefaultIfEmpty()
+                                            //join source in db.RequestTypes on c.RequestSource equals source.Id.ToString() into gj2
+                                            //from subpet3 in gj2.DefaultIfEmpty()
+                                        join pay in db.tblPaymentModes on c.PaymentModeId equals pay.ID into gj2
+                                        from subpet2 in gj2.DefaultIfEmpty()
+                                        where c.BranchID == branchid && c.DepotID == depotId
+                                        //&& c.AcFinancialYearID==yearid                                
+                                        && (c.TransactionDate >= pFromDate && c.TransactionDate < pToDate)                                       
+                                        
+                                        && c.IsDeleted == false
+                                        orderby c.TransactionDate descending, c.ConsignmentNo descending
+                                        select new QuickAWBVM { ConsignmentNo = c.ConsignmentNo, shippername = c.Consignor, ConsignorCountryName = c.ConsignorCountryName, ConsigneeCountryName = c.ConsigneeCountryName, ConsignorPhone = c.ConsignorPhone, consigneename = c.Consignee, destination = c.ConsigneeCountryName, InScanID = c.InScanID, InScanDate = c.TransactionDate, CourierStatus = subpet1.CourierStatus, StatusType = subpet.Name, totalCharge = c.NetTotal, paymentmode = subpet2.PaymentModeText, ConsigneePhone = c.ConsigneePhone, InvoiceTo = c.InvoiceTo, PackageName = p.ParcelType1, Weight = c.Weight, VolumeWeight = c.VolumeWeight }).ToList();  //, requestsource=subpet3.RequestTypeName 
+                model.Details = lst;
+            }
+            
+            //ViewBag.FromDate = pFromDate.Date.ToString("dd-MM-yyyy");
+            //ViewBag.ToDate = pToDate.Date.AddDays(-1).ToString("dd-MM-yyyy");
+            ViewBag.CourierStatus = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
+            ViewBag.CourierStatusList = db.CourierStatus.Where(cc => cc.CourierStatusID >= 4).ToList();
             ViewBag.StatusTypeList = db.tblStatusTypes.ToList();
             ViewBag.CourierStatusId = 0;
-            ViewBag.StatusId = StatusId;    
-            return View(lst);
+            ViewBag.StatusId = StatusId;
+            return View(model);
 
         }
-
+        [HttpPost]
+        public ActionResult Index(ConsignmentSearch obj)
+        {
+            Session["ConsignmentSearch"] = obj;
+            return RedirectToAction("Index");
+        }
         public ActionResult Create(int id=0)
         {           
             
