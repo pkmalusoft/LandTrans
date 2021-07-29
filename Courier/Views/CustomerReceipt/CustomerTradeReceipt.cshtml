@@ -167,7 +167,7 @@
 
         } else {
             $('#btnsearch').attr('disabled', 'disabled');
-
+           
              if ($("#RecPayID").val() > 0) {
             if ($("#StatusEntry").val() == "BK") {
                 $("#Bank").prop('checked', true);
@@ -178,8 +178,14 @@
                 $("#Cash").prop('checked', true);
                 $("#Bank").prop('checked', false);
                 $("#Cash").trigger("click");
-            }
-            PaymentModeChange();
+                 }
+
+                 setTimeout(function () {
+                     PaymentModeChange();
+                     SetDecimal();
+                     $('#customerName').attr('readonly', 'readonly');
+                 }, 100)
+
 
             var money = parseFloat($("#FMoney").val());
             $("#FMoney").val(money.toFixed(@_decimal));
@@ -531,8 +537,41 @@
 </script>
 
 <script type="text/javascript">
-    function numberWithCommas(x) {        
+    function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function SetDecimal() {
+        debugger;
+
+            var idtext = 'txtinvoice_';
+
+           $('[id^=' + idtext + ']').each(function (index, item) {
+
+               if ($(item).val() == "" || $(item).val() == null) {
+                   $(item).val(0);
+               }
+               else {
+                   var amt = $(item).val();
+                   $(item).val(parseFloat(amt).toFixed(@_decimal));
+               }
+
+           });
+
+         idtext = 'txtadjust_';
+         $('[id^=' + idtext + ']').each(function (index, item) {
+
+               if ($(item).val() == "" || $(item).val() == null) {
+                   $(item).val(0);
+               }
+               else {
+                   var amt = $(item).val();
+                   $(item).val(parseFloat(amt).toFixed(@_decimal));
+               }
+
+           });
+
+
     }
     function chkAWBAmt(x) {
         var amt = 0;
@@ -713,9 +752,9 @@
             $("#ChequeNo").attr('required', 'required');
             $("#ChequeDate").attr('required', 'required');
             $("#ChequeNo").removeAttr('readonly');
-            $("#ChequeDate").removeAttr('readonly');          
+            $("#ChequeDate").removeAttr('readonly');
             $('#CashBank').removeAttr('required', 'required');
-            $('#ChequeBank').attr('required', 'required');                        
+            $('#ChequeBank').attr('required', 'required');
             $('#CashBank').val(0).trigger('change');
         } else { //2 Cash
             $("#divBank").css({ "display": "none" });
@@ -726,7 +765,7 @@
             $("#ChequeDate").removeAttr('required');
             $("#ChequeNo").attr('readonly', 'readonly');
             $("#ChequeDate").attr('readonly','readonly')
-            $('#CashBank').attr('required','required');            
+            $('#CashBank').attr('required','required');
             $('#ChequeBank').val(0).trigger('change');
             $('#ChequeBank').removeAttr('required')
         }
@@ -971,12 +1010,12 @@
                                                     @if (@Model.CustomerRcieptChildVM[i].InvoiceDate != null)
                                                     {
                                                         @LTMSV2.Models.CommanFunctions.GetShortDateFormat(@Model.CustomerRcieptChildVM[i].strDate)
-                                                        @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].strDate)
+                                                        @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceDate)
                                                     }
                                                     else
                                                     {
                                                         @Model.CustomerRcieptChildVM[i].strDate
-                                                        @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].strDate)
+                                                        @Html.HiddenFor(item => @Model.CustomerRcieptChildVM[i].InvoiceDate)
                                                     }
                                                 </div>
                                             </td>
@@ -1016,15 +1055,16 @@
                                                     <input type="checkbox" id="chkallocate_@Model.CustomerRcieptChildVM[i].JobCode" onchange="allocate(this)" />
                                                 }
 
-                                                @Html.TextBoxFor(item => item.CustomerRcieptChildVM[i].Amount, string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].Amount), new { @class = "amt txtNum text-right Amount", @id = "txtinvoice_" + @Model.CustomerRcieptChildVM[i].JobCode, onchange = "CheckAmt(this)" })
+                                                @*@Html.TextBoxFor(item => item.CustomerRcieptChildVM[i].Amount, string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].Amount), new { @class = "amt txtNum text-right Amount", @id = "txtinvoice_" + @Model.CustomerRcieptChildVM[i].JobCode, onchange = "CheckAmt(this)" })*@
+                                                @Html.TextBoxFor(item => item.CustomerRcieptChildVM[i].Amount,new { @class = "amt txtNum text-right Amount", @id = "txtinvoice_" + @Model.CustomerRcieptChildVM[i].JobCode, onchange = "CheckAmt(this)" })
 
 
                                             </td>
                                             <td style="text-align:right;">
                                                 <div class="data1">
                                                     @*@Model.CostUpdationDetails[i].JobCode*@
-                                                    @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount, string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].AdjustmentAmount), new { @class = "amt1 txtNum text-right AdjustmentAmount", onchange = "CheckAmt1(this)", @id = "txtadjust_" + Model.CustomerRcieptChildVM[i].JobCode })
-
+                                                    @*@Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount, string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].AdjustmentAmount), new { @class = "amt1 txtNum text-right AdjustmentAmount", onchange = "CheckAmt1(this)", @id = "txtadjust_" + Model.CustomerRcieptChildVM[i].JobCode })*@
+                                                    @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount,new { @class = "amt1 txtNum text-right AdjustmentAmount", onchange = "CheckAmt1(this)", @id = "txtadjust_" + Model.CustomerRcieptChildVM[i].JobCode })
 
                                                 </div>
                                             </td>

@@ -12,6 +12,8 @@
               <xs:element name="Consignor" type="xs:string" minOccurs="0" />
               <xs:element name="Consignee" type="xs:string" minOccurs="0" />
               <xs:element name="Amount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="TaxP" type="xs:decimal" minOccurs="0" />
+              <xs:element name="TaxAmount" type="xs:decimal" minOccurs="0" />
               <xs:element name="SalesMan" type="xs:string" minOccurs="0" />
               <xs:element name="CustomerId" type="xs:int" minOccurs="0" />
               <xs:element name="CustomerName" type="xs:string" minOccurs="0" />

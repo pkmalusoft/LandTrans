@@ -1564,5 +1564,164 @@ namespace LTMSV2.Controllers
 
         }
         #endregion
+
+        #region "VATRegisterSales"
+        public ActionResult VATRegisterSales()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model = (CustomerLedgerReportParam)Session["VATRegisterSalesParam"];
+
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    AsonDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+            Session["VATRegisterSalesParam"] = model;
+            ViewBag.ReportName = "VAT Register - Sales";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("VATRegisterSales"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult VATRegisterSales(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = picker.Output,
+                ReportType = picker.ReportType,
+                AsonDate = picker.AsonDate
+            };
+
+            ViewBag.Token = model;
+            Session["VATRegisterSalesParam"] = model;
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateVATSalesReport();
+
+            return RedirectToAction("VATRegisterSales", "Reports");
+
+
+        }
+        #endregion
+
+        #region "VATRegisterPurchase"
+        public ActionResult VATRegisterPurchase()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            var supplierMasterTypes = (from d in db.SupplierTypes select d).ToList();
+            ViewBag.SupplierType = supplierMasterTypes;
+
+            SupplierLedgerReportParam model = (SupplierLedgerReportParam)Session["VATRegisterPurchaseParam"];
+                        
+            if (model == null)
+            {
+                model = new SupplierLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    SupplierTypeId = 1,
+                    SupplierId = 0,
+                    SupplierName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+        
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+
+            Session["VATRegisterPurchaseParam"] = model;
+            ViewBag.ReportName = "VAT Register - Purchase";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("VATRegisterPurchase"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult VATRegisterPurchase(SupplierLedgerReportParam picker)
+        {
+            SupplierLedgerReportParam model = new SupplierLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate,                
+                SupplierId = picker.SupplierId,
+                SupplierName = picker.SupplierName,
+                SupplierTypeId = picker.SupplierTypeId,
+                Output = picker.Output,
+                ReportType = "Ledger"
+            };
+
+            ViewBag.Token = model;
+            Session["VATRegisterPurchaseParam"] = model;
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateVATPurchaseReport();
+
+            return RedirectToAction("VATRegisterPurchase", "Reports");
+
+
+        }
+        #endregion
+
     }
 }

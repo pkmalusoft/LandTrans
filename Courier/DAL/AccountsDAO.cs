@@ -102,7 +102,7 @@ namespace LTMSV2.DAL
             int iReturn = 0;
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "UPDATE AcJournalDetail SET AcJournalID=@AcJournalID,AcHeadID=@AcHeadID,AnalysisHeadID=@AnalysisHeadID,Amount=@Amount,Remarks=@Remarks,BranchID=@BranchID,AmountIncludingTax=@AmountIncludingTax,SupplierId=@SupplierId WHERE AcJournalDetailID = @AcJournalDetailID";
+            cmd.CommandText = "UPDATE AcJournalDetail SET AcJournalID=@AcJournalID,AcHeadID=@AcHeadID,AnalysisHeadID=@AnalysisHeadID,Amount=@Amount,Remarks=@Remarks,BranchID=@BranchID,AmountIncludingTax=@AmountIncludingTax,SupplierId=@SupplierId,TaxPercent=@TaxPercent,TaxAmount=@TaxAmount WHERE AcJournalDetailID = @AcJournalDetailID";
             cmd.CommandType = CommandType.Text;
 
             cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
@@ -132,6 +132,11 @@ namespace LTMSV2.DAL
             cmd.Parameters.Add("@SupplierId", SqlDbType.Int);
             cmd.Parameters["@SupplierId"].Value = ObjectAcJournalDetail.SupplierId;
 
+            cmd.Parameters.Add("@TaxPercent", SqlDbType.Money);
+            cmd.Parameters["@TaxPercent"].Value = ObjectAcJournalDetail.TaxPercent;
+
+            cmd.Parameters.Add("@TaxAmount", SqlDbType.Money);
+            cmd.Parameters["@TaxAmount"].Value = ObjectAcJournalDetail.TaxAmount;
 
             try
             {
@@ -151,7 +156,7 @@ namespace LTMSV2.DAL
             int iReturn = 0;
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "UPDATE AcJournalConsignment where  AcJournalID=@AcJournalID and AcJournalDetailID = @AcJournalDetailID";
+            cmd.CommandText = "Delete from AcJournalConsignment where  AcJournalID=@AcJournalID and AcJournalDetailID = @AcJournalDetailID";
             cmd.CommandType = CommandType.Text;
 
             cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
@@ -237,7 +242,7 @@ namespace LTMSV2.DAL
             int iReturn = 0;
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
-            cmd.CommandText = "INSERT INTO AcJournalDetail(AcJournalDetailID,AcJournalID,AcHeadID,Amount,Remarks,BranchID,AmountIncludingTax,SupplierId) VALUES(@AcJournalDetailID,@AcJournalID,@AcHeadID,@Amount,@Remarks,@BranchID,@AmountIncludingTax,@SupplierId)";
+            cmd.CommandText = "INSERT INTO AcJournalDetail(AcJournalDetailID,AcJournalID,AcHeadID,Amount,Remarks,BranchID,AmountIncludingTax,SupplierId,TaxPercent,TaxAmount) VALUES(@AcJournalDetailID,@AcJournalID,@AcHeadID,@Amount,@Remarks,@BranchID,@AmountIncludingTax,@SupplierId,@TaxPercent,@TaxAmount)";
             cmd.CommandType = CommandType.Text;
 
             cmd.Parameters.Add("@AcJournalDetailID", SqlDbType.Int);
@@ -266,6 +271,13 @@ namespace LTMSV2.DAL
             
             cmd.Parameters.Add("@SupplierId", SqlDbType.Int);
             cmd.Parameters["@SupplierId"].Value = ObjectAcJournalDetail.SupplierId;
+
+            cmd.Parameters.Add("@TaxPercent", SqlDbType.Money);
+            cmd.Parameters["@TaxPercent"].Value = ObjectAcJournalDetail.TaxPercent;
+
+            cmd.Parameters.Add("@TaxAmount", SqlDbType.Money);
+            cmd.Parameters["@TaxAmount"].Value = ObjectAcJournalDetail.TaxAmount;
+
             try
             {
                 cmd.Connection.Open();

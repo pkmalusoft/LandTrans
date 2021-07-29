@@ -3124,6 +3124,8 @@
     <Content Include="Reports\CustomerInvoiceOpeningRegister.rpt" />
     <Content Include="Reports\CustomerInvoiceRegister.rpt" />
     <Content Include="Reports\SupplierInvoiceOpeningRegister.rpt" />
+    <Content Include="Reports\VATRegisterPurchase.rpt" />
+    <Content Include="Reports\VATRegisterSales.rpt" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3646,6 +3648,8 @@
     <Content Include="Views\Reports\CustomerInvoiceOpeningRegister.cshtml" />
     <Content Include="Views\Reports\CustomerInvoiceRegister.cshtml" />
     <Content Include="Views\Reports\SupplierInvoiceOpeningRegister.cshtml" />
+    <Content Include="Views\Reports\VATRegisterSales.cshtml" />
+    <Content Include="Views\Reports\VATRegisterPurchase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -213,13 +213,13 @@ namespace LTMSV2.Controllers
                 Supplierinvoice.AccompanyID = Convert.ToInt32(Session["CurrentCompanyID"]); 
                 Supplierinvoice.BranchId = Convert.ToInt32(Session["CurrentBranchID"]); 
                 Supplierinvoice.FyearID = Convert.ToInt32(Session["fyearid"]);
-                Supplierinvoice.InvoiceTotal = IDetails.Sum(d => d.Amount);
+                Supplierinvoice.InvoiceTotal = IDetails.Sum(d => d.Value);
                 Supplierinvoice.StatusClose = false;
                 Supplierinvoice.IsDeleted = false;
                 Supplierinvoice.Remarks = Remarks;
                 Supplierinvoice.SupplierTypeId = SupplierTypeId;
                 if (Supplierinvoice.SupplierInvoiceID == 0)
-                {
+                {  
                     db.SupplierInvoices.Add(Supplierinvoice);
                 }
                 db.SaveChanges();

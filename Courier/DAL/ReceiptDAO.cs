@@ -239,6 +239,8 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@FMoney", RecPy.FMoney);
             cmd.Parameters.AddWithValue("@TruckDetailId", RecPy.TruckDetailId);
             cmd.Parameters.AddWithValue("@UserID", RecPy.UserID);
+            cmd.Parameters.AddWithValue("@UpdateDate", CommanFunctions.GetCurrentDateTime().ToString("MM/dd/yyyy HH:mm"));
+            
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -453,7 +455,7 @@ namespace LTMSV2.DAL
             }
 
         }
-        public static int InsertRecpayDetailsForCust(int RecPayID, int InvoiceID, int JInvoiceID, decimal Amount, string Remarks, string StatusInvoice, bool StatusAdvance, string statusReceip, string InvDate, string InvNo, int CurrencyID, int invoiceStatus, int InScanId)
+        public static int InsertRecpayDetailsForCust(int RecPayID, int InvoiceID, int JInvoiceID, decimal Amount, string Remarks, string StatusInvoice, bool StatusAdvance, string statusReceip, string InvDate, string InvNo, int CurrencyID, int invoiceStatus, decimal AdjustmentAmount)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
@@ -470,8 +472,8 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@InvNo", InvNo);
             cmd.Parameters.AddWithValue("@CurrencyID", CurrencyID);            
             cmd.Parameters.AddWithValue("@invoiceStatus", invoiceStatus);
-            cmd.Parameters.AddWithValue("@InScanId",  InScanId);
-                        
+            cmd.Parameters.AddWithValue("@AdjustmentAmount", AdjustmentAmount);
+
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
