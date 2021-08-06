@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="CustomerInvoiceAllocation">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="RecPayID" type="xs:int" minOccurs="0" />
+              <xs:element name="RecPayDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="DocumentNo" type="xs:string" minOccurs="0" />
+              <xs:element name="ReceiptAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="CustomerID" type="xs:int" minOccurs="0" />
+              <xs:element name="customername" type="xs:string" minOccurs="0" />
+              <xs:element name="remarks" type="xs:string" minOccurs="0" />
+              <xs:element name="ChequeNo" type="xs:string" minOccurs="0" />
+              <xs:element name="ChequeDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="InvoiceID" type="xs:int" minOccurs="0" />
+              <xs:element name="AllocatedAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="AcOPInvoiceDetailID" type="xs:int" minOccurs="0" />
+              <xs:element name="InvoiceNo" type="xs:string" minOccurs="0" />
+              <xs:element name="InvoiceDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="InvoiceAmount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="AllocationType" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -647,7 +647,7 @@ namespace LTMSV2.DAL
                     obj.TransDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TransDate"].ToString());
                     obj.Remarks = ds.Tables[0].Rows[i]["Remarks"].ToString();
                     //obj.TransactionNo = ds.Tables[0].Rows[i]["TransactionNo"].ToString();
-                    //obj.Reference = ds.Tables[0].Rows[i]["Reference"].ToString();
+                    obj.Reference = ds.Tables[0].Rows[i]["Reference"].ToString();
                     obj.Amount = Convert.ToDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
                     obj.VoucherType = ds.Tables[0].Rows[i]["VoucherType"].ToString();
                     objList.Add(obj);

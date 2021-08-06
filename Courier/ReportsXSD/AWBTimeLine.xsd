@@ -14,16 +14,17 @@
               <xs:element name="EmployeeId" type="xs:int" minOccurs="0" />
               <xs:element name="RevEmployeeName" type="xs:string" minOccurs="0" />
               <xs:element name="InvoiceId" type="xs:int" minOccurs="0" />
+              <xs:element name="CustomerId" type="xs:int" minOccurs="0" />
               <xs:element name="Amount" type="xs:decimal" minOccurs="0" />
               <xs:element name="InvoiceDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="InvoiceNo" type="xs:string" minOccurs="0" />
               <xs:element name="InvoiceCreatedBy" type="xs:string" minOccurs="0" />
               <xs:element name="InvoiceCreatedDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="RecPayId" type="xs:int" minOccurs="0" />
-              <xs:element name="RecPayDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="DocumentNo" type="xs:string" minOccurs="0" />
+              <xs:element name="RecPayDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="RecPayAmount" type="xs:decimal" minOccurs="0" />
               <xs:element name="RecCreatedBy" type="xs:string" minOccurs="0" />
-              <xs:element name="RecCreatedDate" type="xs:dateTime" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

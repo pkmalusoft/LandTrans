@@ -33,22 +33,23 @@
     $(document).ready(function () {
 
      
-        var o_st = $("#VoucherTypeId").val().split(",");
-        console.log(o_st);
+        var o_st = $("#VoucherTypeId").val().split(",");        
         var items = [
-            { Id: 0, Text: 'All' },
-            { Id: 1, Text: 'Cash Receipts & Payments' },
-            { Id: 2, Text: 'Journal Voucher' },
-            { Id: 3, Text: 'Revenue Posting' },
-            { Id: 4, Text: 'Trip Posting' },
-            { Id: 5, Text: 'Opening Posting' },
-            { Id: 6, Text: 'Invoice Posting' },
-            { Id: 7, Text: 'Receipt Posting' },
-            { Id: 8, Text: 'COD Posting' }];
+            { Id: 0, Text: 'All Transactions' },
+            { Id: 1, Text: 'Opening' },
+            { Id: 2, Text: 'Cash Receipts & Payments' },
+            { Id: 3, Text: 'Journal Voucher' },
+            { Id: 4, Text: 'Revenue Posting' },
+            { Id: 5, Text: 'Customer Invoice' },
+            { Id: 6, Text: 'Customer Receipt' },
+            { Id: 7, Text: 'Trip Posting' },            
+            { Id: 8, Text: 'Supplier Invoice' },
+            { Id: 9, Text: 'Supplier Payments' },
+            { Id: 10, Text: 'COD Posting' }];
         $('#vouchertypeid').empty();
         var flag = 0;
         debugger;
-        for (var i = 0; i < 9; i++) {
+        for (var i = 0; i < 11; i++) {
             var flag = 0;
             for (var j = 0; j < o_st.length; j++) {
 
@@ -63,7 +64,7 @@
                 $('#vouchertypeid').append('<option value="' + i + '">' + items[i].Text + '</option>');
             }
 
-            if (i == 8) {
+            if (i == 10) {
                 $('#vouchertypeid').multiselect({
                     nonSelectedText: 'Select',
                     enableClickableOptGroups: true,

@@ -199,8 +199,8 @@
             <thead>
                 <tr>
                     @*  <th>
-                             @Html.Label("Transaction Type")
-                        </th>
+             @Html.Label("Transaction Type")
+        </th>
                     *@
                     <th>
                         @Html.Label("Voucher No")
@@ -210,6 +210,9 @@
                     </th>
                     <th>
                         @Html.Label("Amount")
+                    </th>
+                    <th>
+                        @Html.Label("Reference")
                     </th>
                     <th>
                         @Html.Label("Narration")
@@ -234,6 +237,9 @@
                         @Html.Label("Amount")
                     </th>
                     <th>
+                        @Html.Label("Reference")
+                    </th>
+                    <th>
                         @Html.Label("Remark")
                     </th>
 
@@ -244,41 +250,44 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td class="details-control">
-                            <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" />
-                            @Html.DisplayFor(modelItem => item.VoucherNo)
-                        </td>
-                        <td class="tdtarget">
-                            <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;width:10px;margin:1px;" />
-                            @LTMSV2.Models.CommanFunctions.GetShortDateFormat((item.TransDate))
-                        </td>
-                        <td class="tdtarget textright">
-                            @string.Format("{0:n3}", item.Amount)
-                        </td>
-                        <td class="tdtarget">
-                            @Html.DisplayFor(modelItem => item.Remarks)
-                        </td>
-                        <td>
-                            @if (ismodify)
-                            {
-                                <a href="@Url.Action("Create", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
-                            }
+                <tr>
+                    <td class="details-control">
+                        <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;" />
+                        @Html.DisplayFor(modelItem => item.VoucherNo)
+                    </td>
+                    <td class="tdtarget">
+                        <img src="/Content/img/details_open.png" id="plus_minus" style="cursor: pointer;width:10px;margin:1px;" />
+                        @LTMSV2.Models.CommanFunctions.GetShortDateFormat((item.TransDate))
+                    </td>
+                    <td class="tdtarget textright">
+                        @string.Format("{0:n3}", item.Amount)
+                    </td>
+                    <td >
+                        @item.Reference
+                    </td>
+                    <td class="tdtarget">
+                        @Html.DisplayFor(modelItem => item.Remarks)
+                    </td>
+                    <td>
+                        @if (ismodify)
+                        {
+                            <a href="@Url.Action("Create", new { id = item.AcJournalID })"><i class="fa fa-pencil"></i></a>
+                        }
 
-                            @if (isdelete)
-                            {
-                                <a onclick="Delete(ID=@item.AcJournalID)" href="#"><i class="fa fa-times"></i></a>
-                            }
-                            @if (isprint)
-                            {
-                                <a onclick="funExportToPDF(@item.AcJournalID)" href="#"><i class="fa fa-print"></i></a>
-                            }
+                        @if (isdelete)
+                        {
+                            <a onclick="Delete(ID=@item.AcJournalID)" href="#"><i class="fa fa-times"></i></a>
+                        }
+                        @if (isprint)
+                        {
+                            <a onclick="funExportToPDF(@item.AcJournalID)" href="#"><i class="fa fa-print"></i></a>
+                        }
 
-                        </td>
-                        <td style="display:none;">
-                            @item.AcJournalID
-                        </td>
-                    </tr>
+                    </td>
+                    <td style="display:none;">
+                        @item.AcJournalID
+                    </td>
+                </tr>
                 }
                 <tbody>
         </table>

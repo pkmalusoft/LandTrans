@@ -1723,5 +1723,172 @@ namespace LTMSV2.Controllers
         }
         #endregion
 
+        #region "CustomerInvoiceAllocation"
+        public ActionResult CustomerInvoiceAllocation()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+
+            CustomerLedgerReportParam model =(CustomerLedgerReportParam)Session["CustomerInvoiceAllocation"];
+            if (model == null)
+            {
+                model = new CustomerLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
+                    CustomerId = 0,
+                    CustomerName = "",
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            if (model.AsonDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            SessionDataModel.SetCustomerStatementParam(model);
+
+
+            model.AsonDate = AccountsDAO.CheckParamDate(model.AsonDate, yearid).Date;
+            //model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            ViewBag.ReportName = "Customer Invoice Allocation";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("CustomerInvoiceAllocation"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerInvoiceAllocation(CustomerLedgerReportParam picker)
+        {
+
+            CustomerLedgerReportParam model = new CustomerLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                CustomerId = picker.CustomerId,
+                CustomerName = picker.CustomerName,
+                Output = picker.Output,
+                ReportType = picker.ReportType,
+                AsonDate = picker.AsonDate
+            };
+
+            ViewBag.Token = model;
+            Session["CustomerInvoiceAllocation"] = model;            
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateCustomerInvoiceAllocationReport();
+
+            return RedirectToAction("CustomerInvoiceAllocation", "Reports");
+
+
+        }
+        #endregion
+
+
+        #region "SupplierInvoiceAllocation"
+        public ActionResult SupplierInvoiceAllocation()
+        {
+            int yearid = Convert.ToInt32(Session["fyearid"].ToString());
+            var supplierMasterTypes = (from d in db.SupplierTypes select d).ToList();
+            ViewBag.SupplierType = supplierMasterTypes;
+            SupplierLedgerReportParam model = (SupplierLedgerReportParam)Session["SupplierInvoiceAllocation"];
+            if (model == null)
+            {
+                model = new SupplierLedgerReportParam
+                {
+                    FromDate = CommanFunctions.GetFirstDayofMonth().Date, //.AddDays(-1);,
+                    ToDate = CommanFunctions.GetLastDayofMonth().Date,
+                    AsonDate = CommanFunctions.GetLastDayofMonth().Date, //.AddDays(-1);,
+                    SupplierId = 0,
+                    SupplierName = "",
+                    SupplierTypeId = 1,
+                    Output = "PDF",
+                    ReportType = "Ledger"
+                };
+            }
+            if (model.FromDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.FromDate = CommanFunctions.GetFirstDayofMonth().Date;
+            }
+
+            if (model.ToDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.ToDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            if (model.AsonDate.ToString() == "01-01-0001 00:00:00")
+            {
+                model.AsonDate = CommanFunctions.GetLastDayofMonth().Date;
+            }
+            
+            
+
+            model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
+            model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
+
+            Session["SupplierInvoiceAllocation"] = model;
+            ViewBag.ReportName = "Supplier Invoice Allocation";
+            if (Session["ReportOutput"] != null)
+            {
+                string currentreport = Session["ReportOutput"].ToString();
+                if (!currentreport.Contains("SupplierInvoiceAllocation"))
+                {
+                    Session["ReportOutput"] = null;
+                }
+
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public ActionResult SupplierInvoiceAllocation(SupplierLedgerReportParam picker)
+        {
+
+            SupplierLedgerReportParam model = new SupplierLedgerReportParam
+            {
+                FromDate = picker.FromDate,
+                ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                SupplierId = picker.SupplierId,
+                SupplierTypeId=picker.SupplierTypeId,
+                SupplierName = picker.SupplierName,
+                Output = picker.Output,
+                ReportType = picker.ReportType,
+                AsonDate = picker.AsonDate
+            };
+
+            ViewBag.Token = model;
+            Session["SupplierInvoiceAllocation"] = model;
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            AccountsReportsDAO.GenerateSupplierInvoiceAllocationReport();
+
+            return RedirectToAction("SupplierInvoiceAllocation", "Reports");
+
+        }
+        #endregion
     }
 }
