@@ -2071,9 +2071,9 @@ namespace LTMSV2.DAL
             sqlAdapter.Fill(ds, "AWBTimeLine");
 
             //generate XSD to design report            
-            System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "AWBTimeLine.xsd"));
-            ds.WriteXmlSchema(writer);
-            writer.Close();
+            //System.IO.StreamWriter writer = new System.IO.StreamWriter(Path.Combine(HostingEnvironment.MapPath("~/ReportsXSD"), "AWBTimeLine.xsd"));
+            //ds.WriteXmlSchema(writer);
+            //writer.Close();
 
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(HostingEnvironment.MapPath("~/Reports"), "AWBTimeLine.rpt"));

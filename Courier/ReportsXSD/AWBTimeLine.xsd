@@ -18,6 +18,7 @@
               <xs:element name="Amount" type="xs:decimal" minOccurs="0" />
               <xs:element name="InvoiceDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="InvoiceNo" type="xs:string" minOccurs="0" />
+              <xs:element name="Invoiceamount" type="xs:decimal" minOccurs="0" />
               <xs:element name="InvoiceCreatedBy" type="xs:string" minOccurs="0" />
               <xs:element name="InvoiceCreatedDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="RecPayId" type="xs:int" minOccurs="0" />
@@ -25,6 +26,23 @@
               <xs:element name="RecPayDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="RecPayAmount" type="xs:decimal" minOccurs="0" />
               <xs:element name="RecCreatedBy" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="AWBTimeLine1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Invoiceid" type="xs:int" minOccurs="0" />
+              <xs:element name="Masterid" type="xs:int" minOccurs="0" />
+              <xs:element name="Column1" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="AWBTimeLine2">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="inscanid" type="xs:int" minOccurs="0" />
+              <xs:element name="Column1" type="xs:int" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

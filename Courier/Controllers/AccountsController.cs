@@ -1291,7 +1291,7 @@ new AcGroupModel()
 
             AcJournalMaster ajm = new AcJournalMaster();
             ajm.AcJournalID = max + 1;
-            ajm.VoucherNo = (voucherno + 1).ToString();
+            //ajm.VoucherNo = (voucherno + 1).ToString();
             ajm.TransDate = v.transdate;
             ajm.TransType = Convert.ToInt16(v.transtype);
             if (v.transtype == 1)
@@ -1317,7 +1317,7 @@ new AcGroupModel()
             ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
             ajm.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
             ajm.Reference = v.reference;
-
+            ajm.VoucherNo = AccountsDAO.GetMaxVoucherNo(Convert.ToInt32(ajm.AcFinancialYearID), Convert.ToInt32(ajm.BranchID));
             db.AcJournalMasters.Add(ajm);
             db.SaveChanges();
 
@@ -1520,8 +1520,8 @@ new AcGroupModel()
             AcJournalMaster ajm = new AcJournalMaster();
             if (v.AcJournalID ==0)
             {
-                int voucherno = 0;
-                voucherno = (from c in db.AcJournalMasters select c).ToList().Count();
+                //int voucherno = 0;
+                //voucherno = (from c in db.AcJournalMasters select c).ToList().Count();
 
                 int max = 0;
                 max = (from c in db.AcJournalMasters orderby c.AcJournalID descending select c.AcJournalID).FirstOrDefault();
@@ -1529,7 +1529,7 @@ new AcGroupModel()
                 int MaxId = 0;
                 MaxId = (from c in db.AcJournalMasters orderby c.ID descending select c.ID).FirstOrDefault();
                 ajm.AcJournalID = max + 1;
-                ajm.VoucherNo = (voucherno + 1).ToString();
+                //ajm.VoucherNo = (voucherno + 1).ToString();
                 ajm.TransDate = v.transdate;
                 ajm.TransType = Convert.ToInt16(v.transtype);
                 if (v.transtype == 1)
@@ -1547,6 +1547,7 @@ new AcGroupModel()
                 ajm.UserID = Convert.ToInt32(Session["UserID"].ToString());
                 ajm.BranchID = Convert.ToInt32(Session["CurrentBranchID"].ToString());
                 ajm.AcCompanyID = Convert.ToInt32(Session["CurrentCompanyID"].ToString());
+                ajm.VoucherNo = AccountsDAO.GetMaxVoucherNo(Convert.ToInt32(ajm.AcFinancialYearID), Convert.ToInt32(ajm.BranchID));
             }
             else
             {
@@ -4632,10 +4633,14 @@ new AcGroupModel()
                     invoice.AcFinancialYearID = yearid;
                 if (model.StatusSDSC == "C")
                 { invoice.AcHeadID = 52; }
-                else
+                else if (model.StatusSDSC=="S")
                 { invoice.AcHeadID = 337; }
-                
-                    invoice.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
+                else if (model.StatusSDSC == "H")
+                { invoice.AcHeadID = 824; }
+                else if (model.StatusSDSC == "F")
+                { invoice.AcHeadID = 107; }
+
+                invoice.BranchID = Convert.ToInt32(Session["CurrentBranchID"]);
                     invoice.StatusSDSC = model.StatusSDSC;
 
                 if (model.AcOPInvoiceMasterID == 0) // new entry

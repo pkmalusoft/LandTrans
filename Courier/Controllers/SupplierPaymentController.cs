@@ -726,7 +726,8 @@ namespace LTMSV2.Controllers
                 recpay.SupplierID = RecP.SupplierID;
                 recpay.DocumentNo = RecP.DocumentNo;
                 recpay.EXRate = RecP.EXRate;
-                recpay.FYearID = RecP.FYearID;
+                recpay.FYearID = fyearid;
+                recpay.AcCompanyID = branchid;
                 recpay.FMoney = RecP.FMoney;
                 recpay.StatusEntry = RecP.StatusEntry;
                 recpay.IsTradingReceipt = true;                

@@ -32,13 +32,13 @@
 </style>
 <script type="text/javascript">
     function deleterow(i) {
-            
-        var item = $('#JAmount_' + i);            
+
+        var item = $('#JAmount_' + i);
         $(item).parent().parent().addClass('hide');
         var obj = $(item).parent().parent().find('.hdndeleted');
         $(obj).val(true);
         CalculateTotal();
-        
+
     }
     function CalculateTotal() {
         debugger;
@@ -61,6 +61,19 @@
         else if (parseFloat(Total)==0 && maxrow>0)
             $('#btnsave').removeAttr('disabled');
     }
+    function GetCurrentDate() {
+
+            var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+            var startdate = '@Session["FyearFrom"].ToString()';
+            var d = new Date();
+            var curr_date = d.getDate();
+            var curr_month = d.getMonth() + 1;
+            var curr_year = d.getFullYear();
+
+            var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+            //var reqdate = curr_date + "-" + curr_month + "-" + curr_year + ' ' + d.getHours() + ':' + d.getMinutes();
+            return (curr_date + "-" + curr_month + "-" + curr_year);
+        }
     $(document).ready(function () {
             var startdate = '@Session["FyearFrom"].ToString()';
         var enddate = '@Session["FyearTo"].ToString()';
@@ -72,17 +85,16 @@
 
         $(function () {
 
-            $(function () {
-                $('.datepicker').datetimepicker({ format: 'DD-MM-YYYY' });
+            //$(function () {
+            //    $('.datepicker').datetimepicker({ format: 'DD-MM-YYYY' });
 
-            });
-
-            //$(".datepicker").datepicker({
-            //    dateFormat: 'dd-M-yy',
-            //    changeYear: true, changeMonth: true,
-            //    minDate: sd,
-            //    maxDate: ed,
             //});
+            $('#TransDate').datetimepicker({
+                //maxDate: ed,
+                //minDate: sd,
+                format: 'DD-MM-YYYY'
+            });
+            $("#TransDate").val(GetCurrentDate())
         });
 
         $(@Model.AcJournalID> 0)
@@ -158,15 +170,15 @@
                 return;
             }
             if (Amount == '') {
-                Amount = 0;                
+                Amount = 0;
             }
 
-            if (Amount == '0') {                
+            if (Amount == '0') {
                 alert("Please Enter Amount!");
                 $('#Amount').focus();
                 return;
             }
-            
+
 
             var i = $('#tbl1 tr').length;
 

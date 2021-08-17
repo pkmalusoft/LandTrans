@@ -438,7 +438,7 @@
                                     {
                                         var credit = -1 * item.Amount;
                                         <td><input type="text" class="form-control text-right " value="0.000" id="txtDebit_@i" />  </td>
-                                        <td><input type="text" class="form-control text-right" value="@LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount,"3")" id="txtCredit_@i" />  </td>
+                                        <td><input type="text" class="form-control text-right" value="@LTMSV2.Models.CommanFunctions.GetDecimalFormat(@credit,"3")" id="txtCredit_@i" />  </td>
 
                                     }
                                     <td>
