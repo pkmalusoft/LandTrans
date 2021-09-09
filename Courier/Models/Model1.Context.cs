@@ -93,7 +93,6 @@ namespace LTMSV2.Models
         public virtual DbSet<CustomerRateType> CustomerRateTypes { get; set; }
         public virtual DbSet<CustomerType> CustomerTypes { get; set; }
         public virtual DbSet<CustSuppJV> CustSuppJVs { get; set; }
-        public virtual DbSet<DebitNoteDetail> DebitNoteDetails { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Designation> Designations { get; set; }
         public virtual DbSet<DRR> DRRs { get; set; }
@@ -247,7 +246,6 @@ namespace LTMSV2.Models
         public virtual DbSet<RouteOrder> RouteOrders { get; set; }
         public virtual DbSet<BranchMaster> BranchMasters { get; set; }
         public virtual DbSet<CityMaster> CityMasters { get; set; }
-        public virtual DbSet<CreditNoteDetail> CreditNoteDetails { get; set; }
         public virtual DbSet<Transit> Transits { get; set; }
         public virtual DbSet<TransportMode> TransportModes { get; set; }
         public virtual DbSet<ImpExpDocumentMaster> ImpExpDocumentMasters { get; set; }
@@ -258,7 +256,6 @@ namespace LTMSV2.Models
         public virtual DbSet<VehicleMaster> VehicleMasters { get; set; }
         public virtual DbSet<RouteMaster> RouteMasters { get; set; }
         public virtual DbSet<DriverMaster> DriverMasters { get; set; }
-        public virtual DbSet<DebitNote> DebitNotes { get; set; }
         public virtual DbSet<TruckDetailOtherCharge> TruckDetailOtherCharges { get; set; }
         public virtual DbSet<CustomerInvoice> CustomerInvoices { get; set; }
         public virtual DbSet<CustomerInvoiceDetail> CustomerInvoiceDetails { get; set; }
@@ -276,8 +273,12 @@ namespace LTMSV2.Models
         public virtual DbSet<CostUpdateConsignment> CostUpdateConsignments { get; set; }
         public virtual DbSet<AcJournalConsignment> AcJournalConsignments { get; set; }
         public virtual DbSet<SupplierInvoiceConsignment> SupplierInvoiceConsignments { get; set; }
-        public virtual DbSet<CreditNote> CreditNotes { get; set; }
         public virtual DbSet<RecPayDetail> RecPayDetails { get; set; }
+        public virtual DbSet<CreditNote> CreditNotes { get; set; }
+        public virtual DbSet<CreditNoteDetail> CreditNoteDetails { get; set; }
+        public virtual DbSet<DebitNote> DebitNotes { get; set; }
+        public virtual DbSet<DebitNoteDetail> DebitNoteDetails { get; set; }
+        public virtual DbSet<AcYearEndProcessLog> AcYearEndProcessLogs { get; set; }
     
         [DbFunction("Entities1", "IDs")]
         public virtual IQueryable<IDs_Result> IDs(string list)
@@ -7760,7 +7761,7 @@ namespace LTMSV2.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetAllRecieptsDetails_Result>("SP_GetAllRecieptsDetails", fromDateParameter, toDateParameter, fYearIdParameter);
         }
     
-        public virtual ObjectResult<SP_GetAllRecieptsDetailsByDate_Result> SP_GetAllRecieptsDetailsByDate(string fromDate, string todate, Nullable<int> fyearId)
+        public virtual ObjectResult<SP_GetAllRecieptsDetailsByDate_Result> SP_GetAllRecieptsDetailsByDate(string fromDate, string todate, Nullable<int> fyearId, Nullable<int> branchId, string receiptNo)
         {
             var fromDateParameter = fromDate != null ?
                 new ObjectParameter("FromDate", fromDate) :
@@ -7774,7 +7775,15 @@ namespace LTMSV2.Models
                 new ObjectParameter("FyearId", fyearId) :
                 new ObjectParameter("FyearId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetAllRecieptsDetailsByDate_Result>("SP_GetAllRecieptsDetailsByDate", fromDateParameter, todateParameter, fyearIdParameter);
+            var branchIdParameter = branchId.HasValue ?
+                new ObjectParameter("BranchId", branchId) :
+                new ObjectParameter("BranchId", typeof(int));
+    
+            var receiptNoParameter = receiptNo != null ?
+                new ObjectParameter("ReceiptNo", receiptNo) :
+                new ObjectParameter("ReceiptNo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetAllRecieptsDetailsByDate_Result>("SP_GetAllRecieptsDetailsByDate", fromDateParameter, todateParameter, fyearIdParameter, branchIdParameter, receiptNoParameter);
         }
     
         public virtual ObjectResult<sp_GetCargoTrackByAWBNo_Result> sp_GetCargoTrackByAWBNo(string iAWBNO)
@@ -7889,7 +7898,7 @@ namespace LTMSV2.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_InsertOrUpdateAcBankDetails", acBankDetailIDParameter, acJournalIDParameter, bankNameParameter, chequeNoParameter, chequeDateParameter, partyNameParameter, statusTransParameter, statusReconciledParameter, valueDateParameter, isUpdateParameter);
         }
     
-        public virtual ObjectResult<Nullable<int>> SP_InsertRecPay(Nullable<System.DateTime> recPayDate, string documentNo, Nullable<int> customerID, Nullable<int> businessCentreID, string bankName, string chequeNo, Nullable<System.DateTime> chequeDate, string remarks, Nullable<int> acJournalID, Nullable<bool> statusRec, string statusEntry, string statusOrigin, Nullable<int> fYearID, Nullable<int> acCompanyID, Nullable<decimal> eXRate, Nullable<decimal> fMoney, Nullable<int> userID, string entryTime)
+        public virtual ObjectResult<Nullable<int>> SP_InsertRecPay(Nullable<System.DateTime> recPayDate, string documentNo, Nullable<int> customerID, Nullable<int> businessCentreID, string bankName, string chequeNo, Nullable<System.DateTime> chequeDate, string remarks, Nullable<int> acJournalID, Nullable<bool> statusRec, string statusEntry, string statusOrigin, Nullable<int> fYearID, Nullable<int> acCompanyID, Nullable<decimal> eXRate, Nullable<decimal> fMoney, Nullable<int> userID, string entryTime, Nullable<int> acOPInvoiceDetailID, string paymentRef)
         {
             var recPayDateParameter = recPayDate.HasValue ?
                 new ObjectParameter("RecPayDate", recPayDate) :
@@ -7963,10 +7972,18 @@ namespace LTMSV2.Models
                 new ObjectParameter("EntryTime", entryTime) :
                 new ObjectParameter("EntryTime", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_InsertRecPay", recPayDateParameter, documentNoParameter, customerIDParameter, businessCentreIDParameter, bankNameParameter, chequeNoParameter, chequeDateParameter, remarksParameter, acJournalIDParameter, statusRecParameter, statusEntryParameter, statusOriginParameter, fYearIDParameter, acCompanyIDParameter, eXRateParameter, fMoneyParameter, userIDParameter, entryTimeParameter);
+            var acOPInvoiceDetailIDParameter = acOPInvoiceDetailID.HasValue ?
+                new ObjectParameter("AcOPInvoiceDetailID", acOPInvoiceDetailID) :
+                new ObjectParameter("AcOPInvoiceDetailID", typeof(int));
+    
+            var paymentRefParameter = paymentRef != null ?
+                new ObjectParameter("PaymentRef", paymentRef) :
+                new ObjectParameter("PaymentRef", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_InsertRecPay", recPayDateParameter, documentNoParameter, customerIDParameter, businessCentreIDParameter, bankNameParameter, chequeNoParameter, chequeDateParameter, remarksParameter, acJournalIDParameter, statusRecParameter, statusEntryParameter, statusOriginParameter, fYearIDParameter, acCompanyIDParameter, eXRateParameter, fMoneyParameter, userIDParameter, entryTimeParameter, acOPInvoiceDetailIDParameter, paymentRefParameter);
         }
     
-        public virtual ObjectResult<Nullable<int>> SP_InsertRecPayDetailsForCustomer(Nullable<int> recPayID, Nullable<int> invoiceID, Nullable<decimal> amount, string remarks, string statusInvoice, Nullable<bool> statusAdvance, string statusReceipt, string invDate, string invNo, Nullable<int> currencyID, Nullable<int> invoiceStatus, Nullable<int> inScanId)
+        public virtual ObjectResult<Nullable<int>> SP_InsertRecPayDetailsForCustomer(Nullable<int> recPayID, Nullable<int> invoiceID, Nullable<decimal> amount, string remarks, string statusInvoice, Nullable<bool> statusAdvance, string statusReceipt, string invDate, string invNo, Nullable<int> currencyID, Nullable<int> invoiceStatus, Nullable<decimal> adjustmentAmount)
         {
             var recPayIDParameter = recPayID.HasValue ?
                 new ObjectParameter("RecPayID", recPayID) :
@@ -8012,11 +8029,11 @@ namespace LTMSV2.Models
                 new ObjectParameter("InvoiceStatus", invoiceStatus) :
                 new ObjectParameter("InvoiceStatus", typeof(int));
     
-            var inScanIdParameter = inScanId.HasValue ?
-                new ObjectParameter("InScanId", inScanId) :
-                new ObjectParameter("InScanId", typeof(int));
+            var adjustmentAmountParameter = adjustmentAmount.HasValue ?
+                new ObjectParameter("AdjustmentAmount", adjustmentAmount) :
+                new ObjectParameter("AdjustmentAmount", typeof(decimal));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_InsertRecPayDetailsForCustomer", recPayIDParameter, invoiceIDParameter, amountParameter, remarksParameter, statusInvoiceParameter, statusAdvanceParameter, statusReceiptParameter, invDateParameter, invNoParameter, currencyIDParameter, invoiceStatusParameter, inScanIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_InsertRecPayDetailsForCustomer", recPayIDParameter, invoiceIDParameter, amountParameter, remarksParameter, statusInvoiceParameter, statusAdvanceParameter, statusReceiptParameter, invDateParameter, invNoParameter, currencyIDParameter, invoiceStatusParameter, adjustmentAmountParameter);
         }
     
         public virtual int SP_InsertRecPayDetailsForSupplier(Nullable<int> recPayID, Nullable<int> invoiceID, Nullable<decimal> amount, string remarks, string statusInvoice, Nullable<bool> statusAdvance, string statusReceipt, string invDate, string invNo, Nullable<int> currencyID, Nullable<int> invoiceStatus)

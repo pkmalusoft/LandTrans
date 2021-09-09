@@ -599,7 +599,7 @@ namespace LTMSV2.Controllers
             model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
             model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
 
-            ViewBag.ReportName = "Consignment Allocation Pending";
+            ViewBag.ReportName = "Consignment Invoice Register";
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
@@ -695,7 +695,7 @@ namespace LTMSV2.Controllers
             model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
             model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
 
-            ViewBag.ReportName = "Customer Profit Analysis";
+            ViewBag.ReportName = "Profit Analysis";
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
@@ -961,7 +961,7 @@ namespace LTMSV2.Controllers
                 model.FromDate = AccountsDAO.CheckParamDate(model.FromDate, yearid).Date;
                 model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
 
-                ViewBag.ReportName = "Manifest Report";
+                ViewBag.ReportName = "Manifest Register";
                 if (Session["ReportOutput"] != null)
                 {
                     string currentreport = Session["ReportOutput"].ToString();
@@ -1259,7 +1259,7 @@ namespace LTMSV2.Controllers
                       
             //model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
 
-            ViewBag.ReportName = "Sales Report";
+            ViewBag.ReportName = "Sales Register";
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
@@ -1459,7 +1459,7 @@ namespace LTMSV2.Controllers
                 };
             }
 
-            ViewBag.ReportName = "Customer Invoice Opening Register";
+            ViewBag.ReportName = "Customer Opening Balance Register";
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();
@@ -1761,7 +1761,7 @@ namespace LTMSV2.Controllers
             model.AsonDate = AccountsDAO.CheckParamDate(model.AsonDate, yearid).Date;
             //model.ToDate = AccountsDAO.CheckParamDate(model.ToDate, yearid).Date;
 
-            ViewBag.ReportName = "Customer Invoice Allocation";
+            ViewBag.ReportName = "Receipt Allocation Register";
             if (Session["ReportOutput"] != null)
             {
                 string currentreport = Session["ReportOutput"].ToString();

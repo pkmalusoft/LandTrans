@@ -112,9 +112,9 @@
                     <div class="col-md-2">
                         <label class="headinglabel">Report Type</label>
                         @Html.DropDownList("ReportType", new List<SelectListItem>
-                       {                   
-                           new SelectListItem{ Text="Customer wise Profit Analysis", Value = "Customer Wise" },
-                           new SelectListItem{ Text="TDwise profit analysis", Value = "TD Wise" }
+                       {
+                           new SelectListItem{ Text="Customer Profit Analysis", Value = "Customer Wise" },
+                           //new SelectListItem{ Text="TD profit analysis", Value = "TD Wise" }
                         }, "Select", new { @class = "form-control" })
                     </div>
 

@@ -41,7 +41,7 @@
 
 
 
-        var table = $('#dataTables-example').DataTable({ "sPaginationType": "full_numbers" });
+        var table = $('#dataTables-example').DataTable({ "aaSorting": [],"sPaginationType": "full_numbers" });
 
         table.columns().every(function () {
             var that = this;
@@ -63,7 +63,7 @@
 
 
 <section class="content-header">
-    <h1 class="headingfont">Debit Note</h1>
+    <h1 class="headingfont">DEBIT NOTE/SUPPLIER JOURNAL</h1>
 
 </section>
 
@@ -97,7 +97,7 @@
            Supplier
         </th>
         <th>
-          Job Number
+          Description
         </th>
             <th>
           Amount
@@ -119,7 +119,7 @@
            Supplier
         </th>
         <th>
-          Invoice Number
+          Description
         </th>
             <th>
           Amount
@@ -134,7 +134,7 @@
         <td>@item.DebitNoteNo</td>
         <td>@LTMSV2.Models.CommanFunctions.GetShortDateFormat(item.Date)</td>
         <td>@item.SupplierName</td>
-        <td>@item.JobNo</td>
+        <td>@item.Remarks</td>
         <td style="text-align:right">@item.Amount</td>
         <td>
             @if (ismodify)

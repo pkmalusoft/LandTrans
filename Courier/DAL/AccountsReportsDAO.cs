@@ -1725,7 +1725,7 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Aging " + reportparam.ReportType);
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Aging Report - " + reportparam.ReportType);
             string period = " As on " + reportparam.AsonDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
@@ -1814,7 +1814,7 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
             rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer OutStanding Report");
-            string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
+            string period = "As on Date " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
@@ -1997,9 +1997,9 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
             if (reportparam.CustomerName != "" && reportparam.CustomerName != null)
-                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment Note UnAllocated Report for Customer " + reportparam.CustomerName);
+                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment Invoiced Report"); // for Customer " + reportparam.CustomerName);
             else
-                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment Note UnAllcoated Report for All Customer");
+                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment Invoiced Report");// for All Customer");
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
@@ -2090,7 +2090,7 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("AWB TimeLine Report");
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment Time Line");
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
@@ -2183,9 +2183,9 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
             if (reportparam.CustomerName != "" && reportparam.CustomerName != null)
-                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment UnInvoiced Report for Customer " + reportparam.CustomerName);
+                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment Invoice Pending Report");// for Customer " + reportparam.CustomerName);
             else
-                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment UnInvoiced Report for All Customer");
+                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Consignment Invoice Pending Report");// for All Customer");
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
@@ -2456,7 +2456,7 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("MANIFEST");
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Manifest Register-Detail");
             string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
@@ -2540,7 +2540,7 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("MANIFEST SUMMARY");
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Manifest Register-Summary");
             string period = "As on " + reportparam.FromDate.Date.ToString("dd-MM-yyyy"); // + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
@@ -2734,9 +2734,9 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
             if (reportparam.CustomerName != "" && reportparam.CustomerName != null)
-                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Profit Report for Customer " + reportparam.CustomerName);
+                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Profit Analysis Report for Customer " + reportparam.CustomerName);
             else
-                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Profit Report for All Customer");
+                rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Profit Analysis Report for All Customer");
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
@@ -2850,7 +2850,7 @@ namespace LTMSV2.DAL
             rd.ParameterFields["SalesMan"].CurrentValues.AddValue(salesman);
             rd.ParameterFields["CustomerName"].CurrentValues.AddValue(customername);           
               
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Sales Report");
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Sales Register");
             string period = "From " + reportparam.FromDate.Date.ToString("dd-MM-yyyy") + " to " + reportparam.ToDate.Date.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
@@ -2911,7 +2911,7 @@ namespace LTMSV2.DAL
             comd.CommandType = CommandType.StoredProcedure;
             comd.CommandText = "SP_CustomerInvoiceAllocation";
             
-            comd.Parameters.AddWithValue("@FromDate", reportparam.AsonDate.ToString("MM/dd/yyyy"));
+            comd.Parameters.AddWithValue("@FromDate", reportparam.FromDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@ToDate", reportparam.ToDate.ToString("MM/dd/yyyy"));
             comd.Parameters.AddWithValue("@FYearId", yearid);
             comd.Parameters.AddWithValue("@BranchId",branchid);
@@ -2945,8 +2945,8 @@ namespace LTMSV2.DAL
             rd.ParameterFields["CompanyName"].CurrentValues.AddValue(companyname);
             rd.ParameterFields["CompanyAddress"].CurrentValues.AddValue(companyaddress);
             rd.ParameterFields["CompanyLocation"].CurrentValues.AddValue(companylocation);
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Invoice Allocation");
-            string period = " As on " + reportparam.AsonDate.Date.ToString("dd-MM-yyyy");
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Receipt Allocation Register");
+            string period = " From " + reportparam.FromDate.ToString("dd-MM-yyyy") + "  To " + reportparam.ToDate.ToString("dd-MM-yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 
             string userdetail = "printed by " + SourceMastersModel.GetUserFullName(userid, usertype) + " on " + DateTime.Now;
@@ -3513,7 +3513,7 @@ namespace LTMSV2.DAL
             //rd.ParameterFields["SalesMan"].CurrentValues.AddValue(salesman);
             //rd.ParameterFields["CustomerName"].CurrentValues.AddValue(customername);
 
-            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Invoice Opening Register");
+            rd.ParameterFields["ReportTitle"].CurrentValues.AddValue("Customer Opening Balance Register");
             string period = "As on " + Convert.ToDateTime(yearfrom).ToString("dd MMM yyyy");
             rd.ParameterFields["ReportPeriod"].CurrentValues.AddValue(period);
 

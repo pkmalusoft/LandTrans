@@ -164,9 +164,9 @@
                      <div class="col-md-2">
                         <label class="headinglabel required">Report Type</label>
                         @Html.DropDownList("ReportType", new List<SelectListItem>
-                       {                                           
-                           new SelectListItem{ Text="CN Note Unallocated", Value = "AWBUnAllocated" },
-                           new SelectListItem{ Text="CN Note OutStanding", Value = "AWBOutStanding" },
+                       {
+                           new SelectListItem{ Text="Consignment-Invoiced", Value = "AWBUnAllocated" }, /*CN Note Unallocated*/
+                           new SelectListItem{ Text="Consignment-Pending Invoice", Value = "AWBOutStanding" },/*CN Note OutStanding*/
                         }, "Select", new { @class = "form-control", @required = "true" })
                     </div>
                      <div class="col-md-3 hide" id="divachead1">

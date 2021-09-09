@@ -153,12 +153,12 @@
 
 
 
-    <div class="col-md-2">
+    <div class="col-md-2 hide">
         <label class="headinglabel required ">From Date</label>
-        @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right", @required = "true" })
+        @Html.TextBoxFor(model => model.FromDate, new { @class = "form-control text-right"})
     </div>
     <div class="col-md-2">
-        <label class="headinglabel required">To Date</label>
+        <label class="headinglabel required">As On Date</label>
         @Html.TextBoxFor(model => model.ToDate, new { @class = "form-control text-right", @required = "true" })
     </div>
     @*<div class="col-md-2 hide">

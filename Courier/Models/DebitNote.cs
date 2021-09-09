@@ -26,7 +26,12 @@ namespace LTMSV2.Models
         public Nullable<int> RecPayID { get; set; }
         public Nullable<int> AcHeadID { get; set; }
         public Nullable<int> SupplierID { get; set; }
-        public Nullable<bool> IsShipping { get; set; }
         public string Remarks { get; set; }
+        public string TransType { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public Nullable<int> BranchID { get; set; }
     }
 }

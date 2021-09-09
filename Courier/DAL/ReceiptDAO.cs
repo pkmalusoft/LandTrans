@@ -53,8 +53,9 @@ namespace LTMSV2.DAL
             }
             return objList;
         }
-        public static List<ReceiptVM> GetCustomerReceiptsByDate(string FromDate,string ToDate,int FyearID)
+        public static List<ReceiptVM> GetCustomerReceiptsByDate(DateTime FromDate, DateTime ToDate, int FyearID, string ReceiptNo)
         {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
             cmd.CommandText = "SP_GetAllRecieptsDetailsByDate";
@@ -63,6 +64,8 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@FromDate", Convert.ToDateTime(FromDate).ToString("MM/dd/yyyy"));
             cmd.Parameters.AddWithValue("@Todate", Convert.ToDateTime(ToDate).ToString("MM/dd/yyyy"));
             cmd.Parameters.AddWithValue("@FyearId", FyearID);
+            cmd.Parameters.AddWithValue("@BranchId", branchid);
+            cmd.Parameters.AddWithValue("@ReceiptNo", ReceiptNo);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -77,7 +80,52 @@ namespace LTMSV2.DAL
                     obj.RecPayID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["RecPayID"].ToString());
                     obj.RecPayDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
                     obj.DocumentNo = ds.Tables[0].Rows[i]["DocumentNo"].ToString();
+                    obj.PaymentMode = ds.Tables[0].Rows[i]["PaymentMode"].ToString();
+                    obj.BankName = ds.Tables[0].Rows[i]["BankName"].ToString();
                     obj.PartyName = ds.Tables[0].Rows[i]["PartyName"].ToString();
+                    if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
+                    {
+                        obj.Amount = 0;
+                    }
+                    else
+                    {
+                        obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
+                    }
+                    obj.Currency = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Currency"].ToString());
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        public static List<ReceiptVM> GetSupplierPaymentsByDate(DateTime FromDate, DateTime ToDate, int FyearID, string ReceiptNo)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetAllPaymentDetailsByDate";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@FromDate", Convert.ToDateTime(FromDate).ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@Todate", Convert.ToDateTime(ToDate).ToString("MM/dd/yyyy"));
+            cmd.Parameters.AddWithValue("@FyearId", FyearID);
+            cmd.Parameters.AddWithValue("@BranchId", branchid);
+            cmd.Parameters.AddWithValue("@ReceiptNo", ReceiptNo);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<ReceiptVM> objList = new List<ReceiptVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    ReceiptVM obj = new ReceiptVM();
+                    obj.RecPayID = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["RecPayID"].ToString());
+                    obj.RecPayDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.DocumentNo = ds.Tables[0].Rows[i]["DocumentNo"].ToString();
+                    obj.PaymentMode = ds.Tables[0].Rows[i]["PaymentMode"].ToString();
+                    obj.BankName = ds.Tables[0].Rows[i]["BankName"].ToString();
                     obj.PartyName = ds.Tables[0].Rows[i]["PartyName"].ToString();
                     if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
                     {
@@ -198,7 +246,13 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@FMoney", RecPy.FMoney);
             cmd.Parameters.AddWithValue("@UserID", RecPy.UserID);
             cmd.Parameters.AddWithValue("@EntryTime", CommanFunctions.GetCurrentDateTime());
-            
+            cmd.Parameters.AddWithValue("@AcOPInvoiceDetailID", RecPy.AcOPInvoiceDetailID);
+            if (RecPy.PaymentRef==null)
+                cmd.Parameters.AddWithValue("@PaymentRef", "");
+            else
+                cmd.Parameters.AddWithValue("@PaymentRef", RecPy.PaymentRef);
+
+
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -241,6 +295,11 @@ namespace LTMSV2.DAL
             cmd.Parameters.AddWithValue("@UserID", RecPy.UserID);
             cmd.Parameters.AddWithValue("@UpdateDate", CommanFunctions.GetCurrentDateTime().ToString("MM/dd/yyyy HH:mm"));
             
+            cmd.Parameters.AddWithValue("@AcOPInvoiceDetailId", RecPy.AcOPInvoiceDetailID);
+            if (RecPy.PaymentRef == null)
+                RecPy.PaymentRef = "";
+            cmd.Parameters.AddWithValue("@PaymentRef", RecPy.PaymentRef);
+
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -539,13 +598,266 @@ namespace LTMSV2.DAL
             //Context1.SP_InsertJournalEntryForRecPay(RecpayID, fyaerId);
         }
 
-        //public int InsertRecpayDetailsForSup(int RecPayID, int InvoiceID, int JInvoiceID, decimal Amount, string Remarks, string StatusInvoice, bool StatusAdvance, string statusReceip, string InvDate, string InvNo, int CurrencyID, int invoiceStatus, int JobID)
-        //{
-        //    //todo:fix to run by sethu
-        //    int query = Context1.SP_InsertRecPayDetailsForSupplier(RecPayID, InvoiceID, Amount, Remarks, StatusInvoice, StatusAdvance, statusReceip, InvDate, InvNo, CurrencyID, invoiceStatus, JobID);
+        public static List<CustomerTradeReceiptVM> SP_GetCustomerInvoicePending(int CustomerId, int InvoiceId, int RecPayId, int CreditNoteId, string Type)
+        {
+            List<CustomerTradeReceiptVM> list = new List<CustomerTradeReceiptVM>();
+            CustomerTradeReceiptVM item = new CustomerTradeReceiptVM();
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerInvoicePending";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
+            cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            cmd.Parameters.AddWithValue("@CreditNoteId", CreditNoteId);
+            cmd.Parameters.AddWithValue("@Type", Type);
+            cmd.Parameters.AddWithValue("@FYearId", yearid);
+            cmd.Parameters.AddWithValue("@BranchId", branchid);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    DataRow drrow = ds.Tables[0].Rows[i];
+                    item = new CustomerTradeReceiptVM();
+                    item.SalesInvoiceID = Convert.ToInt32(drrow["InvoiceID"].ToString());
+                    item.InvoiceNo = drrow["InvoiceNo"].ToString();
+                    item.InvoiceType = drrow["TransType"].ToString();
+                    item.DateTime = Convert.ToDateTime(drrow["InvoiceDate"].ToString()).ToString("dd-MM-yyyy");
+                    item.InvoiceAmount = Convert.ToDecimal(drrow["InvoiceAmount"].ToString());
+                    item.AmountReceived = Convert.ToDecimal(drrow["ReceivedAmount"].ToString());
+                    item.Balance = Convert.ToDecimal(drrow["Balance"].ToString());
 
-        //    return query;
-        //}
+                    list.Add(item);
+
+                }
+            }
+
+            return list;
+
+        }
+
+        public static List<CustomerTradeReceiptVM> SP_GetCustomerReceiptPending(int CustomerId, int InvoiceId, int RecPayId, int CreditNoteId, string Type)
+        {
+            List<CustomerTradeReceiptVM> list = new List<CustomerTradeReceiptVM>();
+            CustomerTradeReceiptVM item = new CustomerTradeReceiptVM();
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerReceiptPending";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
+            cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            cmd.Parameters.AddWithValue("@CreditNoteId", CreditNoteId);
+            cmd.Parameters.AddWithValue("@Type", Type);
+            cmd.Parameters.AddWithValue("@FYearId", yearid);
+            cmd.Parameters.AddWithValue("@BranchId", branchid);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    DataRow drrow = ds.Tables[0].Rows[i];
+                    item = new CustomerTradeReceiptVM();
+                    item.SalesInvoiceID = Convert.ToInt32(drrow["InvoiceID"].ToString());
+                    item.InvoiceNo = drrow["InvoiceNo"].ToString();
+                    item.DateTime = Convert.ToDateTime(drrow["InvoiceDate"].ToString()).ToString("dd-MM-yyyy");
+                    item.InvoiceType = drrow["TransType"].ToString();
+                    item.InvoiceAmount = Convert.ToDecimal(drrow["InvoiceAmount"].ToString());
+                    item.AmountReceived = Convert.ToDecimal(drrow["ReceivedAmount"].ToString());
+                    item.Balance = Convert.ToDecimal(drrow["Balance"].ToString());
+
+                    list.Add(item);
+
+                }
+            }
+
+            return list;
+
+        }
+
+        public static List<CustomerTradeReceiptVM> SP_GetSupplierInvoicePending(int SupplierId, int InvoiceId, int RecPayId, int DebitNoteId, string Type)
+        {
+            List<CustomerTradeReceiptVM> list = new List<CustomerTradeReceiptVM>();
+            CustomerTradeReceiptVM item = new CustomerTradeReceiptVM();
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetSupplierInvoicePending";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@SupplierId", SupplierId);
+            cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
+            cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            cmd.Parameters.AddWithValue("@DebitNoteId", DebitNoteId);
+            cmd.Parameters.AddWithValue("@Type", Type);
+            cmd.Parameters.AddWithValue("@FYearId", yearid);
+            cmd.Parameters.AddWithValue("@BranchId", branchid);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            //int query = Context1.SP_InsertRecPay(RecPy.RecPayDate, RecPy.DocumentNo, RecPy.CustomerID, RecPy.SupplierID, RecPy.BusinessCentreID, RecPy.BankName, RecPy.ChequeNo, RecPy.ChequeDate, RecPy.Remarks, RecPy.AcJournalID, RecPy.StatusRec, RecPy.StatusEntry, RecPy.StatusOrigin, RecPy.FYearID, RecPy.AcCompanyID, RecPy.EXRate, RecPy.FMoney, Convert.ToInt32(UserID));
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    DataRow drrow = ds.Tables[0].Rows[i];
+                    item = new CustomerTradeReceiptVM();
+                    item.SalesInvoiceID = Convert.ToInt32(drrow["InvoiceID"].ToString());
+                    item.InvoiceNo = drrow["InvoiceNo"].ToString();
+                    item.InvoiceType = drrow["TransType"].ToString();
+                    item.DateTime = Convert.ToDateTime(drrow["InvoiceDate"].ToString()).ToString("dd-MM-yyyy");
+                    item.InvoiceAmount = Convert.ToDecimal(drrow["InvoiceAmount"].ToString());
+                    item.AmountReceived = Convert.ToDecimal(drrow["ReceivedAmount"].ToString());
+                    item.Balance = Convert.ToDecimal(drrow["Balance"].ToString());
+
+                    list.Add(item);
+
+                }
+            }
+
+            return list;
+
+        }
+
+        public static List<CustomerTradeReceiptVM> SP_GetSupplierReceiptPending(int SupplierID, int InvoiceId, int RecPayId, int CreditNoteId, string Type)
+        {
+            List<CustomerTradeReceiptVM> list = new List<CustomerTradeReceiptVM>();
+            CustomerTradeReceiptVM item = new CustomerTradeReceiptVM();
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            int yearid = Convert.ToInt32(HttpContext.Current.Session["fyearid"].ToString());
+            int userid = Convert.ToInt32(HttpContext.Current.Session["UserID"].ToString());
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetSupplierPaymentPending";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@SupplierId", SupplierID);
+            cmd.Parameters.AddWithValue("@InvoiceId", InvoiceId);
+            cmd.Parameters.AddWithValue("@RecPayId", RecPayId);
+            cmd.Parameters.AddWithValue("@DebitNoteId", CreditNoteId);
+            cmd.Parameters.AddWithValue("@Type", Type);
+            cmd.Parameters.AddWithValue("@FYearId", yearid);
+            cmd.Parameters.AddWithValue("@BranchId", branchid);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    DataRow drrow = ds.Tables[0].Rows[i];
+                    item = new CustomerTradeReceiptVM();
+                    item.SalesInvoiceID = Convert.ToInt32(drrow["InvoiceID"].ToString());
+                    item.InvoiceNo = drrow["InvoiceNo"].ToString();
+                    item.InvoiceType = drrow["TransType"].ToString();
+                    item.DateTime = Convert.ToDateTime(drrow["InvoiceDate"].ToString()).ToString("dd-MM-yyyy");
+                    item.InvoiceAmount = Convert.ToDecimal(drrow["InvoiceAmount"].ToString());
+                    item.AmountReceived = Convert.ToDecimal(drrow["ReceivedAmount"].ToString());
+                    item.Balance = Convert.ToDecimal(drrow["Balance"].ToString());
+
+                    list.Add(item);
+
+                }
+            }
+
+            return list;
+
+        }
+        public static List<OpeningInvoiceVM> GetCustomerOpeningReceipts(int CustomerId, int BranchId, int FYearId)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetCustomerOpeningCredit";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@CustomerId", CustomerId);
+            cmd.Parameters.AddWithValue("@BranchId", BranchId);
+            cmd.Parameters.AddWithValue("@FYearId", FYearId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<OpeningInvoiceVM> objList = new List<OpeningInvoiceVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    OpeningInvoiceVM obj = new OpeningInvoiceVM();
+                    obj.ACOPInvoiceDetailId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ACOPInvoiceDetailId"].ToString());
+                    obj.CustomerId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["CustomerId"].ToString());
+                    //obj.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["RecPayDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.RefNo = ds.Tables[0].Rows[i]["RefNo"].ToString();
+
+                    if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
+                    {
+                        obj.Amount = 0;
+                    }
+                    else
+                    {
+                        obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
+                    }
+
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+        public static List<OpeningInvoiceVM> GetSupplierOpeningPayments(int SupplierId, int BranchId, int FYearId)
+        {
+            int branchid = Convert.ToInt32(HttpContext.Current.Session["CurrentBranchID"].ToString());
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetSupplierOpeningDebit";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@SupplierId", SupplierId);
+            cmd.Parameters.AddWithValue("@BranchId", BranchId);
+            cmd.Parameters.AddWithValue("@FYearId", FYearId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            List<OpeningInvoiceVM> objList = new List<OpeningInvoiceVM>();
+
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    OpeningInvoiceVM obj = new OpeningInvoiceVM();
+                    obj.ACOPInvoiceDetailId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["ACOPInvoiceDetailId"].ToString());
+                    obj.SupplierId = CommanFunctions.ParseInt(ds.Tables[0].Rows[i]["SupplierId"].ToString());
+                    //obj.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["RecPayDate"].ToString()); // CommanFunctions.ParseDate(ds.Tables[0].Rows[i]["RecPayDate"].ToString());
+                    obj.RefNo = ds.Tables[0].Rows[i]["RefNo"].ToString();
+
+                    if (ds.Tables[0].Rows[i]["Amount"] == DBNull.Value)
+                    {
+                        obj.Amount = 0;
+                    }
+                    else
+                    {
+                        obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
+                    }
+
+                    objList.Add(obj);
+                }
+            }
+            return objList;
+        }
+
 
         public static void InsertJournalOfSupplier(int RecpayID, int fyearId)
         {

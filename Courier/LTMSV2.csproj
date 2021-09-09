@@ -489,6 +489,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AcTypeModel.cs" />
+    <Compile Include="Models\AcYearEndProcessLog.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AgentCollectionRateDetailVM.cs" />
     <Compile Include="Models\AgentCollectionRateVM.cs" />
     <Compile Include="Models\AgentDeliveryRateDetailVM.cs" />
@@ -3257,8 +3260,6 @@
     <Content Include="Views\CourierStatus\Index.cshtml" />
     <Content Include="Views\CreditNote\Create.cshtml" />
     <Content Include="Views\CreditNote\Index.cshtml" />
-    <Content Include="Views\CreditNote\ServiceCreate.cshtml" />
-    <Content Include="Views\CreditNote\ServiceIndex.cshtml" />
     <Content Include="Views\Currency\Create.cshtml" />
     <Content Include="Views\Currency\Delete.cshtml" />
     <Content Include="Views\Currency\Details.cshtml" />
@@ -3299,7 +3300,6 @@
     <Content Include="Views\CustomerReceipt\_GetAllCustomer.cshtml" />
     <Content Include="Views\CustomerReceipt\_GetAllCustomerByDate.cshtml" />
     <Content Include="Views\CustomerReceipt\_GetAllTradeCustomerByDate.cshtml" />
-    <Content Include="Views\CustomerReceipt\_Table.cshtml" />
     <Content Include="Views\DeliveryRunSheetReciept\Create.cshtml" />
     <Content Include="Views\Department\Create.cshtml" />
     <Content Include="Views\Department\Delete.cshtml" />
@@ -3608,7 +3608,7 @@
     <Content Include="Views\DailyTrips\Create - Copy.cshtml" />
     <Content Include="Views\Accounts\AcOpeningMaster.cshtml" />
     <Content Include="Views\SupplierInvoice\Index.cshtml" />
-    <Content Include="Views\SupplierPayment\SupplierPayment.cshtml" />
+    <Content Include="Views\SupplierPayment\Create.cshtml" />
     <Content Include="Views\SupplierPayment\SupplierPaymentDetails.cshtml" />
     <Content Include="Views\SupplierPayment\_GetAllSupplier.cshtml" />
     <Content Include="Views\SupplierPayment\_GetAllSupplierByDate.cshtml" />
@@ -3654,6 +3654,23 @@
     <Content Include="Views\Reports\VATRegisterPurchase.cshtml" />
     <Content Include="Views\Reports\SupplierInvoiceAllocation.cshtml" />
     <Content Include="Views\Reports\CustomerInvoiceAllocation.cshtml" />
+    <Content Include="Views\CustomerReceipt\Index.cshtml" />
+    <Content Include="Views\CustomerReceipt\Create.cshtml" />
+    <Content Include="Views\SupplierPayment\Index.cshtml" />
+    <Content Include="Views\SupplierPayment\SupplierPayment - Copy %283%29.cshtml" />
+    <Content Include="Views\CreditNote\Create - Copy.cshtml" />
+    <Content Include="Views\CreditNote\Index - Copy.cshtml" />
+    <Content Include="Views\CreditNote\CreditNoteDetail.cshtml" />
+    <Content Include="Views\DebitNote\Create - Copy.cshtml" />
+    <Content Include="Views\DebitNote\Index - Copy.cshtml" />
+    <Content Include="Views\DebitNote\DebitNoteDetail.cshtml" />
+    <Content Include="Views\Accounts\AcYearEndIncomeExpense.cshtml" />
+    <Content Include="Views\Accounts\AcYearEndInvCustomer.cshtml" />
+    <Content Include="Views\Accounts\AcYearEndInvSupplier.cshtml" />
+    <Content Include="Views\Accounts\AcYearEndPL.cshtml" />
+    <Content Include="Views\Accounts\AcYearEndProcess.cshtml" />
+    <Content Include="Views\Accounts\AcYearEndProcessItemList.cshtml" />
+    <Content Include="Views\Accounts\AcYearEndProcessSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

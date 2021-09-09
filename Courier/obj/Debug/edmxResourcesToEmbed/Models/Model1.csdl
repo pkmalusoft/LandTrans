@@ -1078,16 +1078,6 @@
     <Property Name="AcCompanyID" Type="Int32" />
     <Property Name="DepartmentID" Type="Int32" />
   </EntityType>
-  <EntityType Name="DebitNoteDetail">
-    <Key>
-      <PropertyRef Name="DebitNoteDetailID" />
-    </Key>
-    <Property Name="DebitNoteDetailID" Type="Int32" Nullable="false" />
-    <Property Name="DebitNoteID" Type="Int32" Nullable="false" />
-    <Property Name="AcHeadID" Type="Int32" Nullable="false" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-  </EntityType>
   <EntityType Name="Department">
     <Key>
       <PropertyRef Name="DepartmentID" />
@@ -2702,6 +2692,8 @@
     <Property Name="CreatedBy" Type="Int32" />
     <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
     <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="PaymentRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AcOPInvoiceDetailID" Type="Int32" />
   </EntityType>
   <EntityType Name="RequestType">
     <Key>
@@ -5167,7 +5159,6 @@
     <EntitySet Name="CustomerRateTypes" EntityType="Self.CustomerRateType" />
     <EntitySet Name="CustomerTypes" EntityType="Self.CustomerType" />
     <EntitySet Name="CustSuppJVs" EntityType="Self.CustSuppJV" />
-    <EntitySet Name="DebitNoteDetails" EntityType="Self.DebitNoteDetail" />
     <EntitySet Name="Departments" EntityType="Self.Department" />
     <EntitySet Name="Designations" EntityType="Self.Designation" />
     <EntitySet Name="DRRs" EntityType="Self.DRR" />
@@ -8053,6 +8044,8 @@
       <Parameter Name="FromDate" Mode="In" Type="String" />
       <Parameter Name="Todate" Mode="In" Type="String" />
       <Parameter Name="FyearId" Mode="In" Type="Int32" />
+      <Parameter Name="BranchId" Mode="In" Type="Int32" />
+      <Parameter Name="ReceiptNo" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="sp_GetCargoTrackByAWBNo" ReturnType="Collection(DB_9F57C4_couriertest_newModel.sp_GetCargoTrackByAWBNo_Result)">
       <Parameter Name="iAWBNO" Mode="In" Type="String" />
@@ -8105,6 +8098,8 @@
       <Parameter Name="FMoney" Mode="In" Type="Decimal" />
       <Parameter Name="UserID" Mode="In" Type="Int32" />
       <Parameter Name="EntryTime" Mode="In" Type="String" />
+      <Parameter Name="AcOPInvoiceDetailID" Mode="In" Type="Int32" />
+      <Parameter Name="PaymentRef" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="SP_InsertRecPayDetailsForCustomer" ReturnType="Collection(Int32)">
       <Parameter Name="RecPayID" Mode="In" Type="Int32" />
@@ -8118,7 +8113,7 @@
       <Parameter Name="InvNo" Mode="In" Type="String" />
       <Parameter Name="CurrencyID" Mode="In" Type="Int32" />
       <Parameter Name="InvoiceStatus" Mode="In" Type="Int32" />
-      <Parameter Name="InScanId" Mode="In" Type="Int32" />
+      <Parameter Name="AdjustmentAmount" Mode="In" Type="Decimal" />
     </FunctionImport>
     <FunctionImport Name="SP_InsertRecPayDetailsForSupplier">
       <Parameter Name="RecPayID" Mode="In" Type="Int32" />
@@ -8455,7 +8450,6 @@
       <End Role="CityMaster" EntitySet="CityMasters" />
       <End Role="tblDepot" EntitySet="tblDepots" />
     </AssociationSet>
-    <EntitySet Name="CreditNoteDetails" EntityType="DB_9F57C4_couriertest_newModel.CreditNoteDetail" />
     <EntitySet Name="Transits" EntityType="DB_9F57C4_couriertest_newModel.Transit" />
     <EntitySet Name="TransportModes" EntityType="DB_9F57C4_couriertest_newModel.TransportMode" />
     <EntitySet Name="ImpExpDocumentMasters" EntityType="DB_9F57C4_couriertest_newModel.ImpExpDocumentMaster" />
@@ -8482,7 +8476,6 @@
     </AssociationSet>
     <EntitySet Name="RouteMasters" EntityType="DB_9F57C4_couriertest_newModel.RouteMaster" />
     <EntitySet Name="DriverMasters" EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" />
-    <EntitySet Name="DebitNotes" EntityType="DB_9F57C4_couriertest_newModel.DebitNote" />
     <EntitySet Name="TruckDetailOtherCharges" EntityType="DB_9F57C4_couriertest_newModel.TruckDetailOtherCharge" />
     <EntitySet Name="CustomerInvoices" EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoice" />
     <EntitySet Name="CustomerInvoiceDetails" EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail" />
@@ -8588,8 +8581,12 @@
     <EntitySet Name="CostUpdateConsignments" EntityType="DB_9F57C4_couriertest_newModel.CostUpdateConsignment" />
     <EntitySet Name="AcJournalConsignments" EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" />
     <EntitySet Name="SupplierInvoiceConsignments" EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceConsignment" />
-    <EntitySet Name="CreditNotes" EntityType="DB_9F57C4_couriertest_newModel.CreditNote" />
     <EntitySet Name="RecPayDetails" EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" />
+    <EntitySet Name="CreditNotes" EntityType="DB_9F57C4_couriertest_newModel.CreditNote" />
+    <EntitySet Name="CreditNoteDetails" EntityType="DB_9F57C4_couriertest_newModel.CreditNoteDetail" />
+    <EntitySet Name="DebitNotes" EntityType="DB_9F57C4_couriertest_newModel.DebitNote" />
+    <EntitySet Name="DebitNoteDetails" EntityType="DB_9F57C4_couriertest_newModel.DebitNoteDetail" />
+    <EntitySet Name="AcYearEndProcessLogs" EntityType="DB_9F57C4_couriertest_newModel.AcYearEndProcessLog" />
   </EntityContainer>
   <ComplexType Name="AcAnalysisHeadAllocationSelectByAcJournalDetailID_Result">
     <Property Type="Int32" Name="AutoID" Nullable="false" />
@@ -12568,16 +12565,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="CreditNoteDetail">
-    <Key>
-      <PropertyRef Name="CreditNoteID" />
-    </Key>
-    <Property Name="CreditNoteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CreditNoteDetailID" Type="Int32" Nullable="false" />
-    <Property Name="AWBNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-    <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-  </EntityType>
   <EntityType Name="Transit">
     <Key>
       <PropertyRef Name="TransitID" />
@@ -12797,25 +12784,6 @@
     <Property Name="CountryName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="SupplierID" Type="Int32" />
     <Property Name="VehicleID" Type="Int32" />
-  </EntityType>
-  <EntityType Name="DebitNote">
-    <Key>
-      <PropertyRef Name="DebitNoteID" />
-    </Key>
-    <Property Name="DebitNoteID" Type="Int32" Nullable="false" />
-    <Property Name="DebitNoteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="InvoiceID" Type="Int32" />
-    <Property Name="DebitNoteDate" Type="DateTime" Precision="3" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="AcJournalID" Type="Int32" />
-    <Property Name="FYearID" Type="Int32" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="InvoiceType" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-    <Property Name="RecPayID" Type="Int32" />
-    <Property Name="AcHeadID" Type="Int32" />
-    <Property Name="SupplierID" Type="Int32" />
-    <Property Name="IsShipping" Type="Boolean" />
-    <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="TruckDetailOtherCharge">
     <Key>
@@ -13515,26 +13483,6 @@
     <Property Name="InScanID" Type="Int32" Nullable="false" />
     <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
-  <EntityType Name="CreditNote">
-    <Key>
-      <PropertyRef Name="CreditNoteID" />
-    </Key>
-    <Property Name="CreditNoteID" Type="Int32" Nullable="false" />
-    <Property Name="CreditNoteNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="InvoiceID" Type="Int32" />
-    <Property Name="CreditNoteDate" Type="DateTime" Precision="3" />
-    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="AcJournalID" Type="Int32" />
-    <Property Name="FYearID" Type="Int32" />
-    <Property Name="AcCompanyID" Type="Int32" />
-    <Property Name="InvoiceType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="RecPayID" Type="Int32" />
-    <Property Name="AcHeadID" Type="Int32" />
-    <Property Name="CustomerID" Type="Int32" />
-    <Property Name="statusclose" Type="Boolean" />
-    <Property Name="IsShipping" Type="Boolean" />
-    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-  </EntityType>
   <EntityType Name="RecPayDetail">
     <Key>
       <PropertyRef Name="RecPayDetailID" />
@@ -13555,5 +13503,86 @@
     <Property Name="TruckDetailID" Type="Int32" />
     <Property Name="AcOPInvoiceDetailID" Type="Int32" />
     <Property Name="InScanID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="CreditNote">
+    <Key>
+      <PropertyRef Name="CreditNoteID" />
+    </Key>
+    <Property Name="CreditNoteID" Type="Int32" Nullable="false" />
+    <Property Name="CreditNoteNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="InvoiceID" Type="Int32" />
+    <Property Name="CreditNoteDate" Type="DateTime" Precision="3" />
+    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="FYearID" Type="Int32" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="InvoiceType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="RecPayID" Type="Int32" />
+    <Property Name="AcHeadID" Type="Int32" />
+    <Property Name="CustomerID" Type="Int32" />
+    <Property Name="statusclose" Type="Boolean" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="TransType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="BranchID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="CreditNoteDetail">
+    <Key>
+      <PropertyRef Name="CreditNoteDetailID" />
+    </Key>
+    <Property Name="CreditNoteDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CreditNoteID" Type="Int32" />
+    <Property Name="AcHeadID" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Precision="13" Scale="3" />
+    <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="DebitNote">
+    <Key>
+      <PropertyRef Name="DebitNoteID" />
+    </Key>
+    <Property Name="DebitNoteID" Type="Int32" Nullable="false" />
+    <Property Name="DebitNoteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="InvoiceID" Type="Int32" />
+    <Property Name="DebitNoteDate" Type="DateTime" Precision="3" />
+    <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="AcJournalID" Type="Int32" />
+    <Property Name="FYearID" Type="Int32" />
+    <Property Name="AcCompanyID" Type="Int32" />
+    <Property Name="InvoiceType" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="RecPayID" Type="Int32" />
+    <Property Name="AcHeadID" Type="Int32" />
+    <Property Name="SupplierID" Type="Int32" />
+    <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="TransType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="BranchID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="DebitNoteDetail">
+    <Key>
+      <PropertyRef Name="DebitNoteDetailID" />
+    </Key>
+    <Property Name="DebitNoteDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DebitNoteID" Type="Int32" />
+    <Property Name="AcHeadID" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Precision="13" Scale="3" />
+    <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="AcYearEndProcessLog">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProcessType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="AcFinancialYearId" Type="Int32" />
+    <Property Name="BranchId" Type="Int32" />
   </EntityType>
 </Schema>

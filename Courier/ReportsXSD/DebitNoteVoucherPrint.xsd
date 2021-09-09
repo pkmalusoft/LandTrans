@@ -18,8 +18,13 @@
               <xs:element name="RecPayID" type="xs:int" minOccurs="0" />
               <xs:element name="AcHeadID" type="xs:int" minOccurs="0" />
               <xs:element name="SupplierID" type="xs:int" minOccurs="0" />
-              <xs:element name="IsShipping" type="xs:boolean" minOccurs="0" />
               <xs:element name="Remarks" type="xs:string" minOccurs="0" />
+              <xs:element name="BranchID" type="xs:int" minOccurs="0" />
+              <xs:element name="TransType" type="xs:string" minOccurs="0" />
+              <xs:element name="CreatedBy" type="xs:int" minOccurs="0" />
+              <xs:element name="CreatedDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="ModifiedBy" type="xs:int" minOccurs="0" />
+              <xs:element name="ModifiedDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="AcHead" type="xs:string" minOccurs="0" />
               <xs:element name="SupplierName" type="xs:string" minOccurs="0" />
               <xs:element name="Address1" type="xs:string" minOccurs="0" />
@@ -29,8 +34,9 @@
               <xs:element name="CountryName" type="xs:string" minOccurs="0" />
               <xs:element name="CityName" type="xs:string" minOccurs="0" />
               <xs:element name="InvoiceNo" type="xs:string" minOccurs="0" />
-              <xs:element name="InvoiceNo1" type="xs:string" minOccurs="0" />
+              <xs:element name="InvoiceDate" type="xs:dateTime" minOccurs="0" />
               <xs:element name="InvoiceTotal" type="xs:decimal" minOccurs="0" />
+              <xs:element name="DetailAmount" type="xs:decimal" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

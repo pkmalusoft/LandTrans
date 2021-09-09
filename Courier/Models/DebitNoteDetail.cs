@@ -15,8 +15,8 @@ namespace LTMSV2.Models
     public partial class DebitNoteDetail
     {
         public int DebitNoteDetailID { get; set; }
-        public int DebitNoteID { get; set; }
-        public int AcHeadID { get; set; }
+        public Nullable<int> DebitNoteID { get; set; }
+        public Nullable<int> AcHeadID { get; set; }
         public Nullable<decimal> Amount { get; set; }
         public string Remarks { get; set; }
     }

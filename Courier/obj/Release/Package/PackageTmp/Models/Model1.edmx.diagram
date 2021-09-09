@@ -71,7 +71,6 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerRateType" Width="1.5" PointX="22.5" PointY="65.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerType" Width="1.5" PointX="11.75" PointY="29.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustSuppJV" Width="1.5" PointX="27.75" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNoteDetail" Width="1.5" PointX="27.75" PointY="29.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Department" Width="1.5" PointX="28.75" PointY="18.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Designation" Width="1.5" PointX="3" PointY="85" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DRR" Width="1.5" PointX="3" PointY="9.375" IsExpanded="true" />
@@ -381,7 +380,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_EmployeeMaster_CityMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_LocationMaster_CityMaster" />
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK_tblDepot_CityMaster" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNoteDetail" Width="1.5" PointX="38.375" PointY="26.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.Transit" Width="1.5" PointX="40.375" PointY="37.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TransportMode" Width="1.5" PointX="0.75" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.ImpExpDocumentMaster" Width="1.5" PointX="17.375" PointY="41.75" />
@@ -396,7 +394,6 @@
         <AssociationConnector Association="DB_9F57C4_couriertest_newModel.FK__EmployeeM__Depot__5A45429A" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RouteMaster" Width="1.5" PointX="42.375" PointY="0.875" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DriverMaster" Width="1.5" PointX="25.375" PointY="41.75" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNote" Width="1.5" PointX="27.375" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.TruckDetailOtherCharge" Width="1.5" PointX="28.375" PointY="25.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoice" Width="1.5" PointX="42.375" PointY="29" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CustomerInvoiceDetail" Width="1.5" PointX="44.625" PointY="29.125" />
@@ -436,8 +433,12 @@
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CostUpdateConsignment" Width="1.5" PointX="29.375" PointY="42.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcJournalConsignment" Width="1.5" PointX="11.375" PointY="37.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.SupplierInvoiceConsignment" Width="1.5" PointX="42.375" PointY="38.75" />
-        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNote" Width="1.5" PointX="42.375" PointY="41.75" />
         <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.RecPayDetail" Width="1.5" PointX="42.375" PointY="33.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNote" Width="1.5" PointX="3.375" PointY="43.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.CreditNoteDetail" Width="1.5" PointX="38.375" PointY="26.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNote" Width="1.5" PointX="43.375" PointY="15.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.DebitNoteDetail" Width="1.5" PointX="28.375" PointY="28.75" />
+        <EntityTypeShape EntityType="DB_9F57C4_couriertest_newModel.AcYearEndProcessLog" Width="1.5" PointX="42.375" PointY="41.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

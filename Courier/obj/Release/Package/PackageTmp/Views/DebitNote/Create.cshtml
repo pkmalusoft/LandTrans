@@ -1,8 +1,7 @@
-﻿@*@model DAL.BranchMaster*@
-@model LTMSV2.Models.DebitNoteVM
+﻿@model LTMSV2.Models.DebitNoteVM
 
 @{
-    ViewBag.Title = "Create";
+    
     Layout = "~/Views/Shared/_TrueBookMstr.cshtml";
     var isadd = true;
     var _decimal = Convert.ToInt32(@Session["Decimal"].ToString());
@@ -50,10 +49,39 @@
 </style>
 
 <script type="text/javascript">
-     function setTwoNumberDecimal(obj) {    
+     function setTwoNumberDecimal(obj) {
        $(obj).val(parseFloat($(obj).val()).toFixed(@_decimal));
     }
+    function getTotal() {
+        debugger;
+        var maxrow = $('#details > tr').length;
+        var total = 0;
+        $('#Amount').val(total);
 
+        for (i = 0; i < maxrow; i++) {
+            var otheramt = $('#txtAmt_' + i).val();
+            total = parseFloat(total) + parseFloat(otheramt);
+            $('#Amount').val(parseFloat(total).toFixed(3));
+            $('#lbltotal').html(parseFloat(total).toFixed(3))
+        }
+    }
+    function Deleterow(index) {
+
+        $.ajax({
+            type: "POST",
+            url: '/DebitNote/DeleteAccount',
+            datatype: "html",
+            data: {
+                'index': index
+            },
+            success: function (data) {
+                $("#listContainer").html(data);
+                $('#AcDetailHeadID').val(0).trigger('change');
+                $("#AcDetailAmount").val(0);
+                getTotal();
+            }
+        });
+    }
     $(document).ready(function () {
         $(":text").css({ "border-radius": "5px" });
         $("select").css({ "border-radius": "5px" });
@@ -98,7 +126,23 @@
 
 
         });
-
+        $('#btnadd').click(function () {
+            $.ajax({
+                type: "POST",
+                url: '/DebitNote/AddAccount/',
+                datatype: "html",
+                data: {
+                    'AcHeadID': $('#AcDetailHeadID').val(), 'Amount': $("#AcDetailAmount").val(), Remarks: $('#AcDetailRemarks').val(), TransType: $('#TransType').val()
+                },
+                success: function (data) {
+                    $("#listContainer").html(data);
+                    $('#AcDetailHeadID').val(0).trigger('change');
+                    $("#AcDetailAmount").val(0);
+                    $('#AcDetailRemarks').val('');
+                    getTotal();
+                }
+            });
+        })
         var startdate = '@Session["FyearFrom"].ToString()';
         var enddate = '@Session["FyearTo"].ToString()';
         var sd = new Date(startdate);
@@ -117,15 +161,99 @@
                 $(this).val(parseFloat(value).toFixed(2));
             }
         });
+        $("#OPRefNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/SupplierPayment/GetOpeningPayment',
+                    datatype: "json",
+                    data: {
+                        term: request.term, SupplierId: $('#SupplierID').val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.RefNo,
+                                value: val.ACOPInvoiceDetailId,
+                                Amount: val.Amount
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (e, i) {
+                $("#OPRefNo").val(i.item.label);
+                $('#FMoney').val(i.item.Amount);
+                $('#AcOPInvoiceDetailID').val(i.item.value);
+
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#OPRefNo").val(i.item.label);
+                $('#FMoney').val(i.item.Amount);
+                $('#AcOPInvoiceDetailID').val(i.item.value);
+
+            },
+
+        });
         $("#SupplierID").change(function () {
+            if ($('#TransType').val() != '') {
+                var ID = $('#SupplierID').val();
+                $.ajax({
+                    type: "POST",
+                    url: '/DebitNote/GetTradeInvoiceOfSupplier/' + ID,
+                    data: { 'ID': ID, 'amountreceived': 0, TransType: $('#TransType').val() },
+                    success: function (data) {
+                        if (data.length == 0) {
+                            alert("There is no item!");
+                            $('#InvoiceNo').val('');
+                            $('#InvoiceNo').attr('readonly', 'readonly');
+                        }
+                        else {
+                            //$('#InvoiceNo').removeAttr('readonly');
+                        }
+
+                    }
+                });
+            }
+        });
+        $('#TransType').change(function () {
+            if ($('#TransType').val() == 'DN') {
+                $('#lblaccount').html('Chart of Account - Debit');
+                $('#lblaccount1').html('Chart of Account - Credit');
+                $('#lblamount').html('Debit Amount');
+                $('#lblamount1').html('Credit Amount');
+                $('#lblchkInvoice').html('For Invoice');
+                $('#lblInvoice').html('Invoice No.');
+                $('#lblInvoiceDate').html('Invoice Date');
+                $('#lblInvoiceAmt').html('Invoice Amount')
+                $('#lblReceivedAmt').html('Received Amt');
+                $('#AmountType').val(0).trigger('change');
+                $('#AcDetailAmountType').val(1).trigger('change');
+            }
+            else if ($('#TransType').val() == 'SJ') {
+                $('#lblaccount').html('Chart of Account - Credit');
+                $('#lblaccount1').html('Chart of Account - Debit');
+                $('#lblamount').html('Credit Amount');
+                $('#lblamount1').html('Debit Amount');
+                $('#lblchkInvoice').html('For Receipt');
+                $('#lblInvoice').html('Receipt No.');
+                $('#lblInvoiceDate').html('Receipt Date');
+                $('#lblInvoiceAmt').html('Receipt Amount')
+                $('#lblReceivedAmt').html('Settled Amount');
+                $('#AmountType').val(1).trigger('change');
+                $('#AcDetailAmountType').val(0).trigger('change');
+            }
+
             var ID = $('#SupplierID').val();
             $.ajax({
                 type: "POST",
                 url: '/DebitNote/GetTradeInvoiceOfSupplier/' + ID,
-                data: { 'ID': ID, 'amountreceived': 0 },
+                data: { 'ID': ID, 'amountreceived': 0, TransType: $('#TransType').val() },
                 success: function (data) {
                     if (data.length == 0) {
-                        alert("There is no pending invoice!");
+                        alert("There is no item");
                         $('#InvoiceNo').val('');
                         $('#InvoiceNo').attr('readonly', 'readonly');
                     }
@@ -135,7 +263,7 @@
 
                 }
             });
-        });
+        })
         $("#InvoiceNo").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -203,115 +331,153 @@
 </script>
 
 <section class="content-header">
-    <h1 class="headingfont">Debit Note</h1>
+    <h1 class="headingfont">@ViewBag.Title</h1>
 
 </section>
 
 <section class="content">
 
-   
+
 
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
-        <div class="searchdiv sm-width">
+        <div class="">
             <div id="alert" style="color:red;display:none;margin-left:10px;">*Please fill mandatory fields</div>
             <fieldset>
                 <div class="row no-margin">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="headinglabel required">Debit Note Number</label>
-                            @Html.HiddenFor(model => model.DebitNoteId)
-                            @Html.HiddenFor(model => model.AcJournalID)
-                            @Html.TextBoxFor(model => model.DebitNoteNo, new { @class = "form-control", @readonly = "readonly" })
-                        </div>
-                        <div class="col-md-6">
-                            <label class="headinglabel required">D.N. Date</label>
-
-                            @Html.TextBoxFor(model => model.Date, new { @class = "form-control text-right", placeholder = "dd-mmm-yyyy" })
-                        </div>
-                    </div>
-                    <div class=" row">
-                        <div class="col-md-12">
-
-                            <label class="headinglabel">Chart of Account (Credit Account)</label>
-
-                            @Html.DropDownListFor(model => model.AcHeadID, new SelectList(@ViewBag.AcHead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
-
-                        </div>
-
-                       
-                    </div>
-                    <div class=" row">
-                        <div class="col-md-6">
-                            <label class="headinglabel required">Supplier</label>
-                            @Html.DropDownListFor(model => model.SupplierID, new SelectList(@ViewBag.Supplier, "SupplierID", "SupplierName"), "Select", new { @class = "form-control" })
-                        </div>
-                        <div class="col-md-6">
-                            <label class="required headinglabel">Invoice No.</label>
-                            @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control", @required = "true" })
-                            @Html.ValidationMessageFor(model => model.InvoiceNo)
-                            <input type="hidden" id="TradingInvoice" name="TradingInvoice" value="" class="form-control" />
-                            @Html.HiddenFor(model => model.InvoiceID)
-                            @Html.HiddenFor(model => model.InvoiceType)
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 labelrow flex justify-between">
-                            <label class="headinglabel required">Invoice Date</label>
-                            <label class="headinglabel required">Invoice Amount</label>
-                            <label class="headinglabel required">Paid Amount</label>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="col-md-4">
-
-                                @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right" })
+                    <div class="col-md-6">
+                        <div class=" row">
+                            <div class="col-md-6">
+                                <label class="headinglabel required">Debit Note Number</label>
+                                @Html.HiddenFor(model => model.DebitNoteId)
+                                @Html.HiddenFor(model => model.AcJournalID)
+                                @Html.TextBoxFor(model => model.DebitNoteNo, new { @class = "form-control", @readonly = "readonly" })
                             </div>
-                            <div class="col-md-4">
-                                @Html.TextBoxFor(model => model.InvoiceAmount, new { @class = "form-control text-right" })
-                            </div>
-                            <div class="col-md-4">
-                                @Html.TextBoxFor(model => model.AmountPaid, new { @class = "form-control text-right" })
+                            <div class="col-md-6">
+                                <label class="headinglabel required">D.N. Date</label>
+
+                                @Html.TextBoxFor(model => model.Date, new { @class = "form-control text-right", placeholder = "dd-mmm-yyyy" })
                             </div>
                         </div>
-                    </div>                    
-                    <div class="row">
-                        <div class="col-md-12">
 
-                            <label class="headinglabel">Description</label>
+                        <div class=" row">
+                            <div class="col-md-6">
+                                <label class="headinglabel required">Supplier</label>
+                                @Html.DropDownListFor(model => model.SupplierID, new SelectList(@ViewBag.Supplier, "SupplierID", "SupplierName"), "Select", new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-2">
+                                <label class="headinglabel">Trans Type</label>
 
-                            @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Remarks)
+                                @Html.DropDownListFor(model => model.TransType, new List<SelectListItem> { new SelectListItem { Text = "Debit", Value = "DN" }, new SelectListItem { Text = "Credit", Value = "SJ" } }, "Select", new { @class = "form-control" })
+
+                            </div>
+                            <div class="col-md-4">
+                                <label class="headinglabel required" id="lblamount"> Debit Note Amount</label>
+
+                                @Html.TextBoxFor(model => model.Amount, new { @class = "form-control text-right",@readonly="readonly" })
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="flexTitle">
+                                    <label class="required headinglabel" id="lblchkInvoice">Invoice No.</label>
+                                    <div class="checkboxdesign no-padding  text-right" style="float:right">
+                                        @Html.CheckBoxFor(model => model.ForInvoice, new { @name = "ForInvoice", @checked = "checked" }) &nbsp
+                                        <label class="headinglabel" style="color:#07a7e3!important;padding-left: 0!important" id="lblInvoice">For Invoice</label>
+                                    </div>
+                                </div>
+                                @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control",@readonly="readonly" })
+                                @Html.ValidationMessageFor(model => model.InvoiceNo)
+                                <input type="hidden" id="TradingInvoice" name="TradingInvoice" value="" class="form-control" />
+                                @Html.HiddenFor(model => model.InvoiceID)
+                                @Html.HiddenFor(model => model.InvoiceType)
+                            </div>
+                            <div class="col-md-8 labelrow flex justify-between">
+                                <label class="headinglabel required">Invoice Date</label>
+                                <label class="headinglabel required">Invoice Amount</label>
+                                <label class="headinglabel required">Paid Amount</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="col-md-4">
+
+                                    @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control text-right" })
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.InvoiceAmount, new { @class = "form-control text-right" })
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.AmountPaid, new { @class = "form-control text-right" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <label class="headinglabel">Description</label>
+
+                                @Html.TextBoxFor(model => model.Remarks, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Remarks)
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <label class="headinglabel">Chart of Account (Credit Account)</label>
+
+                                @Html.DropDownListFor(model => model.AcDetailHeadID, new SelectList(@ViewBag.AcHead, "AcHeadID", "AcHead1"), "Select", new { @class = "form-control" })
+
+                            </div>
+                            <div class="col-md-5">
+
+                                <label class="required headinglabel" id="lblamount1">Debit Amount</label>
+
+                                @Html.TextBoxFor(model => model.AcDetailAmount, new { @class = "form-control text-right" })
+                                @Html.ValidationMessageFor(model => model.AcDetailAmount)
+                            </div>
+                          
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-11">
+
+                                <label class="required headinglabel">Remarks</label>
+
+                                @Html.TextBoxFor(model => model.AcDetailRemarks, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.AcDetailRemarks)
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-success" type="button" id="btnadd" style="margin-top:30px;width: 60px!Important;min-width: 50px!important;"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="row no-margin" style="padding-top:10px">
+                            <div class="" style="text-align:right;padding:10px">
+                                @if (isadd)
+                                {
+                                    <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" />
+                                }
+                                else
+                                {
+                                    <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" disabled />
+                                }
+                                &nbsp;
+                                <a href='@Url.Action("Index", "DebitNote", new { id = 0 })' class="btn btn-danger btnwid" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
+
+                            </div>
                         </div>
 
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="headinglabel required"> Debit Note Amount</label>
+                    <div class="col-md-6 " style="padding-left:30px!important" id="listContainer">
 
-                            @Html.TextBoxFor(model => model.Amount, new { @class = "form-control text-right" })
-                        </div>
+                        @{Html.RenderPartial("DebitNoteDetail", Model);}
 
                     </div>
-
-
-                    <div class="row no-margin" style="padding-top:10px">
-                        <div class="" style="text-align:right;padding:10px">
-                            @if (isadd)
-                            {
-                                <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" />
-                            }
-                            else
-                            {
-                                <input type="submit" value="Save" class="btn btn-primary btnwid" id="btnsave" disabled />
-                            }
-                            &nbsp;
-                            <a href='@Url.Action("Index", "DebitNote", new { id = 0 })' class="btn btn-danger btnwid" data-toggle="tooltip" data-placement="right" title="Click here">Cancel</a>
-
-                        </div>
-                    </div>
+                </div>
+               
 
 
 </fieldset>

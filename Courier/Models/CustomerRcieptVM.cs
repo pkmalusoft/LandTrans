@@ -42,6 +42,7 @@ namespace  LTMSV2.Models
         public decimal AmountToBeRecieved { get; set; }
         public decimal AmountToBePaid { get; set; }
         public int InvoiceID { get; set; }
+        public int AcOPInvoiceDetailID { get; set; }
         public Nullable<System.DateTime> AmtPaidTillDate { get; set; }
         public decimal Balance { get; set; }
         public decimal Amount { get; set;}
@@ -50,11 +51,33 @@ namespace  LTMSV2.Models
         public int InScanID { get; set; }
         public int TruckDetailId { get; set; }
         public string TDNo { get; set; }
+        public string OPRefNo { get; set; }
+
+        public string PaymentRef { get; set; }
         public Nullable<System.DateTime> InvoiceDate { get; set; }
 
         public List<CustomerRcieptChildVM> CustomerRcieptChildVM { get; set; }
         public List<RecPayDetail> recPayDetail { get; set; }
         public List<ReceiptAllocationDetailVM> AWBAllocation { get; set; }
+    }
+    public class CustomerReceiptSearch
+    {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+
+        public string ReceiptNo { get; set; }
+        public List<ReceiptVM> Details { get; set; }
+    }
+    public class OpeningInvoiceVM
+    {
+        public int ACOPInvoiceDetailId { get; set; }
+        public int CustomerId { get; set; }
+        public int SupplierId { get; set; }
+        public string InvoiceNo { get; set; }
+        public string InvoiceDate { get; set; }
+        public string RefNo { get; set; }
+
+        public decimal Amount { get; set; }
     }
 
 

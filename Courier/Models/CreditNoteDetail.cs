@@ -14,10 +14,10 @@ namespace LTMSV2.Models
     
     public partial class CreditNoteDetail
     {
-        public int CreditNoteID { get; set; }
         public int CreditNoteDetailID { get; set; }
-        public string AWBNo { get; set; }
-        public decimal Amount { get; set; }
+        public Nullable<int> CreditNoteID { get; set; }
+        public Nullable<int> AcHeadID { get; set; }
+        public Nullable<decimal> Amount { get; set; }
         public string Remarks { get; set; }
     }
 }

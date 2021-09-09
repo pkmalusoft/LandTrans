@@ -289,18 +289,42 @@
                 $(".textamt").show();
             }
         });
-        //$.ajax({
-        //    type: "GET",
-        //    url: "/PickUpRequest/GetCustomerName",
-        //    datatype: "Json",
-        //    success: function (response) {
-        //        debugger;
-        //        customernames = response.data;
-        //        $("#CustomerName").autocomplete({
-        //            source: customernames
-        //        });
-        //    }
-        //});
+        $("#OPRefNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/CustomerReceipt/GetOpeningPayment',
+                    datatype: "json",
+                    data: {
+                        term: request.term, CustomerId: $('#CustomerID').val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.RefNo,
+                                value: val.ACOPInvoiceDetailId,
+                                Amount: val.Amount
+                            }
+                        }))
+                    }
+                })
+            },
+            minLength: 0,
+            autoFocus: false,
+            focus: function (e, i) {
+                $("#OPRefNo").val(i.item.label);
+                $('#FMoney').val(i.item.Amount);
+                $('#AcOPInvoiceDetailID').val(i.item.value);
+
+            },
+            select: function (e, i) {
+                e.preventDefault();
+                $("#OPRefNo").val(i.item.label);
+                $('#FMoney').val(i.item.Amount);
+                $('#AcOPInvoiceDetailID').val(i.item.value);
+
+            },
+
+        });
 
          $("#customerName").autocomplete({
             source: function (request, response) {
@@ -756,7 +780,7 @@
             $('#CashBank').removeAttr('required', 'required');
             $('#ChequeBank').attr('required', 'required');
             $('#CashBank').val(0).trigger('change');
-        } else { //2 Cash
+        } else if (val==2){ //2 Cash
             $("#divBank").css({ "display": "none" });
             $("#divCash").css({ "display": "block" });
             $("#ChequeNo").val('');
@@ -769,6 +793,24 @@
             $('#ChequeBank').val(0).trigger('change');
             $('#ChequeBank').removeAttr('required')
         }
+         else if (val == 3) { //2 Settlement
+            $("#divBank").css({ "display": "none" });
+            $("#divCash").css({ "display": "block" });
+            $("#ChequeNo").val('');
+            $("#ChequeDate").val('');
+            $("#ChequeNo").removeAttr('required');
+            $("#ChequeDate").removeAttr('required');
+            $("#ChequeNo").attr('readonly', 'readonly');
+            $("#ChequeDate").attr('readonly', 'readonly')
+            $('#CashBank').attr('required', 'required');
+            $('#ChequeBank').val(0).trigger('change');
+            $('#ChequeBank').removeAttr('required')
+            $('#CashBank').attr('readonly', 'readonly');
+            $('#ChequeBank').attr('readonly', 'readonly');
+            $('#CashBank').removeAttr('required');
+            $('#FMoney').attr('readonly', 'readonly');
+
+        } }
 
     }
 </script>
@@ -821,8 +863,8 @@
         @Html.HiddenFor(model => model.RecPayDetailID)
         @Html.HiddenFor(model => model.AcJournalID)
         @Html.HiddenFor(model => model.StatusEntry)
-        @Html.HiddenFor(model => model.Balance,new { id = "hdnAdvance" })
-        
+        @Html.HiddenFor(model => model.Balance, new { id = "hdnAdvance" })
+        @Html.HiddenFor(model => model.AcOPInvoiceDetailID)
         <div class="row no-margin">
             <div class="col-xs-5 col-sm-5">
                 <p style="color:red;display:none;font-size: 15px;margin-top: 30px;" id="msg1">Amount Paid TillDate + Amount Allocated cannot be greater than Balance.</p>
@@ -846,6 +888,7 @@
                 <select id="PaymentMode" class="form-control" onchange="PaymentModeChange()">
                     <option value="1">Bank</option>
                     <option value="2">Cash</option>
+                    <option value="3">OP. ADV</option>
                 </select>
             </div>
 
@@ -916,9 +959,13 @@
 
             }
 
-            <div class="col-xs-4 col-sm-4">
+            <div class="col-xs-4 col-sm-2">
                 <label class="headinglabel">Remarks</label>
                 @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control txttarget" })
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <label class=" required headinglabel">Payment Ref.</label>
+                @Html.TextBoxFor(model => model.PaymentRef, new { @class = "form-control", @readonly = "readonly" })
             </div>
 
         </div>
@@ -929,7 +976,12 @@
             <label class=" required headinglabel">Client</label>
             @Html.TextBoxFor(model => model.customerName, new { @class = "form-control" })
         </div>
+        <div class="col-xs-12 col-sm-3">
+            @*style="width: calc(45% - 100px);"*@
 
+            <label class=" required headinglabel">OP. Bal. Advance</label>
+            @Html.TextBoxFor(model => model.OPRefNo, new { @class = "form-control", @readonly = "readonly" })
+        </div>
         <div class="pull-left" style="padding-right:5px">
             <button class="btn btn-primary small_btn" type="button" id="btnsearch"><i class="fa fa-refresh" aria-hidden="true"></i> </button>
         </div>
@@ -1056,7 +1108,7 @@
                                                 }
 
                                                 @*@Html.TextBoxFor(item => item.CustomerRcieptChildVM[i].Amount, string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].Amount), new { @class = "amt txtNum text-right Amount", @id = "txtinvoice_" + @Model.CustomerRcieptChildVM[i].JobCode, onchange = "CheckAmt(this)" })*@
-                                                @Html.TextBoxFor(item => item.CustomerRcieptChildVM[i].Amount,new { @class = "amt txtNum text-right Amount", @id = "txtinvoice_" + @Model.CustomerRcieptChildVM[i].JobCode, onchange = "CheckAmt(this)" })
+                                                @Html.TextBoxFor(item => item.CustomerRcieptChildVM[i].Amount, new { @class = "amt txtNum text-right Amount", @id = "txtinvoice_" + @Model.CustomerRcieptChildVM[i].JobCode, onchange = "CheckAmt(this)" })
 
 
                                             </td>
@@ -1064,7 +1116,7 @@
                                                 <div class="data1">
                                                     @*@Model.CostUpdationDetails[i].JobCode*@
                                                     @*@Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount, string.Format("{0:n3}", @Model.CustomerRcieptChildVM[i].AdjustmentAmount), new { @class = "amt1 txtNum text-right AdjustmentAmount", onchange = "CheckAmt1(this)", @id = "txtadjust_" + Model.CustomerRcieptChildVM[i].JobCode })*@
-                                                    @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount,new { @class = "amt1 txtNum text-right AdjustmentAmount", onchange = "CheckAmt1(this)", @id = "txtadjust_" + Model.CustomerRcieptChildVM[i].JobCode })
+                                                    @Html.TextBoxFor(item => @Model.CustomerRcieptChildVM[i].AdjustmentAmount, new { @class = "amt1 txtNum text-right AdjustmentAmount", onchange = "CheckAmt1(this)", @id = "txtadjust_" + Model.CustomerRcieptChildVM[i].JobCode })
 
                                                 </div>
                                             </td>

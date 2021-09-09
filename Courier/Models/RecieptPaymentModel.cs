@@ -30,7 +30,8 @@ namespace LTMSV2.Models
         public decimal? Amount { get; set; }
     public decimal Currency { get; set; }
         public string CurrencyName { get; set; }
-
+        public string PaymentMode { get; set; }
+        public string BankName { get; set; }
     }
     public class CustomerReceivable
     {
@@ -180,8 +181,27 @@ namespace LTMSV2.Models
                 cust.RecPayID = item.RecPayID;
                 cust.SupplierID = item.SupplierID;
                 cust.AcJournalID = item.AcJournalID;
+                cust.AcOPInvoiceDetailID = 0;
+                if (item.PaymentRef!=null)
+                {
+                    cust.PaymentRef= item.PaymentRef;
+                }
+                else
+                {
+                    cust.PaymentRef = "";
+                }
+                if (cust.StatusEntry == "CS")
+                    cust.CashBank = (cashOrBankID).ToString();
+                else if (cust.StatusEntry == "BK")
+                    cust.ChequeBank = (cashOrBankID).ToString();
+                else
+                {
+                    cust.OPRefNo = item.BankName;
+                    if (item.AcOPInvoiceDetailID != null)
+                        cust.AcOPInvoiceDetailID = Convert.ToInt32(item.AcOPInvoiceDetailID);
+
+                }
                 
-                cust.AcJournalID = item.AcJournalID;
                 var a = (from t in Context1.RecPayDetails where t.RecPayID == RecpayID select t.CurrencyID).FirstOrDefault();
                 cust.CurrencyId = Convert.ToInt32(a.HasValue ? a.Value : 0);
 

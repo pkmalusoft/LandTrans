@@ -1073,6 +1073,189 @@ namespace LTMSV2.DAL
             }
             return voucherno;
         }
+
+        #region YearEndPRocess
+        public static YearEndProcessSearch GetYearEndProcess(int YearId, int BranchId, int ProcessStatus)
+        {
+            YearEndProcessSearch vm = new YearEndProcessSearch();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_AccYearEndProcess";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@YearID", SqlDbType.Int);
+            cmd.Parameters["@YearID"].Value = YearId;
+            cmd.Parameters.Add("@BranchId", SqlDbType.Int);
+            cmd.Parameters["@BranchId"].Value = BranchId;
+            cmd.Parameters.AddWithValue("@Process", ProcessStatus);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<YearEndProcessIncomeExpense> objList = new List<YearEndProcessIncomeExpense>();
+            List<YearEndProcessPL> objList1 = new List<YearEndProcessPL>();
+            if (ProcessStatus == 0)
+            {
+
+                YearEndProcessIncomeExpense obj;
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        obj = new YearEndProcessIncomeExpense();
+                        obj.AcHeadId = Convert.ToInt32(ds.Tables[0].Rows[i]["AcHeadId"].ToString());
+                        obj.AcHeadName = ds.Tables[0].Rows[i]["AcHeadName"].ToString();
+                        obj.ClosingBalance = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["ClosingBalance"].ToString());
+                        objList.Add(obj);
+                    }
+                }
+                YearEndProcessPL obj1;
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                    {
+                        obj1 = new YearEndProcessPL();
+                        obj1.AcHeadId = Convert.ToInt32(ds.Tables[1].Rows[i]["AcHeadId"].ToString());
+                        obj1.VoucherNo = ds.Tables[1].Rows[i]["VoucherNo"].ToString();
+                        obj1.AcHeadName = ds.Tables[1].Rows[i]["AcHeadName"].ToString();
+                        obj1.Amount = CommanFunctions.ParseDecimal(ds.Tables[1].Rows[i]["Amount"].ToString());
+                        obj1.updatestatus = Convert.ToBoolean(ds.Tables[1].Rows[i]["updatedstatus"].ToString());
+                        objList1.Add(obj1);
+                    }
+                }
+                vm.PLDetails = objList1;
+                vm.IncomeExpDetails = objList;
+            }
+            else
+            {
+                vm.PLDetails = objList1;
+                vm.IncomeExpDetails = objList;
+
+            }
+            return vm;
+        }
+
+
+        public static List<YearEndProcessAccounts> GetYearEndAccountOpening(int Userid, int YearId, int BranchId, int process)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_AcYearEndAccountOpeningProcess";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@YearID", SqlDbType.Int);
+            cmd.Parameters["@YearID"].Value = YearId;
+            cmd.Parameters.Add("@BranchId", SqlDbType.Int);
+            cmd.Parameters["@BranchId"].Value = BranchId;
+            cmd.Parameters.AddWithValue("@UserId", Userid);
+            cmd.Parameters.AddWithValue("@Process", process);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<YearEndProcessAccounts> objList = new List<YearEndProcessAccounts>();
+            YearEndProcessAccounts obj;
+            if (process == 0)
+            {
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        obj = new YearEndProcessAccounts();
+                        obj.Particulars = ds.Tables[0].Rows[i]["AcHeadName"].ToString();
+                        obj.OpeningBalance = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["OpeningBalance"].ToString());
+                        obj.Transactions = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Transactions"].ToString());
+                        obj.ClosingBalance = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["ClosingBalance"].ToString());
+                        obj.NextYearOpening = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["NextYearOpening"].ToString());
+
+                        objList.Add(obj);
+                    }
+                }
+            }
+            return objList;
+        }
+
+
+        public static YearEndProcessSearch GetYearEndProcessCustomerInv(string CustomerType, int YearId, int BranchId, int ProcessStatus)
+        {
+            YearEndProcessSearch vm = new YearEndProcessSearch();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetYearEndCustomerStatement";
+            cmd.CommandType = CommandType.StoredProcedure;
+            //cmd.Parameters.AddWithValue("CustomerType", CustomerType);
+            cmd.Parameters.Add("@FYearId", SqlDbType.Int);
+            cmd.Parameters["@FYearID"].Value = YearId;
+            cmd.Parameters.Add("@BranchId", SqlDbType.Int);
+            cmd.Parameters["@BranchId"].Value = BranchId;
+            cmd.Parameters.AddWithValue("@Process", ProcessStatus);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<YearEndProcessCustomer> objList = new List<YearEndProcessCustomer>();
+            if (ProcessStatus == 0)
+            {
+                YearEndProcessCustomer obj;
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        obj = new YearEndProcessCustomer();
+                        obj.CustomerId = Convert.ToInt32(ds.Tables[0].Rows[i]["CustomerId"].ToString());
+                        obj.CustomerName = ds.Tables[0].Rows[i]["CustomerName"].ToString();
+                        obj.InvoiceNo = ds.Tables[0].Rows[i]["CustomerInvoiceNo"].ToString();
+                        obj.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"].ToString()).ToString("dd-MM-yyyy");
+                        obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
+                        objList.Add(obj);
+                    }
+                }
+
+                vm.CustomerInvDetails = objList;
+            }
+            return vm;
+        }
+
+        public static YearEndProcessSearch GetYearEndProcessSupplierInv(int SupplierTypeId, int YearId, int BranchId, int ProcessStatus)
+        {
+            YearEndProcessSearch vm = new YearEndProcessSearch();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = new SqlConnection(CommanFunctions.GetConnectionString);
+            cmd.CommandText = "SP_GetYearEndSupplierStatement";
+            cmd.CommandType = CommandType.StoredProcedure;
+            //cmd.Parameters.AddWithValue("@SupplierTypeId", 3); 
+            cmd.Parameters.Add("@FYearId", SqlDbType.Int);
+            cmd.Parameters["@FYearID"].Value = YearId;
+            cmd.Parameters.Add("@BranchId", SqlDbType.Int);
+            cmd.Parameters["@BranchId"].Value = BranchId;
+            cmd.Parameters.AddWithValue("@Process", ProcessStatus);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            List<YearEndProcessSupplier> objList = new List<YearEndProcessSupplier>();
+            if (ProcessStatus == 0)
+            {
+                YearEndProcessSupplier obj;
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        obj = new YearEndProcessSupplier();
+                        obj.SupplierId = Convert.ToInt32(ds.Tables[0].Rows[i]["SupplierId"].ToString());
+                        obj.SupplierName = ds.Tables[0].Rows[i]["SupplierName"].ToString();
+                        obj.InvoiceNo = ds.Tables[0].Rows[i]["InvoiceNo"].ToString();
+                        obj.InvoiceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["InvoiceDate"].ToString()).ToString("dd-MM-yyyy");
+                        obj.Amount = CommanFunctions.ParseDecimal(ds.Tables[0].Rows[i]["Amount"].ToString());
+                        objList.Add(obj);
+                    }
+                }
+
+                vm.SupplierInvDetails = objList;
+            }
+            return vm;
+        }
+        #endregion
     }
 }
     

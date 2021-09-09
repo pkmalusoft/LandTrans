@@ -39,5 +39,7 @@ namespace LTMSV2.Models
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
+        public string PaymentRef { get; set; }
+        public Nullable<int> AcOPInvoiceDetailID { get; set; }
     }
 }

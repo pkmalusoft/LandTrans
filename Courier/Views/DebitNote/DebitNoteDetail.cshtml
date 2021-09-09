@@ -1,0 +1,73 @@
+﻿@model LTMSV2.Models.DebitNoteVM
+    @{
+        var i = 0;
+    }
+    
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        
+        //var table1 = $('#AcYearEndCustomer').DataTable({ "paging": false, "sPaginationType": "simple" });
+
+        
+    });
+</script>
+<div class="row no-margin" style="padding-top:30px">
+    <div class="col-md-12">
+        <table class="table table-responsive table-bordered" id="AcYearEndCustomer" style="background-color:white">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Account Head</th>
+                    <th>Amount</th>
+                    <th>Remarks</th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            <tbody id="details">
+
+                @foreach (var item in Model.Details)
+                {
+                <tr>
+                    @Html.HiddenFor(model => model.Details[i].AcHeadID, new { @Value = @item.AcHeadID })
+                    @Html.HiddenFor(model => model.Details[i].AcHeadName, new { @Value = @item.AcHeadName })
+                    @Html.HiddenFor(model => model.Details[i].Remarks, new { @Value = @item.Remarks })
+                    @Html.HiddenFor(model => model.Details[i].Amount, new { @Value = @item.Amount, @id = "txtAmt_" + @i })
+                    <td id="row_@i">@(i+1)</td>
+                    <td>
+                        @item.AcHeadName
+                    </td>
+
+                    @if (item.Amount < 0)
+                    {
+                        <td style="text-align:right">
+                            (    @LTMSV2.Models.CommanFunctions.GetDecimalFormat(-1 * @item.Amount, "3") )
+                        </td>
+                    }
+                    else
+                    {
+                        <td style="text-align:right">
+                            @LTMSV2.Models.CommanFunctions.GetDecimalFormat(@item.Amount, "3")
+                        </td>
+                    }
+                    <td>@item.Remarks</td>
+                    <td><a href="javascript:void(0)" onclick="Deleterow(@i)" id="DeleteRow_@i"><i class="fa fa-times"></i></a></td>
+
+                </tr>
+                    i++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3">Total</th>
+                    <th colspan="1">
+                        <label id="lbltotal">@LTMSV2.Models.CommanFunctions.GetDecimalFormat(@Model.Amount, "2")</label>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
