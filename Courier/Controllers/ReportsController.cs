@@ -365,7 +365,7 @@ namespace LTMSV2.Controllers
                 ToDate = picker.ToDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 CustomerId = picker.CustomerId,
                 CustomerName = picker.CustomerName,
-                Output = "PDF",
+                Output = picker.Output,
                 ReportType = "Ledger",
                 AsonDate=picker.AsonDate
             };

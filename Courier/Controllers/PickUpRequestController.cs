@@ -119,8 +119,9 @@ namespace LTMSV2.Controllers
             ViewBag.Customer = db.CustomerMasters.ToList();
             ViewBag.RequestType = db.RequestTypes.ToList();
             ViewBag.DocumentType = db.tblDocumentTypes.ToList();
+            ViewBag.PaymentMode = db.tblPaymentModes.ToList();
             //ViewBag.PickupRequestStatus = db.PickUpRequestStatus.ToList();
-            
+
             ViewBag.PickupRequestStatus = db.CourierStatus.Where(cc=>cc.StatusTypeID==1).ToList();
 
             ViewBag.PickupSubReason = db.SubStatus.ToList();

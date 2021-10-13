@@ -852,8 +852,7 @@
 
         @Html.HiddenFor(model => model.RecPayID)
         @Html.HiddenFor(model => model.CustomerID)
-        @Html.HiddenFor(model => model.RecPayDetailID)
-        @Html.HiddenFor(model => model.AcJournalID)
+        @Html.HiddenFor(model => model.RecPayDetailID)        
         @Html.HiddenFor(model => model.StatusEntry)
         @Html.HiddenFor(model => model.Balance, new { id = "hdnAdvance" })
         @Html.HiddenFor(model => model.AcOPInvoiceDetailID)
@@ -1148,7 +1147,7 @@
                         <h4 class="modal-title" id="exampleModalLabel">
                             Invoice AWB Allocation
                         </h4>
-                    </div>
+                    </div>AcJournalID
 
                     <div class="modal-body">
                         <div class="container-fluid" style="max-height:480px;overflow-y:scroll">
